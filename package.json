@@ -46,7 +46,7 @@
     "@dcloudio/uni-mp-weixin": "3.0.0-3061320221209001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-3061320221209001",
     "@vitejs/plugin-vue-jsx": "^2.1.0",
-    "echarts": "5.3.2",
+    "echarts": "^5.3.2",
     "pinia": "^2.0.14",
     "pinia-plugin-persistedstate": "^3.1.0",
     "vue": "^3.2.36",

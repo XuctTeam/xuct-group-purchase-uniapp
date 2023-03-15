@@ -8,7 +8,16 @@
         "titlePenetrate": "YES",
         "transparentTitle": "always"
       }
-    }
+    },
+    {
+      "path": "pages/user/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
   ],
 
   "globalStyle": {
