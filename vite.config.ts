@@ -1,3 +1,12 @@
+/*
+ * @Author: Derek Xu
+ * @Date: 2023-03-16 21:29:21
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-03-16 22:14:57
+ * @FilePath: \xuct-group-purchase-uniapp\vite.config.ts
+ * @Description:
+ * Copyright (c) 2022 by 楚恬商行, All Rights Reserved.
+ */
 import { defineConfig } from 'vite'
 import uni from '@dcloudio/vite-plugin-uni'
 import vueJsx from '@vitejs/plugin-vue-jsx'

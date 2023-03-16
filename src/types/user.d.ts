@@ -1,5 +1,7 @@
+
 declare namespace User {
-  type User = {
-    username: String
-  }
+    
+    type User = {
+        
+    }
 }

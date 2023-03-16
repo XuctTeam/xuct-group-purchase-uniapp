@@ -2,8 +2,8 @@
  * @Author: Derek Xu
  * @Date: 2023-03-09 17:47:09
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-09 18:08:52
- * @FilePath: \xct-group-purchase-uniapp\src\store\index.ts
+ * @LastEditTime: 2023-03-16 21:39:40
+ * @FilePath: \xuct-group-purchase-uniapp\src\store\index.ts
  * @Description:
  *
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.

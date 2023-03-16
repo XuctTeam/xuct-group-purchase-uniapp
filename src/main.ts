@@ -1,23 +1,24 @@
 /*
  * @Author: Derek Xu
- * @Date: 2023-03-09 20:45:02
+ * @Date: 2023-03-16 21:29:18
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-09 20:48:46
- * @FilePath: \xct-group-purchase-uniapp\src\main.ts
+ * @LastEditTime: 2023-03-16 22:20:20
+ * @FilePath: \xuct-group-purchase-uniapp\src\main.ts
  * @Description:
- *
- * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
+ * Copyright (c) 2022 by 楚恬商行, All Rights Reserved.
  */
 import { createSSRApp } from 'vue'
+
+import { pinia } from '@/store'
 import tmui from './tmui'
 import App from './App.vue'
-import { pinia } from '@/store'
+import config from './config/config'
 
 export function createApp() {
   const app = createSSRApp(App)
-  app.use(pinia)
-  app.use(tmui)
+  app.use(tmui, config)
   return {
-    app
+    app,
+    pinia
   }
 }

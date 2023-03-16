@@ -15,5 +15,13 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/pages/**/*.vue", "src/**/*", "src/**/*.nvue", "src/**/*.vue"]
+  "include": [
+    "./src/*.vue",
+    "./src/**/*.vue",
+    "./src/*.nvue",
+    "./src/**/*.nvue",
+    "./src/*.ts",
+    "./src/*.d.ts",
+    "./src/**/*.ts", "src/tmui/components/tm-render/zrender.ts11",
+    ]
 }
