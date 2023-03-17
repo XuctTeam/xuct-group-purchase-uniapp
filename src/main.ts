@@ -1,19 +1,18 @@
 /*
  * @Author: Derek Xu
- * @Date: 2023-03-16 21:29:18
+ * @Date: 2023-03-17 09:13:39
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-16 22:20:20
+ * @LastEditTime: 2023-03-17 17:34:52
  * @FilePath: \xuct-group-purchase-uniapp\src\main.ts
  * @Description:
- * Copyright (c) 2022 by 楚恬商行, All Rights Reserved.
+ *
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
  */
 import { createSSRApp } from 'vue'
-
-import { pinia } from '@/store'
 import tmui from './tmui'
 import App from './App.vue'
-import config from './config/config'
-
+import config from './config'
+import { pinia } from './store'
 export function createApp() {
   const app = createSSRApp(App)
   app.use(tmui, config)

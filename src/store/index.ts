@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-09 17:47:09
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-16 21:39:40
+ * @LastEditTime: 2023-03-17 11:02:37
  * @FilePath: \xuct-group-purchase-uniapp\src\store\index.ts
  * @Description:
  *

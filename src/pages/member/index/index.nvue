@@ -1,0 +1,137 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-03-15 22:02:25
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-03-17 17:37:03
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
+ * @Description: 
+ * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
+-->
+<template>
+  <tm-app>
+    <tm-navbar title="个人中心" color="pink" linear="right" blur />
+
+    <!-- 用户头像header -->
+    <view class="member-top">
+      <image class="bg-img" src="/static/member-bg.png"></image>
+      <view class="member-top-c">
+        <template v-if="token">
+          <!-- <image class="user-head-img" mode="aspectFill" :src="userInfo.avatar"></image>
+            <view class="user-name">{{ userInfo.nickname }}</view>
+            <view class="fz12 grade" v-if="userInfo.grade_name">
+              {{ userInfo.grade_name }}
+            </view> -->
+        </template>
+        <template v-else>
+          <view class="user-head-img">
+            <open-data type="userAvatarUrl"></open-data>
+          </view>
+          <view>
+            <tm-button size="small" :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" :round="10" linear="left" label="授权登录" :width="200" @click="goToLogin"></tm-button>
+          </view>
+        </template>
+      </view>
+    </view>
+    <!-- 订单列表信息 -->
+    <tm-cell showAvatar :avatarSize="40" avatar="https://demo.jihainet.com/wap/static/image/userorder.png" :margin="[0, 0]" :titleFontSize="30" title="我的订单"></tm-cell>
+    <view class="member-grid">
+      <view class="member-item" v-for="(item, index) in orderItems" :key="index">
+        <view class="badge color-f" v-if="item.nums">{{ item.nums }}</view>
+        <image class="member-item-icon" :src="item.icon"></image>
+        <text class="member-item-text">{{ item.name }}</text>
+      </view>
+    </view>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
+
+// 导入storeToRefs
+import { storeToRefs } from 'pinia'
+import useStore from '@/store'
+import { ref } from 'vue'
+
+const store = useStore()
+
+// 解构的时候调用storeToRefs
+const token = store.token
+debugger
+
+const orderItems = ref([
+  {
+    name: '待付款',
+    icon: '/static/me-ic-obligation.png',
+    nums: 0
+  },
+  {
+    name: '待发货',
+    icon: '/static/me-ic-sendout.png',
+    nums: 0
+  },
+  {
+    name: '待收货',
+    icon: '/static/me-ic-receiving.png',
+    nums: 0
+  },
+  {
+    name: '待评价',
+    icon: '/static/me-ic-evaluate.png',
+    nums: 0
+  }
+])
+
+function goToLogin() {
+  uni.navigateTo({
+    url: '/pages/member/login/index'
+  })
+}
+</script>
+<style>
+.member-top {
+  position: relative;
+  width: 100%;
+  height: 340upx;
+}
+
+.bg-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.member-top-c {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.user-head-img {
+  display: block;
+  width: 160upx;
+  height: 160upx;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.7);
+  margin: 0 auto 16upx;
+}
+
+.login-btn {
+  width: 180upx;
+  height: 50upx;
+  line-height: 50upx;
+  font-size: 12px;
+}
+
+.member-grid {
+  background-color: #fff;
+  border-top: 2upx solid #eee;
+  padding: 20upx 0;
+  display: flex;
+  flex-direction: row;
+}
+</style>

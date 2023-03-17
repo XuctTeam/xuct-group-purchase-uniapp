@@ -1,11 +1,12 @@
 /*
  * @Author: Derek Xu
- * @Date: 2023-03-16 21:29:21
+ * @Date: 2023-03-17 09:13:39
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-16 22:14:57
+ * @LastEditTime: 2023-03-17 17:38:05
  * @FilePath: \xuct-group-purchase-uniapp\vite.config.ts
  * @Description:
- * Copyright (c) 2022 by 楚恬商行, All Rights Reserved.
+ *
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
  */
 import { defineConfig } from 'vite'
 import uni from '@dcloudio/vite-plugin-uni'
@@ -27,8 +28,8 @@ export default defineConfig({
   server: {
     // 选项写法
     proxy: {
-      '/pag': {
-        target: 'https://cdn.tmui.design',
+      '/rest': {
+        target: 'http://localhost:6500',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, '/api')
       }

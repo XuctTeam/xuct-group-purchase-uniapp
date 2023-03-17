@@ -1,0 +1,131 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-03-17 13:42:03
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-03-17 17:46:28
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\login\index.nvue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
+<template>
+  <tm-app>
+    <tm-navbar title="授权登录" color="pink" linear="right" blur />
+    <view class="login-m">
+      <view class="login-item">
+        <view class="logo">
+          <open-data type="userAvatarUrl"></open-data>
+        </view>
+      </view>
+      <view class="login-tip">
+        <view class="login-tip-big">申请获取以下权限</view>
+        <view class="login-tip-small">获得你的公开信息 （昵称、头像等）</view>
+      </view>
+    </view>
+    <view class="login-b flc">
+      <tm-modal title="确认提示" @ok="back" :height="300">
+        <template v-slot:trigger>
+          <tm-button :round="6" label="拒绝"></tm-button>
+        </template>
+        <view class="confirm">
+          <tm-text :font-size="32" label="拒绝后将无法进行登录！"></tm-text>
+        </view>
+      </tm-modal>
+
+      <tm-button :round="6" :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" linear="left" label="允许" @click="login"></tm-button>
+    </view>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import tmModal from '@/tmui/components/tm-modal/tm-modal.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import { loginByCode } from '@/api/login'
+
+function login() {
+  uni.login({
+    provider: 'weixin', //使用微信登录
+    success: function (loginRes) {
+      console.log(loginRes.authResult)
+      const { code } = loginRes
+      loginByCode(code)
+        .then(res => {})
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  })
+}
+
+function back() {
+  const pageSize = getCurrentPages().length
+  if (pageSize === 1) {
+    uni.redirectTo({
+      url: '/pages/index/index'
+    })
+    return
+  }
+  uni.navigateBack({
+    delta: 1
+  })
+}
+</script>
+<style>
+.login-item {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 40upx;
+  border-bottom: 1upx solid #dddddd;
+  align-items: center;
+  margin-top: 20upx;
+}
+.logo {
+  display: block;
+  width: 180upx;
+  height: 180upx;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #fff;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.login-tip {
+  padding: 30upx;
+}
+
+.login-tip-big {
+  font-size: 28upx;
+  line-height: 80upx;
+}
+
+.login-tip-small {
+  font-size: 12px;
+  color: #9e9e9e;
+}
+.app-name {
+  font-size: 28upx;
+  color: #999;
+}
+
+.login-b {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.login-b .btn-g {
+  margin-top: 40upx;
+}
+
+.confirm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  line-height: 40px;
+}
+</style>
