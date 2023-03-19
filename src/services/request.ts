@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 16:49:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-17 18:25:13
+ * @LastEditTime: 2023-03-19 14:28:30
  * @FilePath: \xuct-group-purchase-uniapp\src\services\request.ts
  * @Description:
  *
@@ -10,7 +10,7 @@
  */
 
 import ajax from 'uni-ajax'
-import useStore from '@/store'
+import { useStore } from '@/store'
 import codeMessage from './codeMessage'
 import ENV_CONFIG from '@/config/env'
 
@@ -96,6 +96,7 @@ instance.interceptors.response.use(
       return refreshTokenHandler(() => instance(response.config))
     }
     const { code, msg } = response.data
+
     if (code !== 200) {
       uni.showToast({
         icon: 'error',

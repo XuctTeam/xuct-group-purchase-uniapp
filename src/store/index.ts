@@ -1,45 +1,39 @@
 /*
  * @Author: Derek Xu
- * @Date: 2023-03-09 17:47:09
+ * @Date: 2023-03-19 14:23:29
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-17 11:02:37
+ * @LastEditTime: 2023-03-19 17:52:18
  * @FilePath: \xuct-group-purchase-uniapp\src\store\index.ts
  * @Description:
- *
- * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
+ * Copyright (c) 2022 by 楚恬商行, All Rights Reserved.
  */
-import { defineStore, createPinia } from 'pinia'
-import { createPersistedState } from 'pinia-plugin-persistedstate'
+
+import { defineStore, acceptHMRUpdate } from 'pinia'
 
 type StateType = {
   user?: User.User
   token?: string
 }
-export default defineStore('useStore', {
+export const useStore = defineStore('useStore', {
   persist: {
     key: 'pinia',
     paths: ['user', 'token']
   },
   state: (): StateType => ({
     user: undefined,
-    token: undefined
+    token: ''
   }),
   actions: {
-    setData<T extends keyof StateType>({ key, value }: { key: T; value: any }) {
+      setData<T extends keyof StateType>({ key, value }: { key: T; value: any }) {
+          debugger
       this[key] = value
-    }
+      },
+      
+      setToken(value: string) {
+          this.token = value
+      }
   }
 })
-
-export const pinia = createPinia().use(
-  createPersistedState({
-    storage: {
-      getItem(key: string): string | null {
-        return uni.getStorageSync(key)
-      },
-      setItem(key: string, value: string) {
-        uni.setStorageSync(key, value)
-      }
-    }
-  })
-)
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useStore, import.meta.hot))
+}
