@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 16:49:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-19 14:28:30
+ * @LastEditTime: 2023-03-20 19:03:46
  * @FilePath: \xuct-group-purchase-uniapp\src\services\request.ts
  * @Description:
  *
@@ -10,7 +10,7 @@
  */
 
 import ajax from 'uni-ajax'
-import { useStore } from '@/store'
+import useStore from '@/store/user'
 import codeMessage from './codeMessage'
 import ENV_CONFIG from '@/config/env'
 
@@ -112,7 +112,6 @@ instance.interceptors.response.use(
   error => {
     const { errno } = error
     const _tips = codeKeys[errno] || '请求异常！'
-    debugger
     uni.showToast({
       title: _tips,
       icon: 'error'

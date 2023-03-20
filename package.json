@@ -45,11 +45,9 @@
     "@dcloudio/uni-mp-toutiao": "3.0.0-3061820230117001",
     "@dcloudio/uni-mp-weixin": "3.0.0-3061820230117001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-3061820230117001",
-    "@nuxt/devalue": "^2.0.0",
     "@vitejs/plugin-vue-jsx": "^2.1.0",
     "echarts": "5.3.2",
     "pinia": "^2.0.14",
-    "pinia-plugin-persistedstate": "^3.1.0",
     "uni-ajax": "^2.5.1",
     "vue": "^3.2.36",
     "vue-i18n": "^9.1.10"

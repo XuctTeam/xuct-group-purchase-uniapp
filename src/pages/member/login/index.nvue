@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 13:42:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-19 20:41:21
+ * @LastEditTime: 2023-03-20 21:33:32
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\login\index.nvue
  * @Description: 
  * 
@@ -32,15 +32,7 @@
         </view>
       </tm-modal>
 
-      <tm-button
-        :round="6"
-        :linear-color="['#ea3c2d', '#ff9d14']"
-        color="orange"
-        font-color="white"
-        linear="left"
-        label="允许"
-        @click="login"
-      ></tm-button>
+      <tm-button :round="6" :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" linear="left" label="允许" @click="login"></tm-button>
     </view>
   </tm-app>
 </template>
@@ -51,40 +43,40 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmModal from '@/tmui/components/tm-modal/tm-modal.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import { loginByCode } from '@/api/login'
-import { useStore } from '@/store'
-const store = useStore()
+import useUserStore from '@/store/user'
+import { resolve } from 'path'
+import { rejects } from 'assert'
+const userStore = useUserStore()
 
-
-
-function login() {
-  uni.login({
-    provider: 'weixin', //使用微信登录
-    success: function (loginRes) {
-      console.log(loginRes.authResult)
-      const { code } = loginRes
-      loginByCode(code)
-        .then(res => {
-          const { tokenValue, openId } = res.data
-          store.setToken(tokenValue)
-          back()
-        })
-        .catch((err: any) => {
-          console.log(err)
-        })
-    }
-  })
+const login = () => {
+  _login()
+    .then((res: any) => {
+      const { tokenValue, ...userInfo } = res
+      userStore.setUserInfo(tokenValue, userInfo)
+      const pLenth = getCurrentPages().length
+      uni.$tm.u.routerTo(pLenth === 1 ? '/pages/index/index' : '', pLenth === 1 ? 'redirect' : 'navigateBack')
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
 }
 
-function back() {
-  const pageSize = getCurrentPages().length
-  if (pageSize === 1) {
-    uni.redirectTo({
-      url: '/pages/index/index'
+const _login = () => {
+  return new Promise((resolve, reject) => {
+    uni.login({
+      provider: 'weixin', //使用微信登录
+      success: async loginRes => {
+        const loinResult = await loginByCode(loginRes.code)
+        const { tokenValue, openId } = loinResult.data
+        return resolve({
+          tokenValue,
+          openId
+        })
+      },
+      fail(result: any) {
+        reject(result)
+      }
     })
-    return
-  }
-  uni.navigateBack({
-    delta: 1
   })
 }
 </script>
