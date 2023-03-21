@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 16:49:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-20 19:03:46
+ * @LastEditTime: 2023-03-21 12:06:40
  * @FilePath: \xuct-group-purchase-uniapp\src\services\request.ts
  * @Description:
  *
@@ -98,10 +98,7 @@ instance.interceptors.response.use(
     const { code, msg } = response.data
 
     if (code !== 200) {
-      uni.showToast({
-        icon: 'error',
-        title: msg
-      })
+      uni.$tm.u.toast(msg, true, 'error')
       return Promise.reject({
         error: code,
         message: msg
@@ -112,10 +109,7 @@ instance.interceptors.response.use(
   error => {
     const { errno } = error
     const _tips = codeKeys[errno] || '请求异常！'
-    uni.showToast({
-      title: _tips,
-      icon: 'error'
-    })
+    uni.$tm.u.toast(_tips, true, 'error')
     return Promise.reject(error)
   }
 )

@@ -1,12 +1,12 @@
 /*
  * @Author: Derek Xu
- * @Date: 2023-03-17 09:13:39
+ * @Date: 2023-03-21 10:14:41
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-17 17:38:05
+ * @LastEditTime: 2023-03-21 12:10:51
  * @FilePath: \xuct-group-purchase-uniapp\vite.config.ts
- * @Description:
- *
- * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
  */
 import { defineConfig } from 'vite'
 import uni from '@dcloudio/vite-plugin-uni'

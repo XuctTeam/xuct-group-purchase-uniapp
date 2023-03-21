@@ -1,7 +1,9 @@
 {
   "name": "tmui",
-  "version": "3.0.9",
+  "version": "3.1.01",
   "scripts": {
+    "copy": "node auto/autoCopy.js",
+    "build:h5:copy": "uni build & node auto/autoCopy.js",
     "dev:app": "uni -p app",
     "dev:custom": "uni -p",
     "dev:h5": "uni",
@@ -26,7 +28,7 @@
     "build:mp-lark": "uni build -p mp-lark",
     "build:mp-qq": "uni build -p mp-qq",
     "build:mp-toutiao": "uni build -p mp-toutiao",
-    "build:mp-weixin": "uni build -p mp-weixin --mode prod",
+    "build:mp-weixin": "uni build -p mp-weixin",
     "build:quickapp-webview": "uni build -p quickapp-webview",
     "build:quickapp-webview-huawei": "uni build -p quickapp-webview-huawei",
     "build:quickapp-webview-union": "uni build -p quickapp-webview-union"
