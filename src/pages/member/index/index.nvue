@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-15 22:02:25
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-21 18:30:44
+ * @LastEditTime: 2023-03-21 22:51:33
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -27,13 +27,30 @@
             <open-data type="userAvatarUrl"></open-data>
           </view>
           <view>
-            <tm-button size="small" :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" :round="10" linear="left" label="授权登录" :width="200" @click="goToLogin"></tm-button>
+            <tm-button
+              size="small"
+              :linear-color="['#ea3c2d', '#ff9d14']"
+              color="orange"
+              font-color="white"
+              :round="10"
+              linear="left"
+              label="授权登录"
+              :width="200"
+              @click="goToLogin"
+            ></tm-button>
           </view>
         </template>
       </view>
     </view>
     <!-- 订单列表信息 -->
-    <tm-cell showAvatar :avatarSize="40" avatar="https://demo.jihainet.com/wap/static/image/userorder.png" :margin="[0, 0]" :titleFontSize="30" title="我的订单"></tm-cell>
+    <tm-cell
+      showAvatar
+      :avatarSize="40"
+      avatar="https://demo.jihainet.com/wap/static/image/userorder.png"
+      :margin="[0, 0]"
+      :titleFontSize="30"
+      title="我的订单"
+    ></tm-cell>
     <tm-grid :col="4" class="border-t-1">
       <tm-grid-item dot v-for="(item, index) in orderItems" :key="index" :height="140" @click="orderItemClick(index)">
         <tm-icon :font-size="60" :name="item.icon"></tm-icon>
@@ -43,7 +60,14 @@
 
     <!--我的服务-->
     <view class="mt-20">
-      <tm-cell showAvatar :avatarSize="40" avatar="https://demo.jihainet.com/wap/static/image/userorder.png" :margin="[0, 0]" :titleFontSize="30" title="我的服务"></tm-cell>
+      <tm-cell
+        showAvatar
+        :avatarSize="40"
+        avatar="https://demo.jihainet.com/wap/static/image/userorder.png"
+        :margin="[0, 0]"
+        :titleFontSize="30"
+        title="我的服务"
+      ></tm-cell>
       <tm-grid :col="4" class="border-t-1">
         <tm-grid-item :height="140" v-for="(item, index) in serviceItems" :key="index" class="cell-item">
           <tm-icon :font-size="60" :name="item.icon"></tm-icon>
@@ -65,14 +89,13 @@ import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
 
 // 导入storeToRefs
 import { storeToRefs } from 'pinia'
-import useStore from '@/store/user'
+import { useUserHook } from '@/store/user'
 import { ref } from 'vue'
 
-const store = useStore()
+const store = useUserHook()
 
 // 解构的时候调用storeToRefs
-const logged = store.logged
-const userInfo = store.userInfo
+const { logged, userInfo } = storeToRefs(store)
 
 const orderItems = ref([
   {

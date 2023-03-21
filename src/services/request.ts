@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 16:49:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-21 12:06:40
+ * @LastEditTime: 2023-03-21 22:30:40
  * @FilePath: \xuct-group-purchase-uniapp\src\services\request.ts
  * @Description:
  *
@@ -10,7 +10,7 @@
  */
 
 import ajax from 'uni-ajax'
-import useStore from '@/store/user'
+import {useUserHook} from '@/store/user'
 import codeMessage from './codeMessage'
 import ENV_CONFIG from '@/config/env'
 
@@ -78,7 +78,7 @@ const refreshTokenHandler = (afresh: any) => {
 
 instance.interceptors.request.use(
   config => {
-    const store = useStore()
+    const store = useUserHook()
     const token = store.token
     token && (config.header['Authorization'] = token)
     return config

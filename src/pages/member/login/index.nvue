@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 13:42:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-20 21:33:32
+ * @LastEditTime: 2023-03-21 22:32:25
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\login\index.nvue
  * @Description: 
  * 
@@ -32,29 +32,42 @@
         </view>
       </tm-modal>
 
-      <tm-button :round="6" :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" linear="left" label="允许" @click="login"></tm-button>
+      <tm-button
+        :round="6"
+        :linear-color="['#ea3c2d', '#ff9d14']"
+        color="orange"
+        font-color="white"
+        linear="left"
+        label="允许"
+        @click="login"
+      ></tm-button>
     </view>
+    <tm-message ref="msg"></tm-message>
   </tm-app>
 </template>
 <script lang="ts" setup>
+import { ref } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmModal from '@/tmui/components/tm-modal/tm-modal.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import tmMessage from '@/tmui/components/tm-message/tm-message.vue'
+
 import { loginByCode } from '@/api/login'
-import useUserStore from '@/store/user'
-import { resolve } from 'path'
-import { rejects } from 'assert'
-const userStore = useUserStore()
+import { useUserHook } from '@/store/user'
+
+const msg = ref<InstanceType<typeof tmMessage> | null>(null)
+
+const userStore = useUserHook()
 
 const login = () => {
+  const that = this
   _login()
     .then((res: any) => {
       const { tokenValue, ...userInfo } = res
       userStore.setUserInfo(tokenValue, userInfo)
-      const pLenth = getCurrentPages().length
-      uni.$tm.u.routerTo(pLenth === 1 ? '/pages/index/index' : '', pLenth === 1 ? 'redirect' : 'navigateBack')
+      back()
     })
     .catch((err: any) => {
       console.log(err)
@@ -66,18 +79,32 @@ const _login = () => {
     uni.login({
       provider: 'weixin', //使用微信登录
       success: async loginRes => {
-        const loinResult = await loginByCode(loginRes.code)
-        const { tokenValue, openId } = loinResult.data
-        return resolve({
-          tokenValue,
-          openId
-        })
+        msg.value?.show({ model: 'load' })
+        try {
+          const loinResult = await loginByCode(loginRes.code)
+          const { tokenValue, openId } = loinResult.data
+          msg.value?.hide()
+          return resolve({
+            tokenValue,
+            openId
+          })
+        } catch (err) {
+          console.log(err)
+          msg.value?.hide()
+          return reject(err)
+        }
       },
       fail(result: any) {
-        reject(result)
+        msg.value?.hide()
+        return reject(result)
       }
     })
   })
+}
+
+const back = () => {
+  const pLenth = getCurrentPages().length
+  uni.$tm.u.routerTo(pLenth === 1 ? '/pages/index/index' : '', pLenth === 1 ? 'redirect' : 'navigateBack')
 }
 </script>
 <style>

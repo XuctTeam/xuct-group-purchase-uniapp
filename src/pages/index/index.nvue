@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-09 20:45:02
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-17 11:27:56
+ * @LastEditTime: 2023-03-21 22:05:58
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -10,28 +10,48 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="标题导航栏" color="pink" linear="right" hideHome blur>
+    <tm-navbar title="团到家" color="pink" linear="right" hideHome blur>
       <template v-slot:right>
         <tm-icon _class="px-32" name="tmicon-plus"></tm-icon>
       </template>
     </tm-navbar>
-    <tm-carousel autoplay :margin="[0, 16]" :align="right" :round="3" :width="700" :height="300" :list="listimg"></tm-carousel>
+    <tm-carousel
+      autoplay
+      :margin="[0, 16]"
+      :align="right"
+      :round="3"
+      :width="700"
+      :height="300"
+      :list="listimg"
+    ></tm-carousel>
     <tm-sheet :margin="[16, 16]" :shadow="4" :round="4">
       <tm-grid :width="680" :col="4">
         <tm-grid-item :height="140">
-          <tm-image :width="90" :height="90" src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico01.png"></tm-image>
+          <tm-image
+            :width="90"
+            :height="90"
+            src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico01.png"
+          ></tm-image>
           <view style="margin-top: 6px">
             <tm-text _class="text-overflow-1" :font-size="24" label="限时抢购"></tm-text>
           </view>
         </tm-grid-item>
         <tm-grid-item color="orange" :height="140">
-          <tm-image :width="90" :height="90" src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico02.png"></tm-image>
+          <tm-image
+            :width="90"
+            :height="90"
+            src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico02.png"
+          ></tm-image>
           <view style="margin-top: 6px">
             <tm-text _class="text-overflow-1" :font-size="24" label="限时抢购"></tm-text>
           </view>
         </tm-grid-item>
         <tm-grid-item color="green" :height="140">
-          <tm-image :width="90" :height="90" src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico03.png"></tm-image>
+          <tm-image
+            :width="90"
+            :height="90"
+            src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico03.png"
+          ></tm-image>
           <view style="margin-top: 6px">
             <tm-text _class="text-overflow-1" :font-size="24" label="限时抢购"></tm-text>
           </view>
@@ -51,7 +71,13 @@
           </view>
         </tm-waterfall-item>
       </tm-waterfall>
-      <tm-float-button :actions="fabActions" actionsPos="top" position="br" :btn="{ icon: 'tmicon-plus', linear: 'bottom', color: 'green' }" @change="floatClick"></tm-float-button>
+      <tm-float-button
+        :actions="fabActions"
+        actionsPos="top"
+        position="br"
+        :btn="{ icon: 'tmicon-plus', linear: 'bottom', color: 'pink' }"
+        @change="floatClick"
+      ></tm-float-button>
     </view>
   </tm-app>
 </template>
@@ -75,8 +101,8 @@ const wall = ref<InstanceType<typeof tmWaterfall> | null>(null)
 const imglist = ref<Good.Image[]>([])
 
 const fabActions = [
-  { icon: 'tmicon-shopping-cart-fill', color: 'pink', linear: 'top', label: '购物车' },
-  { icon: 'tmicon-user-fill', color: 'red', label: '我的' }
+  { icon: 'tmicon-shopping-cart-fill', color: 'red', linear: 'top', label: '购物车' },
+  { icon: 'tmicon-user-fill', color: 'blue', label: '我的' }
 ]
 
 const list = ref([
@@ -152,7 +178,12 @@ const list = ref([
   }
 ])
 
-const listimg = ['https://picsum.photos/200/300?id=43335', 'https://picsum.photos/200/300?id=433', 'https://picsum.photos/200/300?id=439', 'https://picsum.photos/200/300?id=459']
+const listimg = [
+  'https://picsum.photos/200/300?id=43335',
+  'https://picsum.photos/200/300?id=433',
+  'https://picsum.photos/200/300?id=439',
+  'https://picsum.photos/200/300?id=459'
+]
 
 onLoad(() => {
   imglist.value = [
