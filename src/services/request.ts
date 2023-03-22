@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 16:49:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-21 22:30:40
+ * @LastEditTime: 2023-03-22 15:50:38
  * @FilePath: \xuct-group-purchase-uniapp\src\services\request.ts
  * @Description:
  *
@@ -10,9 +10,10 @@
  */
 
 import ajax from 'uni-ajax'
-import {useUserHook} from '@/store/user'
+import { useUserHook } from '@/store/user'
 import codeMessage from './codeMessage'
 import ENV_CONFIG from '@/config/env'
+import { API_NOT_TOKEN } from '@/constant/white'
 
 interface RequestTaskQuery<T = any> {
   resolve: any
@@ -80,7 +81,10 @@ instance.interceptors.request.use(
   config => {
     const store = useUserHook()
     const token = store.token
-    token && (config.header['Authorization'] = token)
+    const url = config.url
+    if (url && !API_NOT_TOKEN.includes(url) && token) {
+      config.header['Authorization'] = token
+    }
     return config
   },
   error => {

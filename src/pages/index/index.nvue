@@ -10,48 +10,24 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="团到家" color="pink" linear="right" hideHome blur>
-      <template v-slot:right>
-        <tm-icon _class="px-32" name="tmicon-plus"></tm-icon>
-      </template>
-    </tm-navbar>
-    <tm-carousel
-      autoplay
-      :margin="[0, 16]"
-      :align="right"
-      :round="3"
-      :width="700"
-      :height="300"
-      :list="listimg"
-    ></tm-carousel>
+    <tm-navbar title="团到家" color="pink" linear="right" hideHome blur></tm-navbar>
+    <tm-carousel autoplay :margin="[0, 16]" :align="right" :round="3" :width="700" :height="300" :list="listimg"></tm-carousel>
     <tm-sheet :margin="[16, 16]" :shadow="4" :round="4">
       <tm-grid :width="680" :col="4">
         <tm-grid-item :height="140">
-          <tm-image
-            :width="90"
-            :height="90"
-            src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico01.png"
-          ></tm-image>
+          <tm-image :width="90" :height="90" src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico01.png"></tm-image>
           <view style="margin-top: 6px">
             <tm-text _class="text-overflow-1" :font-size="24" label="限时抢购"></tm-text>
           </view>
         </tm-grid-item>
         <tm-grid-item color="orange" :height="140">
-          <tm-image
-            :width="90"
-            :height="90"
-            src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico02.png"
-          ></tm-image>
+          <tm-image :width="90" :height="90" src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico02.png"></tm-image>
           <view style="margin-top: 6px">
             <tm-text _class="text-overflow-1" :font-size="24" label="限时抢购"></tm-text>
           </view>
         </tm-grid-item>
         <tm-grid-item color="green" :height="140">
-          <tm-image
-            :width="90"
-            :height="90"
-            src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico03.png"
-          ></tm-image>
+          <tm-image :width="90" :height="90" src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico03.png"></tm-image>
           <view style="margin-top: 6px">
             <tm-text _class="text-overflow-1" :font-size="24" label="限时抢购"></tm-text>
           </view>
@@ -71,18 +47,12 @@
           </view>
         </tm-waterfall-item>
       </tm-waterfall>
-      <tm-float-button
-        :actions="fabActions"
-        actionsPos="top"
-        position="br"
-        :btn="{ icon: 'tmicon-plus', linear: 'bottom', color: 'pink' }"
-        @change="floatClick"
-      ></tm-float-button>
+      <tm-float-button :actions="fabActions" actionsPos="top" position="br" :btn="{ icon: 'tmicon-plus', linear: 'bottom', color: 'pink' }" @change="floatClick"></tm-float-button>
     </view>
   </tm-app>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { onShow, onLoad } from '@dcloudio/uni-app'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
@@ -96,9 +66,11 @@ import tmGrid from '../../tmui/components/tm-grid/tm-grid.vue'
 import tmGridItem from '../../tmui/components/tm-grid-item/tm-grid-item.vue'
 import tmIcon from '../../tmui/components/tm-icon/tm-icon.vue'
 import tmImage from '../../tmui/components/tm-image/tm-image.vue'
+import { bannerList } from '@/api/banner'
 
 const wall = ref<InstanceType<typeof tmWaterfall> | null>(null)
 const imglist = ref<Good.Image[]>([])
+const bannerImages = reactive<API.Banner[]>([])
 
 const fabActions = [
   { icon: 'tmicon-shopping-cart-fill', color: 'red', linear: 'top', label: '购物车' },
@@ -178,12 +150,7 @@ const list = ref([
   }
 ])
 
-const listimg = [
-  'https://picsum.photos/200/300?id=43335',
-  'https://picsum.photos/200/300?id=433',
-  'https://picsum.photos/200/300?id=439',
-  'https://picsum.photos/200/300?id=459'
-]
+//const listimg = ['https://picsum.photos/200/300?id=43335', 'https://picsum.photos/200/300?id=433', 'https://picsum.photos/200/300?id=439', 'https://picsum.photos/200/300?id=459']
 
 onLoad(() => {
   imglist.value = [
@@ -251,7 +218,24 @@ onLoad(() => {
       num: '1500+人购买'
     }
   ]
+
+  _loadBanner()
 })
+
+const _loadBanner = () => {
+  bannerList()
+    .then(res => {
+      bannerImages.push(...res.data)
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+}
+
+const bannerClick = (index: number) => {
+  debugger
+}
+
 function click(e: any) {
   debugger
 }

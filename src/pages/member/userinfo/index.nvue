@@ -1,0 +1,71 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-03-22 13:49:10
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-03-22 15:55:11
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\userinfo\index.nvue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
+<template>
+    <tm-app>
+      <tm-navbar title="个人资料" color="pink" linear="right" blur />
+      <view class="avatar">
+        <image class="bg-img" src="/static/images/member-bg.png"></image>
+        <view class="user-head-img">
+          <open-data type="userAvatarUrl"></open-data>
+        </view>
+        <tm-button size="small" font-color="white" :round="10" color="orange" label="授权获取" @chooseavatar="chooseavatar" open-type="chooseAvatar"></tm-button>
+      </view>
+      <tm-sheet>
+        <tm-input :margin="[0, 30]" placeholder="请输入手机号" prefix="tmicon-phone-fill"></tm-input>
+        <tm-input :margin="[0, 30]" placeholder="请输入昵称" prefix="tmicon-user-fill"></tm-input>
+        <tm-divider></tm-divider>
+        <tm-button block label="block" :margin="[10, 60]" :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" linear="left">保存资料</tm-button>
+      </tm-sheet>
+    </tm-app>
+  </template>
+  <script lang="ts" setup>
+  import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+  import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+  import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+  import tmInput from '@/tmui/components/tm-input/tm-input.vue'
+  import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+  import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
+  
+  const chooseavatar = (avatar: any) => {
+    const { tempPath } = avatar.detail
+  }
+  </script>
+  <style>
+  .avatar {
+    position: relative;
+    width: 100%;
+    height: 340upx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .bg-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .user-head-img {
+    display: block;
+    width: 160upx;
+    height: 160upx;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .form {
+    margin: 30px;
+    background-color: #fff;
+  }
+  </style>
+  

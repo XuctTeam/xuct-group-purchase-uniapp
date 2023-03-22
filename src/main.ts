@@ -13,10 +13,12 @@ import * as Pinia from 'pinia'
 import tmui from './tmui'
 import App from './App.vue'
 import config from '@/config'
+import { setupRouter } from './router'
 
 export function createApp() {
   const app = createSSRApp(App)
   app.use(tmui, config)
+  setupRouter(app)
   return {
     app,
     Pinia

@@ -1,0 +1,25 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-03-22 12:22:42
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-03-22 15:54:35
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\setting\index.nvue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
+<template>
+    <tm-app>
+      <tm-navbar title="设置" color="pink" linear="right" blur />
+      <view class="mt-20 ml-10 mr-10 overflow">
+        <tm-cell :margin="[0, 0]" :titleFontSize="30" bottomBorder title="个人资料" url="/pages/member/userinfo/index"></tm-cell>
+        <tm-cell :margin="[0, 0]" :titleFontSize="30" bottomBorder title="意见反馈"></tm-cell>
+      </view>
+    </tm-app>
+  </template>
+  <script lang="ts" setup>
+  import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+  import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+  import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
+  </script>
+  
