@@ -5,5 +5,5 @@ import request from '@/services/request'
  * @returns
  */
 export const bannerList = () => {
-  return request.get<API.Banner[]>('/api/v1/banner/list')
+  return request.get<API.BannerResult[]>('/api/v1/banner/list')
 }

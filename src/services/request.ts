@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 16:49:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-22 15:50:38
+ * @LastEditTime: 2023-03-22 19:29:23
  * @FilePath: \xuct-group-purchase-uniapp\src\services\request.ts
  * @Description:
  *
@@ -80,10 +80,10 @@ const refreshTokenHandler = (afresh: any) => {
 instance.interceptors.request.use(
   config => {
     const store = useUserHook()
-    const token = store.token
+    const token = store.getToken
     const url = config.url
     if (url && !API_NOT_TOKEN.includes(url) && token) {
-      config.header['Authorization'] = token
+      config.header['satoken'] = 'Bearer ' + token
     }
     return config
   },

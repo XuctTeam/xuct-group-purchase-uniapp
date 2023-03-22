@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-09 20:45:02
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-21 22:05:58
+ * @LastEditTime: 2023-03-22 21:19:46
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -10,8 +10,8 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="团到家" color="pink" linear="right" hideHome blur></tm-navbar>
-    <tm-carousel autoplay :margin="[0, 16]" :align="right" :round="3" :width="700" :height="300" :list="listimg"></tm-carousel>
+    <tm-navbar title="团到家" color="green" linear="right" hideHome blur></tm-navbar>
+    <tm-carousel autoplay :margin="[0, 16]" :round="3" :width="700" :height="300" :list="bannerImages" :display-multiple-items="0" rangKey="image"></tm-carousel>
     <tm-sheet :margin="[16, 16]" :shadow="4" :round="4">
       <tm-grid :width="680" :col="4">
         <tm-grid-item :height="140">
@@ -36,7 +36,7 @@
     </tm-sheet>
     <view class="flex flex-col flex-col-top-center">
       <tm-waterfall ref="wall" :width="718">
-        <tm-waterfall-item :img="item.img" :id="item.id" v-for="(item, index) in imglist" @img-click="click">
+        <tm-waterfall-item :img="item.img" :id="item.id" v-for="(item, index) in imglist" :key="index" @img-click="click">
           <view class="pt-12 pb-12 px-12" @click="$event => click">
             <tm-text :label="item.text" _class="text-overflow-2"></tm-text>
             <view class="flex flex-row flex-row-bottom-start mt-24">
@@ -64,13 +64,12 @@ import tmCarousel from '@/tmui/components/tm-carousel/tm-carousel.vue'
 import tmSheet from '../../tmui/components/tm-sheet/tm-sheet.vue'
 import tmGrid from '../../tmui/components/tm-grid/tm-grid.vue'
 import tmGridItem from '../../tmui/components/tm-grid-item/tm-grid-item.vue'
-import tmIcon from '../../tmui/components/tm-icon/tm-icon.vue'
 import tmImage from '../../tmui/components/tm-image/tm-image.vue'
 import { bannerList } from '@/api/banner'
 
 const wall = ref<InstanceType<typeof tmWaterfall> | null>(null)
 const imglist = ref<Good.Image[]>([])
-const bannerImages = reactive<API.Banner[]>([])
+const bannerImages = reactive<API.BannerResult[]>([])
 
 const fabActions = [
   { icon: 'tmicon-shopping-cart-fill', color: 'red', linear: 'top', label: '购物车' },

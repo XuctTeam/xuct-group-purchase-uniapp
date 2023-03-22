@@ -2,14 +2,14 @@
  * @Author: Derek Xu
  * @Date: 2023-03-15 22:02:25
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-22 15:53:42
+ * @LastEditTime: 2023-03-22 21:49:22
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
 -->
 <template>
   <tm-app>
-    <tm-navbar title="个人中心" color="pink" linear="right" blur />
+    <tm-navbar title="个人中心" color="green" linear="right" blur />
 
     <!-- 用户头像header -->
     <view class="member-top">
@@ -71,7 +71,8 @@ import { ref } from 'vue'
 const store = useUserHook()
 
 // 解构的时候调用storeToRefs
-const { logged, userInfo } = storeToRefs(store)
+const { logged } = storeToRefs(store)
+const userInfo = store.getUserInfo
 
 const orderItems = ref([
   {
@@ -116,7 +117,9 @@ const orderItemClick = (index: any) => {
 const serviceItemClick = (code: string) => {
   if (code === 'setting') {
     uni.$tm.u.routerTo('/pages/member/setting/index', 'navigate')
+    return
   }
+  uni.$tm.u.routerTo('/pages/member/address/list', 'navigate')
 }
 
 function goToLogin() {

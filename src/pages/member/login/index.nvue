@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 13:42:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-21 22:32:25
+ * @LastEditTime: 2023-03-22 20:27:03
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\login\index.nvue
  * @Description: 
  * 
@@ -10,7 +10,7 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="授权登录" color="pink" linear="right" blur />
+    <tm-navbar title="授权登录" color="green" linear="right" blur />
     <view class="login-m">
       <view class="login-item">
         <view class="logo">
@@ -32,15 +32,7 @@
         </view>
       </tm-modal>
 
-      <tm-button
-        :round="6"
-        :linear-color="['#ea3c2d', '#ff9d14']"
-        color="orange"
-        font-color="white"
-        linear="left"
-        label="允许"
-        @click="login"
-      ></tm-button>
+      <tm-button :round="6" :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" linear="left" label="允许" @click="login"></tm-button>
     </view>
     <tm-message ref="msg"></tm-message>
   </tm-app>
@@ -62,11 +54,11 @@ const msg = ref<InstanceType<typeof tmMessage> | null>(null)
 const userStore = useUserHook()
 
 const login = () => {
-  const that = this
   _login()
     .then((res: any) => {
-      const { tokenValue, ...userInfo } = res
-      userStore.setUserInfo(tokenValue, userInfo)
+      const { tokenValue, ...user } = res
+      userStore.setToken(tokenValue)
+      userStore.setUserInfo(user)
       back()
     })
     .catch((err: any) => {
@@ -82,11 +74,11 @@ const _login = () => {
         msg.value?.show({ model: 'load' })
         try {
           const loinResult = await loginByCode(loginRes.code)
-          const { tokenValue, openId } = loinResult.data
+          const { tokenValue, user } = loinResult.data
           msg.value?.hide()
           return resolve({
             tokenValue,
-            openId
+            ...user
           })
         } catch (err) {
           console.log(err)

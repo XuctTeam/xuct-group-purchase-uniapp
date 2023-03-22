@@ -7,6 +7,15 @@
   // },
   "pages": [
     {
+      "path": "pages/member/index/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
       "path": "pages/member/setting/index",
       "style": {
         "navigationBarTitleText": "",
@@ -25,15 +34,6 @@
       }
     },
     {
-      "path": "pages/member/index/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-    {
       "path": "pages/member/login/index",
       "style": {
         "navigationBarTitleText": "",
@@ -44,6 +44,15 @@
     },
     {
       "path": "pages/member/userinfo/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/member/address/list",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",

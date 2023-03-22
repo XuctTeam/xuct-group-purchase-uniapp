@@ -5,11 +5,12 @@ declare namespace User {
     avatar?: string
     nickname?: string
     openId: string
+    phone?: string
   }
 
   type LoginResult = {
     tokenName: string
     tokenValue: string
-    openId: string
+    user?: UserInfo
   }
 }

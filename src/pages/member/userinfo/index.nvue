@@ -2,70 +2,143 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 13:49:10
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-22 15:55:11
+ * @LastEditTime: 2023-03-22 21:34:33
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\userinfo\index.nvue
  * @Description: 
  * 
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
 -->
 <template>
-    <tm-app>
-      <tm-navbar title="个人资料" color="pink" linear="right" blur />
-      <view class="avatar">
-        <image class="bg-img" src="/static/images/member-bg.png"></image>
-        <view class="user-head-img">
+  <tm-app>
+    <tm-navbar title="个人资料" color="green" linear="right" blur />
+    <view class="avatar">
+      <image class="bg-img" src="/static/images/member-bg.png"></image>
+      <view>
+        <template v-if="userInfo.avatar">
+          <image class="user-head-img" mode="aspectFill" :src="userInfo.avatar"></image>
+        </template>
+        <template v-else>
           <open-data type="userAvatarUrl"></open-data>
-        </view>
-        <tm-button size="small" font-color="white" :round="10" color="orange" label="授权获取" @chooseavatar="chooseavatar" open-type="chooseAvatar"></tm-button>
+        </template>
       </view>
-      <tm-sheet>
-        <tm-input :margin="[0, 30]" placeholder="请输入手机号" prefix="tmicon-phone-fill"></tm-input>
-        <tm-input :margin="[0, 30]" placeholder="请输入昵称" prefix="tmicon-user-fill"></tm-input>
-        <tm-divider></tm-divider>
-        <tm-button block label="block" :margin="[10, 60]" :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" linear="left">保存资料</tm-button>
-      </tm-sheet>
-    </tm-app>
-  </template>
-  <script lang="ts" setup>
-  import tmApp from '@/tmui/components/tm-app/tm-app.vue'
-  import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
-  import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
-  import tmInput from '@/tmui/components/tm-input/tm-input.vue'
-  import tmButton from '@/tmui/components/tm-button/tm-button.vue'
-  import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
-  
-  const chooseavatar = (avatar: any) => {
-    const { tempPath } = avatar.detail
+      <tm-button size="small" font-color="white" :round="10" color="green" label="授权更新" @chooseavatar="chooseavatar" open-type="chooseAvatar"></tm-button>
+    </view>
+    <tm-sheet>
+      <tm-input v-model:model-value="phoneRef" :margin="[0, 30]" placeholder="请输入手机号" prefix="tmicon-phone-fill"></tm-input>
+      <tm-input v-model:model-value="nickNameRef" :margin="[0, 30]" placeholder="请输入昵称" prefix="tmicon-user-fill"></tm-input>
+      <tm-divider></tm-divider>
+      <tm-button block label="block" :margin="[10, 60]" :linear-color="['#cbe54e', '#329d9c']" color="green" font-color="white" linear="right" @click="saveUser" :loading="loadingRef">保存资料</tm-button>
+    </tm-sheet>
+    <tm-message ref="msg"></tm-message>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmInput from '@/tmui/components/tm-input/tm-input.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import tmMessage from '@/tmui/components/tm-message/tm-message.vue'
+import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
+import { useUserHook } from '@/store/user'
+import { saveUserInfo } from '@/api/user'
+import { upload } from '@/services/upload'
+
+const userStore = useUserHook()
+const userInfo: User.UserInfo = userStore.getUserInfo
+const phoneRef = ref<string>(userInfo?.phone || '')
+const nickNameRef = ref<string>(userInfo?.nickname || '')
+const msg = ref<InstanceType<typeof tmMessage> | null>(null)
+const loadingRef = ref<boolean>(false)
+
+const chooseavatar = (avatar: any) => {
+  const tempPath = avatar?.detail?.avatarUrl
+  if (!tempPath) {
+    msg.value?.show({
+      text: '头像选择失败',
+      model: 'error'
+    })
+    return
   }
-  </script>
-  <style>
-  .avatar {
-    position: relative;
-    width: 100%;
-    height: 340upx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  upload(tempPath, {}, ({ code, data }: API.UploadResult) => {
+    if (code === -1) {
+      msg.value?.show({
+        text: data,
+        model: 'error'
+      })
+      return
+    }
+    userStore.setUserInfo({ ...userInfo, avatar: data })
+    //uni.$tm.u.routerTo('', 'navigateBack')
+  })
+}
+
+const saveUser = () => {
+  if (!phoneRef.value) {
+    msg.value?.show({
+      text: '电话不能为空',
+      model: 'error'
+    })
+    return
   }
-  
-  .bg-img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+
+  if (!uni.$tm.u.isPhone(phoneRef.value)) {
+    msg.value?.show({
+      text: '手机格式错误',
+      model: 'error'
+    })
+    return
   }
-  
-  .user-head-img {
-    display: block;
-    width: 160upx;
-    height: 160upx;
-    border-radius: 50%;
-    overflow: hidden;
-    background-color: rgba(255, 255, 255, 0.7);
+
+  if (!nickNameRef.value) {
+    msg.value?.show({
+      text: '昵称不能为空',
+      model: 'error'
+    })
+    return
   }
-  
-  .form {
-    margin: 30px;
-    background-color: #fff;
-  }
-  </style>
-  
+
+  loadingRef.value = true
+
+  saveUserInfo(phoneRef.value, nickNameRef.value)
+    .then(() => {
+      userStore.setUserInfo({ ...userInfo, nickname: nickNameRef.value, phone: phoneRef.value })
+      loadingRef.value = false
+      uni.$tm.u.routerTo('', 'navigateBack')
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+}
+</script>
+<style>
+.avatar {
+  position: relative;
+  width: 100%;
+  height: 340upx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.user-head-img {
+  display: block;
+  width: 160upx;
+  height: 160upx;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.form {
+  margin: 30px;
+  background-color: #fff;
+}
+</style>

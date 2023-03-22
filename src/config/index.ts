@@ -8,7 +8,6 @@
  *
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
  */
-import { useTmRouterAfter, useTmRouterBefore } from '../router'
 export default {
   autoDark: true,
   theme: {},
@@ -29,6 +28,5 @@ export default {
     },
     component: {}
   },
-  router: { useTmRouterAfter, useTmRouterBefore },
   custom: {}
 } as Tmui.tmuiConfig

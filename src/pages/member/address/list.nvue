@@ -1,0 +1,79 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-03-22 21:40:01
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-03-22 22:39:35
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\list.nvue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
+<template>
+  <tm-app>
+    <tm-navbar title="收货地址" color="green" linear="right" blur />
+    <!-- <view class="content">
+      <view class="list"></view>
+      <view class="button-bottom">
+     
+      </view>
+      <view class="btn_save_fff" v-if="doesHaveBangs"></view>
+    </view> -->
+    <view class="scrool-page">
+      <view class="header-cont">头部</view>
+      <view class="list-cont">
+        <!-- <scroll-view class="scrool-more" style="height: 100%" scroll-y="true" scroll-with-animation="true">
+          <view lass="list" v-for="(item, index) in list" :key="index">
+            {{ item.cont }}
+          </view>
+        </scroll-view> -->
+      </view>
+
+      <view class="footer">
+        <tm-button :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" linear="left" block label="自定义渐变背景"></tm-button>
+        <tm-button :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" linear="left" block label="自定义渐变背景"></tm-button>
+      </view>
+    </view>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import { onLoad } from '@dcloudio/uni-app'
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+
+import { ref } from 'vue'
+const doesHaveBangs = ref<boolean>(false)
+
+onLoad(() => {
+  uni.getSystemInfo({
+    success: res => {
+      const iphoneX = 'iPhone X'
+      // 判断手机型号是不是iphone x
+      if (res.model.indexOf(iphoneX) > -1) {
+        doesHaveBangs.value = true
+      }
+      // 后面可以考虑把有刘海屏的iphone型号都添加进来进行判断
+    }
+  })
+})
+</script>
+<style>
+page {
+  width: 100%;
+  height: 100%;
+}
+
+.scrool-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.footer {
+  color: #fff;
+  line-height: 100rpx;
+  flex: 0 0 100rpx;
+  /* 不放大不缩小固定100rpx */
+}
+</style>

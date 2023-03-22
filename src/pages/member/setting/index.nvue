@@ -9,17 +9,16 @@
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
 -->
 <template>
-    <tm-app>
-      <tm-navbar title="设置" color="pink" linear="right" blur />
-      <view class="mt-20 ml-10 mr-10 overflow">
-        <tm-cell :margin="[0, 0]" :titleFontSize="30" bottomBorder title="个人资料" url="/pages/member/userinfo/index"></tm-cell>
-        <tm-cell :margin="[0, 0]" :titleFontSize="30" bottomBorder title="意见反馈"></tm-cell>
-      </view>
-    </tm-app>
-  </template>
-  <script lang="ts" setup>
-  import tmApp from '@/tmui/components/tm-app/tm-app.vue'
-  import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
-  import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
-  </script>
-  
+  <tm-app>
+    <tm-navbar title="设置" color="green" linear="right" blur />
+    <view class="mt-20 ml-10 mr-10 overflow">
+      <tm-cell :margin="[0, 0]" :titleFontSize="30" bottomBorder title="个人资料" url="/pages/member/userinfo/index"></tm-cell>
+      <tm-cell :margin="[0, 0]" :titleFontSize="30" bottomBorder title="意见反馈"></tm-cell>
+    </view>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
+</script>
