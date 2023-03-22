@@ -1,7 +1,0 @@
-{
-  "component": true,
-  "usingComponents": {
-    "tm-sheet": "../tm-sheet/tm-sheet",
-    "tm-icon": "../tm-icon/tm-icon"
-  }
-}
