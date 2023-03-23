@@ -309,7 +309,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
           btn: {
             icon: "tmicon-plus",
             linear: "bottom",
-            color: "pink"
+            color: "green"
           }
         })
       };

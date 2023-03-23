@@ -13,6 +13,11 @@
     "navigationBarBackgroundColor": "#FFFFFF",
     "backgroundColor": "#FFFFFF"
   },
+  "permission": {
+    "scope.address": {
+      "desc": "用于获取您通讯录地址"
+    }
+  },
   "requiredPrivateInfos": [
     "chooseAddress"
   ],

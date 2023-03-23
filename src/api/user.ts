@@ -13,3 +13,21 @@ export const saveUserInfo = (phone: string, nickname: string) => {
     nickname
   })
 }
+
+/**
+ * 获取用户地址列表
+ * @returns
+ */
+export const userAddressList = () => {
+  return request.get<User.Address[]>('/api/v1/address/list')
+}
+
+/**
+ * 保存用户地址
+ * @param address
+ */
+export const saveUserAddress = (address: User.Address) => {
+  return request.post('/api/v1/address', {
+    ...address
+  })
+}

@@ -6,4 +6,14 @@ const saveUserInfo = (phone, nickname) => {
     nickname
   });
 };
+const userAddressList = () => {
+  return services_request.instance.get("/api/v1/address/list");
+};
+const saveUserAddress = (address) => {
+  return services_request.instance.post("/api/v1/address", {
+    ...address
+  });
+};
+exports.saveUserAddress = saveUserAddress;
 exports.saveUserInfo = saveUserInfo;
+exports.userAddressList = userAddressList;

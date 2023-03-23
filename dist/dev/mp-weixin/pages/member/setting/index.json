@@ -6,6 +6,7 @@
   "usingComponents": {
     "tm-app": "../../../tmui/components/tm-app/tm-app",
     "tm-navbar": "../../../tmui/components/tm-navbar/tm-navbar",
+    "tm-sheet": "../../../tmui/components/tm-sheet/tm-sheet",
     "tm-cell": "../../../tmui/components/tm-cell/tm-cell"
   }
 }
