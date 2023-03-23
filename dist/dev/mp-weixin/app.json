@@ -13,5 +13,8 @@
     "navigationBarBackgroundColor": "#FFFFFF",
     "backgroundColor": "#FFFFFF"
   },
+  "requiredPrivateInfos": [
+    "chooseAddress"
+  ],
   "usingComponents": {}
 }

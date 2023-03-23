@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 21:40:01
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-22 22:39:35
+ * @LastEditTime: 2023-03-23 13:24:59
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\list.nvue
  * @Description: 
  * 
@@ -11,69 +11,155 @@
 <template>
   <tm-app>
     <tm-navbar title="收货地址" color="green" linear="right" blur />
-    <!-- <view class="content">
-      <view class="list"></view>
-      <view class="button-bottom">
-     
-      </view>
-      <view class="btn_save_fff" v-if="doesHaveBangs"></view>
-    </view> -->
-    <view class="scrool-page">
-      <view class="header-cont">头部</view>
-      <view class="list-cont">
-        <!-- <scroll-view class="scrool-more" style="height: 100%" scroll-y="true" scroll-with-animation="true">
-          <view lass="list" v-for="(item, index) in list" :key="index">
-            {{ item.cont }}
-          </view>
-        </scroll-view> -->
-      </view>
 
-      <view class="footer">
-        <tm-button :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" linear="left" block label="自定义渐变背景"></tm-button>
-        <tm-button :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" linear="left" block label="自定义渐变背景"></tm-button>
+    <view class="flex flex-1">
+      <!-- <tm-result :showBtn="false" :size="200" subTitle="微信导入"></tm-result> -->
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+      <tm-sheet :margin="[32, 0, 32, 32]" :shadow="4" :round="2" color="pink" linear="right">
+        <tm-text :font-size="24" _class="font-weight-b" label="不同的方向，还有更多丰富属性见文档,这是基础组件,只要套在外面用来自动配色使用,适应暗黑效果,切不可无限套的太多,影响性能."></tm-text>
+      </tm-sheet>
+    </view>
+    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'px' }">
+      <view class="relative flex flex-row flex-row-center-center flex-around">
+        <view class="flex flex-1 ma-10">
+          <tm-button block color="red" @click="chooseaddress" :padding="[0, 10]" label="微信导入"></tm-button>
+        </view>
+        <view class="flex flex-1 ma-10">
+          <tm-button block color="green" :padding="[0, 10]" label="新增"></tm-button>
+        </view>
       </view>
     </view>
+
+    <tm-message ref="msg"></tm-message>
   </tm-app>
 </template>
 <script lang="ts" setup>
-import { onLoad } from '@dcloudio/uni-app'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import tmResult from '@/tmui/components/tm-result/tm-result.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmMessage from '@/tmui/components/tm-message/tm-message.vue'
 
-import { ref } from 'vue'
-const doesHaveBangs = ref<boolean>(false)
+import { computed, ref } from 'vue'
+const _showSafe = ref<boolean>(false)
+const msg = ref<InstanceType<typeof tmMessage> | null>(null)
 
-onLoad(() => {
-  uni.getSystemInfo({
-    success: res => {
-      const iphoneX = 'iPhone X'
-      // 判断手机型号是不是iphone x
-      if (res.model.indexOf(iphoneX) > -1) {
-        doesHaveBangs.value = true
+let sys = uni.getSystemInfoSync()
+
+const win_bottom = sys?.safeAreaInsets?.bottom ?? 0
+if (win_bottom > 0) {
+  _showSafe.value = true
+}
+
+const _totalBarHeight = computed(() => {
+  if (_showSafe.value) return 80
+  return 60
+})
+
+const chooseaddress = (e: any) => {
+  uni.chooseAddress({
+    success: (res: WX.Address) => {
+      if (res.errMsg == 'chooseAddress:ok') {
+        //保存通讯录
       }
-      // 后面可以考虑把有刘海屏的iphone型号都添加进来进行判断
+    },
+    fail: (e: any) => {
+      console.log(e)
+      msg.value?.show({
+        text: '获取通讯录失败',
+        icon: 'error'
+      })
     }
   })
-})
+}
 </script>
-<style>
-page {
-  width: 100%;
-  height: 100%;
-}
-
-.scrool-page {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-}
-
-.footer {
-  color: #fff;
-  line-height: 100rpx;
-  flex: 0 0 100rpx;
-  /* 不放大不缩小固定100rpx */
-}
-</style>

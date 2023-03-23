@@ -113,7 +113,13 @@
     "usingComponents": true,
     "uniStatistics": {
       "enable": false
-    }
+    },
+    "permission": {
+      "scope.address": {
+        "desc": "用于获取您通讯录地址"
+      }
+    },
+    "requiredPrivateInfos": ["chooseAddress"]
   },
   "mp-alipay": {
     "usingComponents": true,

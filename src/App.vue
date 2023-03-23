@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-21 10:14:41
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-21 12:20:14
+ * @LastEditTime: 2023-03-23 11:19:07
  * @FilePath: \xuct-group-purchase-uniapp\src\App.vue
  * @Description: 
  * 
@@ -17,4 +17,6 @@
 /* #ifndef APP-PLUS-NVUE */
 @import './tmui/scss/noNvue.css';
 /* #endif */
+
+@import './uni.scss';
 </style>
