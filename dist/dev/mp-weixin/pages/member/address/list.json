@@ -9,6 +9,10 @@
     "tm-button": "../../../tmui/components/tm-button/tm-button",
     "tm-result": "../../../tmui/components/tm-result/tm-result",
     "tm-sheet": "../../../tmui/components/tm-sheet/tm-sheet",
-    "tm-message": "../../../tmui/components/tm-message/tm-message"
+    "tm-message": "../../../tmui/components/tm-message/tm-message",
+    "tm-icon": "../../../tmui/components/tm-icon/tm-icon",
+    "tm-input": "../../../tmui/components/tm-input/tm-input",
+    "tm-text": "../../../tmui/components/tm-text/tm-text",
+    "tm-tag": "../../../tmui/components/tm-tag/tm-tag"
   }
 }

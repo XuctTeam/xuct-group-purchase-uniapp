@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 13:42:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-22 20:27:03
+ * @LastEditTime: 2023-03-24 19:02:46
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\login\index.nvue
  * @Description: 
  * 
@@ -23,33 +23,19 @@
       </view>
     </view>
     <view class="login-b flc">
-      <tm-modal title="确认提示" @ok="back" :height="300">
-        <template v-slot:trigger>
-          <tm-button :round="6" label="拒绝"></tm-button>
-        </template>
-        <view class="confirm">
-          <tm-text :font-size="32" label="拒绝后将无法进行登录！"></tm-text>
-        </view>
-      </tm-modal>
-
+      <tm-button :round="6" label="拒绝" @click="reject"></tm-button>
       <tm-button :round="6" :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" linear="left" label="允许" @click="login"></tm-button>
     </view>
-    <tm-message ref="msg"></tm-message>
   </tm-app>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
-import tmModal from '@/tmui/components/tm-modal/tm-modal.vue'
-import tmText from '@/tmui/components/tm-text/tm-text.vue'
-import tmMessage from '@/tmui/components/tm-message/tm-message.vue'
 
 import { loginByCode } from '@/api/login'
 import { useUserHook } from '@/store/user'
-
-const msg = ref<InstanceType<typeof tmMessage> | null>(null)
+import { confirm, loading, hideLoading } from '@/utils/dialog'
 
 const userStore = useUserHook()
 
@@ -66,37 +52,49 @@ const login = () => {
     })
 }
 
+const back = () => {
+  const pLenth = getCurrentPages().length
+  uni.$tm.u.routerTo(pLenth === 1 ? '/pages/index/index' : '', pLenth === 1 ? 'redirect' : 'navigateBack')
+}
+
+const reject = () => {
+  confirm({
+    title: '拒绝后将无法进行登录！',
+    success: () => {
+      back()
+    },
+    fail: (msg: any) => {
+      console.log(msg)
+    }
+  })
+}
+
 const _login = () => {
   return new Promise((resolve, reject) => {
     uni.login({
       provider: 'weixin', //使用微信登录
       success: async loginRes => {
-        msg.value?.show({ model: 'load' })
+        loading()
         try {
           const loinResult = await loginByCode(loginRes.code)
           const { tokenValue, user } = loinResult.data
-          msg.value?.hide()
+          hideLoading()
           return resolve({
             tokenValue,
             ...user
           })
         } catch (err) {
           console.log(err)
-          msg.value?.hide()
+          hideLoading()
           return reject(err)
         }
       },
       fail(result: any) {
-        msg.value?.hide()
+        hideLoading()
         return reject(result)
       }
     })
   })
-}
-
-const back = () => {
-  const pLenth = getCurrentPages().length
-  uni.$tm.u.routerTo(pLenth === 1 ? '/pages/index/index' : '', pLenth === 1 ? 'redirect' : 'navigateBack')
 }
 </script>
 <style>

@@ -1,0 +1,177 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-03-24 16:24:00
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-03-24 19:15:02
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\index.nvue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
+<template>
+  <tm-app>
+    <tm-navbar title="编辑地址" color="#70DB93" fontColor="white" />
+    <tm-form ref="form" @submit="onConfirm" v-model="address" :label-width="170" :margin="[10, 10]">
+      <tm-form-item required label="收货人" field="userName" :rules="[{ required: true, message: '收货人不能为空' }]">
+        <tm-input :inputPadding="[0, 0]" placeholder="请输入收货人" v-model.lazy="address.userName" :transprent="true" :showBottomBotder="false"></tm-input>
+      </tm-form-item>
+      <tm-form-item required label="联系电话" field="telNumber" :rules="[{ required: true, message:'电话不能为空且格式正确' , validator: (val: any)=> checkPhone(val) }]">
+        <tm-input :inputPadding="[0, 0]" placeholder="请输入电话" v-model.lazy="address.telNumber" :transprent="true" :showBottomBotder="false"></tm-input>
+      </tm-form-item>
+      <tm-form-item :padding="[0, 0]" requiredTitleChangeColor label="选择地区" field="city" required :rules="[{ required: true, message: '请选择地区' }]">
+        <view @click="areaClick" class="flex flex-row flex-row-center-between">
+          <tm-text :userInteractionEnabled="false" :label="address.cityStr || '请选择所在地区地址'"></tm-text>
+          <tm-icon :userInteractionEnabled="false" :font-size="24" name="tmicon-angle-right"></tm-icon>
+        </view>
+      </tm-form-item>
+      <tm-form-item required label="详细地址" field="detailInfo" :rules="[{ required: true, message: '详细地址不能为空' }]">
+        <tm-input placeholder="请输入详细地址" :inputPadding="[0, 0]" v-model.lazy="address.detailInfo" :transprent="true" :showBottomBotder="false"></tm-input>
+      </tm-form-item>
+      <tm-form-item label="是否默认" field="switch">
+        <tm-switch v-model="address.firstChoose" color="red" :default-value="address.firstChoose" :selected="1"></tm-switch>
+      </tm-form-item>
+    </tm-form>
+    <tm-city-picker v-model="address.city" v-model:model-str="address.cityStr" v-model:show="showCity" selectedModel="name" :default-value="address.city" color="green"></tm-city-picker>
+    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'px' }">
+      <view class="relative flex flex-row flex-row-center-center flex-around">
+        <view class="flex flex-1 ma-10">
+          <tm-button block color="red" :padding="[0, 10]" label="删除" :disabled="!address.id" @click="onDelete"></tm-button>
+        </view>
+        <view class="flex flex-1 ma-10">
+          <tm-button block color="green" :padding="[0, 10]" label="保存" @click="onSave"></tm-button>
+        </view>
+      </view>
+    </view>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmFormItem from '@/tmui/components/tm-form-item/tm-form-item.vue'
+import tmForm from '@/tmui/components/tm-form/tm-form.vue'
+import tmInput from '@/tmui/components/tm-input/tm-input.vue'
+import tmCityPicker from '@/tmui/components/tm-city-picker/tm-city-picker.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import tmSwitch from '@/tmui/components/tm-switch/tm-switch.vue'
+import { saveUserAddress, getUserAddress, deleteUserAddress } from '@/api/user'
+import { computed, ref } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { confirm, loading, hideLoading, message } from '@/utils/dialog'
+
+const _showSafe = ref<boolean>(false)
+const form = ref<InstanceType<typeof tmForm> | null>(null)
+
+const showCity = ref(false)
+const address = ref<User.Address>({
+  id: '',
+  userName: '',
+  detailInfo: '',
+  firstChoose: 0,
+  city: [],
+  cityStr: '',
+  telNumber: ''
+})
+
+let sys = uni.getSystemInfoSync()
+
+const win_bottom = sys?.safeAreaInsets?.bottom ?? 0
+if (win_bottom > 0) {
+  _showSafe.value = true
+}
+
+const _totalBarHeight = computed(() => {
+  if (_showSafe.value) return 90
+  return 75
+})
+
+onLoad((opt: any) => {
+  const { id } = opt
+  if (!id) {
+    return
+  }
+  address.value.id = id
+  _load(id)
+})
+
+const _load = (id: string) => {
+  loading()
+  getUserAddress(id)
+    .then(res => {
+      const { provinceName = '', cityName = '', countyName = '', ...addr } = res.data
+      address.value = { ...addr, city: [provinceName, cityName, countyName], cityStr: provinceName + cityName + countyName }
+      hideLoading()
+    })
+    .catch((err: any) => {
+      console.log(err)
+      hideLoading()
+    })
+}
+
+const areaClick = () => {
+  showCity.value = !showCity.value
+}
+
+const checkPhone = (value: any) => {
+  return uni.$tm.u.isPhone(value)
+}
+
+const onSave = () => {
+  form.value?.submit()
+}
+
+const onDelete = () => {
+  if (!address.value.id) {
+    return
+  }
+  confirm({
+    title: '确认删除吗?',
+    success: () => {
+      deleteUserAddress(address.value.id || '')
+        .then(() => {
+          uni.$emit('address:add::success')
+          uni.$tm.u.routerTo('', 'navigateBack')
+        })
+        .catch((err: any) => {
+          message({
+            title: err,
+            icon: 'error'
+          })
+        })
+    },
+    fail: () => {
+      console.log('点击了取消')
+    }
+  })
+}
+
+const onConfirm = (e: any) => {
+  const { validate, data } = e
+  if (!validate) {
+    return
+  }
+
+  const { city, cityStr, ..._address } = data
+  if (city[0]) {
+    _address.provinceName = city[0]
+  }
+  if (city[1]) {
+    _address.cityName = city[1]
+  }
+  if (city[2]) {
+    _address.countyName = city[2]
+  }
+  loading()
+  saveUserAddress(_address)
+    .then(() => {
+      hideLoading()
+      uni.$emit('address:add::success')
+      uni.$tm.u.routerTo('', 'navigateBack')
+    })
+    .catch((err: any) => {
+      console.log(err)
+      hideLoading()
+    })
+}
+</script>

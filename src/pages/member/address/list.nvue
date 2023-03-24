@@ -2,29 +2,44 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 21:40:01
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-23 22:40:18
+ * @LastEditTime: 2023-03-24 19:03:53
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\list.nvue
  * @Description: 
  * 
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
 -->
 <template>
-  <tm-app>
-    <tm-navbar title="收货地址" color="green" linear="right" blur />
-
-    <tm-sheet transprent class="empty flex flex-row-center-center" :margin="[0, 0]" v-if="addressList.length === 0">
-      <tm-result :showBtn="false" status="empty" title="暂无数据" />
+  <tm-app class="flex flex-col">
+    <tm-navbar title="收货地址" color="#70DB93" fontColor="white" />
+    <tm-sheet :margin="[20, 20]" :round="3" :shadow="2">
+      <tm-input prefix="tmicon-search" searchLabel="搜索" placeholder="请输入关键词"></tm-input>
     </tm-sheet>
-    <view v-else>
-      <tm-sheet v-for="(item, index) in addressList" :key="index">sdfsdf</tm-sheet>
+    <view class="empty flex flex-row flex-row-center-center" v-if="addressList.length === 0 && !load">
+      <tm-result class="mt-100" :showBtn="false" status="empty" title="暂无数据" />
     </view>
+    <view class="list" v-else>
+      <tm-sheet v-for="(item, index) in addressList" :key="index" :round="3" :shadow="2" :margin="[20, 20]">
+        <view class="flex flex-row flex-row-center-between">
+          <view>
+            <view class="flex flex-row flex-row-center-between">
+              <tm-tag color="red" size="s" label="默认" v-if="item.firstChoose === 1"></tm-tag>
+              <tm-text :font-size="30" :label="`${item.provinceName}${item.cityName}${item.countyName}`"></tm-text>
+            </view>
+            <tm-text :font-size="28" :label="item.detailInfo"></tm-text>
+            <tm-text :font-size="28" :label="`${item.telNumber}${item.userName}`" class="mt-10"></tm-text>
+          </view>
+          <tm-icon name="tmicon-edit" @click="onEdit(item.id)"></tm-icon>
+        </view>
+      </tm-sheet>
+    </view>
+
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'px' }">
       <view class="relative flex flex-row flex-row-center-center flex-around">
         <view class="flex flex-1 ma-10">
           <tm-button block color="red" @click="chooseaddress" :padding="[0, 10]" label="微信导入"></tm-button>
         </view>
         <view class="flex flex-1 ma-10">
-          <tm-button block color="green" :padding="[0, 10]" label="新增"></tm-button>
+          <tm-button block color="green" :padding="[0, 10]" label="新增" @click="toAdd"></tm-button>
         </view>
       </view>
     </view>
@@ -39,12 +54,18 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmResult from '@/tmui/components/tm-result/tm-result.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmMessage from '@/tmui/components/tm-message/tm-message.vue'
-import { userAddressList, saveUserAddress } from '@/api/user'
-
-import { computed, nextTick, reactive, ref } from 'vue'
+import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
+import tmInput from '@/tmui/components/tm-input/tm-input.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import tmTag from '@/tmui/components/tm-tag/tm-tag.vue'
 import { onLoad } from '@dcloudio/uni-app'
+import { computed, reactive, ref } from 'vue'
+import { userAddressList, saveUserAddress } from '@/api/user'
+import { loading, hideLoading } from '@/utils/dialog'
+
 const _showSafe = ref<boolean>(false)
 const msg = ref<InstanceType<typeof tmMessage> | null>(null)
+const load = ref(true)
 const addressList = reactive<User.Address[]>([])
 
 let sys = uni.getSystemInfoSync()
@@ -60,23 +81,23 @@ const _totalBarHeight = computed(() => {
 })
 
 onLoad(() => {
-  nextTick(() => {
-    _load()
-  })
+  _load()
 })
 
 const _load = () => {
-  msg.value?.show({
-    model: 'load'
-  })
+  addressList.length = 0
+  load.value = true
+  loading()
   userAddressList()
     .then(res => {
       addressList.push(...res.data)
-      msg.value?.hide()
+      load.value = false
+      hideLoading()
     })
     .catch(err => {
       console.log(err)
-      msg.value?.hide()
+      load.value = false
+      hideLoading()
     })
 }
 
@@ -103,9 +124,38 @@ const chooseaddress = (e: any) => {
     }
   })
 }
+
+const onEdit = (id: string) => {
+  uni.navigateTo({
+    url: './index?id=' + id,
+    success: () => {
+      uni.$once('address:add::success', data => {
+        _load()
+        console.log('新增成功返回')
+      })
+    }
+  })
+}
+
+const toAdd = () => {
+  uni.navigateTo({
+    url: './index',
+    success: () => {
+      uni.$once('address:add::success', data => {
+        _load()
+        console.log('新增成功返回')
+      })
+    }
+  })
+}
 </script>
 <style>
 .empty {
   height: 400px;
+}
+
+.list {
+  flex: 1;
+  padding-bottom: 90px;
 }
 </style>

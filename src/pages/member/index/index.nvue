@@ -2,95 +2,69 @@
  * @Author: Derek Xu
  * @Date: 2023-03-15 22:02:25
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-23 21:41:39
+ * @LastEditTime: 2023-03-24 19:52:59
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
 -->
 <template>
   <tm-app>
-    <tm-navbar title="个人中心" color="green" linear="right" blur />
-
+    <tm-navbar title="个人中心" color="#70DB93" fontColor="white" />
     <!-- 用户头像header -->
-    <view class="member-top">
-      <image class="bg-img" src="/static/images/member-bg.png"></image>
-      <view class="member-top-c">
-        <template v-if="logged">
-          <image class="user-head-img" mode="aspectFill" :src="userInfo.avatar"></image>
-          <view class="user-name">{{ userInfo.nickname }}</view>
-          <!-- <view class="fz12 grade" v-if="userInfo.grade_name">
-            {{ userInfo.grade_name }}
-          </view> -->
-        </template>
-        <template v-else>
-          <view class="user-head-img">
-            <open-data type="userAvatarUrl"></open-data>
+    <view class="box">
+      <view class="head_top">
+        <view class="avatar flex flex-row flex-row-center-start">
+          <template v-if="!logged">
+            <tm-avatar trigger triggerIcon="tmicon-check" :round="12" text label="QQ"></tm-avatar>
+            <tm-text :font-size="24" _class="font-weight-b" label="基本示例"></tm-text>
+          </template>
+          <view class="flex flex-row flex-row-center-start flex-1 pl-10" v-else>
+            <view class="user-head-img">
+              <open-data type="userAvatarUrl"></open-data>
+            </view>
+            <view class="user-login">
+              <tm-text :font-size="32" _class="font-weight-b" color="black" label="游客"></tm-text>
+              <tm-button size="small" font-color="white" label="授权登录" color="#FF2400" url="../login/index"></tm-button>
+            </view>
           </view>
-          <view>
-            <tm-button
-              size="small"
-              :linear-color="['#ea3c2d', '#ff9d14']"
-              color="orange"
-              font-color="white"
-              :round="10"
-              linear="left"
-              label="授权登录"
-              :width="200"
-              @click="goToLogin"
-            ></tm-button>
-          </view>
-        </template>
+        </view>
       </view>
-    </view>
-    <!-- 订单列表信息 -->
-    <tm-cell
-      showAvatar
-      :avatarSize="40"
-      avatar="https://demo.jihainet.com/wap/static/image/userorder.png"
-      :margin="[0, 0]"
-      :titleFontSize="30"
-      title="我的订单"
-    ></tm-cell>
-    <tm-grid :col="4" class="border-t-1">
-      <tm-grid-item dot v-for="(item, index) in orderItems" :key="index" :height="140" @click="orderItemClick(index)">
-        <tm-icon :font-size="60" :name="item.icon"></tm-icon>
-        <tm-text _class="pt-16" :font-size="22" :label="item.name"></tm-text>
-      </tm-grid-item>
-    </tm-grid>
-
-    <!--我的服务-->
-    <view class="mt-20">
-      <tm-cell
-        showAvatar
-        :avatarSize="40"
-        avatar="https://demo.jihainet.com/wap/static/image/userorder.png"
-        :margin="[0, 0]"
-        :titleFontSize="30"
-        title="我的服务"
-      ></tm-cell>
-      <tm-grid :col="4" class="border-t-1">
-        <tm-grid-item
-          :height="140"
-          v-for="(item, index) in serviceItems"
-          :key="index"
-          @click="serviceItemClick(item.code)"
-        >
-          <tm-icon :font-size="60" :name="item.icon"></tm-icon>
-          <tm-text _class="pt-10" :font-size="22" :label="item.name"></tm-text>
-        </tm-grid-item>
-      </tm-grid>
+      <view class="menu">
+        <!-- 订单列表信息 -->
+        <tm-sheet :round="3" :shadow="2" :margin="[20, 30, 20, 10]">
+          <tm-cell showAvatar :avatarSize="40" avatar="https://demo.jihainet.com/wap/static/image/userorder.png" :margin="[0, 0]" :titleFontSize="30" title="我的服务"></tm-cell>
+          <tm-grid :col="4" class="border-t-1" :width="686">
+            <tm-grid-item dot v-for="(item, index) in orderItems" :key="index" :height="140" @click="orderItemClick(index)">
+              <tm-icon :font-size="40" :name="item.icon"></tm-icon>
+              <tm-text _class="pt-16" :font-size="22" :label="item.name"></tm-text>
+            </tm-grid-item>
+          </tm-grid>
+        </tm-sheet>
+        <!--我的服务-->
+        <tm-sheet :round="3" :shadow="2" :margin="[20, 30, 20, 10]">
+          <tm-cell showAvatar :avatarSize="40" avatar="https://demo.jihainet.com/wap/static/image/userorder.png" :margin="[0, 0]" :titleFontSize="30" title="我的服务"></tm-cell>
+          <tm-grid :col="4" class="border-t-1" :width="680">
+            <tm-grid-item :height="140" v-for="(item, index) in serviceItems" :key="index" @click="serviceItemClick(item.code)">
+              <tm-icon :font-size="60" :name="item.icon"></tm-icon>
+              <tm-text _class="pt-10" :font-size="22" :label="item.name"></tm-text>
+            </tm-grid-item>
+          </tm-grid>
+        </tm-sheet>
+      </view>
     </view>
   </tm-app>
 </template>
 <script lang="ts" setup>
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
-import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
+import tmAvatar from '@/tmui/components/tm-avatar/tm-avatar.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmGridItem from '@/tmui/components/tm-grid-item/tm-grid-item.vue'
 import tmGrid from '@/tmui/components/tm-grid/tm-grid.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 
 // 导入storeToRefs
 import { storeToRefs } from 'pinia'
@@ -158,48 +132,54 @@ function goToLogin() {
 }
 </script>
 <style>
-.member-top {
+.box {
   position: relative;
-  width: 100%;
-  height: 340upx;
 }
 
-.bg-img {
-  position: absolute;
+.head_top {
   width: 100%;
-  height: 100%;
+  height: 300rpx;
+  position: relative;
+  overflow: hidden;
+}
+.head_top::after {
+  content: '';
+  width: 140%;
+  height: 300rpx;
+  position: absolute;
+  z-index: -1;
+  left: -20%;
+  top: 0;
+  border-radius: 0 0 50% 50%;
+  background: #70db93;
 }
 
-.member-top-c {
+.avatar {
+  height: 180rpx;
+  width: 100%;
+  padding: 10rpx 30rpx;
+}
+
+.menu {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+  top: 160rpx;
+  right: 0;
+  left: 0;
+  overflow: hidden;
 }
 
 .user-head-img {
-  display: block;
-  width: 160upx;
-  height: 160upx;
+  width: 120upx;
+  height: 120upx;
   border-radius: 50%;
   overflow: hidden;
   background-color: rgba(255, 255, 255, 0.7);
-  margin: 0 auto 16upx;
 }
 
-.login-btn {
-  width: 180upx;
-  height: 50upx;
-  line-height: 50upx;
-  font-size: 12px;
-}
-
-.member-grid {
-  background-color: #fff;
-  border-top: 2upx solid #eee;
-  padding: 20upx 0;
+.user-login {
+  height: 100%;
   display: flex;
-  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 10px;
 }
 </style>

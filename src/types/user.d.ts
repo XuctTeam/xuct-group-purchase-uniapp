@@ -22,6 +22,7 @@ declare namespace User {
   }
 
   type Address = {
+    id?: string
     cityName?: string
     countyName?: string
     detailInfo?: string
@@ -31,5 +32,8 @@ declare namespace User {
     provinceName?: string
     telNumber?: string
     userName?: string
+    firstChoose?: number
+    city?: string[]
+    cityStr?: string
   }
 }

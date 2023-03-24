@@ -5,7 +5,8 @@
     "pages/index/index",
     "pages/member/login/index",
     "pages/member/userinfo/index",
-    "pages/member/address/list"
+    "pages/member/address/list",
+    "pages/member/address/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",

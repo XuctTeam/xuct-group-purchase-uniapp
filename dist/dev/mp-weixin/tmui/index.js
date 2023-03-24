@@ -61,6 +61,15 @@ const pages$1 = [
       titlePenetrate: "YES",
       transparentTitle: "always"
     }
+  },
+  {
+    path: "pages/member/address/index",
+    style: {
+      navigationBarTitleText: "",
+      navigationStyle: "custom",
+      titlePenetrate: "YES",
+      transparentTitle: "always"
+    }
   }
 ];
 const globalStyle = {

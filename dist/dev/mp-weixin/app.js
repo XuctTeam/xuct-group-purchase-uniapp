@@ -22,6 +22,7 @@ if (!Math) {
   "./pages/member/login/index.js";
   "./pages/member/userinfo/index.js";
   "./pages/member/address/list.js";
+  "./pages/member/address/index.js";
 }
 const _sfc_main = {};
 function _sfc_render(_ctx, _cache) {

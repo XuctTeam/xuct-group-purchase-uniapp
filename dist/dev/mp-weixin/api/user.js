@@ -14,6 +14,14 @@ const saveUserAddress = (address) => {
     ...address
   });
 };
+const getUserAddress = (id) => {
+  return services_request.instance.get("/api/v1/address", { id });
+};
+const deleteUserAddress = (id) => {
+  return services_request.instance.delete("/api/v1/address?id=" + id);
+};
+exports.deleteUserAddress = deleteUserAddress;
+exports.getUserAddress = getUserAddress;
 exports.saveUserAddress = saveUserAddress;
 exports.saveUserInfo = saveUserInfo;
 exports.userAddressList = userAddressList;

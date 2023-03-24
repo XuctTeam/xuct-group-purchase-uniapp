@@ -31,3 +31,21 @@ export const saveUserAddress = (address: User.Address) => {
     ...address
   })
 }
+
+/**
+ * 获取地址详情
+ * @param id
+ * @returns
+ */
+export const getUserAddress = (id: string) => {
+  return request.get<User.Address>('/api/v1/address', { id })
+}
+
+/**
+ * 删除通讯录地址
+ * @param id
+ * @returns
+ */
+export const deleteUserAddress = (id: string) => {
+  return request.delete('/api/v1/address?id=' + id)
+}

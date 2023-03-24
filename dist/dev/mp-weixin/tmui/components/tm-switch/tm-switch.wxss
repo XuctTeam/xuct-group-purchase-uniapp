@@ -1,0 +1,21 @@
+
+.base.data-v-031c9c9a {
+  transform: translateX(0%);
+  transition: 0.2s ease;
+  left: 0;
+}
+.on.data-v-031c9c9a {
+  left: calc(50% + 2px);
+}
+.off.data-v-031c9c9a {
+  left: 2px;
+}
+
+
+
+.switchbgani {
+  transition-timing-function: ease;
+  transition-property: background-color;
+  transition-duration: 0.3s;
+  transition-delay: 0ms;
+}

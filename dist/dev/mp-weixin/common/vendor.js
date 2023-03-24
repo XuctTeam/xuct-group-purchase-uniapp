@@ -3083,6 +3083,9 @@ function inject(key, defaultValue, treatDefaultAsFactory = false) {
     warn$1$1(`inject() can only be used inside setup() or functional components.`);
   }
 }
+function watchEffect(effect, options) {
+  return doWatch(effect, null, options);
+}
 const INITIAL_WATCHER_VALUE = {};
 function watch(source, cb, options) {
   if (!isFunction$1(cb)) {
@@ -5640,6 +5643,27 @@ function setRef(ref2, id, opts = {}) {
   const { $templateRefs } = getCurrentInstance();
   $templateRefs.push({ i: id, r: ref2, k: opts.k, f: opts.f });
 }
+function withModelModifiers(fn, { number: number2, trim }, isComponent = false) {
+  if (isComponent) {
+    return (...args) => {
+      if (trim) {
+        args = args.map((a2) => a2.trim());
+      } else if (number2) {
+        args = args.map(toNumber);
+      }
+      return fn(...args);
+    };
+  }
+  return (event) => {
+    const value = event.detail.value;
+    if (trim) {
+      event.detail.value = value.trim();
+    } else if (number2) {
+      event.detail.value = toNumber(value);
+    }
+    return fn(event);
+  };
+}
 function setupDevtoolsPlugin() {
 }
 const o$1 = (value, key) => vOn(value, key);
@@ -5652,6 +5676,7 @@ const n$1 = (value) => normalizeClass(value);
 const t$1 = (val) => toDisplayString$1(val);
 const p$1 = (props) => renderProps(props);
 const sr = (ref2, id, opts) => setRef(ref2, id, opts);
+const m$1 = (fn, modifiers, isComponent = false) => withModelModifiers(fn, modifiers, isComponent);
 function createApp$1(rootComponent, rootProps = null) {
   rootComponent && (rootComponent.mpType = "app");
   return createVueApp(rootComponent, rootProps).use(plugin);
@@ -11504,6 +11529,7 @@ exports.getCurrentInstance = getCurrentInstance;
 exports.index = index;
 exports.inject = inject;
 exports.isRef = isRef;
+exports.m = m$1;
 exports.n = n$1;
 exports.nextTick = nextTick;
 exports.o = o$1;
@@ -11514,6 +11540,7 @@ exports.onMounted = onMounted;
 exports.onShareAppMessage = onShareAppMessage;
 exports.onShareTimeline = onShareTimeline;
 exports.onUnmounted = onUnmounted;
+exports.onUpdated = onUpdated;
 exports.p = p$1;
 exports.provide = provide;
 exports.r = r$1;
@@ -11527,3 +11554,4 @@ exports.t = t$1;
 exports.toRaw = toRaw;
 exports.unref = unref;
 exports.watch = watch;
+exports.watchEffect = watchEffect;
