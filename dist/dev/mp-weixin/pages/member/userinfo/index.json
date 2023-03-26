@@ -7,9 +7,7 @@
     "tm-app": "../../../tmui/components/tm-app/tm-app",
     "tm-navbar": "../../../tmui/components/tm-navbar/tm-navbar",
     "tm-sheet": "../../../tmui/components/tm-sheet/tm-sheet",
-    "tm-input": "../../../tmui/components/tm-input/tm-input",
     "tm-button": "../../../tmui/components/tm-button/tm-button",
-    "tm-message": "../../../tmui/components/tm-message/tm-message",
-    "tm-divider": "../../../tmui/components/tm-divider/tm-divider"
+    "tm-icon": "../../../tmui/components/tm-icon/tm-icon"
   }
 }

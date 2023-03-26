@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 13:42:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-24 19:02:46
+ * @LastEditTime: 2023-03-26 20:13:27
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\login\index.nvue
  * @Description: 
  * 
@@ -10,7 +10,7 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="授权登录" color="green" linear="right" blur />
+    <tm-navbar title="授权登录" color="#70DB93" fontColor="white" />
     <view class="login-m">
       <view class="login-item">
         <view class="logo">
@@ -24,7 +24,15 @@
     </view>
     <view class="login-b flc">
       <tm-button :round="6" label="拒绝" @click="reject"></tm-button>
-      <tm-button :round="6" :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" linear="left" label="允许" @click="login"></tm-button>
+      <tm-button
+        :round="6"
+        :linear-color="['#ea3c2d', '#ff9d14']"
+        color="orange"
+        font-color="white"
+        linear="left"
+        label="允许"
+        @click="login"
+      ></tm-button>
     </view>
   </tm-app>
 </template>
@@ -104,7 +112,7 @@ const _login = () => {
   padding-bottom: 40upx;
   border-bottom: 1upx solid #dddddd;
   align-items: center;
-  margin-top: 20upx;
+  margin-top: 30upx;
 }
 .logo {
   display: block;

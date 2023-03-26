@@ -38,10 +38,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: ""
     },
+    //激活时的主题配色。
     focusColor: {
       type: String,
       default: "primary"
     },
+    //默认使用自动配色
     fontColor: {
       type: String,
       default: ""
@@ -82,18 +84,22 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Number,
       default: 64
     },
+    //前缀图标
     prefix: {
       type: String,
       default: ""
     },
+    //前缀文字
     prefixLabel: {
       type: String,
       default: ""
     },
+    //后缀图标
     suffix: {
       type: String,
       default: ""
     },
+    //后缀文字
     suffixLabel: {
       type: String,
       default: ""
@@ -102,10 +108,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Number,
       default: 30
     },
+    //tmicon-search
     search: {
       type: String,
       default: ""
     },
+    //搜索
     searchLabel: {
       type: String,
       default: ""
@@ -118,18 +126,22 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Boolean,
       default: false
     },
+    //是否禁用
     disabled: {
       type: Boolean,
       default: false
     },
     placeholder: {
       type: String,
-      default: "\u8BF7\u8F93\u5165\u5185\u5BB9"
+      default: "请输入内容"
     },
+    //错误时，提示的文本。
     errorLabel: {
       type: String,
-      default: "\u8BF7\u8F93\u5165\u5185\u5BB9"
+      default: "请输入内容"
     },
+    //对齐方式。
+    //left,right,center
     align: {
       type: String,
       default: "left"
@@ -142,6 +154,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Array,
       default: () => [24, 0]
     },
+    //是否显示字符统计。
     showCharNumber: {
       type: Boolean,
       default: false
@@ -178,6 +191,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Boolean,
       default: true
     },
+    //默认的聚集状态
     focus: {
       type: Boolean,
       default: false
@@ -218,6 +232,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Boolean,
       default: false
     },
+    /**横向布局的对齐类,主要是用来配置文本域时,左图标需要顶对齐或者左中对齐. */
     layoutAlign: {
       type: String,
       default: "flex-row-top-start"
@@ -235,22 +250,22 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     "click"
   ],
   setup(__props, { emit: emits }) {
-    var _a, _b, _c;
+    var _a;
     const props = __props;
     const store = tmui_tool_lib_tmpinia.useTmpiniaStore();
-    const proxy = (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
+    const proxy = ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
     let parentFormItem = proxy == null ? void 0 : proxy.$parent;
     while (parentFormItem) {
       if ((parentFormItem == null ? void 0 : parentFormItem.tmFormComnameFormItem) == "tmFormComnameFormItem" || !parentFormItem) {
         break;
       } else {
-        parentFormItem = (_c = parentFormItem == null ? void 0 : parentFormItem.$parent) != null ? _c : void 0;
+        parentFormItem = (parentFormItem == null ? void 0 : parentFormItem.$parent) ?? void 0;
       }
     }
     const isAndroid = common_vendor.ref(false);
     isAndroid.value = common_vendor.index.getSystemInfoSync().osName == "android" ? true : false;
-    const _height = common_vendor.computed$1(() => props.height);
-    const _inputPadding = common_vendor.computed$1(() => {
+    const _height = common_vendor.computed(() => props.height);
+    const _inputPadding = common_vendor.computed(() => {
       if (props.search !== "" || props.searchLabel !== "") {
         return [4, 0];
       }
@@ -274,17 +289,17 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         }, wait);
       }
     }
-    const propsDetail = common_vendor.computed$1(() => {
+    const propsDetail = common_vendor.computed(() => {
       return {
         ...props,
         fontSize_px: common_vendor.index.upx2px(props.fontSize)
       };
     });
     props.modelValue;
-    const tmcfg = common_vendor.computed$1(() => store.tmStore);
-    common_vendor.computed$1(() => tmui_tool_lib_minxs.computedStyle(props));
-    common_vendor.computed$1(() => tmui_tool_lib_minxs.computedClass(props));
-    const isDark = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
+    const tmcfg = common_vendor.computed(() => store.tmStore);
+    common_vendor.computed(() => tmui_tool_lib_minxs.computedStyle(props));
+    common_vendor.computed(() => tmui_tool_lib_minxs.computedClass(props));
+    const isDark = common_vendor.computed(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
     const _requiredError = common_vendor.ref(false);
     const _foucsActive = common_vendor.ref(props.focus || false);
     common_vendor.watch(
@@ -293,7 +308,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         _foucsActive.value = props.focus;
       }
     );
-    const _color = common_vendor.computed$1(() => {
+    const _color = common_vendor.computed(() => {
       let color = props.color;
       if (_foucsActive.value) {
         if (props.followTheme && store.tmStore.color) {
@@ -306,15 +321,15 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         color = "red";
       return color;
     });
-    const tmcomputed = common_vendor.computed$1(() => {
+    const tmcomputed = common_vendor.computed(() => {
       const _props = { ...props, color: _color.value };
       return tmui_tool_lib_minxs.computedTheme(_props, isDark.value, tmcfg.value);
     });
     const showPasswordText = common_vendor.ref(propsDetail.value.password);
-    const showPasswordIcon = common_vendor.computed$1(() => props.password);
+    const showPasswordIcon = common_vendor.computed(() => props.password);
     common_vendor.ref(props.errorLabel);
     const _value = common_vendor.ref(props.modelValue);
-    const _valueLenChar = common_vendor.computed$1(() => {
+    const _valueLenChar = common_vendor.computed(() => {
       let str = String(_value.value).split("");
       return str.length;
     });
@@ -361,7 +376,6 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         return;
       } else {
         debounce(() => emits("click", e), 200, true);
-        console.log(type);
       }
     }
     return (_ctx, _cache) => {

@@ -13,35 +13,35 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     return (_ctx, _cache) => {
       return {
         a: common_vendor.p({
-          title: "\u8BBE\u7F6E",
-          color: "green",
-          linear: "right",
-          blur: true
+          title: "系统设置",
+          color: "#70DB93",
+          fontColor: "white"
         }),
         b: common_vendor.p({
           titleFontSize: 30,
           bottomBorder: true,
-          title: "\u4E2A\u4EBA\u8D44\u6599",
+          title: "个人资料",
           url: "/pages/member/userinfo/index"
         }),
         c: common_vendor.p({
-          margin: [30, 10],
-          shadow: 4,
-          round: 2,
-          color: "green",
-          linear: "right"
-        }),
-        d: common_vendor.p({
           titleFontSize: 30,
           bottomBorder: true,
-          title: "\u610F\u89C1\u53CD\u9988"
+          title: "意见反馈"
+        }),
+        d: common_vendor.p({
+          margin: [10, 10],
+          shadow: 4,
+          round: 2
         }),
         e: common_vendor.p({
-          margin: [30, 30],
+          titleFontSize: 30,
+          bottomBorder: true,
+          title: "意见反馈"
+        }),
+        f: common_vendor.p({
+          margin: [10, 10],
           shadow: 4,
-          round: 2,
-          color: "green",
-          linear: "right"
+          round: 2
         })
       };
     };

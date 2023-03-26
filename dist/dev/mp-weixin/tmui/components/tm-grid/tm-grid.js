@@ -20,18 +20,22 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Number,
       default: 750
     },
+    //一行放置几个。
     col: {
       type: Number,
       default: 5
     },
+    //是否显示边线。
     showBorder: {
       type: Boolean,
       default: false
     },
+    // 背景
     color: {
       type: String,
       default: "white"
     },
+    //是否透明背景
     transprent: {
       type: Boolean,
       default: false
@@ -41,7 +45,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     const props = __props;
     common_vendor.inject(
       "tmuiSysInfo",
-      common_vendor.computed$1(() => {
+      common_vendor.computed(() => {
         return {
           bottom: 0,
           height: 750,
@@ -53,17 +57,17 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       })
     );
     let _cachList = common_vendor.ref([]);
-    const _colWidth = common_vendor.computed$1(() => {
+    const _colWidth = common_vendor.computed(() => {
       return Math.ceil(props.width / props.col - 1);
     });
     common_vendor.provide("tmGridItemWidth", _colWidth.value + (props.showBorder ? 1 : 0));
     common_vendor.provide(
       "tmGridshowBorder",
-      common_vendor.computed$1(() => props.showBorder)
+      common_vendor.computed(() => props.showBorder)
     );
     common_vendor.provide(
       "tmGridshowCachList",
-      common_vendor.computed$1(() => _cachList.value)
+      common_vendor.computed(() => _cachList.value)
     );
     function pushKey(e) {
       let index = _cachList.value.findIndex((el) => el.id == e.id);

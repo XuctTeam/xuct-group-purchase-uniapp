@@ -27,7 +27,7 @@ const tmSwitch = () => "../../../tmui/components/tm-switch/tm-switch.js";
 const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   __name: "index",
   setup(__props) {
-    var _a, _b;
+    var _a;
     const _showSafe = common_vendor.ref(false);
     const form = common_vendor.ref(null);
     const showCity = common_vendor.ref(false);
@@ -41,11 +41,11 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       telNumber: ""
     });
     let sys = common_vendor.index.getSystemInfoSync();
-    const win_bottom = (_b = (_a = sys == null ? void 0 : sys.safeAreaInsets) == null ? void 0 : _a.bottom) != null ? _b : 0;
+    const win_bottom = ((_a = sys == null ? void 0 : sys.safeAreaInsets) == null ? void 0 : _a.bottom) ?? 0;
     if (win_bottom > 0) {
       _showSafe.value = true;
     }
-    const _totalBarHeight = common_vendor.computed$1(() => {
+    const _totalBarHeight = common_vendor.computed(() => {
       if (_showSafe.value)
         return 90;
       return 75;
@@ -84,7 +84,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         return;
       }
       utils_dialog.confirm({
-        title: "\u786E\u8BA4\u5220\u9664\u5417?",
+        title: "确认删除吗?",
         success: () => {
           api_user.deleteUserAddress(address.value.id || "").then(() => {
             common_vendor.index.$emit("address:add::success");
@@ -97,7 +97,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
           });
         },
         fail: () => {
-          console.log("\u70B9\u51FB\u4E86\u53D6\u6D88");
+          console.log("点击了取消");
         }
       });
     };
@@ -129,7 +129,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     return (_ctx, _cache) => {
       return {
         a: common_vendor.p({
-          title: "\u7F16\u8F91\u5730\u5740",
+          title: "编辑地址",
           color: "#70DB93",
           fontColor: "white"
         }),
@@ -138,18 +138,18 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         }, true)),
         c: common_vendor.p({
           inputPadding: [0, 0],
-          placeholder: "\u8BF7\u8F93\u5165\u6536\u8D27\u4EBA",
+          placeholder: "请输入收货人",
           transprent: true,
           showBottomBotder: false,
           modelValue: address.value.userName
         }),
         d: common_vendor.p({
           required: true,
-          label: "\u6536\u8D27\u4EBA",
+          label: "收货人",
           field: "userName",
           rules: [{
             required: true,
-            message: "\u6536\u8D27\u4EBA\u4E0D\u80FD\u4E3A\u7A7A"
+            message: "收货人不能为空"
           }]
         }),
         e: common_vendor.o(common_vendor.m(($event) => address.value.telNumber = $event, {
@@ -157,24 +157,24 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         }, true)),
         f: common_vendor.p({
           inputPadding: [0, 0],
-          placeholder: "\u8BF7\u8F93\u5165\u7535\u8BDD",
+          placeholder: "请输入电话",
           transprent: true,
           showBottomBotder: false,
           modelValue: address.value.telNumber
         }),
         g: common_vendor.p({
           required: true,
-          label: "\u8054\u7CFB\u7535\u8BDD",
+          label: "联系电话",
           field: "telNumber",
           rules: [{
             required: true,
-            message: "\u7535\u8BDD\u4E0D\u80FD\u4E3A\u7A7A\u4E14\u683C\u5F0F\u6B63\u786E",
+            message: "电话不能为空且格式正确",
             validator: (val) => checkPhone(val)
           }]
         }),
         h: common_vendor.p({
           userInteractionEnabled: false,
-          label: address.value.cityStr || "\u8BF7\u9009\u62E9\u6240\u5728\u5730\u533A\u5730\u5740"
+          label: address.value.cityStr || "请选择所在地区地址"
         }),
         i: common_vendor.p({
           userInteractionEnabled: false,
@@ -185,19 +185,19 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         k: common_vendor.p({
           padding: [0, 0],
           requiredTitleChangeColor: true,
-          label: "\u9009\u62E9\u5730\u533A",
+          label: "选择地区",
           field: "city",
           required: true,
           rules: [{
             required: true,
-            message: "\u8BF7\u9009\u62E9\u5730\u533A"
+            message: "请选择地区"
           }]
         }),
         l: common_vendor.o(common_vendor.m(($event) => address.value.detailInfo = $event, {
           lazy: true
         }, true)),
         m: common_vendor.p({
-          placeholder: "\u8BF7\u8F93\u5165\u8BE6\u7EC6\u5730\u5740",
+          placeholder: "请输入详细地址",
           inputPadding: [0, 0],
           transprent: true,
           showBottomBotder: false,
@@ -205,11 +205,11 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         }),
         n: common_vendor.p({
           required: true,
-          label: "\u8BE6\u7EC6\u5730\u5740",
+          label: "详细地址",
           field: "detailInfo",
           rules: [{
             required: true,
-            message: "\u8BE6\u7EC6\u5730\u5740\u4E0D\u80FD\u4E3A\u7A7A"
+            message: "详细地址不能为空"
           }]
         }),
         o: common_vendor.o(($event) => address.value.firstChoose = $event),
@@ -220,7 +220,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
           modelValue: address.value.firstChoose
         }),
         q: common_vendor.p({
-          label: "\u662F\u5426\u9ED8\u8BA4",
+          label: "是否默认",
           field: "switch"
         }),
         r: common_vendor.sr(form, "0ce79303-2,0ce79303-0", {
@@ -249,7 +249,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
           block: true,
           color: "red",
           padding: [0, 10],
-          label: "\u5220\u9664",
+          label: "删除",
           disabled: !address.value.id
         }),
         C: common_vendor.o(onSave),
@@ -257,7 +257,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
           block: true,
           color: "green",
           padding: [0, 10],
-          label: "\u4FDD\u5B58"
+          label: "保存"
         }),
         E: common_vendor.unref(_totalBarHeight) + "px"
       };

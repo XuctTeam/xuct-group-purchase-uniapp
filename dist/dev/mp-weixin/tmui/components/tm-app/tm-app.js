@@ -11,6 +11,8 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   __name: "tm-app",
   props: {
     ...tmui_tool_lib_minxs.custom_props,
+    //整体的主题色调同全局色一样。
+    /**暂时不可用 */
     theme: {
       type: String,
       default: "grey-5"
@@ -19,18 +21,22 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: ""
     },
+    //应用的背景颜色。
     color: {
       type: String,
       default: "grey-4"
     },
+    /**自定义暗黑的背景，你也可以通过全局配置 */
     darkColor: {
       type: String,
       default: "#050505"
     },
+    /**是否模糊背景，暂时不可用 */
     blur: {
       type: [Boolean, String],
       default: false
     },
+    /**这是一个淘汰的属性，请在pages.json中配置即可，会自动读取。而不需要在这里设置 */
     navbar: {
       type: Object,
       default: () => {
@@ -47,25 +53,25 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   emits: ["update:showMenu"],
   setup(__props, { expose, emit: emits }) {
-    var _a, _b;
+    var _a;
     const props = __props;
     const store = tmui_tool_lib_tmpinia.useTmpiniaStore();
-    const proxy = (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
-    const tmcfg = common_vendor.computed$1(() => store.tmStore);
+    const proxy = ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
+    const tmcfg = common_vendor.computed(() => store.tmStore);
     const isSetThemeOk = common_vendor.ref(false);
-    const isDark = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
-    const tmcomputed = common_vendor.computed$1(
+    const isDark = common_vendor.computed(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
+    const tmcomputed = common_vendor.computed(
       () => tmui_tool_lib_minxs.computedTheme(props, isDark.value, tmcfg.value)
     );
     const _showMenu = common_vendor.ref(props.showMenu);
     const sysinfo = tmui_tool_function_util.getWindow();
     const sysinfoRef = common_vendor.ref(sysinfo);
-    const _bgImg = common_vendor.computed$1(() => props.bgImg);
+    const _bgImg = common_vendor.computed(() => props.bgImg);
     const view_width = common_vendor.ref(sysinfo.width);
     let view_height = common_vendor.ref(sysinfo.height);
     let isTabbarPage = false;
     let nowPage = getCurrentPages().pop();
-    const _blurEffect = common_vendor.computed$1(() => {
+    const _blurEffect = common_vendor.computed(() => {
       if (props.blur === true && isDark.value)
         return "dark";
       if (props.blur === true && !isDark.value)
@@ -80,12 +86,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       dark: isDark.value
     });
     common_vendor.onLoad((opts) => {
-      var _a2, _b2;
+      var _a2;
       try {
-        (_b2 = store.tmuiConfig.router) == null ? void 0 : _b2.useTmRouterAfter({
-          path: (_a2 = nowPage == null ? void 0 : nowPage.route) != null ? _a2 : "",
+        (_a2 = store.tmuiConfig.router) == null ? void 0 : _a2.useTmRouterAfter({
+          path: (nowPage == null ? void 0 : nowPage.route) ?? "",
           opts,
-          context: proxy != null ? proxy : null
+          context: proxy ?? null
         });
       } catch (error) {
       }
@@ -94,8 +100,8 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       _onInit();
     });
     function _onInit() {
-      var _a2, _b2;
-      let barLit = (_b2 = (_a2 = common_vendor.index.$tm.tabBar) == null ? void 0 : _a2.list) != null ? _b2 : [];
+      var _a2;
+      let barLit = ((_a2 = common_vendor.index.$tm.tabBar) == null ? void 0 : _a2.list) ?? [];
       for (let i = 0; i < barLit.length; i++) {
         if ((nowPage == null ? void 0 : nowPage.route) == barLit[i].pagePath) {
           isTabbarPage = true;
@@ -122,9 +128,9 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       appConfig.value.theme = tmcomputed.value.backgroundColor;
     });
     function setAppStyle() {
-      var _a2, _b2, _c;
+      var _a2, _b, _c;
       if (isDark.value) {
-        appConfig.value.theme = ((_c = (_b2 = (_a2 = store.tmuiConfig) == null ? void 0 : _a2.themeConfig) == null ? void 0 : _b2.dark) == null ? void 0 : _c.bodyColor) || props.darkColor;
+        appConfig.value.theme = ((_c = (_b = (_a2 = store.tmuiConfig) == null ? void 0 : _a2.themeConfig) == null ? void 0 : _b.dark) == null ? void 0 : _c.bodyColor) || props.darkColor;
       } else {
         appConfig.value.theme = tmcomputed.value.backgroundColor;
       }
@@ -218,7 +224,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         osChangeTheme(ev.theme);
       });
     } catch (error) {
-      console.warn("\u6CA1\u6709\u4E3B\u9898\u5207\u6362\u529F\u80FD\uFF1A", error);
+      console.warn("没有主题切换功能：", error);
     }
     function osChangeTheme(ev) {
       if (!store.getAutoDark)
@@ -231,11 +237,11 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     }
     common_vendor.provide(
       "tmuiSysInfo",
-      common_vendor.computed$1(() => sysinfoRef.value)
+      common_vendor.computed(() => sysinfoRef.value)
     );
     common_vendor.provide(
       "appTextColor",
-      common_vendor.computed$1(() => tmcomputed.value.textColor)
+      common_vendor.computed(() => tmcomputed.value.textColor)
     );
     common_vendor.provide("custom_space_size", [0, 0]);
     expose({

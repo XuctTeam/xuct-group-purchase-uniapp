@@ -16,9 +16,11 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Number,
       default: 0
     },
+    //动画名称
     name: {
       type: String,
       default: "fade"
+      //fade,left,right,up,down,zoom
     },
     autoPlay: {
       type: Boolean,
@@ -36,10 +38,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: [Number, String],
       default: 0
     },
+    //是否反向动画
     reverse: {
       type: [Boolean, String],
       default: false
     },
+    //每变动一次，就重置动画一下，这个属性不对外，特殊情况使用。
     initByWechat: {
       type: Boolean,
       default: false
@@ -47,15 +51,15 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   emits: ["start", "end", "click"],
   setup(__props, { expose, emit: emits }) {
-    var _a, _b;
+    var _a;
     const props = __props;
     function hanlder(e) {
       emits("click", e);
     }
-    (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
-    const customCSSStyle = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedStyle(props));
-    const customClass = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedClass(props));
-    const computedHeight = common_vendor.computed$1(() => {
+    ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
+    const customCSSStyle = common_vendor.computed(() => tmui_tool_lib_minxs.computedStyle(props));
+    const customClass = common_vendor.computed(() => tmui_tool_lib_minxs.computedClass(props));
+    const computedHeight = common_vendor.computed(() => {
       if (!props.height || !Number(props.height)) {
         return 0;
       }
@@ -64,7 +68,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       }
       return String(props.height) + "rpx";
     });
-    const computedWidth = common_vendor.computed$1(() => {
+    const computedWidth = common_vendor.computed(() => {
       if (!props.width) {
         return 0;
       }
@@ -73,10 +77,10 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       }
       return props.width + "rpx";
     });
-    const animationName = common_vendor.computed$1(() => props.name || "fade");
-    common_vendor.computed$1(() => props.duration);
-    const computedReverse = common_vendor.computed$1(() => props.reverse);
-    const reverseAniPrefxname = common_vendor.computed$1(() => computedReverse.value ? "-reverse" : "");
+    const animationName = common_vendor.computed(() => props.name || "fade");
+    common_vendor.computed(() => props.duration);
+    const computedReverse = common_vendor.computed(() => props.reverse);
+    const reverseAniPrefxname = common_vendor.computed(() => computedReverse.value ? "-reverse" : "");
     const animationClassName = common_vendor.ref(animationName.value + reverseAniPrefxname.value);
     const animationStatus = common_vendor.ref(0);
     const tmid = common_vendor.ref(Number(common_vendor.index.$tm.u.getUid(3)));
@@ -89,10 +93,10 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       animationClassName.value = animationName.value + reverseAniPrefxname.value;
     });
     function init() {
-      common_vendor.nextTick(() => {
+      common_vendor.nextTick$1(() => {
         isLoadEl.value = true;
         if (props.autoPlay == true && !props.disabled) {
-          common_vendor.nextTick(() => play());
+          common_vendor.nextTick$1(() => play());
         }
       });
     }

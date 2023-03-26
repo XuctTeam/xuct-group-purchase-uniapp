@@ -33,10 +33,17 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Array,
       default: () => [0, 0]
     },
+    /**
+     * 轮播图的数据列表
+     * 可以是图片地址数组，也可以是对象数组（需要提供rangKey字段，默认url）
+     */
     list: {
       type: Array,
       default: () => []
     },
+    /**
+     * 当list为对象时，需要提供key名称以获取图片地址。
+     */
     rangKey: {
       type: String,
       default: "url"
@@ -45,22 +52,35 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Number,
       default: 0
     },
+    /**
+     * 指示点的位置
+     * top,left,right,bottom
+     */
     dotPosition: {
       type: String,
       default: "bottom"
     },
+    /**
+     * 内容居对齐，左，中，右
+     * left,center,right
+    **/
     align: {
       type: String,
       default: "center"
     },
+    /**
+     * 指示点类型 dot,number,rect
+     */
     model: {
       type: String,
       default: "number"
     },
+    /**间隔时间 */
     interval: {
       type: Number,
       default: 5e3
     },
+    /**动画时间 */
     duration: {
       type: Number,
       default: 500
@@ -69,6 +89,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Boolean,
       default: true
     },
+    /**是否垂直轮播 */
     vertical: {
       type: Boolean,
       default: false
@@ -105,6 +126,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Boolean,
       default: true
     },
+    //是否显示加载动画
     showLoad: {
       type: Boolean,
       default: true
@@ -112,13 +134,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   emits: ["change", "click"],
   setup(__props, { emit: emits }) {
-    var _a, _b;
+    var _a;
     const props = __props;
-    (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
-    const _list = common_vendor.computed$1(() => {
+    ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
+    const _list = common_vendor.computed(() => {
       let l = [];
       props.list.forEach((el) => {
-        var _a2, _b2;
         if (typeof el == "string") {
           l.push({
             url: el,
@@ -127,8 +148,8 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         } else if (typeof el === "object") {
           l.push({
             url: el[props.rangKey],
-            type: (_a2 = el == null ? void 0 : el.type) != null ? _a2 : tmui_components_tmCarousel_interface.listItemType.img,
-            img: (_b2 = el == null ? void 0 : el.img) != null ? _b2 : "",
+            type: (el == null ? void 0 : el.type) ?? tmui_components_tmCarousel_interface.listItemType.img,
+            img: (el == null ? void 0 : el.img) ?? "",
             ...el
           });
         }
@@ -137,17 +158,17 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     });
     const _current = common_vendor.ref(props.defaultValue || 0);
     const _currentActive = common_vendor.ref(props.defaultValue || 0);
-    const _model = common_vendor.computed$1(() => props.model);
-    const _dotPosition = common_vendor.computed$1(() => props.dotPosition);
-    const _align = common_vendor.computed$1(() => props.align);
-    const _autoplay = common_vendor.computed$1(() => props.autoplay);
+    const _model = common_vendor.computed(() => props.model);
+    const _dotPosition = common_vendor.computed(() => props.dotPosition);
+    const _align = common_vendor.computed(() => props.align);
+    const _autoplay = common_vendor.computed(() => props.autoplay);
     function sliderChange(e) {
-      var _a2, _b2;
+      var _a2, _b;
       if (!_autoplay.value) {
         _current.value = (_a2 = e == null ? void 0 : e.detail) == null ? void 0 : _a2.current;
       }
-      _currentActive.value = (_b2 = e == null ? void 0 : e.detail) == null ? void 0 : _b2.current;
-      common_vendor.nextTick(() => {
+      _currentActive.value = (_b = e == null ? void 0 : e.detail) == null ? void 0 : _b.current;
+      common_vendor.nextTick$1(() => {
         emits("change", _currentActive.value);
       });
     }

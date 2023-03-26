@@ -42,6 +42,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Number,
       default: 22
     },
+    //为真时，隐藏插槽数据，展现状态文本模式。
     status: {
       type: [Boolean],
       default: false
@@ -54,6 +55,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: [String],
       default: ""
     },
+    //如果count为数字时，显示数字角标，如果为string是显示文本角标。
     count: {
       type: [Number, String],
       default: 0
@@ -74,17 +76,17 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   emits: ["click"],
   setup(__props, { emit: emits }) {
     const props = __props;
-    const customCSSStyle = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedStyle(props));
-    const customClass = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedClass(props));
-    const istext = common_vendor.computed$1(() => {
+    const customCSSStyle = common_vendor.computed(() => tmui_tool_lib_minxs.computedStyle(props));
+    const customClass = common_vendor.computed(() => tmui_tool_lib_minxs.computedClass(props));
+    const istext = common_vendor.computed(() => {
       return isNaN(parseInt(String(props.count)));
     });
-    const show = common_vendor.computed$1(() => {
+    const show = common_vendor.computed(() => {
       if (!props.dot && !props.icon && !props.count)
         return false;
       return true;
     });
-    const size = common_vendor.computed$1(() => {
+    const size = common_vendor.computed(() => {
       if (props.status || props.dot) {
         return {
           w: 12,
@@ -133,9 +135,9 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         t: 0
       };
     });
-    const _icon = common_vendor.computed$1(() => props.icon);
-    const _dot = common_vendor.computed$1(() => props.dot);
-    const _count = common_vendor.computed$1(() => props.count);
+    const _icon = common_vendor.computed(() => props.icon);
+    const _dot = common_vendor.computed(() => props.dot);
+    const _count = common_vendor.computed(() => props.count);
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: !props.status

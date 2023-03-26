@@ -18,6 +18,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: [Number],
       default: 90
     },
+    //是否开启交互，在pc端有用，鼠标移上去变成手型
     trigger: {
       type: [Boolean, String],
       default: false
@@ -66,6 +67,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: ""
     },
+    //自动匹配字体大小。
     fontSize: {
       type: [Number],
       default: 0
@@ -78,30 +80,23 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   emits: ["click"],
   setup(__props, { emit: emits }) {
     const props = __props;
-    const customCSSStyle = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedStyle(props));
-    const customClass = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedClass(props));
-    const width = common_vendor.computed$1(() => {
-      var _a;
-      return (_a = props.size) != null ? _a : 90;
-    });
-    const height = common_vendor.computed$1(() => {
-      var _a;
-      return (_a = props.size) != null ? _a : 90;
-    });
-    const fontSize = common_vendor.computed$1(() => {
-      var _a;
+    const customCSSStyle = common_vendor.computed(() => tmui_tool_lib_minxs.computedStyle(props));
+    const customClass = common_vendor.computed(() => tmui_tool_lib_minxs.computedClass(props));
+    const width = common_vendor.computed(() => props.size ?? 90);
+    const height = common_vendor.computed(() => props.size ?? 90);
+    const fontSize = common_vendor.computed(() => {
       if (props.fontSize)
         return props.fontSize;
       if (props.label)
         return parseInt(String(width.value)) * 0.4;
       if (props.icon)
         return parseInt(String(width.value)) * 0.7;
-      return (_a = props.size) != null ? _a : 90;
+      return props.size ?? 90;
     });
-    const imgsize = common_vendor.computed$1(() => {
+    const imgsize = common_vendor.computed(() => {
       return common_vendor.index.upx2px(fontSize.value - 4) + "px";
     });
-    const triggSize = common_vendor.computed$1(() => {
+    const triggSize = common_vendor.computed(() => {
       let wh = width.value / 3 + 6;
       wh = wh >= 64 ? 64 : wh;
       return {

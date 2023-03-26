@@ -4,7 +4,9 @@ let config = {
   url: "",
   data: {},
   statusCode: 200,
-  header: {},
+  header: {
+    // "content-type":"application/json"
+  },
   method: "POST",
   timeout: 6e4,
   dataType: "json",
@@ -70,6 +72,12 @@ function request(cog = config, complete, beforeRequest2, afterRequest2) {
 var beforeRequest = (val) => val;
 var afterRequest = (val) => val;
 class fetchNet {
+  /**
+   * 构建新的请求
+   * @param cog 请示配置见：fetchConfig
+   * @param beforeRequest 访问前执行的函数，可以是Promise,你可以对执行前的参数进行修改之类的，将以你最新的修改参数为准进行请求。
+   * @param afterRequest 访问后执行的函数，可以是Promise,提供请示后的数据，你可以在这里修改，返回，这样所有请求的数据返回后都为返回你修改后的数据。
+   */
   constructor(cog, beforeRequestFun, afterRequesFunt) {
     config = { ...config, ...cog || {} };
     if (typeof beforeRequestFun == "function") {
@@ -87,11 +95,16 @@ class fetchNet {
     let cfg = { ...config, ...opts || {}, url, method: "POST", data };
     return request(cfg);
   }
+  /**
+   * 请求
+   * @param cog 配置
+   * @param complete 访问结束后执行的函数
+   */
   static async request(cog = config, beforeFun, afterFun, complete) {
     let newConfig = { ...config, ...cog };
     if (typeof beforeFun == "function") {
       let testFun = await beforeFun();
-      let cb = { errMsg: "\u4E2D\u6B62\u8BF7\u6C42" };
+      let cb = { errMsg: "中止请求" };
       if (!testFun)
         return cb;
     }

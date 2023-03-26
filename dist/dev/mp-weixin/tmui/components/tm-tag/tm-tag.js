@@ -43,34 +43,42 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Array,
       default: () => [0, 0]
     },
+    //是否开启标签可选中状态。
     checkable: {
       type: [Boolean],
       default: false
     },
+    //只有当checkable为true时有效。
     checked: {
       type: [Boolean],
       default: false
     },
+    //标签是否处于加载中。
     load: {
       type: [Boolean],
       default: false
     },
+    //标签尺寸
     size: {
       type: String,
       default: "m"
+      //xs|s|m|n|g|lg
     },
     fontSize: {
       type: [Number],
       default: 0
     },
+    //是否允许关闭标签。
     closable: {
       type: [Boolean],
       default: false
     },
+    //标签上显示图标。
     icon: {
       type: [String],
       default: ""
     },
+    /**图标在文字的左还是右 */
     iconAlign: {
       type: String,
       default: "left"
@@ -88,13 +96,13 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   setup(__props, { emit: emits }) {
     const props = __props;
     const anitag = common_vendor.ref(null);
-    const customCSSStyle = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedStyle(props));
-    common_vendor.computed$1(() => tmui_tool_lib_minxs.computedClass(props));
+    const customCSSStyle = common_vendor.computed(() => tmui_tool_lib_minxs.computedStyle(props));
+    common_vendor.computed(() => tmui_tool_lib_minxs.computedClass(props));
     const show = common_vendor.ref(true);
     const _checked_ = common_vendor.ref(false);
-    const _fontColor = common_vendor.computed$1(() => props.fontColor);
-    const loading = common_vendor.computed$1(() => props.load);
-    const checked_com = common_vendor.computed$1({
+    const _fontColor = common_vendor.computed(() => props.fontColor);
+    const loading = common_vendor.computed(() => props.load);
+    const checked_com = common_vendor.computed({
       get: function() {
         return _checked_.value;
       },
@@ -111,7 +119,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         emits("change", checked_com.value);
       }
     );
-    const wh = common_vendor.computed$1(() => {
+    const wh = common_vendor.computed(() => {
       if (props.size == "xs") {
         return {
           px: props.padding[0] || 10,

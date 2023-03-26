@@ -2,13 +2,13 @@
 const common_vendor = require("../../../common/vendor.js");
 function preview(url = "", list = [], rangKey = "url") {
   if (!url) {
-    common_vendor.index.$tm.u.toast("\u53C2\u6570\u6709\u8BEF");
+    common_vendor.index.$tm.u.toast("参数有误");
     return;
   }
   if (arguments.length == 1) {
     common_vendor.index.previewImage({
       current: url,
-      urls: list ? list : [url]
+      urls: [url]
     });
   } else if (arguments.length === 3) {
     if (typeof list[0] === "object" && typeof list[0] !== "undefined") {
@@ -30,7 +30,7 @@ function preview(url = "", list = [], rangKey = "url") {
       });
     }
   } else {
-    common_vendor.index.$tm.u.toast("\u53C2\u6570\u6709\u8BEF");
+    common_vendor.index.$tm.u.toast("参数有误");
   }
 }
 exports.preview = preview;

@@ -8,10 +8,12 @@ const tmIcon = () => "../tm-icon/tm-icon.js";
 const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   __name: "tm-waterfall",
   props: {
+    /**组件整体宽度 */
     width: {
       type: Number,
       default: 750
     },
+    /**元素间的间距 */
     gutter: {
       type: Number,
       default: 12
@@ -19,8 +21,8 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   setup(__props, { expose }) {
     const props = __props;
-    const _containerWidth = common_vendor.computed$1(() => props.width);
-    const _itemRealWidth = common_vendor.computed$1(() => {
+    const _containerWidth = common_vendor.computed(() => props.width);
+    const _itemRealWidth = common_vendor.computed(() => {
       return (_containerWidth.value - props.gutter) / 2;
     });
     const parentNameId = "tmWaterfallId";
@@ -28,7 +30,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     const _totalSort = common_vendor.ref([[], []]);
     const _list = common_vendor.ref([]);
     const _totalNum = common_vendor.ref([]);
-    const _containerHeight = common_vendor.computed$1(() => {
+    const _containerHeight = common_vendor.computed(() => {
       let gu = common_vendor.index.upx2px(props.gutter);
       let lh = _totalSort.value[0].map((el) => el.height);
       let l_height = lh.length == 0 ? 0 : lh.reduce((a, b) => a + b + gu);
@@ -43,7 +45,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     });
     common_vendor.provide(
       "tmWaterFallItemRealWidth",
-      common_vendor.computed$1(() => common_vendor.index.upx2px(_itemRealWidth.value))
+      common_vendor.computed(() => common_vendor.index.upx2px(_itemRealWidth.value))
     );
     function sumTotal(id) {
       _totalNum.value.push(id);
@@ -66,9 +68,9 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       _totalSort.value = [[], []];
     }
     function countPushSort(item) {
-      var _a, _b;
+      var _a;
       let dir = _containerHeight.value.left > _containerHeight.value.right ? 1 : 0;
-      let bottom = (_b = (_a = _totalSort.value[dir][_totalSort.value[dir].length - 1]) == null ? void 0 : _a.bottom) != null ? _b : 0;
+      let bottom = ((_a = _totalSort.value[dir][_totalSort.value[dir].length - 1]) == null ? void 0 : _a.bottom) ?? 0;
       item.top = bottom + common_vendor.index.upx2px(props.gutter);
       item.bottom = item.top + item.height;
       item.left = dir == 0 ? 0 : common_vendor.index.upx2px(_itemRealWidth.value) + common_vendor.index.upx2px(props.gutter);

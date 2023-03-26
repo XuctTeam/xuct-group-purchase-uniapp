@@ -61,10 +61,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: [Number],
       default: 44
     },
+    //指两边，左宽度除了中间，中间标题宽度为自动
     leftWidth: {
       type: [Number],
       default: 220
     },
+    //指两边，左宽度除了中间，中间标题宽度为自动
     rightWidth: {
       type: [Number],
       default: 220
@@ -79,8 +81,9 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     },
     title: {
       type: [String],
-      default: "\u6807\u9898\u6807\u9898\u6807\u9898\u6807\u9898\u6807\u9898\u6807\u9898\u6807\u9898\u6807\u9898\u6807\u9898\u6807\u9898\u6807\u9898\u6807\u9898\u6807\u9898\u6807\u9898\u6807\u9898\u6807\u9898"
+      default: "标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题"
     },
+    //默认为自动，提供了，将强制使用本主题色。
     fontColor: {
       type: [String],
       default: ""
@@ -97,6 +100,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Boolean,
       default: false
     },
+    //返回首页的路径，默认/pages/index/index
     homePath: {
       type: [String],
       default: "/pages/index/index"
@@ -113,10 +117,14 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: "rpx"
     },
+    //暗下强制的背景色，
+    //有时自动的背景，可能不是你想要暗黑背景，此时可以使用此参数，强制使用背景色，
+    //只能是颜色值。
     darkBgColor: {
       type: String,
       default: ""
     },
+    /**是否占位,如果为false,底部内容会被导航遮盖,true则会店内内容位置. */
     isPlace: {
       type: Boolean,
       default: true
@@ -124,23 +132,23 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   emits: ["click", "close"],
   setup(__props, { emit: emits }) {
-    var _a, _b, _c, _d;
+    var _a, _b;
     const props = __props;
     tmui_tool_lib_tmpinia.useTmpiniaStore();
-    (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
-    const _height = common_vendor.computed$1(() => props.height);
+    ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
+    const _height = common_vendor.computed(() => props.height);
     const _width = common_vendor.index.getSystemInfoSync().windowWidth;
-    const statusBarHeight = (_d = (_c = common_vendor.index.getSystemInfoSync()) == null ? void 0 : _c.statusBarHeight) != null ? _d : 0;
-    const _barHeight = common_vendor.computed$1(() => statusBarHeight + _height.value);
-    const _leftWidth = common_vendor.computed$1(() => props.leftWidth);
-    const _rightWidth = common_vendor.computed$1(() => props.rightWidth);
-    const contentwidth = common_vendor.computed$1(() => {
+    const statusBarHeight = ((_b = common_vendor.index.getSystemInfoSync()) == null ? void 0 : _b.statusBarHeight) ?? 0;
+    const _barHeight = common_vendor.computed(() => statusBarHeight + _height.value);
+    const _leftWidth = common_vendor.computed(() => props.leftWidth);
+    const _rightWidth = common_vendor.computed(() => props.rightWidth);
+    const contentwidth = common_vendor.computed(() => {
       return _width - common_vendor.index.upx2px(_leftWidth.value) - common_vendor.index.upx2px(_rightWidth.value);
     });
-    const _title = common_vendor.computed$1(() => props.title);
-    const _fontColor = common_vendor.computed$1(() => props.fontColor);
-    const _homeColor = common_vendor.computed$1(() => props.homeColor);
-    const _blur = common_vendor.computed$1(() => props.blur);
+    const _title = common_vendor.computed(() => props.title);
+    const _fontColor = common_vendor.computed(() => props.fontColor);
+    const _homeColor = common_vendor.computed(() => props.homeColor);
+    const _blur = common_vendor.computed(() => props.blur);
     const _pages = common_vendor.ref(0);
     common_vendor.onMounted(() => {
       _pages.value = getCurrentPages().length;

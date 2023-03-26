@@ -19,8 +19,10 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: ""
     },
+    /** 自定义图标规则为:myicon-music-e617,图标前缀和字体名称相同-图标类名-图标unicode符 */
     name: {
       type: String,
+      //图标名称。
       default: ""
     },
     spin: {
@@ -31,6 +33,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: "rpx"
     },
+    //-1表示自动
     lineHeight: {
       type: [Number],
       default: -1
@@ -43,6 +46,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Number,
       default: 0
     },
+    //为了提高响应速度，只有开启了自定图标显示功能才会去解析用户自定义图标规则名称
     customicon: {
       type: Boolean,
       default: false
@@ -50,16 +54,16 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   emits: ["click", "longpress"],
   setup(__props, { emit: emits }) {
-    var _a, _b;
+    var _a;
     const props = __props;
     const store = tmui_tool_lib_tmpinia.useTmpiniaStore();
-    const _rotateDeg = common_vendor.computed$1(() => props.rotateDeg);
-    (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
-    const tmcfg = common_vendor.computed$1(() => store.tmStore);
-    const customCSSStyle = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedStyle(props));
-    const customClass = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedClass(props));
-    const isDark = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
-    common_vendor.computed$1(
+    const _rotateDeg = common_vendor.computed(() => props.rotateDeg);
+    ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
+    const tmcfg = common_vendor.computed(() => store.tmStore);
+    const customCSSStyle = common_vendor.computed(() => tmui_tool_lib_minxs.computedStyle(props));
+    const customClass = common_vendor.computed(() => tmui_tool_lib_minxs.computedClass(props));
+    const isDark = common_vendor.computed(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
+    common_vendor.computed(
       () => tmui_tool_lib_minxs.computedTheme(props, isDark.value, tmcfg.value)
     );
     function clickhandle(e) {
@@ -67,9 +71,9 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     }
     const appTextColor = common_vendor.inject(
       "appTextColor",
-      common_vendor.computed$1(() => void 0)
+      common_vendor.computed(() => void 0)
     );
-    const textColor = common_vendor.computed$1(() => {
+    const textColor = common_vendor.computed(() => {
       if (props.followTheme && store.tmStore.color)
         return store.tmStore.color;
       let isColorHex = tmui_tool_theme_theme.theme.isCssColor(props.color);
@@ -83,7 +87,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         return appTextColor.value;
       return "rgba(34, 34, 34, 1.0)";
     });
-    const fontSizeComputed = common_vendor.computed$1(() => {
+    const fontSizeComputed = common_vendor.computed(() => {
       let strc = {
         fontSize: (props.fontSize || 30) + props.unit,
         lineHeight: props.lineHeight > -1 ? props.lineHeight + props.unit : (props.fontSize || 30) + props.unit
@@ -93,18 +97,18 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       }
       return strc;
     });
-    const isImg = common_vendor.computed$1(() => {
+    const isImg = common_vendor.computed(() => {
       if (props.name[0] == "." || props.name[0] == "@" || props.name[0] == "/" || props.name[0] == "~" || props.name.substring(0, 5) == "data:" || props.name.substring(0, 4) == "http" || props.name.substring(0, 5) == "https" || props.name.substring(0, 3) == "ftp") {
         return true;
       }
       return false;
     });
-    const prefx = common_vendor.computed$1(() => {
+    const prefx = common_vendor.computed(() => {
       var _a2;
       let prefix = (_a2 = props.name.split("-")) == null ? void 0 : _a2[0];
       return prefix;
     });
-    const iconComputed = common_vendor.computed$1(() => {
+    const iconComputed = common_vendor.computed(() => {
       if (isImg.value)
         return props.name;
       if (props.customicon) {
@@ -120,10 +124,10 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       }
       return props.name;
     });
-    const spinComputed = common_vendor.computed$1(() => props.spin);
+    const spinComputed = common_vendor.computed(() => props.spin);
     const custom_space_size = common_vendor.inject("custom_space_size", [0, 0]);
-    common_vendor.computed$1(() => Math.ceil(props.fontSize || 34) + custom_space_size[0]);
-    common_vendor.computed$1(() => Math.ceil(props.fontSize || 34) + custom_space_size[1]);
+    common_vendor.computed(() => Math.ceil(props.fontSize || 34) + custom_space_size[0]);
+    common_vendor.computed(() => Math.ceil(props.fontSize || 34) + custom_space_size[1]);
     common_vendor.watch(spinComputed, () => {
     });
     common_vendor.onBeforeMount(() => {

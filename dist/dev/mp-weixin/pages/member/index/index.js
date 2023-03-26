@@ -22,37 +22,37 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   setup(__props) {
     const store = store_user.useUserHook();
     const { logged } = common_vendor.storeToRefs(store);
-    store.getUserInfo;
+    const userInfo = store.getUserInfo;
     const orderItems = common_vendor.ref([
       {
-        name: "\u5F85\u4ED8\u6B3E",
+        name: "待付款",
         icon: "/static/images/me-ic-obligation.png",
         nums: 0
       },
       {
-        name: "\u5F85\u53D1\u8D27",
+        name: "待发货",
         icon: "/static/images/me-ic-sendout.png",
         nums: 0
       },
       {
-        name: "\u5F85\u6536\u8D27",
+        name: "待收货",
         icon: "/static/images/me-ic-receiving.png",
         nums: 0
       },
       {
-        name: "\u5F85\u8BC4\u4EF7",
+        name: "待评价",
         icon: "/static/images/me-ic-evaluate.png",
         nums: 0
       }
     ]);
     const serviceItems = common_vendor.ref([
       {
-        name: "\u5730\u5740\u7BA1\u7406",
+        name: "地址管理",
         icon: "/static/images/me-ic-site.png",
         code: "address"
       },
       {
-        name: "\u7CFB\u7EDF\u8BBE\u7F6E",
+        name: "系统设置",
         icon: "/static/images/me-ic-set.png",
         code: "setting"
       }
@@ -70,37 +70,40 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: common_vendor.p({
-          title: "\u4E2A\u4EBA\u4E2D\u5FC3",
+          title: "个人中心",
           color: "#70DB93",
           fontColor: "white"
         }),
-        b: !common_vendor.unref(logged)
-      }, !common_vendor.unref(logged) ? {
+        b: common_vendor.unref(logged)
+      }, common_vendor.unref(logged) ? {
         c: common_vendor.p({
           trigger: true,
-          triggerIcon: "tmicon-check",
-          round: 12,
-          text: true,
-          label: "QQ"
+          img: common_vendor.unref(userInfo).avatar,
+          round: 12
         }),
         d: common_vendor.p({
-          ["font-size"]: 24,
+          ["font-size"]: 32,
           _class: "font-weight-b",
-          label: "\u57FA\u672C\u793A\u4F8B"
+          label: common_vendor.unref(userInfo).nickname
         })
       } : {
         e: common_vendor.p({
           ["font-size"]: 32,
           _class: "font-weight-b",
-          color: "black",
-          label: "\u6E38\u5BA2"
+          label: "登录参与团购"
         }),
         f: common_vendor.p({
-          size: "small",
-          ["font-color"]: "white",
-          label: "\u6388\u6743\u767B\u5F55",
-          color: "#FF2400",
-          url: "../login/index"
+          color: "red",
+          icon: "tmicon-account",
+          width: 60,
+          round: 10,
+          height: 60,
+          fontSize: 28,
+          margin: [50, 10],
+          shadow: 0,
+          text: true,
+          size: "normal",
+          url: "/pages/member/login/index"
         })
       }, {
         g: common_vendor.p({
@@ -109,7 +112,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
           avatar: "https://demo.jihainet.com/wap/static/image/userorder.png",
           margin: [0, 0],
           titleFontSize: 30,
-          title: "\u6211\u7684\u670D\u52A1"
+          title: "我的服务"
         }),
         h: common_vendor.f(orderItems.value, (item, index, i0) => {
           return {
@@ -148,7 +151,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
           avatar: "https://demo.jihainet.com/wap/static/image/userorder.png",
           margin: [0, 0],
           titleFontSize: 30,
-          title: "\u6211\u7684\u670D\u52A1"
+          title: "我的服务"
         }),
         m: common_vendor.f(serviceItems.value, (item, index, i0) => {
           return {

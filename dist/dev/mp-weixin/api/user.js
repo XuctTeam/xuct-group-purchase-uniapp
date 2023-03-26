@@ -6,8 +6,10 @@ const saveUserInfo = (phone, nickname) => {
     nickname
   });
 };
-const userAddressList = () => {
-  return services_request.instance.get("/api/v1/address/list");
+const userAddressList = (searchValue) => {
+  return services_request.instance.get("/api/v1/address/list", {
+    searchValue
+  });
 };
 const saveUserAddress = (address) => {
   return services_request.instance.post("/api/v1/address", {

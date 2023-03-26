@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-15 22:02:25
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-24 19:52:59
+ * @LastEditTime: 2023-03-26 22:10:10
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -14,17 +14,31 @@
     <view class="box">
       <view class="head_top">
         <view class="avatar flex flex-row flex-row-center-start">
-          <template v-if="!logged">
-            <tm-avatar trigger triggerIcon="tmicon-check" :round="12" text label="QQ"></tm-avatar>
-            <tm-text :font-size="24" _class="font-weight-b" label="基本示例"></tm-text>
+          <template v-if="logged">
+            <tm-avatar trigger :img="userInfo.avatar" :round="12" />
+            <view class="ml-10">
+              <tm-text :font-size="32" _class="font-weight-b" :label="userInfo.nickname" />
+            </view>
           </template>
           <view class="flex flex-row flex-row-center-start flex-1 pl-10" v-else>
             <view class="user-head-img">
               <open-data type="userAvatarUrl"></open-data>
             </view>
-            <view class="user-login">
-              <tm-text :font-size="32" _class="font-weight-b" color="black" label="游客"></tm-text>
-              <tm-button size="small" font-color="white" label="授权登录" color="#FF2400" url="../login/index"></tm-button>
+            <view class="flex flex-row flex-1 ml-10 flex-row-center-between">
+              <tm-text :font-size="32" _class="font-weight-b" label="登录参与团购"></tm-text>
+              <tm-button
+                color="red"
+                icon="tmicon-account"
+                :width="60"
+                :round="10"
+                :height="60"
+                :fontSize="28"
+                :margin="[50, 10]"
+                :shadow="0"
+                text
+                size="normal"
+                url="/pages/member/login/index"
+              ></tm-button>
             </view>
           </view>
         </view>
@@ -32,9 +46,22 @@
       <view class="menu">
         <!-- 订单列表信息 -->
         <tm-sheet :round="3" :shadow="2" :margin="[20, 30, 20, 10]">
-          <tm-cell showAvatar :avatarSize="40" avatar="https://demo.jihainet.com/wap/static/image/userorder.png" :margin="[0, 0]" :titleFontSize="30" title="我的服务"></tm-cell>
+          <tm-cell
+            showAvatar
+            :avatarSize="40"
+            avatar="https://demo.jihainet.com/wap/static/image/userorder.png"
+            :margin="[0, 0]"
+            :titleFontSize="30"
+            title="我的服务"
+          ></tm-cell>
           <tm-grid :col="4" class="border-t-1" :width="686">
-            <tm-grid-item dot v-for="(item, index) in orderItems" :key="index" :height="140" @click="orderItemClick(index)">
+            <tm-grid-item
+              dot
+              v-for="(item, index) in orderItems"
+              :key="index"
+              :height="140"
+              @click="orderItemClick(index)"
+            >
               <tm-icon :font-size="40" :name="item.icon"></tm-icon>
               <tm-text _class="pt-16" :font-size="22" :label="item.name"></tm-text>
             </tm-grid-item>
@@ -42,9 +69,21 @@
         </tm-sheet>
         <!--我的服务-->
         <tm-sheet :round="3" :shadow="2" :margin="[20, 30, 20, 10]">
-          <tm-cell showAvatar :avatarSize="40" avatar="https://demo.jihainet.com/wap/static/image/userorder.png" :margin="[0, 0]" :titleFontSize="30" title="我的服务"></tm-cell>
+          <tm-cell
+            showAvatar
+            :avatarSize="40"
+            avatar="https://demo.jihainet.com/wap/static/image/userorder.png"
+            :margin="[0, 0]"
+            :titleFontSize="30"
+            title="我的服务"
+          ></tm-cell>
           <tm-grid :col="4" class="border-t-1" :width="680">
-            <tm-grid-item :height="140" v-for="(item, index) in serviceItems" :key="index" @click="serviceItemClick(item.code)">
+            <tm-grid-item
+              :height="140"
+              v-for="(item, index) in serviceItems"
+              :key="index"
+              @click="serviceItemClick(item.code)"
+            >
               <tm-icon :font-size="60" :name="item.icon"></tm-icon>
               <tm-text _class="pt-10" :font-size="22" :label="item.name"></tm-text>
             </tm-grid-item>
@@ -169,17 +208,10 @@ function goToLogin() {
 }
 
 .user-head-img {
-  width: 120upx;
-  height: 120upx;
+  width: 100upx;
+  height: 100upx;
   border-radius: 50%;
   overflow: hidden;
   background-color: rgba(255, 255, 255, 0.7);
-}
-
-.user-login {
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-left: 10px;
 }
 </style>

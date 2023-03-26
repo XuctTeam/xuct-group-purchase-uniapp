@@ -78,7 +78,7 @@ function getColor(colorName) {
     isHand = colors.findIndex(function(el, index) {
       return el.name == colorName;
     });
-    console.warn("\u4E3B\u9898\u4E2D\u4E0D\u5B58\u5728\u76F8\u5173\u540D\u79F0\u7684\u4E3B\u9898\u3002");
+    console.warn("主题中不存在相关名称的主题。");
   }
   return colors[isHand];
 }
@@ -101,7 +101,7 @@ class themeColors {
       return this.colors;
     }
     if (!value) {
-      console.error("\u989C\u8272\u503C\u5FC5\u586B!!!");
+      console.error("颜色值必填!!!");
       return this.colors;
     }
     let rgba = tmui_tool_theme_colortool.colortool.cssToRgba(value);
@@ -125,7 +125,7 @@ class themeColors {
       return el.name == colorName;
     });
     if (isHand == -1) {
-      console.error("\u5220\u9664\u5931\u8D25\uFF0C\u4E3B\u9898\u4E2D\u4E0D\u5B58\u5728\u76F8\u5173\u540D\u79F0\u7684\u4E3B\u9898\u3002");
+      console.error("删除失败，主题中不存在相关名称的主题。");
       return;
     }
     this.colors.splice(isHand, 1);
@@ -139,19 +139,25 @@ class themeColors {
       isHand = this.colors.findIndex(function(el, index) {
         return el.name == colorName;
       });
-      console.error("\u4E3B\u9898\u4E2D\u4E0D\u5B58\u5728\u76F8\u5173\u540D\u79F0\u7684\u4E3B\u9898\u3002");
+      console.error("主题中不存在相关名称的主题。");
     }
     return this.colors[isHand];
   }
+  /**
+   * 计算主题
+   * @author tmui3.0|tmzdy
+   * @param config 样式的细化
+   * @returns cssstyle 返回一个计算好的主题系。
+   */
   getTheme(config = { colorname: "primary", dark: false }) {
-    var _a2, _b2, _c, _d;
+    var _a2, _b2;
     if (!config["colorname"]) {
-      console.error("\u989C\u8272\u540D\u79F0\u5FC5\u586B");
+      console.error("颜色名称必填");
       config.colorname = "primary";
     }
     let index = this.colors.findIndex((el) => el.name == config.colorname);
     if (index == -1) {
-      console.error("\u4E3B\u9898\u4E0D\u5B58\u5728\uFF0C\u9ED8\u8BA4\u4E3Aprimary");
+      console.error("主题不存在，默认为primary");
       config.colorname = "primary";
     }
     let isBlack = false;
@@ -160,7 +166,7 @@ class themeColors {
     let isGrey = false;
     let isDarkColor = false;
     let nowColor = { ...this.colors[index] };
-    config.borderWidth = isNaN(parseInt(String(config["borderWidth"]))) ? 0 : (_a2 = config["borderWidth"]) != null ? _a2 : 0;
+    config.borderWidth = isNaN(parseInt(String(config["borderWidth"]))) ? 0 : config["borderWidth"] ?? 0;
     config.borderStyle = config["borderStyle"] ? config["borderStyle"] : "solid";
     config.borderColor = config["borderColor"] || "";
     config.borderDirection = config["borderDirection"] || tmui_tool_lib_interface.cssDirection.all;
@@ -382,7 +388,7 @@ class themeColors {
       }
     }
     if (config.dark == true) {
-      css = { ...css, ...(_d = (_c = (_b2 = common_vendor.index.$tm.config) == null ? void 0 : _b2.themeConfig) == null ? void 0 : _c.dark) != null ? _d : {} };
+      css = { ...css, ...((_b2 = (_a2 = common_vendor.index.$tm.config) == null ? void 0 : _a2.themeConfig) == null ? void 0 : _b2.dark) ?? {} };
     }
     css.textColor = tmui_tool_theme_colortool.colortool.rgbaToCss(tmui_tool_theme_colortool.colortool.hslaToRgba(txcolor));
     if (config.dark) {

@@ -1,5 +1,4 @@
 "use strict";
-var _a, _b;
 const common_vendor = require("../common/vendor.js");
 const tmui_tool_lib_fetch = require("./tool/lib/fetch.js");
 const tmui_tool_function_util = require("./tool/function/util.js");
@@ -98,10 +97,10 @@ if (typeof (PageJsonInit == null ? void 0 : PageJsonInit.pages) == "undefined") 
   PageJsonInit.pages = [];
 }
 PageJsonInit.pages.forEach((el) => {
-  var _a2, _b2, _c, _d, _e, _f, _g, _h, _i, _j;
-  let customType = (_b2 = (_a2 = el == null ? void 0 : el.style) == null ? void 0 : _a2.navigationStyle) != null ? _b2 : "default";
-  let bg = ((_f = (_e = (_c = el.style) == null ? void 0 : _c.navigationBarBackgroundColor) != null ? _e : (_d = PageJsonInit == null ? void 0 : PageJsonInit.globalStyle) == null ? void 0 : _d.navigationBarBackgroundColor) != null ? _f : "#FFFFFF") || "#FFFFFF";
-  let txtColor = ((_j = (_i = (_g = el.style) == null ? void 0 : _g.navigationBarTextStyle) != null ? _i : (_h = PageJsonInit == null ? void 0 : PageJsonInit.globalStyle) == null ? void 0 : _h.navigationBarTextStyle) != null ? _j : "black") || "black";
+  var _a, _b, _c, _d, _e;
+  let customType = ((_a = el == null ? void 0 : el.style) == null ? void 0 : _a.navigationStyle) ?? "default";
+  let bg = (((_b = el.style) == null ? void 0 : _b.navigationBarBackgroundColor) ?? ((_c = PageJsonInit == null ? void 0 : PageJsonInit.globalStyle) == null ? void 0 : _c.navigationBarBackgroundColor) ?? "#FFFFFF") || "#FFFFFF";
+  let txtColor = (((_d = el.style) == null ? void 0 : _d.navigationBarTextStyle) ?? ((_e = PageJsonInit == null ? void 0 : PageJsonInit.globalStyle) == null ? void 0 : _e.navigationBarTextStyle) ?? "black") || "black";
   pages.push({
     path: el.path,
     custom: customType,
@@ -109,17 +108,17 @@ PageJsonInit.pages.forEach((el) => {
     navigationBarTextStyle: txtColor
   });
 });
-if (Array.isArray((_a = PageJsonInit == null ? void 0 : PageJsonInit.subPackages) != null ? _a : null)) {
+if (Array.isArray((PageJsonInit == null ? void 0 : PageJsonInit.subPackages) ?? null)) {
   PageJsonInit == null ? void 0 : PageJsonInit.subPackages.forEach((el) => {
     let rootPath = el.root;
     el.pages.forEach((el2) => {
-      var _a2, _b2, _c, _d, _e, _f, _g, _h, _i, _j;
+      var _a, _b, _c, _d, _e;
       let elany = el2;
-      let bg = ((_d = (_c = (_a2 = el2.style) == null ? void 0 : _a2.navigationBarBackgroundColor) != null ? _c : (_b2 = PageJsonInit == null ? void 0 : PageJsonInit.globalStyle) == null ? void 0 : _b2.navigationBarBackgroundColor) != null ? _d : "#FFFFFF") || "#FFFFFF";
-      let txtColor = ((_h = (_g = (_e = el2.style) == null ? void 0 : _e.navigationBarTextStyle) != null ? _g : (_f = PageJsonInit == null ? void 0 : PageJsonInit.globalStyle) == null ? void 0 : _f.navigationBarTextStyle) != null ? _h : "black") || "black";
+      let bg = (((_a = el2.style) == null ? void 0 : _a.navigationBarBackgroundColor) ?? ((_b = PageJsonInit == null ? void 0 : PageJsonInit.globalStyle) == null ? void 0 : _b.navigationBarBackgroundColor) ?? "#FFFFFF") || "#FFFFFF";
+      let txtColor = (((_c = el2.style) == null ? void 0 : _c.navigationBarTextStyle) ?? ((_d = PageJsonInit == null ? void 0 : PageJsonInit.globalStyle) == null ? void 0 : _d.navigationBarTextStyle) ?? "black") || "black";
       pages.push({
         path: rootPath + "/" + elany.path,
-        custom: (_j = (_i = elany == null ? void 0 : elany.style) == null ? void 0 : _i.navigationStyle) != null ? _j : "default",
+        custom: ((_e = elany == null ? void 0 : elany.style) == null ? void 0 : _e.navigationStyle) ?? "default",
         navigationBarBackgroundColor: bg,
         navigationBarTextStyle: txtColor
       });
@@ -127,7 +126,7 @@ if (Array.isArray((_a = PageJsonInit == null ? void 0 : PageJsonInit.subPackages
   });
 }
 let pagers = PageJsonInit;
-let tabBar = (_b = pagers == null ? void 0 : pagers.tabBar) != null ? _b : {
+let tabBar = (pagers == null ? void 0 : pagers.tabBar) ?? {
   color: "",
   selectedColor: "",
   borderStyle: "",
@@ -143,7 +142,9 @@ let $tm = {
     const reg2 = /^(rgb|RGB|rgba|RGBA)/;
     return reg1.test(color) || reg2.test(color);
   },
+  /**tmui3.0工具函数 */
   u: { ...tmui_tool_function_util.util, preview: tmui_tool_function_preview.preview },
+  /**tmui3.0国际化语言辅助函数 */
   language: tmui_tool_lib_language.language,
   fetch: tmui_tool_lib_fetch.fetchNet,
   tmicon: [
@@ -156,10 +157,15 @@ let $tm = {
   config: tmui_tool_lib_tmuiconfigDefault.tmuiconfigdefault
 };
 const tmui = {
+  /**
+   * tmui3.0
+   * @param app Vue
+   * @param options tmui3.0配置
+   */
   install: (app, options = {}) => {
     common_vendor.index.addInterceptor("navigateTo", {
       invoke(result) {
-        common_vendor.nextTick(() => {
+        common_vendor.nextTick$1(() => {
           linsInko({
             path: result.url,
             context: null,
@@ -172,11 +178,10 @@ const tmui = {
     });
     common_vendor.index.addInterceptor("redirectTo", {
       success(result) {
-        var _a2, _b2, _c;
         let pages2 = getCurrentPages().pop();
-        let path = (_a2 = pages2 == null ? void 0 : pages2.route) != null ? _a2 : "";
-        let msg = (_b2 = result.errMsg) != null ? _b2 : "";
-        let opentype = (_c = msg.split(":")[0]) != null ? _c : "";
+        let path = (pages2 == null ? void 0 : pages2.route) ?? "";
+        let msg = result.errMsg ?? "";
+        let opentype = msg.split(":")[0] ?? "";
         linsInko({
           path,
           context: null,
@@ -186,11 +191,10 @@ const tmui = {
     });
     common_vendor.index.addInterceptor("reLaunch", {
       success(result) {
-        var _a2, _b2, _c;
         let pages2 = getCurrentPages().pop();
-        let path = (_a2 = pages2 == null ? void 0 : pages2.route) != null ? _a2 : "";
-        let msg = (_b2 = result.errMsg) != null ? _b2 : "";
-        let opentype = (_c = msg.split(":")[0]) != null ? _c : "";
+        let path = (pages2 == null ? void 0 : pages2.route) ?? "";
+        let msg = result.errMsg ?? "";
+        let opentype = msg.split(":")[0] ?? "";
         linsInko({
           path,
           context: null,
@@ -200,12 +204,11 @@ const tmui = {
     });
     common_vendor.index.addInterceptor("navigateBack", {
       invoke(result) {
-        common_vendor.nextTick(() => {
-          var _a2, _b2, _c;
+        common_vendor.nextTick$1(() => {
           let pages2 = getCurrentPages().pop();
-          let path = (_a2 = pages2 == null ? void 0 : pages2.route) != null ? _a2 : "";
-          let msg = (_b2 = result.errMsg) != null ? _b2 : "";
-          (_c = msg.split(":")[0]) != null ? _c : "";
+          let path = (pages2 == null ? void 0 : pages2.route) ?? "";
+          let msg = result.errMsg ?? "";
+          msg.split(":")[0] ?? "";
           linsInko({
             path,
             context: null,

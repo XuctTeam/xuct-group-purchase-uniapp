@@ -15,14 +15,20 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Number,
       default: 450
     },
+    //可v-model,每一列选中的索引值
     modelValue: {
       type: Array,
       default: () => []
     },
+    /**
+     * 注意：这里是单向输出显示的value值，而不是modelValue的index索引值。
+     * 这里主要是为了方便表单上页面的显示。如果真要保存到数据库，你应该保存modelValue的值。
+     */
     modelStr: {
       type: [String],
       default: ""
     },
+    //默认选中的索引值。
     defaultValue: {
       type: Array,
       default: () => []
@@ -32,14 +38,19 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       default: () => [],
       required: true
     },
+    //当columns项目中的data数据为对象时的key取值字段。
     dataKey: {
       type: String,
       default: "text"
     },
+    //当columns项目中的data数据为对象时的key取值字段。兼容上方dataKey,因为微信dataKey与本字段重名，无法设置。
     mapKey: {
       type: String,
       default: "text"
     },
+    //当前改变index项时，改变时执行的函数。如果返回false，将会阻止本次改变,可以是Promise
+    //提供了即将改变的数据和将要改变到目标的数据
+    //结构 为 from:{itemindex,levelIndex,data},to:{itemindex,levelIndex,data}。
     beforeChange: {
       type: [Boolean, Function],
       default: () => false
@@ -60,21 +71,20 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     const props = __props;
     const _colIndex = common_vendor.ref([...props.defaultValue]);
     const _data = common_vendor.ref([]);
-    const _modelStr = common_vendor.computed$1(() => {
+    const _modelStr = common_vendor.computed(() => {
       let str = [];
       _data.value.forEach((el, index) => {
-        var _a;
         let item = el[_colIndex.value[index]];
         if (typeof item == "undefined")
           return;
-        str.push((_a = item[props.mapKey || props.dataKey]) != null ? _a : "");
+        str.push(item[props.mapKey || props.dataKey] ?? "");
       });
       return str.join("/");
     });
     common_vendor.watch(
       () => _colIndex.value,
       () => {
-        common_vendor.nextTick(() => {
+        common_vendor.nextTick$1(() => {
           emits("update:modelStr", _modelStr.value);
         });
       },
@@ -140,7 +150,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         }
         if (!p) {
           isActive = false;
-          common_vendor.nextTick(() => {
+          common_vendor.nextTick$1(() => {
             _colIndex.value.splice(levelIndex, 1, params.from.itemindex);
           });
           common_vendor.index.hideLoading();
@@ -148,7 +158,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       }
       if ((toItem == null ? void 0 : toItem.disabled) == true) {
         isActive = false;
-        common_vendor.nextTick(() => {
+        common_vendor.nextTick$1(() => {
           _colIndex.value.splice(levelIndex, 1, params.from.itemindex);
         });
       }
@@ -158,7 +168,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         emits("update:modelValue", common_vendor.toRaw(_colIndex.value));
       }
     }
-    common_vendor.nextTick(() => {
+    common_vendor.nextTick$1(() => {
       emits("update:modelValue", common_vendor.toRaw(_colIndex.value));
       emits("update:modelStr", _modelStr.value || props.modelStr);
     });

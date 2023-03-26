@@ -42,6 +42,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     align: {
       type: String,
       default: "center"
+      //left,right,center
     },
     margin: {
       type: Array,
@@ -51,6 +52,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: [Number],
       default: 1
     },
+    //使用原始颜色为线条色，而不使用计算过的颜色值。
     realColor: {
       type: [Boolean],
       default: false
@@ -60,11 +62,11 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   setup(__props, { emit: emits }) {
     const props = __props;
     const store = tmui_tool_lib_tmpinia.useTmpiniaStore();
-    const borderDir = common_vendor.computed$1(() => props.vertical ? "left" : "bottom");
-    const _label = common_vendor.computed$1(() => props.label);
-    const tmcfg = common_vendor.computed$1(() => store.tmStore);
-    const _realColor = common_vendor.computed$1(() => props.realColor);
-    const isDark = common_vendor.computed$1(
+    const borderDir = common_vendor.computed(() => props.vertical ? "left" : "bottom");
+    const _label = common_vendor.computed(() => props.label);
+    const tmcfg = common_vendor.computed(() => store.tmStore);
+    const _realColor = common_vendor.computed(() => props.realColor);
+    const isDark = common_vendor.computed(
       () => tmui_tool_lib_minxs.computedDark(
         {
           ...props,
@@ -73,7 +75,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         tmcfg.value
       )
     );
-    const tmcomputed = common_vendor.computed$1(
+    const tmcomputed = common_vendor.computed(
       () => tmui_tool_lib_minxs.computedTheme(
         {
           ...props,

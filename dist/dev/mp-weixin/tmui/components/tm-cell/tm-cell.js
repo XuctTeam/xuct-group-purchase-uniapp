@@ -48,6 +48,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: "white"
     },
+    //标题
     title: {
       type: String,
       default: ""
@@ -60,6 +61,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: ""
     },
+    //标题下方的介绍
     label: {
       type: String,
       default: ""
@@ -72,6 +74,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: "grey"
     },
+    //右边文字
     rightText: {
       type: String,
       default: ""
@@ -80,10 +83,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: "tmicon-angle-right"
     },
+    //右边文字
     rightColor: {
       type: String,
       default: "grey"
     },
+    //右边文字大小。
     rightTextSize: {
       type: Number,
       default: 24
@@ -92,6 +97,8 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Boolean,
       default: false
     },
+    //头像。
+    //https://picsum.photos/200
     avatar: {
       type: String,
       default: ""
@@ -112,14 +119,19 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: [String],
       default: tmui_tool_lib_interface.cssDirection.bottom
     },
+    //显示下边线
     bottomBorder: {
       type: [Boolean],
       default: false
     },
+    //当有链接地址时，将打开链接
     url: {
       type: String,
       default: ""
     },
+    //暗下强制的背景色，
+    //有时自动的背景，可能不是你想要暗黑背景，此时可以使用此参数，强制使用背景色，
+    //只能是颜色值。
     darkBgColor: {
       type: String,
       default: ""
@@ -135,14 +147,14 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
           common_vendor.index.navigateTo({
             url: props.url,
             fail(error) {
-              console.error("\u6253\u5F00\u8FDE\u63A5\u9519\u8BEF\uFF1A", error);
+              console.error("打开连接错误：", error);
             }
           });
         } catch (e2) {
         }
       }
     }
-    const _computedValue = common_vendor.computed$1(() => props);
+    const _computedValue = common_vendor.computed(() => props);
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: common_vendor.unref(_computedValue).showAvatar

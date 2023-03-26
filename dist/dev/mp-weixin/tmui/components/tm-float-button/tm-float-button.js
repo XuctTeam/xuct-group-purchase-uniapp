@@ -13,10 +13,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: [Boolean],
       default: true
     },
+    //主按钮的位置
     position: {
       type: String,
       default: "br"
     },
+    //子菜单弹出的位置
     actionsPos: {
       type: String,
       default: "top"
@@ -33,20 +35,24 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Array,
       default: () => [32, 32]
     },
+    //子按钮组数据
     actions: {
       type: Array,
       default: () => []
     },
+    // 主按钮对象数据
     btn: {
       type: Object,
       default: () => {
       },
       required: true
     },
+    //是否默认显示子菜单
     showActions: {
       type: Boolean,
       default: false
     },
+    //点击子菜单后，是否需要隐藏，如果为false,点击子按钮后不会隐藏按钮。始终保持展开子按钮。
     clickHidnActions: {
       type: Boolean,
       default: true
@@ -68,11 +74,11 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   emits: ["click", "change"],
   setup(__props, { emit: emits }) {
-    var _a, _b, _c;
+    var _a;
     const props = __props;
     const sysinfo = common_vendor.inject(
       "tmuiSysInfo",
-      common_vendor.computed$1(() => {
+      common_vendor.computed(() => {
         return {
           bottom: 0,
           height: 750,
@@ -83,26 +89,24 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         };
       })
     );
-    const windowWidth = common_vendor.computed$1(() => sysinfo.value.width);
-    common_vendor.computed$1(() => sysinfo.value.top);
-    (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
+    const windowWidth = common_vendor.computed(() => sysinfo.value.width);
+    common_vendor.computed(() => sysinfo.value.top);
+    ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
     common_vendor.ref(false);
-    const showActions = common_vendor.ref((_c = props.showActions) != null ? _c : false);
-    const BtnPos = common_vendor.computed$1(() => props.position);
-    const AcionPos = common_vendor.computed$1(() => props.actionsPos);
-    const _offset = common_vendor.computed$1(() => {
-      var _a2;
-      let ost = (_a2 = props.offset) != null ? _a2 : [0, 0];
+    const showActions = common_vendor.ref(props.showActions ?? false);
+    const BtnPos = common_vendor.computed(() => props.position);
+    const AcionPos = common_vendor.computed(() => props.actionsPos);
+    const _offset = common_vendor.computed(() => {
+      let ost = props.offset ?? [0, 0];
       ost = [common_vendor.index.upx2px(props.offset[0]), common_vendor.index.upx2px(props.offset[1])];
       return ost;
     });
-    const centerPosLeft = common_vendor.computed$1(() => {
+    const centerPosLeft = common_vendor.computed(() => {
       let ps = (windowWidth.value - common_vendor.index.upx2px(props.width * 2)) / 2 + _offset.value[0] * 2;
       return ps;
     });
-    common_vendor.computed$1(() => common_vendor.index.upx2px(props.width));
-    const _btn = common_vendor.computed$1(() => {
-      var _a2;
+    common_vendor.computed(() => common_vendor.index.upx2px(props.width));
+    const _btn = common_vendor.computed(() => {
       return {
         icon: "tmicon-plus",
         fontSize: 20,
@@ -112,10 +116,10 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         label: "",
         iconSize: 42,
         fontColor: "",
-        ...(_a2 = props.btn) != null ? _a2 : {}
+        ...props.btn ?? {}
       };
     });
-    const _actionsItem = common_vendor.computed$1(() => {
+    const _actionsItem = common_vendor.computed(() => {
       let asbtn = props.actions.map((el) => {
         let default_btn = {
           icon: "tmicon-plus",
@@ -131,7 +135,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       });
       return asbtn;
     });
-    const _pos = common_vendor.computed$1(() => {
+    const _pos = common_vendor.computed(() => {
       common_vendor.index.upx2px(24);
       let actionwidth_total = _actionsItem.value.length * common_vendor.index.upx2px(props.width);
       let actionwidth = common_vendor.index.upx2px(props.width);
@@ -474,7 +478,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       emits("change", index, item);
     }
     return (_ctx, _cache) => {
-      var _a2, _b2;
+      var _a2, _b;
       return common_vendor.e({
         a: common_vendor.p({
           userInteractionEnabled: false,
@@ -556,7 +560,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         m: common_vendor.s((_a2 = common_vendor.unref(_pos)) == null ? void 0 : _a2.children),
         n: showActions.value
       } : {}, {
-        o: common_vendor.s((_b2 = common_vendor.unref(_pos)) == null ? void 0 : _b2.parent)
+        o: common_vendor.s((_b = common_vendor.unref(_pos)) == null ? void 0 : _b.parent)
       });
     };
   }

@@ -11,7 +11,7 @@ function setupRouter(app) {
   });
   common_vendor.It((to, from) => {
     common_vendor.index.showToast({
-      title: `${to.url} \u4E0D\u5B58\u57281111`,
+      title: `${to.url} 不存在1111`,
       icon: "none"
     });
   });

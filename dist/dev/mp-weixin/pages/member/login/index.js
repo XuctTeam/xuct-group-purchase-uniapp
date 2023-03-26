@@ -37,7 +37,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     };
     const reject = () => {
       utils_dialog.confirm({
-        title: "\u62D2\u7EDD\u540E\u5C06\u65E0\u6CD5\u8FDB\u884C\u767B\u5F55\uFF01",
+        title: "拒绝后将无法进行登录！",
         success: () => {
           back();
         },
@@ -50,6 +50,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       return new Promise((resolve, reject2) => {
         common_vendor.index.login({
           provider: "weixin",
+          //使用微信登录
           success: async (loginRes) => {
             utils_dialog.loading();
             try {
@@ -76,15 +77,14 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     return (_ctx, _cache) => {
       return {
         a: common_vendor.p({
-          title: "\u6388\u6743\u767B\u5F55",
-          color: "green",
-          linear: "right",
-          blur: true
+          title: "授权登录",
+          color: "#70DB93",
+          fontColor: "white"
         }),
         b: common_vendor.o(reject),
         c: common_vendor.p({
           round: 6,
-          label: "\u62D2\u7EDD"
+          label: "拒绝"
         }),
         d: common_vendor.o(login),
         e: common_vendor.p({
@@ -93,7 +93,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
           color: "orange",
           ["font-color"]: "white",
           linear: "left",
-          label: "\u5141\u8BB8"
+          label: "允许"
         })
       };
     };

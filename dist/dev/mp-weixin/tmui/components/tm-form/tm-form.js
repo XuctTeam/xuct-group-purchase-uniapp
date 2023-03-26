@@ -22,18 +22,23 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Array,
       default: () => [16, 0]
     },
+    //表单标签是竖还是横排列。
+    //vertical,horizontal
     layout: {
       type: String,
       default: "horizontal"
     },
+    //如果为0表示自动宽度。
     labelWidth: {
       type: Number,
       default: 160
     },
+    //标签对齐方式
     labelAlign: {
       type: String,
       default: "left"
     },
+    //显示下划线。
     border: {
       type: Boolean,
       default: true
@@ -63,31 +68,31 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     const formFunCallBack = common_vendor.ref("");
     common_vendor.provide(
       "tmFormFun",
-      common_vendor.computed$1(() => formFunCallBack.value)
+      common_vendor.computed(() => formFunCallBack.value)
     );
     common_vendor.provide(
       "tmFormLabelWidth",
-      common_vendor.computed$1(() => props.labelWidth)
+      common_vendor.computed(() => props.labelWidth)
     );
     common_vendor.provide(
       "tmFormLabelAlign",
-      common_vendor.computed$1(() => props.labelAlign)
+      common_vendor.computed(() => props.labelAlign)
     );
     common_vendor.provide(
       "tmFormLayout",
-      common_vendor.computed$1(() => props.layout)
+      common_vendor.computed(() => props.layout)
     );
     common_vendor.provide(
       "tmFormBorder",
-      common_vendor.computed$1(() => props.border)
+      common_vendor.computed(() => props.border)
     );
     common_vendor.provide(
       "tmFormTransprent",
-      common_vendor.computed$1(() => props.transprent)
+      common_vendor.computed(() => props.transprent)
     );
     common_vendor.provide(
       "formCallFiled",
-      common_vendor.computed$1(() => _modelVal.value)
+      common_vendor.computed(() => _modelVal.value)
     );
     common_vendor.watch(
       () => props.modelValue,
@@ -100,7 +105,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     let ptimeId = 301120999856;
     function reset() {
       formFunCallBack.value = "";
-      common_vendor.nextTick(() => {
+      common_vendor.nextTick$1(() => {
         formFunCallBack.value = "reset";
         clearTimeout(timid);
         emits("reset");
@@ -115,16 +120,16 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     }
     function clearValidate() {
       formFunCallBack.value = "";
-      common_vendor.nextTick(() => {
+      common_vendor.nextTick$1(() => {
         formFunCallBack.value = "clearValidate";
-        common_vendor.nextTick(() => {
+        common_vendor.nextTick$1(() => {
           emits("clearValidate");
         });
       });
     }
     function submit() {
       formFunCallBack.value = "";
-      common_vendor.nextTick(() => {
+      common_vendor.nextTick$1(() => {
         formFunCallBack.value = "validate";
         let isPass = true;
         common_vendor.index.$tm.u.throttle(
@@ -145,9 +150,9 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     }
     function validate() {
       formFunCallBack.value = "";
-      common_vendor.nextTick(() => {
+      common_vendor.nextTick$1(() => {
         formFunCallBack.value = "validate";
-        common_vendor.nextTick(() => {
+        common_vendor.nextTick$1(() => {
           emits("reset");
         });
       });

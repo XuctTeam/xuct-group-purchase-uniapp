@@ -21,26 +21,41 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: [Boolean, String],
       default: true
     },
+    //v-model以selectedModel为索引的值结果。
     modelValue: {
       type: Array,
       default: () => []
     },
+    //单向输出地区名称以/分割。不管selectedModel是以哪种索引选项，此处始终以地区名称输出显示。
+    //可以使用v-model:modelStr，外部不可更改。
     modelStr: {
       type: String,
       default: ""
     },
+    //v-model:show来双向绑定显示和隐藏选择器。
     show: {
       type: [Boolean],
       default: false
     },
+    //赋值和选值方式
+    //name:名称模式赋值和选择
+    //id:地区id模式赋值和选择
+    //index:索引模式赋值和选择
     selectedModel: {
       type: String,
       default: "id"
     },
+    /**
+    * 城市选择的级别
+    * province:省级别。
+    * city:省，市
+    * area:省，市，县/区.
+    */
     cityLevel: {
       type: String,
       default: "area"
     },
+    // 手动赋值城市数据
     city: {
       type: Array,
       default: () => []
@@ -65,6 +80,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Number,
       default: 12
     },
+    /**禁用时，通过插槽点击时，不会触发显示本组件，适合表单 */
     disabled: {
       type: Boolean,
       default: false
@@ -77,14 +93,14 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     "confirm",
     "cancel"
   ],
-  setup(__props, { emit: emits }) {
-    var _a, _b;
+  setup(__props, { expose, emit: emits }) {
+    var _a;
     const props = __props;
-    (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
+    ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
     const drawer = common_vendor.ref(null);
     const picker = common_vendor.ref(null);
     const showCity = common_vendor.ref(true);
-    const _cityData = common_vendor.computed$1(() => props.city);
+    const _cityData = common_vendor.computed(() => props.city);
     const _colIndex = common_vendor.ref([]);
     const _data = common_vendor.ref(chiliFormatCity_area());
     let tmid = NaN;
@@ -126,7 +142,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       if (!aniover.value)
         return;
       setVal();
-      common_vendor.nextTick(() => {
+      common_vendor.nextTick$1(() => {
         var _a2;
         emits("confirm", props.modelValue);
         (_a2 = drawer.value) == null ? void 0 : _a2.close();
@@ -138,10 +154,9 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       emits("cancel");
     }
     function setVal() {
-      var _a2;
       let val = [];
       if (props.selectedModel == "name") {
-        val = (_a2 = _colStr.value.split("/")) != null ? _a2 : [];
+        val = _colStr.value.split("/") ?? [];
       } else if (props.selectedModel == "id") {
         val = getRouterId(_data.value, 0);
       } else {
@@ -154,7 +169,6 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       clearTimeout(tmid);
       tmid = setTimeout(function() {
         if (_colIndex.value.length > 0) {
-          console.log(_colIndex.value, 999);
           let text = getRouterText(_data.value, 0);
           emits("update:modelStr", text.join("/"));
         }
@@ -208,12 +222,13 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       }
       return _colIndex.value;
     }
-    function getRouterId(list = [], parentIndex = 0) {
+    function getRouterId(list = [], parentIndex = 0, value = []) {
       let p = [];
+      const _defalutValue = value.length == 0 ? _colIndex.value : value;
       for (let i = 0; i < list.length; i++) {
-        if (i == _colIndex.value[parentIndex]) {
+        if (i == _defalutValue[parentIndex]) {
           p.push(list[i]["id"]);
-          if (typeof _colIndex.value[parentIndex] != "undefined") {
+          if (typeof _defalutValue[parentIndex] != "undefined") {
             let c = getRouterId(list[i]["children"], parentIndex + 1);
             p = [...p, ...c];
           }
@@ -242,9 +257,8 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         return _cityData.value;
       }
       tmui_tool_static_province.provinceData.forEach((item, index) => {
-        var _a2;
         list.push({
-          id: (_a2 = item.value) != null ? _a2 : "",
+          id: item.value ?? "",
           text: String(item.label),
           children: []
         });
@@ -253,10 +267,10 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         return list;
       tmui_tool_static_city.cityData.forEach((item, index) => {
         item.forEach((citem, cindex) => {
-          var _a2, _b2, _c;
-          (_c = list[index]) == null ? void 0 : _c.children.push({
-            id: (_a2 = citem.value) != null ? _a2 : "",
-            text: (_b2 = citem.label) != null ? _b2 : "",
+          var _a2;
+          (_a2 = list[index]) == null ? void 0 : _a2.children.push({
+            id: citem.value ?? "",
+            text: citem.label ?? "",
             children: []
           });
         });
@@ -266,16 +280,21 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       list.forEach((item, index) => {
         item.children.forEach((citem, cindex) => {
           tmui_tool_static_area.areaData[index][cindex].forEach((jitem) => {
-            var _a2, _b2, _c, _d;
-            (_d = (_a2 = list[index]) == null ? void 0 : _a2.children[cindex]) == null ? void 0 : _d.children.push({
-              id: (_b2 = jitem.value) != null ? _b2 : "",
-              text: (_c = jitem.label) != null ? _c : ""
+            var _a2, _b;
+            (_b = (_a2 = list[index]) == null ? void 0 : _a2.children[cindex]) == null ? void 0 : _b.children.push({
+              id: jitem.value ?? "",
+              text: jitem.label ?? ""
             });
           });
         });
       });
       return list;
     }
+    expose({
+      getList: chiliFormatCity_area,
+      getIndexs: getIndexBymodel,
+      getRouterId
+    });
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: showCity.value
@@ -297,7 +316,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       } : {}, {
         h: common_vendor.o(confirm),
         i: common_vendor.p({
-          label: "\u786E\u8BA4\u9009\u62E9",
+          label: "确认选择",
           block: true,
           margin: [32, 12],
           color: props.color,
@@ -320,8 +339,8 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
           closable: true,
           overlayClick: aniover.value,
           show: showCity.value,
-          title: "\u8BF7\u9009\u62E9\u5730\u533A",
-          ["ok-text"]: "\u786E\u8BA4"
+          title: "请选择地区",
+          ["ok-text"]: "确认"
         }),
         q: common_vendor.o(($event) => showCity.value = !props.disabled ? !showCity.value : false)
       });

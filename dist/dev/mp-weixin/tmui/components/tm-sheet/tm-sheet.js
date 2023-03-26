@@ -55,14 +55,21 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: "none"
     },
+    //暗下强制的背景色，
+    //有时自动的背景，可能不是你想要暗黑背景，此时可以使用此参数，强制使用背景色，
+    //只能是颜色值。
     darkBgColor: {
       type: String,
       default: ""
     },
+    //不是同层背景，默认是同层，为false
+    //如果输入框表单与tmshee在同一层下。他们的黑白暗黑背景色是相同的。为了区分这个问题，需要单独指示，以便区分背景同层。
+    //主意：它只在黑和白之间的色系才起作用，其它颜色下不起作用。
     noLevel: {
       type: Boolean,
       default: false
     },
+    //是否开启磨砂背景。只有是黑白灰色系才能使用。
     blur: {
       type: Boolean,
       default: false
@@ -83,36 +90,38 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     "mouseleave"
   ],
   setup(__props, { emit: emits }) {
-    var _a, _b;
+    var _a;
     const props = __props;
     const store = tmui_tool_lib_tmpinia.useTmpiniaStore();
-    (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
-    const parenClass_p = common_vendor.computed$1(() => props.parenClass);
-    const contStyle_p = common_vendor.computed$1(() => props.contStyle);
-    const _transprent = common_vendor.computed$1(() => props.transprent);
-    const tmcfg = common_vendor.computed$1(() => store.tmStore);
-    const _blur = common_vendor.computed$1(() => {
+    ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
+    const parenClass_p = common_vendor.computed(() => props.parenClass);
+    const contStyle_p = common_vendor.computed(() => props.contStyle);
+    const _transprent = common_vendor.computed(() => props.transprent);
+    const tmcfg = common_vendor.computed(() => store.tmStore);
+    const _blur = common_vendor.computed(() => {
       if (tmcfg.value.os == "android" && _isNvue.value) {
         return false;
       }
       return props.blur;
     });
-    const customCSSStyle = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedStyle(props));
-    const customClass = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedClass(props));
-    const isDark = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
-    const tmcomputed = common_vendor.computed$1(() => {
+    const customCSSStyle = common_vendor.computed(() => tmui_tool_lib_minxs.computedStyle(props));
+    const customClass = common_vendor.computed(() => tmui_tool_lib_minxs.computedClass(props));
+    const isDark = common_vendor.computed(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
+    const tmcomputed = common_vendor.computed(() => {
       let text = props.text;
       if (_blur.value && tmcfg.value.os == "ios" && _isNvue.value) {
         text = true;
       }
+      let _props_rs = common_vendor.index.$tm.u.deepClone(props);
+      const customPropsDefault = common_vendor.index.$tm.u.deepObjectMerge(_props_rs, { blur: _blur.value, text });
       return tmui_tool_lib_minxs.computedTheme(
-        { ...props, blur: _blur.value, text },
+        customPropsDefault,
         isDark.value,
         tmcfg.value
       );
     });
     const _isNvue = common_vendor.ref(false);
-    const _margin = common_vendor.computed$1(() => {
+    const _margin = common_vendor.computed(() => {
       if (props.margin.length == 1)
         return [props.margin[0], props.margin[0], props.margin[0], props.margin[0]];
       if (props.margin.length == 2)
@@ -123,7 +132,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         return [props.margin[0], props.margin[1], props.margin[2], props.margin[3]];
       return [0, 0, 0, 0];
     });
-    const _padding = common_vendor.computed$1(() => {
+    const _padding = common_vendor.computed(() => {
       if (props.padding.length == 1)
         return [props.padding[0], props.padding[0], props.padding[0], props.padding[0]];
       if (props.padding.length == 2)
@@ -134,13 +143,13 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         return [props.padding[0], props.padding[1], props.padding[2], props.padding[3]];
       return [0, 0, 0, 0];
     });
-    const _width = common_vendor.computed$1(() => props.width + _padding.value[0] + _padding.value[2]);
-    const _height = common_vendor.computed$1(() => props.height + _padding.value[1] + _padding.value[3]);
-    const _width_real = common_vendor.computed$1(() => props.width);
-    const _height_real = common_vendor.computed$1(() => props.height);
-    const _noLevel = common_vendor.computed$1(() => props.noLevel);
+    const _width = common_vendor.computed(() => props.width + _padding.value[0] + _padding.value[2]);
+    const _height = common_vendor.computed(() => props.height + _padding.value[1] + _padding.value[3]);
+    const _width_real = common_vendor.computed(() => props.width);
+    const _height_real = common_vendor.computed(() => props.height);
+    const _noLevel = common_vendor.computed(() => props.noLevel);
     const _blue_sheet = common_vendor.ref(true);
-    const _blurEffect = common_vendor.computed$1(() => {
+    const _blurEffect = common_vendor.computed(() => {
       if (props.blur === true && isDark.value)
         return "dark";
       if (props.blur === true && !isDark.value)
@@ -152,7 +161,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       () => {
       }
     );
-    const _bgcolor = common_vendor.computed$1(() => {
+    const _bgcolor = common_vendor.computed(() => {
       var _a2;
       if (_transprent.value === true)
         return `background-color:rgba(255,255,255,0);`;
@@ -210,17 +219,17 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         });
       }
     }
-    common_vendor.computed$1(() => {
+    common_vendor.computed(() => {
       let w = parseFloat(String(_width.value)) - parseFloat(String(props.padding[0]));
       w = w - parseFloat(String(props.border)) * 2;
       return w;
     });
-    common_vendor.computed$1(() => {
+    common_vendor.computed(() => {
       let h = parseFloat(String(_height.value)) - parseFloat(String(props.padding[1]));
       h = h - parseFloat(String(props.border)) * 2;
       return h;
     });
-    let textColor = common_vendor.computed$1(() => {
+    let textColor = common_vendor.computed(() => {
       return tmcomputed.value.textColor;
     });
     common_vendor.provide("appTextColor", textColor);

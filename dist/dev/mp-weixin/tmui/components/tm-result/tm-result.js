@@ -10,6 +10,7 @@ const tmTranslate = () => "../tm-translate/tm-translate.js";
 const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   __name: "tm-result",
   props: {
+    // empty,error,success,warning,lock,network
     status: {
       type: String,
       default: "empty"
@@ -32,8 +33,9 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     },
     btnText: {
       type: String,
-      default: "\u786E\u8BA4"
+      default: "确认"
     },
+    //是否跟随全局主题的变换而变换
     followTheme: {
       type: [Boolean, String],
       default: true
@@ -42,14 +44,17 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: [Boolean, String],
       default: true
     },
+    //暗黑
     dark: {
       type: [Boolean, String],
       default: false
     },
+    //是否显示底部的操作按钮。
     showBtn: {
       type: Boolean,
       default: true
     },
+    //是否禁用整个组件的点击事件。
     clickDisabled: {
       type: Boolean,
       default: true
@@ -69,63 +74,63 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     const statusData = {
       empty: {
         icon: "tmicon-shiliangzhinengduixiang-",
-        title: "\u6570\u636E\u7A7A",
-        subTitle: "\u4E0B\u62C9\u5237\u65B0",
+        title: "数据空",
+        subTitle: "下拉刷新",
         color: "primary"
       },
       error: {
         icon: "tmicon-times",
-        title: "\u9519\u8BEF",
-        subTitle: "\u8BF7\u6839\u636E\u6307\u793A\u64CD\u4F5C",
+        title: "错误",
+        subTitle: "请根据指示操作",
         color: "red"
       },
       success: {
         icon: "tmicon-check",
-        title: "\u64CD\u4F5C\u6B63\u786E",
-        subTitle: "\u8BF7\u7A0D\u5019",
+        title: "操作正确",
+        subTitle: "请稍候",
         color: "green"
       },
       warning: {
         icon: "tmicon-exclamation-circle",
-        title: "\u5F02\u5E38",
-        subTitle: "\u8BF7\u6839\u636E\u6307\u793A\u64CD\u4F5C",
+        title: "异常",
+        subTitle: "请根据指示操作",
         color: "orange"
       },
       lock: {
         icon: "tmicon-ios-unlock",
-        title: "\u6388\u6743\u63D0\u9192",
-        subTitle: "\u9700\u8981\u4F60\u7684\u6388\u6743\u8FDB\u4E00\u6B65\u64CD\u4F5C\u3002",
+        title: "授权提醒",
+        subTitle: "需要你的授权进一步操作。",
         color: "blue"
       },
       network: {
         icon: "tmicon-wifi-off",
-        title: "\u7F51\u7EDC\u9519\u8BEF",
-        subTitle: "\u8BF7\u5173\u6CE8\u4F60\u7684\u7F51\u7EDC\u60C5\u51B5",
+        title: "网络错误",
+        subTitle: "请关注你的网络情况",
         color: "blue"
       }
     };
-    const icon_rp = common_vendor.computed$1(() => {
+    const icon_rp = common_vendor.computed(() => {
       if (props.icon)
         return props.icon;
       if (!props.status)
         return "";
       return statusData[props.status].icon || "";
     });
-    const icon_title = common_vendor.computed$1(() => {
+    const icon_title = common_vendor.computed(() => {
       if (props.title)
         return props.title;
       if (!props.status)
         return "";
       return statusData[props.status].title || "";
     });
-    const icon_subtitle = common_vendor.computed$1(() => {
+    const icon_subtitle = common_vendor.computed(() => {
       if (props.subTitle)
         return props.subTitle;
       if (!props.status)
         return "";
       return statusData[props.status].subTitle || "";
     });
-    const icon_color = common_vendor.computed$1(() => {
+    const icon_color = common_vendor.computed(() => {
       if (props.color)
         return props.color;
       if (!props.status)

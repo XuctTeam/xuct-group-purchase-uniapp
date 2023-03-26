@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperties(exports, { __esModule: { value: true }, [Symbol.toStringTag]: { value: "Module" } });
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const common_vendor = require("./common/vendor.js");
 const tmui_index = require("./tmui/index.js");
 const config_index = require("./config/index.js");

@@ -18,8 +18,10 @@ export const saveUserInfo = (phone: string, nickname: string) => {
  * 获取用户地址列表
  * @returns
  */
-export const userAddressList = () => {
-  return request.get<User.Address[]>('/api/v1/address/list')
+export const userAddressList = (searchValue: string) => {
+  return request.get<User.Address[]>('/api/v1/address/list', {
+    searchValue
+  })
 }
 
 /**

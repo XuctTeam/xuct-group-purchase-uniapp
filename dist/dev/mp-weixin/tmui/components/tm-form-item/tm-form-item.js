@@ -21,6 +21,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: ""
     },
+    //表单描述
     desc: {
       type: String,
       default: ""
@@ -33,24 +34,31 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Array,
       default: () => [0, 0]
     },
+    //如果在forom绑定的model为深层对象，这里的名称需要如下:
+    //比如model = {a:2,b:{c:333}}
+    //如果想绑定c,则field = "b.c"
     field: {
       type: String,
       default: ""
     },
+    //表彰底部的单项注意说明。
     help: {
       type: String,
       default: ""
     },
+    //是否必填
     required: {
       type: Boolean,
       default: false
     },
+    //检验规则
     rules: {
       type: [Object, Array],
       default: () => {
         return [{ validator: false, required: false }];
       }
     },
+    //显示下划线。
     border: {
       type: Boolean,
       default: null
@@ -59,10 +67,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Boolean,
       default: true
     },
+    /**当显示错误信息标题时，是否隐藏顶部的间隙，当连续的布局时有用，可以减少之间的间隙大小。 */
     showTopErrorGap: {
       type: Boolean,
       default: true
     },
+    //校验不通过时，是否让标题跟着变化文字颜色，默认是。
     requiredTitleChangeColor: {
       type: Boolean,
       default: false
@@ -77,52 +87,58 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     }
   },
   setup(__props, { expose }) {
-    var _a, _b, _c;
+    var _a;
     const props = __props;
-    const proxy = (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
+    const proxy = ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
     const tmFormComnameFormItem = "tmFormComnameFormItem";
     const item = common_vendor.ref({
       label: "",
+      //标签名称。
       field: props.field,
+      //字段名称key.
       value: null,
       isRequiredError: false,
+      //true,错误，false正常 检验状态
       message: "",
+      //检验信息提示语。
       id: common_vendor.index.$tm.u.getUid(1),
+      //表单唯一标识id
       componentsName: ""
+      //表单组件类型。
     });
     const _required = common_vendor.ref(props.required);
     const tmFormLabelWidth = common_vendor.inject(
       "tmFormLabelWidth",
-      common_vendor.computed$1(() => 100)
+      common_vendor.computed(() => 100)
     );
     const tmFormLabelAlign = common_vendor.inject(
       "tmFormLabelAlign",
-      common_vendor.computed$1(() => "left")
+      common_vendor.computed(() => "left")
     );
     const tmFormLayout = common_vendor.inject(
       "tmFormLayout",
-      common_vendor.computed$1(() => "horizontal")
+      common_vendor.computed(() => "horizontal")
     );
     const tmFormBorder_inject = common_vendor.inject(
       "tmFormBorder",
-      common_vendor.computed$1(() => true)
+      common_vendor.computed(() => true)
     );
     const tmFormTransprent = common_vendor.inject(
       "tmFormTransprent",
-      common_vendor.computed$1(() => false)
+      common_vendor.computed(() => false)
     );
-    const tmFormBorder = common_vendor.computed$1(() => {
+    const tmFormBorder = common_vendor.computed(() => {
       if (props.border !== null && typeof props.border === "boolean")
         return props.border;
       return tmFormBorder_inject.value;
     });
-    const _label = common_vendor.computed$1(() => props.label);
+    const _label = common_vendor.computed(() => props.label);
     let parent = proxy == null ? void 0 : proxy.$parent;
     while (parent) {
       if ((parent == null ? void 0 : parent.tmFormComnameId) == "tmFormId" || !parent) {
         break;
       } else {
-        parent = (_c = parent == null ? void 0 : parent.$parent) != null ? _c : void 0;
+        parent = (parent == null ? void 0 : parent.$parent) ?? void 0;
       }
     }
     common_vendor.onUnmounted(() => {
@@ -130,50 +146,48 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     });
     common_vendor.provide(
       "tmFormItemRules",
-      common_vendor.computed$1(() => {
-        var _a2, _b2, _c2, _d, _e;
+      common_vendor.computed(() => {
+        var _a2, _b, _c;
         let defaultrs = [];
         if (Array.isArray(props == null ? void 0 : props.rules)) {
           props == null ? void 0 : props.rules.forEach((el) => {
-            var _a3, _b3;
             let isreq = (el == null ? void 0 : el.required) || props.required;
             defaultrs.push({
-              message: (_a3 = el == null ? void 0 : el.message) != null ? _a3 : "\u8BF7\u586B\u5199\u5FC5\u8981\u7684\u5185\u5BB9",
+              message: (el == null ? void 0 : el.message) ?? "请填写必要的内容",
               required: isreq,
-              validator: (_b3 = el == null ? void 0 : el.validator) != null ? _b3 : false
+              validator: (el == null ? void 0 : el.validator) ?? false
             });
           });
         } else {
           defaultrs = [
             {
-              message: (_b2 = (_a2 = props == null ? void 0 : props.rules) == null ? void 0 : _a2.message) != null ? _b2 : "\u8BF7\u586B\u5199\u5FC5\u8981\u7684\u5185\u5BB9",
-              required: ((_c2 = props.rules) == null ? void 0 : _c2.required) || props.required,
-              validator: (_e = (_d = props.rules) == null ? void 0 : _d.validator) != null ? _e : false
+              message: ((_a2 = props == null ? void 0 : props.rules) == null ? void 0 : _a2.message) ?? "请填写必要的内容",
+              required: ((_b = props.rules) == null ? void 0 : _b.required) || props.required,
+              validator: ((_c = props.rules) == null ? void 0 : _c.validator) ?? false
             }
           ];
         }
         return defaultrs;
       })
     );
-    const Rules = common_vendor.computed$1(() => {
-      var _a2, _b2, _c2, _d, _e;
+    const Rules = common_vendor.computed(() => {
+      var _a2, _b, _c;
       let defaultrs = [];
       if (Array.isArray(props == null ? void 0 : props.rules)) {
         props == null ? void 0 : props.rules.forEach((el) => {
-          var _a3, _b3;
           let isreq = (el == null ? void 0 : el.required) || props.required;
           defaultrs.push({
-            message: (_a3 = el == null ? void 0 : el.message) != null ? _a3 : "\u8BF7\u586B\u5199\u5FC5\u8981\u7684\u5185\u5BB9",
+            message: (el == null ? void 0 : el.message) ?? "请填写必要的内容",
             required: isreq,
-            validator: (_b3 = el == null ? void 0 : el.validator) != null ? _b3 : false
+            validator: (el == null ? void 0 : el.validator) ?? false
           });
         });
       } else {
         defaultrs = [
           {
-            message: (_b2 = (_a2 = props == null ? void 0 : props.rules) == null ? void 0 : _a2.message) != null ? _b2 : "\u8BF7\u586B\u5199\u5FC5\u8981\u7684\u5185\u5BB9",
-            required: ((_c2 = props.rules) == null ? void 0 : _c2.required) || props.required,
-            validator: (_e = (_d = props.rules) == null ? void 0 : _d.validator) != null ? _e : false
+            message: ((_a2 = props == null ? void 0 : props.rules) == null ? void 0 : _a2.message) ?? "请填写必要的内容",
+            required: ((_b = props.rules) == null ? void 0 : _b.required) || props.required,
+            validator: ((_c = props.rules) == null ? void 0 : _c.validator) ?? false
           }
         ];
       }
@@ -181,7 +195,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     });
     function pushCom(itemComval) {
       if (parent) {
-        item.value = { ...item.value, ...itemComval != null ? itemComval : {} };
+        item.value = { ...item.value, ...itemComval ?? {} };
         parent.pushKey({ ...item.value });
       }
     }
@@ -192,15 +206,15 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     }
     const tmFormFun = common_vendor.inject(
       "tmFormFun",
-      common_vendor.computed$1(() => "")
+      common_vendor.computed(() => "")
     );
     expose({ pushCom, delCom, tmFormComnameFormItem });
     const formCallFiled = common_vendor.inject(
       "formCallFiled",
-      common_vendor.computed$1(() => {
+      common_vendor.computed(() => {
       })
     );
-    const nowValue = common_vendor.computed$1(() => {
+    const nowValue = common_vendor.computed(() => {
       return getObjectVal(formCallFiled.value, props.field);
     });
     let tid = NaN;
@@ -212,7 +226,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
           tid = setTimeout(async () => {
             let vaild = await checkVal();
             item.value = { ...vaild };
-            common_vendor.nextTick(() => {
+            common_vendor.nextTick$1(() => {
               pushCom();
               if (parent) {
                 parent == null ? void 0 : parent.checkValidate(vaild);

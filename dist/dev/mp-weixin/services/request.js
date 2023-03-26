@@ -75,7 +75,7 @@ instance.interceptors.response.use(
   },
   (error) => {
     const { errno } = error;
-    const _tips = codeKeys[errno] || "\u8BF7\u6C42\u5F02\u5E38\uFF01";
+    const _tips = codeKeys[errno] || "请求异常！";
     common_vendor.index.$tm.u.toast(_tips, true, "error");
     return Promise.reject(error);
   }

@@ -15,10 +15,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   __name: "tm-image",
   props: {
     ...tmui_tool_lib_minxs.custom_props,
+    //外部间隙
     margin: {
       type: Array,
       default: () => [0, 0]
     },
+    //内部间隙
     padding: {
       type: Array,
       default: () => [0, 0]
@@ -56,20 +58,23 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     },
     errorLabel: {
       type: String,
-      default: "\u91CD\u65B0\u52A0\u8F7D"
+      default: "重新加载"
     },
     loadIcon: {
       type: String,
       default: ""
     },
+    //是否显示加载动画。
     showLoad: {
       type: Boolean,
       default: true
     },
+    //是否开启预览。
     preview: {
       type: [Boolean],
       default: false
     },
+    //是否开启图片额外插槽显示内容。
     extra: {
       type: [Boolean],
       default: false
@@ -77,15 +82,20 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     extraPosition: {
       type: String,
       default: "in"
+      //in:叠加图片上显示,out：图片下方显示,
     },
+    //展示关闭删除按钮。
     delete: {
       type: [Boolean],
       default: false
     },
+    //是否允许点击delete图标关闭自己，如果为false,将仅触发delete事件，本身图片不会被关闭。
     allowDelete: {
       type: [Boolean],
       default: true
     },
+    //图片绽放模式。
+    //同官方阅读：https://uniapp.dcloud.io/component/image.html
     model: {
       type: String,
       default: "scaleToFill"
@@ -94,6 +104,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: "rpx"
     },
+    //开启长按图片显示识别小程序码菜单,与preview不冲突,可点击预览也可长按,默认不开启
     showMenuByLongPress: {
       type: [Boolean],
       default: false
@@ -101,20 +112,20 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   emits: ["load", "error", "click", "delete", "close"],
   setup(__props, { emit: emits }) {
-    var _a, _b, _c;
+    var _a;
     const props = __props;
     const aniplay = common_vendor.ref(null);
-    const proxy = (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
+    const proxy = ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
     if (!props.height && !props.width) {
-      console.error("\u9519\u8BEF\uFF1A\u56FE\u7247\u5BBD\u5EA6\u548C\u9AD8\u5EA6\u5FC5\u987B\u8BBE\u7F6E\u4E00\u4E2A");
+      console.error("错误：图片宽度和高度必须设置一个");
     }
-    const img_width = common_vendor.computed$1(() => {
+    const img_width = common_vendor.computed(() => {
       return props.width;
     });
-    const img_height = common_vendor.computed$1(() => {
+    const img_height = common_vendor.computed(() => {
       return props.height - props.padding[1];
     });
-    const img_src = common_vendor.computed$1(() => props.src);
+    const img_src = common_vendor.computed(() => props.src);
     const loading = common_vendor.ref(true);
     const error = common_vendor.ref(false);
     const isRmove = common_vendor.ref(false);
@@ -125,12 +136,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       if ((parent == null ? void 0 : parent.tmImageGroup) == "tmImageGroup" || !parent) {
         break;
       } else {
-        parent = (_c = parent == null ? void 0 : parent.$parent) != null ? _c : void 0;
+        parent = (parent == null ? void 0 : parent.$parent) ?? void 0;
       }
     }
     const ImagGrupList = common_vendor.inject(
       "ImagGrupList",
-      common_vendor.computed$1(() => [])
+      common_vendor.computed(() => [])
     );
     if (parent == null ? void 0 : parent.pushKey) {
       parent.pushKey({
@@ -155,7 +166,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       emits("load", event);
     }
     function imageError(event) {
-      console.error("\u56FE\u7247\u52A0\u8F7D\u9519:" + props.src, event);
+      console.error("图片加载错:" + props.src, event);
       error.value = true;
       loading.value = false;
       emits("error", event);
@@ -171,14 +182,14 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       }
     }
     async function del() {
-      var _a2, _b2;
+      var _a2, _b;
       isRmove.value = false;
       if (!props.allowDelete) {
         emits("delete", props.src);
         return;
       }
       if ((_a2 = aniplay.value) == null ? void 0 : _a2.play) {
-        (_b2 = aniplay.value) == null ? void 0 : _b2.play();
+        (_b = aniplay.value) == null ? void 0 : _b.play();
       } else {
         isRmove.value = true;
         emits("close", props.src);

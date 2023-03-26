@@ -27,6 +27,9 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: "opacity-7"
     },
+    /**
+     * mini,small,normal,middle,large
+     */
     size: {
       type: String,
       default: "normal"
@@ -47,6 +50,9 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Array,
       default: () => [0, 0]
     },
+    //不是同层背景，默认是同层，为false
+    //如果输入框表单与tmshee在同一层下。他们的黑白暗黑背景色是相同的。为了区分这个问题，需要单独指示，以便区分背景同层。
+    //主意：它只在黑和白之间的色系才起作用，其它颜色下不起作用。
     noLevel: {
       type: Boolean,
       default: false
@@ -63,6 +69,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Number,
       default: 0
     },
+    //如果为true，采用块状flex布局，自动宽和高度。
     block: {
       type: Boolean,
       default: false
@@ -79,6 +86,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Boolean,
       default: false
     },
+    //提供时，点击后会中转到对应页面。
     url: {
       type: String,
       default: ""
@@ -91,14 +99,19 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: ""
     },
+    /**
+     * submit,reset 在tm-form中使用。
+     */
     formType: {
       type: String,
       default: ""
     },
+    //开放能力
     openType: {
       type: String,
       default: ""
     },
+    //打开 APP 时，向 APP 传递的参数，open-type=launchApp时有效
     appParameter: {
       type: String,
       default: ""
@@ -143,6 +156,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: ""
     },
+    /**禁用后的主题色 */
     disabledColor: {
       type: String,
       default: "grey-1"
@@ -150,12 +164,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   emits: ["click", "touchstart", "touchmove", "touchcancel", "touchend", "tap", "longpress", "getphonenumber", "getUserInfo", "getUserProfile", "error", "opensetting", "launchapp", "contact", "chooseavatar"],
   setup(__props, { emit: emits }) {
-    var _a, _b, _c, _d;
+    var _a;
     const props = __props;
     const store = tmui_tool_lib_tmpinia.useTmpiniaStore();
     common_vendor.ref(false);
-    const proxy = (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
-    const formtype = common_vendor.computed$1(() => props.formType);
+    const proxy = ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
+    const formtype = common_vendor.computed(() => props.formType);
     let FormParent = null;
     let FilterParent = null;
     if (formtype.value == "reset" || formtype.value == "submit") {
@@ -164,7 +178,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         if ((FormParent == null ? void 0 : FormParent.tmFormComnameId) == "tmFormId" || !FormParent) {
           break;
         } else {
-          FormParent = (_c = FormParent == null ? void 0 : FormParent.$parent) != null ? _c : void 0;
+          FormParent = (FormParent == null ? void 0 : FormParent.$parent) ?? void 0;
         }
       }
     }
@@ -174,27 +188,33 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         if ((FilterParent == null ? void 0 : FilterParent.FilterMenu) == "FilterMenu" || !FilterParent) {
           break;
         } else {
-          FilterParent = (_d = FilterParent == null ? void 0 : FilterParent.$parent) != null ? _d : void 0;
+          FilterParent = (FilterParent == null ? void 0 : FilterParent.$parent) ?? void 0;
         }
       }
     }
-    const _noLevel = common_vendor.computed$1(() => props.noLevel);
-    const isDark = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
-    let textColor = common_vendor.computed$1(() => {
+    const _noLevel = common_vendor.computed(() => props.noLevel);
+    const isDark = common_vendor.computed(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
+    let textColor = common_vendor.computed(() => {
       if (tmui_tool_theme_theme.theme.isCssColor(_fontColor.value))
         return _fontColor.value;
       if (!props.fontColor)
         return tmcomputed.value.textColor;
       return tmui_tool_theme_theme.theme.getColor(props.fontColor).value;
     });
-    const customCSSStyle = common_vendor.computed$1(() => {
+    const customCSSStyle = common_vendor.computed(() => {
       return {
+        // height: btnSizeObj.value.h + props.unit,
         ...tmui_tool_lib_minxs.computedStyle(props)
+        // fontSize:props.fontSize,
+        // color:textColor,
+        // border: "0px solid rgba(0, 0, 0, 0)",
+        // background: "rgba(0, 0, 0, 0)",
+        // borderRadius: "0px",
       };
     });
-    const customClass = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedClass(props));
-    const tmcfg = common_vendor.computed$1(() => store.tmStore);
-    const tmcomputed = common_vendor.computed$1(() => {
+    const customClass = common_vendor.computed(() => tmui_tool_lib_minxs.computedClass(props));
+    const tmcfg = common_vendor.computed(() => store.tmStore);
+    const tmcomputed = common_vendor.computed(() => {
       let nprops = { ...props };
       if (_disabled.value) {
         nprops.color = props.disabledColor;
@@ -202,25 +222,25 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       return tmui_tool_lib_minxs.computedTheme({ ...nprops }, isDark.value, tmcfg.value);
     });
     const isclickOn = common_vendor.ref(false);
-    const _load = common_vendor.computed$1(() => props.loading);
-    const _disabled = common_vendor.computed$1(() => props.disabled);
-    const _label = common_vendor.computed$1(() => props.label);
-    const _icon = common_vendor.computed$1(() => props.icon);
-    common_vendor.computed$1(() => {
+    const _load = common_vendor.computed(() => props.loading);
+    const _disabled = common_vendor.computed(() => props.disabled);
+    const _label = common_vendor.computed(() => props.label);
+    const _icon = common_vendor.computed(() => props.icon);
+    common_vendor.computed(() => {
       if (props.outlined && props.border == 0)
         return 1;
       if (props.border > 0)
         return props.border;
       return 0;
     });
-    const sizeObj = common_vendor.computed$1(() => {
+    const sizeObj = common_vendor.computed(() => {
       let ptest = {
         block: { w: 0, h: 80, fontSize: 28, round: 3 },
         mini: { w: 88, h: 36, fontSize: 20, round: 2 },
         small: { w: 120, h: 56, fontSize: 22, round: 2 },
         normal: { w: 220, h: 80, fontSize: 28, round: 2 },
         middle: { w: 360, h: 80, fontSize: 30, round: 2 },
-        large: { w: 535, h: 88, fontSize: 32, round: 3 }
+        large: { w: 535, h: 80, fontSize: 32, round: 3 }
       };
       if (props.unit == "px") {
         let key = "block";
@@ -233,7 +253,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       }
       return ptest;
     });
-    const btnSizeObj = common_vendor.computed$1(() => {
+    const btnSizeObj = common_vendor.computed(() => {
       let fontSize = props.fontSize || 0;
       if (props.block) {
         return {
@@ -250,9 +270,9 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         round: props.round == -1 ? 0 : props.round || sizeObj.value[props.size].round
       };
     });
-    const _fontColor = common_vendor.computed$1(() => props.fontColor);
-    const _transprent = common_vendor.computed$1(() => props.transprent);
-    const _margin = common_vendor.computed$1(() => {
+    const _fontColor = common_vendor.computed(() => props.fontColor);
+    const _transprent = common_vendor.computed(() => props.transprent);
+    const _margin = common_vendor.computed(() => {
       if (props.margin.length == 1)
         return [props.margin[0], props.margin[0], props.margin[0], props.margin[0]];
       if (props.margin.length == 2)
@@ -263,7 +283,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         return [props.margin[0], props.margin[1], props.margin[2], props.margin[3]];
       return [0, 0, 0, 0];
     });
-    const _padding = common_vendor.computed$1(() => {
+    const _padding = common_vendor.computed(() => {
       if (props.padding.length == 1)
         return [props.padding[0], props.padding[0], props.padding[0], props.padding[0]];
       if (props.padding.length == 2)
@@ -274,7 +294,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         return [props.padding[0], props.padding[1], props.padding[2], props.padding[3]];
       return [0, 0, 0, 0];
     });
-    const _bgcolor = common_vendor.computed$1(() => {
+    const _bgcolor = common_vendor.computed(() => {
       var _a2;
       if (_transprent.value === true)
         return `background-color:rgba(255,255,255,0);`;
@@ -319,7 +339,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       }
       if (props.openType == "getUserInfo" || props.openType == "getUserProfile") {
         common_vendor.index.getUserProfile({
-          desc: "\u7528\u4E8E\u5B8C\u5584\u4F1A\u5458\u8D44\u6599",
+          desc: "用于完善会员资料",
           success: function(userProfile) {
             if (userProfile.errMsg != "getUserProfile:ok") {
               common_vendor.index.showToast({
@@ -341,7 +361,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
           }
         });
         console.warn(
-          "\u5FAE\u4FE1\u5C0F\u7A0B\u5E8F\u5DF2\u6536\u56DE\u2018getUserProfile\u2019\u4EE5\u53CA\u2018getUserInfo\u2019\u6743\u9650\uFF0C\u8BF7\u4F7F\u7528open-type='chooseAvatar'\u4F7F\u7528@chooseavatar\u56DE\u8C03\uFF0C\u8BE6\u89C1\u300A\u5FAE\u4FE1\u5C0F\u7A0B\u5E8F\u7528\u6237\u5934\u50CF\u6635\u79F0\u83B7\u53D6\u89C4\u5219\u8C03\u6574\u516C\u544A\u300Bhttps://developers.weixin.qq.com/community/develop/doc/00022c683e8a80b29bed2142b56c01"
+          "微信小程序已收回‘getUserProfile’以及‘getUserInfo’权限，请使用open-type='chooseAvatar'使用@chooseavatar回调，详见《微信小程序用户头像昵称获取规则调整公告》https://developers.weixin.qq.com/community/develop/doc/00022c683e8a80b29bed2142b56c01"
         );
       }
     }

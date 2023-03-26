@@ -16,6 +16,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   __name: "tm-grid-item",
   props: {
     ...tmui_tool_lib_minxs.custom_props,
+    //项目的高度。如果提供为0，就表示自动高度。
     height: {
       type: Number,
       default: 100
@@ -32,6 +33,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: [String],
       default: ""
     },
+    //如果count为数字时，显示数字角标，如果为string是显示文本角标。
     count: {
       type: [Number, String],
       default: 0
@@ -44,10 +46,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: String,
       default: "white"
     },
+    // dot的主题色
     color: {
       type: String,
       default: "red"
     },
+    //如果提供了链接，当点击项目时自动跳转页面。
     url: {
       type: String,
       default: ""
@@ -55,23 +59,23 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   emits: ["click"],
   setup(__props, { emit: emits }) {
-    var _a, _b, _c;
+    var _a;
     const props = __props;
     const store = tmui_tool_lib_tmpinia.useTmpiniaStore();
-    const proxy = (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
-    const tmcfg = common_vendor.computed$1(() => store.tmStore);
-    const isDark = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
-    const tmcomputed = common_vendor.computed$1(() => {
+    const proxy = ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
+    const tmcfg = common_vendor.computed(() => store.tmStore);
+    const isDark = common_vendor.computed(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
+    const tmcomputed = common_vendor.computed(() => {
       return tmui_tool_lib_minxs.computedTheme({ ...props, color: props.bgColor }, isDark.value, tmcfg.value);
     });
     const _colWidth = common_vendor.inject("tmGridItemWidth", 0);
     const _tmGridshowBorder = common_vendor.inject(
       "tmGridshowBorder",
-      common_vendor.computed$1(() => false)
+      common_vendor.computed(() => false)
     );
     const tmGridshowCachList = common_vendor.inject(
       "tmGridshowCachList",
-      common_vendor.computed$1(() => [])
+      common_vendor.computed(() => [])
     );
     const uid = common_vendor.ref({
       id: common_vendor.index.$tm.u.getUid(1),
@@ -82,7 +86,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       if ((parentFormItem == null ? void 0 : parentFormItem.keyName) == "tmGrid" || !parentFormItem) {
         break;
       } else {
-        parentFormItem = (_c = parentFormItem == null ? void 0 : parentFormItem.$parent) != null ? _c : void 0;
+        parentFormItem = (parentFormItem == null ? void 0 : parentFormItem.$parent) ?? void 0;
       }
     }
     common_vendor.onMounted(() => {
@@ -96,7 +100,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     common_vendor.watch(
       [tmGridshowCachList, _tmGridshowBorder],
       () => {
-        common_vendor.nextTick(() => setStyleFun());
+        common_vendor.nextTick$1(() => setStyleFun());
       },
       { deep: true }
     );

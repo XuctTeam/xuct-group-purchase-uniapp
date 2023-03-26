@@ -8,6 +8,7 @@ const upload = (filePath, formData, callback) => {
   const token = store.getToken;
   common_vendor.index.uploadFile({
     url: BASE_API_URL + "/api/v1/user/avatar/upload",
+    //仅为示例，非真实的接口地址
     filePath,
     name: "file",
     formData,

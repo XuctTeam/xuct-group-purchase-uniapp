@@ -9,6 +9,7 @@ const tmIcon = () => "../tm-icon/tm-icon.js";
 const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   __name: "tm-waterfall-item",
   props: {
+    //封面图片。
     img: {
       type: String,
       default: ""
@@ -24,13 +25,14 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   emits: ["img-click"],
   setup(__props, { emit: emits }) {
-    var _a, _b;
+    var _a;
     const props = __props;
-    const proxy = (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
+    const proxy = ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
     const imgerror = common_vendor.ref(false);
-    const _width = common_vendor.inject("tmWaterFallItemRealWidth", common_vendor.computed$1(() => common_vendor.index.upx2px(_width.value)));
+    const _width = common_vendor.inject("tmWaterFallItemRealWidth", common_vendor.computed(() => common_vendor.index.upx2px(_width.value)));
     let _nodeInfo = common_vendor.ref({
       id: common_vendor.index.$tm.u.getUid(2),
+      //子组件id，唯一。
       width: _width.value,
       height: _width.value,
       imgWidth: _width.value,
@@ -44,11 +46,11 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     const _parentComs = getParent();
     const isPush = common_vendor.ref(false);
     if (!_parentComs) {
-      console.error("\u8BF7\u4E0D\u8981\u5355\u72EC\u4F7F\u7528\u6B64\u7EC4\u4EF6\uFF0C\u8BF7\u653E\u7F6E\u5728:tm-waterfall\u5185\uFF1B");
+      console.error("请不要单独使用此组件，请放置在:tm-waterfall内；");
     }
     _parentComs.sumTotal(_nodeInfo.value.id);
     common_vendor.onMounted(() => {
-      common_vendor.nextTick(() => {
+      common_vendor.nextTick$1(() => {
         if (isimgLoad.value === true) {
           nvuegetClientRect();
         }
@@ -60,7 +62,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       let _height = _w / (width / height);
       _nodeInfo.value = { ..._nodeInfo.value, imgWidth: _w, imgHeight: _height };
       setTimeout(() => {
-        common_vendor.nextTick(() => nvuegetClientRect());
+        common_vendor.nextTick$1(() => nvuegetClientRect());
       }, 50);
     }
     function error() {
@@ -70,24 +72,23 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       console.log(wx_height);
       _nodeInfo.value = { ..._nodeInfo.value, imgWidth: wx_width, imgHeight: wx_width };
       setTimeout(() => {
-        common_vendor.nextTick(() => nvuegetClientRect());
+        common_vendor.nextTick$1(() => nvuegetClientRect());
         imgerror.value = true;
       }, 50);
     }
     function getParent() {
-      var _a2;
       let parent = proxy.$parent;
       while (parent) {
         if ((parent == null ? void 0 : parent.parentNameId) == "tmWaterfallId" || !parent) {
           break;
         } else {
-          parent = (_a2 = parent == null ? void 0 : parent.$parent) != null ? _a2 : void 0;
+          parent = (parent == null ? void 0 : parent.$parent) ?? void 0;
         }
       }
       return parent;
     }
     function nvuegetClientRect() {
-      common_vendor.nextTick(function() {
+      common_vendor.nextTick$1(function() {
         common_vendor.index.createSelectorQuery().in(proxy).select(".itemWall").boundingClientRect((res) => {
           if (res.height === 0 && res.width === 0) {
             nvuegetClientRect();

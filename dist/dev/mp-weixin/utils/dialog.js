@@ -2,7 +2,7 @@
 const common_vendor = require("../common/vendor.js");
 const confirm = ({ title, success, fail }) => {
   common_vendor.index.showModal({
-    title: "\u786E\u8BA4\u4FE1\u606F",
+    title: "确认信息",
     content: title,
     success: function(res) {
       if (res.confirm) {
@@ -15,7 +15,7 @@ const confirm = ({ title, success, fail }) => {
 };
 const loading = () => {
   common_vendor.index.showLoading({
-    title: "\u52A0\u8F7D\u4E2D",
+    title: "加载中",
     mask: true
   });
 };

@@ -33,15 +33,9 @@
   overflow: hidden;
 }
 .user-head-img {
-  width: 120rpx;
-  height: 120rpx;
+  width: 100rpx;
+  height: 100rpx;
   border-radius: 50%;
   overflow: hidden;
   background-color: rgba(255, 255, 255, 0.7);
-}
-.user-login {
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-left: 10px;
 }

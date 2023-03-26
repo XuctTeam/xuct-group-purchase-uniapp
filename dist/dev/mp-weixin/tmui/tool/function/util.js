@@ -122,7 +122,7 @@ function timeMuch(t) {
   }
   return format;
 }
-function getDateToNewData(timestamp = new Date().getTime()) {
+function getDateToNewData(timestamp = (/* @__PURE__ */ new Date()).getTime()) {
   if (typeof timestamp == "string") {
     timestamp = new Date(timestamp).getTime();
   }
@@ -137,10 +137,10 @@ function getDateToNewData(timestamp = new Date().getTime()) {
   var hour = minute * 60;
   var day = hour * 24;
   var month = day * 30;
-  var now = new Date().getTime();
+  var now = (/* @__PURE__ */ new Date()).getTime();
   var diffValue = now - timestamp;
   if (diffValue < 0) {
-    return "\u4E0D\u4E45\u524D";
+    return "不久前";
   }
   var monthC = diffValue / month;
   var weekC = diffValue / (7 * day);
@@ -156,20 +156,20 @@ function getDateToNewData(timestamp = new Date().getTime()) {
   if (monthC > 12) {
     return function() {
       var date = new Date(timestamp);
-      return date.getFullYear() + "\u5E74" + zero(date.getMonth() + 1) + "\u6708" + zero(date.getDate()) + "\u65E5";
+      return date.getFullYear() + "年" + zero(date.getMonth() + 1) + "月" + zero(date.getDate()) + "日";
     }();
   } else if (monthC >= 1) {
-    return parseInt(monthC + "") + "\u6708\u524D";
+    return parseInt(monthC + "") + "月前";
   } else if (weekC >= 1) {
-    return parseInt(weekC + "") + "\u5468\u524D";
+    return parseInt(weekC + "") + "周前";
   } else if (dayC >= 1) {
-    return parseInt(dayC + "") + "\u5929\u524D";
+    return parseInt(dayC + "") + "天前";
   } else if (hourC >= 1) {
-    return parseInt(hourC + "") + "\u5C0F\u65F6\u524D";
+    return parseInt(hourC + "") + "小时前";
   } else if (minC >= 1) {
-    return parseInt(minC + "") + "\u5206\u949F\u524D";
+    return parseInt(minC + "") + "分钟前";
   }
-  return "\u521A\u521A";
+  return "刚刚";
 }
 function callPhone(phoneNumber = "") {
   let num = phoneNumber.toString();
@@ -401,14 +401,14 @@ function toast(word, mask = true, icon = "none") {
   });
 }
 function getWindow() {
-  var _a, _b, _c, _d;
+  var _a, _b;
   const sysinfo = common_vendor.index.getSystemInfoSync();
   let top = 0;
   let height = sysinfo.windowHeight;
   let nowPage = getCurrentPages().pop();
   let isCustomHeader = false;
-  (_b = (_a = common_vendor.index.$tm) == null ? void 0 : _a.pages) != null ? _b : [];
-  let bottom = (_d = (_c = sysinfo.safeAreaInsets) == null ? void 0 : _c.bottom) != null ? _d : 0;
+  ((_a = common_vendor.index.$tm) == null ? void 0 : _a.pages) ?? [];
+  let bottom = ((_b = sysinfo.safeAreaInsets) == null ? void 0 : _b.bottom) ?? 0;
   for (let i = 0; i < common_vendor.index.$tm.pages.length; i++) {
     if ((nowPage == null ? void 0 : nowPage.route) == common_vendor.index.$tm.pages[i].path && common_vendor.index.$tm.pages[i].custom == "custom") {
       isCustomHeader = true;
@@ -475,7 +475,7 @@ function topx(v) {
 }
 var lastTime = 0;
 function requestAnimationFrame(callback) {
-  const currentTime = new Date().getTime();
+  const currentTime = (/* @__PURE__ */ new Date()).getTime();
   const timeToCall = Math.max(0, 16 - (currentTime - lastTime));
   const id = setTimeout(() => {
     callback(currentTime + timeToCall);
@@ -488,48 +488,48 @@ function cancelAnimationFrame(id) {
 }
 const util = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: tmui_tool_function_preview.preview,
-  isNumber,
-  isString,
-  paginate,
-  getValue,
-  setValue,
-  getMaxDepth,
-  deepObjectMerge,
-  splitData,
-  deepClone,
-  timeMuch,
-  getDateToNewData,
   callPhone,
-  scanCode,
-  setClipboardData,
-  getClipboardData,
-  setCookie,
+  cancelAnimationFrame,
+  debounce,
+  deepClone,
+  deepObjectMerge,
+  default: tmui_tool_function_preview.preview,
   delCookie,
+  getClipboardData,
   getCookie,
-  httpUrlAddKey,
+  getDateToNewData,
+  getMaxDepth,
   getQueryString,
   getUid,
-  debounce,
-  throttle,
-  quereyDom,
-  queryDom,
-  isPhone,
+  getValue,
+  getWindow,
+  httpUrlAddKey,
   isChina,
-  isEmpty,
+  isDate,
   isEmail,
-  isIdCard,
+  isEmpty,
   isIdCar,
+  isIdCard,
+  isNumber,
   isPasswordOfNumber,
   isPasswordOfOther,
-  isDate,
-  toast,
-  getWindow,
-  routerTo,
-  torpx,
-  topx,
+  isPhone,
+  isString,
+  paginate,
+  quereyDom,
+  queryDom,
   requestAnimationFrame,
-  cancelAnimationFrame
+  routerTo,
+  scanCode,
+  setClipboardData,
+  setCookie,
+  setValue,
+  splitData,
+  throttle,
+  timeMuch,
+  toast,
+  topx,
+  torpx
 }, Symbol.toStringTag, { value: "Module" }));
 exports.deepObjectMerge = deepObjectMerge;
 exports.getCookie = getCookie;

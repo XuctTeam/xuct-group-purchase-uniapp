@@ -1,5 +1,5 @@
 "use strict";
-var _a, _b;
+var _a;
 const common_vendor = require("../../../common/vendor.js");
 const tmui_tool_theme_theme = require("../theme/theme.js");
 const tmui_tool_function_util = require("../function/util.js");
@@ -14,7 +14,7 @@ if (pdefault_cookies_colorArrayList) {
   themeObj = new tmui_tool_theme_theme.theme.themeColors([...themeObj.colors, ...result2]);
 }
 const colorArray = themeObj.colors;
-const os = (_b = (_a = common_vendor.index.getSystemInfoSync()) == null ? void 0 : _a.osName) != null ? _b : "";
+const os = ((_a = common_vendor.index.getSystemInfoSync()) == null ? void 0 : _a.osName) ?? "";
 tmui_tool_function_util.setCookie("colorArrayList", colorArray);
 const useTmpiniaStore = common_vendor.defineStore("tmpinia", {
   state: () => {
@@ -25,23 +25,31 @@ const useTmpiniaStore = common_vendor.defineStore("tmpinia", {
         tmVueTifly_pages: "",
         tmVueTifly_pagesIndex: "",
         os,
+        //这里是微信小程序和微信H5的配置资料。
         wxshareConfig_miniMp: {
           title: "",
+          // 分享标题
           desc: "",
+          // 描述
           imageUrl: "",
+          // 分享图片
           path: "",
+          // 分享路径
           copyLink: "",
+          // 复制链接
           query: {}
+          // 分享参数
         },
+        //当前存储存的主题对象。
         colorList: colorArray,
+        //当前的语言
         local: pdefault_cookies_local
       }
     };
   },
   getters: {
     getAutoDark: (state) => {
-      var _a2;
-      let pdefault_cookies_autoDark = (_a2 = tmui_tool_function_util.getCookie("setTmVuetifyAutoDark")) != null ? _a2 : void 0;
+      let pdefault_cookies_autoDark = tmui_tool_function_util.getCookie("setTmVuetifyAutoDark") ?? void 0;
       let autoDark = typeof pdefault_cookies_autoDark === "boolean" ? pdefault_cookies_autoDark : state.tmuiConfig.autoDark;
       return autoDark;
     }
@@ -68,7 +76,7 @@ const useTmpiniaStore = common_vendor.defineStore("tmpinia", {
       };
     },
     setTmAutoDark(autoDark) {
-      var _a2, _b2;
+      var _a2;
       tmui_tool_function_util.setCookie("setTmVuetifyAutoDark", autoDark);
       this.tmuiConfig = {
         ...this.tmuiConfig,
@@ -76,7 +84,7 @@ const useTmpiniaStore = common_vendor.defineStore("tmpinia", {
       };
       if (autoDark) {
         let nowstrdark = "";
-        nowstrdark = (_b2 = (_a2 = common_vendor.index.getSystemInfoSync()) == null ? void 0 : _a2.hostTheme) != null ? _b2 : "";
+        nowstrdark = ((_a2 = common_vendor.index.getSystemInfoSync()) == null ? void 0 : _a2.hostTheme) ?? "";
         this.setTmVuetifyDark(nowstrdark == "dark" ? true : false);
       }
     },
@@ -100,6 +108,7 @@ const useTmpiniaStore = common_vendor.defineStore("tmpinia", {
       tmui_tool_function_util.setCookie("setTmVuetifyColor", defaultColorName);
       this.tmStore = { ...this.tmStore, color: defaultColorName };
     },
+    //添加一个主题
     setTmVuetifyAddTheme(colorName, color, isSet = true) {
       this.tmStore = {
         ...this.tmStore,

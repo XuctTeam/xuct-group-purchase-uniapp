@@ -15,6 +15,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   __name: "tm-switch",
   props: {
     ...tmui_tool_lib_minxs.custom_props,
+    //是否跟随全局主题的变换而变换
     followTheme: {
       type: [Boolean, String],
       default: true
@@ -35,10 +36,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: [Boolean, String, Number],
       default: false
     },
+    // 未选中时的值。
     unSelected: {
       type: [Boolean, String, Number],
       default: false
     },
+    // 选中时的值。
     selected: {
       type: [Boolean, String, Number],
       default: true
@@ -54,15 +57,19 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     size: {
       type: String,
       default: "normal"
+      //mini,normal,large
     },
+    //激活后的主题色
     color: {
       type: String,
       default: "primary"
     },
+    //未激活的背景色
     unCheckedColor: {
       type: String,
       default: "grey-3"
     },
+    // 小圆球冒的背景色。
     barColor: {
       type: String,
       default: "white"
@@ -79,6 +86,9 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: [Function, Boolean, String],
       default: () => false
     },
+    /**
+     * 自定义打开成功后的bar上的小图标。
+     */
     barIcon: {
       type: String,
       default: "tmicon-check"
@@ -94,10 +104,10 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   emits: ["update:modelValue", "change", "click"],
   setup(__props, { emit: emits }) {
-    var _a, _b;
+    var _a;
     const props = __props;
-    (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
-    const viewSize = common_vendor.computed$1(() => {
+    ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
+    const viewSize = common_vendor.computed(() => {
       let width = 0;
       let height = 0;
       let fontSize = 24;
@@ -139,7 +149,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       return obj;
     });
     const _value = common_vendor.ref(props.defaultValue);
-    const _CheckVal = common_vendor.computed$1(() => checkVal(_value.value));
+    const _CheckVal = common_vendor.computed(() => checkVal(_value.value));
     _CheckVal.value;
     const _load = common_vendor.ref(false);
     common_vendor.watchEffect(() => {
@@ -172,7 +182,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       }
     );
     common_vendor.onMounted(() => {
-      common_vendor.nextTick(() => spinNvueAni(_CheckVal.value));
+      common_vendor.nextTick$1(() => spinNvueAni(_CheckVal.value));
     });
     function checkVal(nowVal) {
       let val = typeof nowVal !== "undefined" ? nowVal : props.modelValue;

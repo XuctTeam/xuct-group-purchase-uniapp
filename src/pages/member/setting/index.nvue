@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 12:22:42
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-23 22:33:48
+ * @LastEditTime: 2023-03-26 21:34:45
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\setting\index.nvue
  * @Description: 
  * 
@@ -10,11 +10,12 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="设置" color="green" linear="right" blur />
-    <tm-sheet :margin="[30, 10]" :shadow="4" :round="2" color="green" linear="right">
+    <tm-navbar title="系统设置" color="#70DB93" fontColor="white" />
+    <tm-sheet :margin="[10, 10]" :shadow="4" :round="2">
       <tm-cell :titleFontSize="30" bottomBorder title="个人资料" url="/pages/member/userinfo/index" />
+      <tm-cell :titleFontSize="30" bottomBorder title="意见反馈" />
     </tm-sheet>
-    <tm-sheet :margin="[30, 30]" :shadow="4" :round="2" color="green" linear="right">
+    <tm-sheet :margin="[10, 10]" :shadow="4" :round="2">
       <tm-cell :titleFontSize="30" bottomBorder title="意见反馈" />
     </tm-sheet>
   </tm-app>

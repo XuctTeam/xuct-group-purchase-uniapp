@@ -4,18 +4,16 @@ const tmui_tool_lib_minxs = require("../../tool/lib/minxs.js");
 require("../../tool/theme/theme.js");
 require("../../tool/theme/colortool.js");
 require("../../tool/lib/interface.js");
-if (!Array) {
-  const _component_root_portal = common_vendor.resolveComponent("root-portal");
-  _component_root_portal();
-}
 const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   __name: "tm-overlay",
   props: {
     ...tmui_tool_lib_minxs.custom_props,
+    // 内容的对齐方式的类
     align: {
       type: String,
       default: "flex-col-center-center"
     },
+    //当前组件的主题。可以是颜色值，也可以是主题名称。
     bgColor: {
       type: String,
       default: "rgba(0,0,0,0.24)"
@@ -44,6 +42,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Boolean,
       default: false
     },
+    /** 是否嵌入弹层，开启后将在它的父组件内执行弹层。 */
     inContent: {
       type: Boolean,
       default: false
@@ -51,15 +50,15 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   emits: ["click", "open", "close", "update:show"],
   setup(__props, { expose, emit: emits }) {
-    var _a, _b;
+    var _a;
     const props = __props;
     const defaultBgColor = "rgba(0,0,0,0.24)";
-    (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
+    ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
     const customCSSStyle = tmui_tool_lib_minxs.computedStyle(props);
     const customClass = tmui_tool_lib_minxs.computedClass(props);
     const sysinfo = common_vendor.inject(
       "tmuiSysInfo",
-      common_vendor.computed$1(() => {
+      common_vendor.computed(() => {
         return {
           bottom: 0,
           height: 750,
@@ -70,9 +69,9 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         };
       })
     );
-    const width = common_vendor.computed$1(() => sysinfo.value.width);
-    const height = common_vendor.computed$1(() => sysinfo.value.height);
-    const top = common_vendor.computed$1(() => sysinfo.value.top);
+    const width = common_vendor.computed(() => sysinfo.value.width);
+    const height = common_vendor.computed(() => sysinfo.value.height);
+    const top = common_vendor.computed(() => sysinfo.value.top);
     common_vendor.ref(false);
     common_vendor.index.$tm.u.getUid(1);
     let timerId = NaN;
@@ -80,8 +79,8 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     const showMask = common_vendor.ref(false);
     const ani = common_vendor.ref(false);
     common_vendor.onUnmounted(() => clearTimeout(timerId));
-    const align_rpx = common_vendor.computed$1(() => props.align);
-    const bgColor_rp = common_vendor.computed$1(() => {
+    const align_rpx = common_vendor.computed(() => props.align);
+    const bgColor_rp = common_vendor.computed(() => {
       if (!props.bgColor || props.transprent)
         return "rgba(0,0,0,0)";
       return props.bgColor || defaultBgColor;
@@ -157,7 +156,6 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     common_vendor.watch(
       () => props.show,
       (newval) => {
-        console.log(ani.value);
         open(newval);
       }
     );

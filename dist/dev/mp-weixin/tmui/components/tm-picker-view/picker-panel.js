@@ -21,6 +21,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Number,
       default: 0
     },
+    //禁用的部分日期，禁用的日期将不会被选中，就算滑到了该位置，也会回弹到之前的时间。
     disabled: {
       type: Boolean,
       default: false
@@ -34,10 +35,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       default: () => [],
       required: true
     },
+    //当columns项目中的data数据为对象时的key取值字段。
     dataKey: {
       type: String,
       default: "text"
     },
+    //当columns项目中的data数据为对象时的key取值字段。兼容上方dataKey,因为微信dataKey与本字段重名，无法设置。
     mapKey: {
       type: String,
       default: "text"
@@ -49,19 +52,19 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   emits: ["change", "end", "start"],
   setup(__props, { emit: emits }) {
-    var _a, _b;
+    var _a;
     const props = __props;
-    (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
+    ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
     const store = tmui_tool_lib_tmpinia.useTmpiniaStore();
-    const isDark = common_vendor.computed$1(() => store.tmStore.dark);
-    const _data = common_vendor.computed$1(() => props.data);
+    const isDark = common_vendor.computed(() => store.tmStore.dark);
+    const _data = common_vendor.computed(() => props.data);
     const colIndex = common_vendor.ref(0);
     const showDom = common_vendor.ref(false);
-    common_vendor.computed$1(() => {
+    common_vendor.computed(() => {
       return (common_vendor.index.upx2px(props.height) - 34) / 2;
     });
     common_vendor.ref(0);
-    const maskStyle = common_vendor.computed$1(() => {
+    const maskStyle = common_vendor.computed(() => {
       let str_white = "background-image:linear-gradient(rgba(255,255,255,0.95),rgba(255,255,255,0.6)),linear-gradient(rgba(255,255,255,0.6),rgba(255,255,255,0.95))";
       let str_black = "background-image:linear-gradient(rgba(17, 17, 17, 1.0),rgba(106, 106, 106, 0.2)),linear-gradient(rgba(106, 106, 106, 0.2),rgba(17, 17, 17, 1.0))";
       if (!isDark.value) {
@@ -69,7 +72,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       }
       return str_black;
     });
-    common_vendor.computed$1(() => {
+    common_vendor.computed(() => {
       let str_white = "background:linear-gradient(rgba(255,255,255,0.95),rgba(255,255,255,0.6))";
       let str_black = "background:linear-gradient(0deg,rgba(0,0,0,0.4),rgba(0,0,0,0),rgba(0,0,0,0.4))";
       return isDark ? str_black : str_white;
@@ -85,7 +88,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     common_vendor.watch(
       () => props.col,
       () => {
-        common_vendor.nextTick(() => {
+        common_vendor.nextTick$1(() => {
           colIndex.value = props.col;
         });
       }
@@ -95,7 +98,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       emits("change", colIndex.value);
     }
     function nvuegetClientRect() {
-      common_vendor.nextTick(function() {
+      common_vendor.nextTick$1(function() {
       });
     }
     return (_ctx, _cache) => {

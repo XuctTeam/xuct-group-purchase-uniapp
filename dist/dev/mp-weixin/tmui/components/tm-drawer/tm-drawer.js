@@ -18,13 +18,16 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   __name: "tm-drawer",
   props: {
     ...tmui_tool_lib_minxs.custom_props,
+    //是否显示遮罩
     mask: {
       type: [Boolean, String],
       default: true
     },
+    //抽屉放置的位置
     placement: {
       type: String,
       default: "bottom"
+      //top|left|right|bottom|center
     },
     show: {
       type: [Boolean],
@@ -42,10 +45,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Number,
       default: 10
     },
+    //弹出的动画时间单位ms.
     duration: {
       type: Number,
       default: 300
     },
+    //是否允许点击遮罩关闭
     overlayClick: {
       type: Boolean,
       default: true
@@ -54,6 +59,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: [Boolean, String],
       default: false
     },
+    //如果显示关闭。标题栏被替换为左标题右关闭按钮。
     closeable: {
       type: [Boolean, String],
       default: false
@@ -65,24 +71,26 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     title: [String],
     okText: {
       type: [String],
-      default: "\u5B8C\u6210"
+      default: "完成"
     },
     okColor: {
       type: [String],
       default: "primary"
     },
+    //true时，确认按钮将出现加载状态。
     okLoading: {
       type: [Boolean, String],
       default: false
     },
     cancelText: {
       type: [String],
-      default: "\u53D6\u6D88"
+      default: "取消"
     },
     hideCancel: {
       type: [Boolean, String],
       default: false
     },
+    //隐藏工具栏，标题，取消，确认
     hideHeader: {
       type: [Boolean, String],
       default: false
@@ -103,6 +111,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       type: Boolean,
       default: false
     },
+    /** 是否嵌入弹层，开启后将在它的父组件内执行弹层。 */
     inContent: {
       type: Boolean,
       default: false
@@ -114,15 +123,15 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   },
   emits: ["click", "open", "close", "update:show", "ok", "cancel"],
   setup(__props, { expose, emit: emits }) {
-    var _a, _b;
+    var _a;
     const props = __props;
     const drawerANI = common_vendor.ref(null);
     const overlayAni = common_vendor.ref(null);
     const store = tmui_tool_lib_tmpinia.useTmpiniaStore();
-    (_b = (_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) != null ? _b : null;
+    ((_a = common_vendor.getCurrentInstance()) == null ? void 0 : _a.proxy) ?? null;
     const sysinfo = common_vendor.inject(
       "tmuiSysInfo",
-      common_vendor.computed$1(() => {
+      common_vendor.computed(() => {
         return {
           bottom: 0,
           height: 750,
@@ -133,15 +142,15 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         };
       })
     );
-    const tmcfg = common_vendor.computed$1(() => store.tmStore);
-    const customCSSStyle = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedStyle(props));
-    const customClass = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedClass(props));
-    const isDark = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
-    const tmcomputed = common_vendor.computed$1(
+    const tmcfg = common_vendor.computed(() => store.tmStore);
+    const customCSSStyle = common_vendor.computed(() => tmui_tool_lib_minxs.computedStyle(props));
+    const customClass = common_vendor.computed(() => tmui_tool_lib_minxs.computedClass(props));
+    const isDark = common_vendor.computed(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
+    const tmcomputed = common_vendor.computed(
       () => tmui_tool_lib_minxs.computedTheme(props, isDark.value, tmcfg.value)
     );
-    const syswidth = common_vendor.computed$1(() => sysinfo.value.width);
-    const sysheight = common_vendor.computed$1(() => sysinfo.value.height);
+    const syswidth = common_vendor.computed(() => sysinfo.value.width);
+    const sysheight = common_vendor.computed(() => sysinfo.value.height);
     const reverse = common_vendor.ref(true);
     const timeid = common_vendor.ref(0);
     let timerId = NaN;
@@ -198,7 +207,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
           (_a2 = overlayAni.value) == null ? void 0 : _a2.close();
         }
         if (_show.value !== props.show) {
-          common_vendor.nextTick(() => {
+          common_vendor.nextTick$1(() => {
             var _a3;
             (_a3 = drawerANI.value) == null ? void 0 : _a3.play();
           });
@@ -211,8 +220,8 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         open();
       }
     });
-    const ok_loading = common_vendor.computed$1(() => props.okLoading);
-    const round_rp = common_vendor.computed$1(() => {
+    const ok_loading = common_vendor.computed(() => props.okLoading);
+    const round_rp = common_vendor.computed(() => {
       if (aniname.value == "left")
         return "round-r-" + props.round;
       if (aniname.value == "right")
@@ -224,12 +233,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       if (aniname.value == "zoom")
         return "round-" + props.round;
     });
-    const reverse_rp = common_vendor.computed$1(() => {
+    const reverse_rp = common_vendor.computed(() => {
       if (aniname.value != "zoom")
         return reverse.value;
       return !reverse.value;
     });
-    const aniname = common_vendor.computed$1(() => {
+    const aniname = common_vendor.computed(() => {
       if (props.placement == "center")
         return "zoom";
       if (props.placement == "top")
@@ -238,7 +247,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         return "down";
       return props.placement;
     });
-    const anwidth = common_vendor.computed$1(() => {
+    const anwidth = common_vendor.computed(() => {
       if (aniname.value == "zoom") {
         return props.width + props.unit;
       }
@@ -247,14 +256,14 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       }
       return syswidth.value + "px";
     });
-    const anheight = common_vendor.computed$1(() => {
+    const anheight = common_vendor.computed(() => {
       let wucha = 0;
       if (props.placement == "top" || props.placement == "bottom" || aniname.value == "zoom") {
         return props.height + wucha + props.unit;
       }
       return sysheight.value + "px";
     });
-    const contentHeight = common_vendor.computed$1(() => {
+    const contentHeight = common_vendor.computed(() => {
       let base_height = props.hideHeader ? 0 : 44;
       let _footerHeight = common_vendor.index.$tm.u.topx(props.footHeight);
       if (props.placement == "top" || props.placement == "bottom" || aniname.value == "zoom") {
@@ -266,7 +275,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       }
       return sysheight.value - base_height - _footerHeight + "px";
     });
-    const align_rp = common_vendor.computed$1(() => {
+    const align_rp = common_vendor.computed(() => {
       if (aniname.value == "down") {
         return "flex-col-bottom-center";
       }
@@ -289,7 +298,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       emits("update:show", true);
     }
     function overclose() {
-      common_vendor.nextTick(() => {
+      common_vendor.nextTick$1(() => {
         _show.value = false;
         emits("close");
         emits("update:show", false);
@@ -302,10 +311,10 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       reverse.value = false;
       throttle(
         () => {
-          var _a2, _b2;
+          var _a2, _b;
           emits("cancel");
           (_a2 = overlayAni.value) == null ? void 0 : _a2.close();
-          (_b2 = drawerANI.value) == null ? void 0 : _b2.play();
+          (_b = drawerANI.value) == null ? void 0 : _b.play();
         },
         props.duration + 80,
         true
@@ -317,10 +326,10 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       reverse.value = false;
       debounce(
         () => {
-          var _a2, _b2;
+          var _a2, _b;
           emits("ok");
           (_a2 = overlayAni.value) == null ? void 0 : _a2.close();
-          (_b2 = drawerANI.value) == null ? void 0 : _b2.play();
+          (_b = drawerANI.value) == null ? void 0 : _b.play();
         },
         500,
         true
@@ -332,10 +341,10 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       reverse.value = false;
       debounce(
         () => {
-          var _a2, _b2;
+          var _a2, _b;
           emits("cancel");
           (_a2 = overlayAni.value) == null ? void 0 : _a2.close();
-          (_b2 = drawerANI.value) == null ? void 0 : _b2.play();
+          (_b = drawerANI.value) == null ? void 0 : _b.play();
         },
         500,
         true
@@ -344,16 +353,16 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     function open() {
       reverse.value = true;
       _show.value = true;
-      common_vendor.nextTick(() => {
+      common_vendor.nextTick$1(() => {
         var _a2;
         (_a2 = drawerANI.value) == null ? void 0 : _a2.play();
       });
     }
     function close() {
-      var _a2, _b2;
+      var _a2, _b;
       reverse.value = false;
       (_a2 = overlayAni.value) == null ? void 0 : _a2.close();
-      (_b2 = drawerANI.value) == null ? void 0 : _b2.play();
+      (_b = drawerANI.value) == null ? void 0 : _b.play();
     }
     expose({
       close,

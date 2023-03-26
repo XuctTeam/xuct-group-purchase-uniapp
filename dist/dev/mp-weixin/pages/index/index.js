@@ -31,78 +31,78 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     const imglist = common_vendor.ref([]);
     const bannerImages = common_vendor.reactive([]);
     const fabActions = [
-      { icon: "tmicon-shopping-cart-fill", color: "red", linear: "top", label: "\u8D2D\u7269\u8F66" },
-      { icon: "tmicon-user-fill", color: "blue", label: "\u6211\u7684" }
+      { icon: "tmicon-shopping-cart-fill", color: "red", linear: "top", label: "购物车" },
+      { icon: "tmicon-user-fill", color: "blue", label: "我的" }
     ];
     common_vendor.ref([
       {
         path: "https://gw.alicdn.com/imgextra/i4/O1CN01XCiY1B1px9ivHkDGm_!!6000000005426-2-tps-183-144.png_q90.jpg",
-        title: "\u5929\u732B\u65B0\u54C1",
-        count: "\u70ED\u9500"
+        title: "天猫新品",
+        count: "热销"
       },
       {
         path: "https://gw.alicdn.com/imgextra/i3/O1CN01FgQFp81spmBXqQMtA_!!6000000005816-2-tps-183-144.png_q90.jpg",
-        title: "\u4ECA\u65E5\u7206\u6B3E\u4ECA\u65E5\u7206\u6B3E\u4ECA\u65E5\u7206\u6B3E",
+        title: "今日爆款今日爆款今日爆款",
         count: 0
       },
       {
         path: "https://gw.alicdn.com/imgextra/i1/O1CN01tsk5OY1q0MUo5PJga_!!6000000005433-2-tps-183-144.png_q90.jpg",
-        title: "\u5929\u732B\u56FD\u9645",
+        title: "天猫国际",
         count: 0
       },
       {
         path: "https://gw.alicdn.com/imgextra/i2/O1CN01yK3Cxn1sTnAx1fOjq_!!6000000005768-2-tps-183-144.png_q90.jpg",
-        title: "\u98DE\u732A\u65C5\u884C",
+        title: "飞猪旅行",
         count: 0
       },
       {
         path: "https://gw.alicdn.com/imgextra/i1/O1CN01iZIGkz1URSOUdRHqS_!!6000000002514-2-tps-183-144.png_q90.jpg",
-        title: "\u5929\u732B\u8D85\u5E02",
+        title: "天猫超市",
         count: 0
       },
       {
         path: "https://gw.alicdn.com/imgextra/i4/O1CN01VuRfwH1muSbsJFxoM_!!6000000005014-2-tps-183-144.png_q90.jpg_.webp",
-        title: "\u51AC\u5965\u516C\u76CA",
+        title: "冬奥公益",
         count: 0
       },
       {
         path: "https://gw.alicdn.com/imgextra/i2/O1CN01yK3Cxn1sTnAx1fOjq_!!6000000005768-2-tps-183-144.png_q90.jpg",
-        title: "\u98DE\u732A\u65C5\u884C",
+        title: "飞猪旅行",
         count: 99
       },
       {
         path: "https://gw.alicdn.com/imgextra/i1/O1CN01iZIGkz1URSOUdRHqS_!!6000000002514-2-tps-183-144.png_q90.jpg",
-        title: "\u5929\u732B\u8D85\u5E02",
+        title: "天猫超市",
         count: 0
       },
       {
         path: "https://gw.alicdn.com/imgextra/i4/O1CN01VuRfwH1muSbsJFxoM_!!6000000005014-2-tps-183-144.png_q90.jpg_.webp",
-        title: "\u51AC\u5965\u516C\u76CA",
+        title: "冬奥公益",
         count: 0
       },
       {
         path: "https://gw.alicdn.com/imgextra/i4/O1CN01XCiY1B1px9ivHkDGm_!!6000000005426-2-tps-183-144.png_q90.jpg",
-        title: "\u5929\u732B\u65B0\u54C1",
+        title: "天猫新品",
         count: 6
       },
       {
         path: "https://gw.alicdn.com/imgextra/i3/O1CN01FgQFp81spmBXqQMtA_!!6000000005816-2-tps-183-144.png_q90.jpg",
-        title: "\u4ECA\u65E5\u7206\u6B3E",
+        title: "今日爆款",
         count: 0
       },
       {
         path: "https://gw.alicdn.com/imgextra/i1/O1CN01tsk5OY1q0MUo5PJga_!!6000000005433-2-tps-183-144.png_q90.jpg",
-        title: "\u5929\u732B\u56FD\u9645",
+        title: "天猫国际",
         count: 0
       },
       {
         path: "https://gw.alicdn.com/imgextra/i2/O1CN01yK3Cxn1sTnAx1fOjq_!!6000000005768-2-tps-183-144.png_q90.jpg",
-        title: "\u98DE\u732A\u65C5\u884C",
+        title: "飞猪旅行",
         count: 0
       },
       {
         path: "https://gw.alicdn.com/imgextra/i1/O1CN01iZIGkz1URSOUdRHqS_!!6000000002514-2-tps-183-144.png_q90.jpg",
-        title: "\u5929\u732B\u8D85\u5E02",
+        title: "天猫超市",
         count: 0
       }
     ]);
@@ -111,65 +111,65 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         {
           id: "123",
           img: "https://gw.alicdn.com/bao/uploaded/i2/1848622920/O1CN018zBHJ91XRPJ4bHW78_!!0-item_pic.jpg_320x320q90.jpg",
-          text: "\u6768\u5927\u7237\u9EBB\u8FA3\u9999\u80A0\u814A\u80A0500\u514B\u56DB\u5DDD\u7279\u4EA7\u70DF\u718F\u8089\u519C\u5BB6\u81EA\u5236\u5DDD\u5473\u70E4\u814A\u8089\u8FA3\u80A0",
+          text: "杨大爷麻辣香肠腊肠500克四川特产烟熏肉农家自制川味烤腊肉辣肠",
           price: "49",
-          num: "3000+\u4EBA\u8D2D\u4E70"
+          num: "3000+人购买"
         },
         {
           id: "222",
           img: "https://gw.alicdn.com/imgextra/i4/2207613550143/O1CN01hPpOvy1CvXQdlZLeC_!!2207613550143-0-alimamacc.jpg_q90.jpg",
           text: "",
           price: "200",
-          num: "3000+\u4EBA\u8D2D\u4E70"
+          num: "3000+人购买"
         },
         {
           id: "333",
           img: "https://gw.alicdn.com/bao/uploaded/i4/14498052/O1CN01pa6ScB29LrgfkRp8V_!!14498052.jpg_320x320q90.jpg",
-          text: "\u5E26\u76D6 \u9178\u5976\u676F\u4E00\u6B21\u6027\u5851\u6599\u5E03\u4E01\u676F\u80D6\u80D6pp\u679C\u51BB\u676F\u6155\u65AF\u751C\u54C1\u676F\u53CC\u76AE\u5976100\u5957",
+          text: "带盖 酸奶杯一次性塑料布丁杯胖胖pp果冻杯慕斯甜品杯双皮奶100套",
           price: "12.8",
-          num: "1500+\u4EBA\u8D2D\u4E70"
+          num: "1500+人购买"
         },
         {
           id: "444",
           img: "https://gw.alicdn.com/bao/uploaded/i4/14498052/O1CN01pa6ScB29LrgfkRp8V_!!14498052.jpg_320x320q90.jpg",
-          text: "\u5E26\u76D6 \u9178\u5976\u676F\u4E00\u6B21\u6027\u5851\u6599\u5E03\u4E01\u676F\u80D6\u80D6pp\u679C\u51BB\u676F\u6155\u65AF\u751C\u54C1\u676F\u53CC\u76AE\u5976100\u5957",
+          text: "带盖 酸奶杯一次性塑料布丁杯胖胖pp果冻杯慕斯甜品杯双皮奶100套",
           price: "12.8",
-          num: "1500+\u4EBA\u8D2D\u4E70"
+          num: "1500+人购买"
         },
         {
           id: "555",
           img: "https://gw.alicdn.com/bao/uploaded/i4/1026973813/O1CN014Kirba1e2OrHg7gwN_!!1026973813.jpg_320x320q90.jpg",
-          text: "\u5E26\u76D6 \u9178\u5976\u676F\u4E00\u6B21\u6027\u5851\u6599\u5E03\u4E01\u676F\u80D6\u80D6pp\u679C\u51BB\u676F\u6155\u65AF\u751C\u54C1\u676F\u53CC\u76AE\u5976100\u5957",
+          text: "带盖 酸奶杯一次性塑料布丁杯胖胖pp果冻杯慕斯甜品杯双皮奶100套",
           price: "12.8",
-          num: "1500+\u4EBA\u8D2D\u4E70"
+          num: "1500+人购买"
         },
         {
           id: "666",
           img: "https://gw.alicdn.com/imgextra/i3/23844911/O1CN01N1UxMS1m9Hs6gGu6E_!!23844911-0-alimamacc.jpg",
           text: "",
           price: "200",
-          num: "3000+\u4EBA\u8D2D\u4E70"
+          num: "3000+人购买"
         },
         {
           id: "777",
           img: "https://gw.alicdn.com/bao/uploaded/i4/2418392409/O1CN01zT4JbA1TfMoU30Uub_!!2418392409.jpg_320x320q90.jpg",
-          text: "50\u679A\u6302\u8033\u5496\u5561\u6EE4\u888B\u65E5\u672C\u6750\u8D28\u624B\u51B2\u5496\u5561\u6EE4\u7EB8\u5496\u5561\u7C89\u6EE4\u888B\u6302\u8033\u5496\u5561\u888B\u5305\u90AE",
+          text: "50枚挂耳咖啡滤袋日本材质手冲咖啡滤纸咖啡粉滤袋挂耳咖啡袋包邮",
           price: "12.8",
-          num: "1500+\u4EBA\u8D2D\u4E70"
+          num: "1500+人购买"
         },
         {
           id: "888",
           img: "https://gw.alicdn.com/bao/uploaded/i2/6000000001207/O1CN016TztFg1Kmqqrtarb0_!!6000000001207-0-picassoopen.jpg_320x320q90.jpg",
-          text: "\u5E26\u76D6 \u9178\u5976\u676F\u4E00\u6B21\u6027\u5851\u6599\u5E03\u4E01\u676F\u80D6\u80D6pp\u679C\u51BB\u676F\u6155\u65AF\u751C\u54C1\u676F\u53CC\u76AE\u5976100\u5957",
+          text: "带盖 酸奶杯一次性塑料布丁杯胖胖pp果冻杯慕斯甜品杯双皮奶100套",
           price: "12.8",
-          num: "1500+\u4EBA\u8D2D\u4E70"
+          num: "1500+人购买"
         },
         {
           id: "999",
           img: "https://gw.alicdn.com/bao/uploaded/i3/2200531292142/O1CN01gFUdOw1Rh4vjN44sB_!!0-item_pic.jpg_320x320q90.jpg",
-          text: "\u5E26\u76D6 \u9178\u5976\u676F\u4E00\u6B21\u6027\u5851\u6599\u5E03\u4E01\u676F\u80D6\u80D6pp\u679C\u51BB\u676F\u6155\u65AF\u751C\u54C1\u676F\u53CC\u76AE\u5976100\u5957",
+          text: "带盖 酸奶杯一次性塑料布丁杯胖胖pp果冻杯慕斯甜品杯双皮奶100套",
           price: "12.8",
-          num: "1500+\u4EBA\u8D2D\u4E70"
+          num: "1500+人购买"
         }
       ];
       _loadBanner();
@@ -192,7 +192,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     return (_ctx, _cache) => {
       return {
         a: common_vendor.p({
-          title: "\u56E2\u5230\u5BB6",
+          title: "团到家",
           color: "green",
           linear: "right",
           hideHome: true,
@@ -216,7 +216,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         d: common_vendor.p({
           _class: "text-overflow-1",
           ["font-size"]: 24,
-          label: "\u9650\u65F6\u62A2\u8D2D"
+          label: "限时抢购"
         }),
         e: common_vendor.p({
           height: 140
@@ -229,7 +229,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         g: common_vendor.p({
           _class: "text-overflow-1",
           ["font-size"]: 24,
-          label: "\u9650\u65F6\u62A2\u8D2D"
+          label: "限时抢购"
         }),
         h: common_vendor.p({
           color: "orange",
@@ -243,7 +243,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         j: common_vendor.p({
           _class: "text-overflow-1",
           ["font-size"]: 24,
-          label: "\u9650\u65F6\u62A2\u8D2D"
+          label: "限时抢购"
         }),
         k: common_vendor.p({
           color: "green",
@@ -293,7 +293,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         o: common_vendor.p({
           color: "orange",
           ["font-size"]: 24,
-          label: "\xA5"
+          label: "¥"
         }),
         p: common_vendor.sr(wall, "d9ab5c1c-14,d9ab5c1c-0", {
           "k": "wall"

@@ -44,21 +44,21 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   setup(__props, { emit: emits }) {
     const props = __props;
     const store = tmui_tool_lib_tmpinia.useTmpiniaStore();
-    const _parentClass = common_vendor.computed$1(() => props.parentClass);
-    const tmcfg = common_vendor.computed$1(() => store.tmStore);
-    const customCSSStyle = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedStyle(props));
-    const customClass = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedClass(props));
-    const isDark = common_vendor.computed$1(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
-    const _label = common_vendor.computed$1(() => props.label);
-    const _fontSize = common_vendor.computed$1(() => {
-      var _a, _b;
-      return Number(props.fontSize) * ((_b = (_a = store.tmuiConfig.themeConfig) == null ? void 0 : _a.globalFontSizeRatio) != null ? _b : 1);
+    const _parentClass = common_vendor.computed(() => props.parentClass);
+    const tmcfg = common_vendor.computed(() => store.tmStore);
+    const customCSSStyle = common_vendor.computed(() => tmui_tool_lib_minxs.computedStyle(props));
+    const customClass = common_vendor.computed(() => tmui_tool_lib_minxs.computedClass(props));
+    const isDark = common_vendor.computed(() => tmui_tool_lib_minxs.computedDark(props, tmcfg.value));
+    const _label = common_vendor.computed(() => props.label);
+    const _fontSize = common_vendor.computed(() => {
+      var _a;
+      return Number(props.fontSize) * (((_a = store.tmuiConfig.themeConfig) == null ? void 0 : _a.globalFontSizeRatio) ?? 1);
     });
     const appTextColor = common_vendor.inject(
       "appTextColor",
-      common_vendor.computed$1(() => void 0)
+      common_vendor.computed(() => void 0)
     );
-    const textColor = common_vendor.computed$1(() => {
+    const textColor = common_vendor.computed(() => {
       if (props.followTheme && store.tmStore.color)
         return store.tmStore.color;
       let isColorHex = tmui_tool_theme_theme.theme.isCssColor(props.color);
