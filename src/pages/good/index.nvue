@@ -2,19 +2,39 @@
   <tm-app>
     <tm-navbar title="商品详情" color="#70DB93"></tm-navbar>
     <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
-    <tm-sheet :margin="[0, 0, 0, 0]" color="red" :height="100">
-      <view>sdfsdf</view>
+    <tm-sheet :margin="[10, 10, 10, 10]" :height="140" :round="4" :shadow="4">
+      <view class="title">{{ name }}</view>
+      <view class="flex flex-row flex-row-center-between mt-20">
+        <view class="flex flex-row">
+          <tm-text color="grey" :font-size="26" label="库存" />
+          <view class="ml-8">
+            <tm-text color="orange" :font-size="26" label="30" />
+          </view>
+        </view>
+        <view class="flex flex-row">
+          <tm-text color="grey" :font-size="26" label="热度"></tm-text>
+          <view class="ml-8">
+            <tm-text color="orange" :font-size="26" label="30" />
+          </view>
+        </view>
+        <view class="flex flex-row">
+          <tm-text color="grey" :font-size="26" label="销量"></tm-text>
+          <view class="ml-8">
+            <tm-text color="orange" :font-size="26" label="30" />
+          </view>
+        </view>
+      </view>
     </tm-sheet>
-    <view class="pa-32">
+    <view class="pl-10 pr-10 pt-10" :style="{ paddingBottom: _totalBarHeight + 'rpx' }">
       <tm-html :content="detail"></tm-html>
     </view>
-    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'px' }">
+    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }" v-if="!!logged">
       <view class="relative flex flex-row flex-row-center-center flex-around">
         <view class="flex flex-1 ma-10">
           <tm-button block color="red" :padding="[0, 10]" label="加入购物车"></tm-button>
         </view>
         <view class="flex flex-1 ma-10">
-          <tm-button block color="green" :padding="[0, 10]" label="直接购买"></tm-button>
+          <tm-button block color="green" :padding="[0, 10]" label="立即下单"></tm-button>
         </view>
       </view>
     </view>
@@ -28,15 +48,20 @@ import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCarousel from '@/tmui/components/tm-carousel/tm-carousel.vue'
 import tmHtml from '@/tmui/components/tm-html/tm-html.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import { onLoad } from '@dcloudio/uni-app'
+import { useUserHook } from '@/store/user'
 import { getGood } from '@/api/good'
 import { loading, hideLoading } from '@/utils/dialog'
-
-const _showSafe = ref<boolean>(false)
-let sys = uni.getSystemInfoSync()
-const swiperImages: string[] = reactive([])
 const detail = ref('')
+const name = ref('')
+const _showSafe = ref<boolean>(false)
+const swiperImages: string[] = reactive([])
+
+let sys = uni.getSystemInfoSync()
+const store = useUserHook()
+const logged = store.logged
 
 const win_bottom = sys?.safeAreaInsets?.bottom ?? 0
 if (win_bottom > 0) {
@@ -44,8 +69,16 @@ if (win_bottom > 0) {
 }
 
 const _totalBarHeight = computed(() => {
-  if (_showSafe.value) return 90
-  return 75
+  if (logged) {
+    if (_showSafe.value) {
+      return uni.$tm.u.torpx(80)
+    }
+    return uni.$tm.u.torpx(70)
+  }
+  if (_showSafe.value) {
+    return uni.$tm.u.torpx(20)
+  }
+  return 0
 })
 
 onLoad((opts: any) => {
@@ -60,6 +93,7 @@ onLoad((opts: any) => {
       const swipers: string[] = good.swiperImages?.split(',') || []
       swiperImages.push(...swipers)
       detail.value = good.detail || ''
+      name.value = good.name
       hideLoading()
     })
     .catch(err => {
@@ -68,3 +102,10 @@ onLoad((opts: any) => {
     })
 })
 </script>
+<style>
+.title {
+  font-size: 30upx;
+  font-weight: bold;
+  color: black;
+}
+</style>

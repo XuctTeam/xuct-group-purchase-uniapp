@@ -46,22 +46,9 @@
       <view class="menu">
         <!-- 订单列表信息 -->
         <tm-sheet :round="3" :shadow="2" :margin="[20, 30, 20, 10]">
-          <tm-cell
-            showAvatar
-            :avatarSize="40"
-            avatar="https://demo.jihainet.com/wap/static/image/userorder.png"
-            :margin="[0, 0]"
-            :titleFontSize="30"
-            title="我的服务"
-          ></tm-cell>
+          <tm-cell showAvatar :avatarSize="40" avatar="https://demo.jihainet.com/wap/static/image/userorder.png" :margin="[0, 0]" :titleFontSize="30" title="我的服务"></tm-cell>
           <tm-grid :col="4" class="border-t-1" :width="686">
-            <tm-grid-item
-              dot
-              v-for="(item, index) in orderItems"
-              :key="index"
-              :height="140"
-              @click="orderItemClick(index)"
-            >
+            <tm-grid-item dot v-for="(item, index) in orderItems" :key="index" :height="140" @click="orderItemClick(index)">
               <tm-icon :font-size="40" :name="item.icon"></tm-icon>
               <tm-text _class="pt-16" :font-size="22" :label="item.name"></tm-text>
             </tm-grid-item>
@@ -69,21 +56,9 @@
         </tm-sheet>
         <!--我的服务-->
         <tm-sheet :round="3" :shadow="2" :margin="[20, 30, 20, 10]">
-          <tm-cell
-            showAvatar
-            :avatarSize="40"
-            avatar="https://demo.jihainet.com/wap/static/image/userorder.png"
-            :margin="[0, 0]"
-            :titleFontSize="30"
-            title="我的服务"
-          ></tm-cell>
+          <tm-cell showAvatar :avatarSize="40" avatar="https://demo.jihainet.com/wap/static/image/userorder.png" :margin="[0, 0]" :titleFontSize="30" title="我的服务"></tm-cell>
           <tm-grid :col="4" class="border-t-1" :width="680">
-            <tm-grid-item
-              :height="140"
-              v-for="(item, index) in serviceItems"
-              :key="index"
-              @click="serviceItemClick(item.code)"
-            >
+            <tm-grid-item :height="140" v-for="(item, index) in serviceItems" :key="index" @click="serviceItemClick(item.code)">
               <tm-icon :font-size="60" :name="item.icon"></tm-icon>
               <tm-text _class="pt-10" :font-size="22" :label="item.name"></tm-text>
             </tm-grid-item>
