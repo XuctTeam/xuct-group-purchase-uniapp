@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 13:49:10
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-26 22:31:08
+ * @LastEditTime: 2023-03-27 10:40:51
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\userinfo\index.nvue
  * @Description: 
  * 
@@ -18,41 +18,20 @@
       <template v-else>
         <open-data type="userAvatarUrl"></open-data>
       </template>
-      <tm-button
-        size="small"
-        font-color="white"
-        :round="10"
-        color="red"
-        label="授权更新"
-        @chooseavatar="chooseavatar"
-        open-type="chooseAvatar"
-      ></tm-button>
+      <tm-button size="small" font-color="white" :round="10" color="red" label="授权更新" @chooseavatar="chooseavatar" open-type="chooseAvatar"></tm-button>
     </view>
     <tm-sheet>
-      <!-- <tm-input
-        v-model:model-value="phoneRef"
-        :margin="[0, 30]"
-        placeholder="请输入手机号"
-        prefix="tmicon-phone-fill"
-      ></tm-input> -->
-      <view class="flex flex-row flex-wrap">
-        <tm-icon :font-size="50" name="tmicon-playcircle-fill"></tm-icon>
-        <input class="input" placeholder="请输入昵称" maxlength="15" :value="nickNameRef" />
+      <view class="flex flex-row flex-wrap flex-row-center-start input pa-20">
+        <tm-icon :font-size="30" name="tmicon-phone-fill" />
+        <input placeholder="请输入电话" maxlength="15" :value="phoneRef" @change="phoneChage" />
       </view>
-      <view>
-        <input type="nickname" class="input" placeholder="请输入昵称" maxlength="15" :value="nickNameRef" />
+      <view class="flex flex-row flex-wrap flex-row-center-start input pa-10">
+        <tm-icon :font-size="30" name="tmicon-user-fill" />
+        <input type="nickname" placeholder="请输入昵称" maxlength="15" :value="nickNameRef" @change="nickNameChage" />
       </view>
-
-      <!-- <tm-input
-        v-model:model-value="nickNameRef"
-        :margin="[0, 30]"
-        placeholder="请输入昵称"
-        prefix="tmicon-user-fill"
-      ></tm-input> -->
     </tm-sheet>
-
     <view class="button-bottom fixed pa-10" :style="{ height: _totalBarHeight + 'px' }">
-      <tm-button block color="green" label="保存" @click="onSave"></tm-button>
+      <tm-button block color="green" label="保存" @click="onSave" :loading="loadingRef" />
     </view>
   </tm-app>
 </template>
@@ -63,6 +42,7 @@ import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
+
 import { useUserHook } from '@/store/user'
 import { saveUserInfo } from '@/api/user'
 import { upload } from '@/services/upload'
@@ -108,6 +88,14 @@ const chooseavatar = (avatar: any) => {
   })
 }
 
+const phoneChage = (e: any) => {
+  phoneRef.value = e.detail?.value
+}
+
+const nickNameChage = (e: any) => {
+  nickNameRef.value = e.detail?.value
+}
+
 const onSave = () => {
   if (!phoneRef.value) {
     message({
@@ -143,10 +131,11 @@ const onSave = () => {
     })
     .catch((err: any) => {
       console.log(err)
+      loadingRef.value = false
     })
 }
 </script>
-<style>
+<style type="scss">
 .avatar {
   position: relative;
   width: 100%;
@@ -182,5 +171,9 @@ const onSave = () => {
   height: 80upx;
   line-height: 80upx;
   margin-bottom: 20upx;
+}
+
+.input input {
+  margin-left: 20upx;
 }
 </style>

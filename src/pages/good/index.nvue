@@ -1,0 +1,70 @@
+<template>
+  <tm-app>
+    <tm-navbar title="商品详情" color="#70DB93"></tm-navbar>
+    <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
+    <tm-sheet :margin="[0, 0, 0, 0]" color="red" :height="100">
+      <view>sdfsdf</view>
+    </tm-sheet>
+    <view class="pa-32">
+      <tm-html :content="detail"></tm-html>
+    </view>
+    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'px' }">
+      <view class="relative flex flex-row flex-row-center-center flex-around">
+        <view class="flex flex-1 ma-10">
+          <tm-button block color="red" :padding="[0, 10]" label="加入购物车"></tm-button>
+        </view>
+        <view class="flex flex-1 ma-10">
+          <tm-button block color="green" :padding="[0, 10]" label="直接购买"></tm-button>
+        </view>
+      </view>
+    </view>
+  </tm-app>
+</template>
+
+<script lang="ts" setup>
+import { computed, reactive, ref } from 'vue'
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmCarousel from '@/tmui/components/tm-carousel/tm-carousel.vue'
+import tmHtml from '@/tmui/components/tm-html/tm-html.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { getGood } from '@/api/good'
+import { loading, hideLoading } from '@/utils/dialog'
+
+const _showSafe = ref<boolean>(false)
+let sys = uni.getSystemInfoSync()
+const swiperImages: string[] = reactive([])
+const detail = ref('')
+
+const win_bottom = sys?.safeAreaInsets?.bottom ?? 0
+if (win_bottom > 0) {
+  _showSafe.value = true
+}
+
+const _totalBarHeight = computed(() => {
+  if (_showSafe.value) return 90
+  return 75
+})
+
+onLoad((opts: any) => {
+  const { id } = opts
+  if (!id) {
+    return
+  }
+  loading()
+  getGood(id)
+    .then(res => {
+      const good: Good.GoodResult = res.data
+      const swipers: string[] = good.swiperImages?.split(',') || []
+      swiperImages.push(...swipers)
+      detail.value = good.detail || ''
+      hideLoading()
+    })
+    .catch(err => {
+      console.log(err)
+      hideLoading()
+    })
+})
+</script>

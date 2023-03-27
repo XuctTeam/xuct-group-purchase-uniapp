@@ -7,6 +7,24 @@
   // },
   "pages": [
     {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/good/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
       "path": "pages/member/index/index",
       "style": {
         "navigationBarTitleText": "",
@@ -24,15 +42,7 @@
         "transparentTitle": "always"
       }
     },
-    {
-      "path": "pages/index/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
+
     {
       "path": "pages/member/login/index",
       "style": {
