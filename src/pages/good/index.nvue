@@ -1,3 +1,13 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-03-28 16:23:38
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-03-28 18:00:02
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\index.nvue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
 <template>
   <tm-app>
     <tm-navbar title="商品详情" color="#70DB93"></tm-navbar>
@@ -26,15 +36,28 @@
       </view>
     </tm-sheet>
     <view class="pl-10 pr-10 pt-10" :style="{ paddingBottom: _totalBarHeight + 'rpx' }">
-      <tm-html :content="detail"></tm-html>
+      <tm-html :content="detail" />
     </view>
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }" v-if="!!logged">
-      <view class="relative flex flex-row flex-row-center-center flex-around">
-        <view class="flex flex-1 ma-10">
-          <tm-button block color="red" :padding="[0, 10]" label="加入购物车"></tm-button>
+      <view class="relative flex flex-row flex-around">
+        <view class="flex flex-row flex-3 ma-10 flex-row-center-between">
+          <view @click="toHome">
+            <tm-icon name="tmicon-home" :fontSize="40" />
+            <tm-text color="grey" :font-size="24" label="首页" />
+          </view>
+          <view>
+            <tm-icon name="tmicon-shoppingcart" :fontSize="40" />
+            <tm-text color="grey" :font-size="24" label="购物车" />
+          </view>
+          <view>
+            <tm-icon name="tmicon-md-heart-empty" :fontSize="40" @click="onCllect" v-if="!userCollect" />
+            <tm-icon name="tmicon-md-heart" color="red" :fontSize="40" @click="onCllect" v-else />
+            <tm-text color="grey" :font-size="24" label="收藏" />
+          </view>
         </view>
-        <view class="flex flex-1 ma-10">
-          <tm-button block color="green" :padding="[0, 10]" label="立即下单"></tm-button>
+        <view class="flex flex-row flex-1 ma-10 flex-row-center-end">
+          <tm-button color="red" :round="5" label="加入购物车"></tm-button>
+          <tm-button color="orange" :round="5" label="立即下单" :margin="[10, 0, 10, 0]"></tm-button>
         </view>
       </view>
     </view>
@@ -50,35 +73,27 @@ import tmHtml from '@/tmui/components/tm-html/tm-html.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { useUserHook } from '@/store/user'
-import { getGood } from '@/api/good'
-import { loading, hideLoading } from '@/utils/dialog'
-const detail = ref('')
-const name = ref('')
-const _showSafe = ref<boolean>(false)
-const swiperImages: string[] = reactive([])
+import { useUserHook, useAppHook } from '@/store'
 
-let sys = uni.getSystemInfoSync()
+import { getGood, collect } from '@/api/good'
+import { loading, hideLoading } from '@/utils/dialog'
+const _id = ref<string>('')
+const detail = ref<string>('')
+const name = ref('')
+const swiperImages: string[] = reactive([])
+const userCollect = ref<boolean>(false)
+
 const store = useUserHook()
+const appStore = useAppHook()
 const logged = store.logged
 
-const win_bottom = sys?.safeAreaInsets?.bottom ?? 0
-if (win_bottom > 0) {
-  _showSafe.value = true
-}
-
 const _totalBarHeight = computed(() => {
-  if (logged) {
-    if (_showSafe.value) {
-      return uni.$tm.u.torpx(80)
-    }
-    return uni.$tm.u.torpx(70)
+  if (!logged) {
+    return appStore.getSafeBottom()
   }
-  if (_showSafe.value) {
-    return uni.$tm.u.torpx(20)
-  }
-  return 0
+  return uni.$tm.u.torpx(60 + appStore.getSafeBottom())
 })
 
 onLoad((opts: any) => {
@@ -86,8 +101,23 @@ onLoad((opts: any) => {
   if (!id) {
     return
   }
+  _id.value = id
+  _loadGood()
+})
+
+const onCllect = () => {
+  collect(_id.value)
+    .then(() => {
+      userCollect.value = !userCollect.value
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
+const _loadGood = () => {
   loading()
-  getGood(id)
+  getGood(_id.value)
     .then(res => {
       const good: Good.GoodResult = res.data
       const swipers: string[] = good.swiperImages?.split(',') || []
@@ -100,7 +130,11 @@ onLoad((opts: any) => {
       console.log(err)
       hideLoading()
     })
-})
+}
+
+const toHome = () => {
+  uni.$tm.u.routerTo('/pages/index/index', 'reLaunch')
+}
 </script>
 <style>
 .title {

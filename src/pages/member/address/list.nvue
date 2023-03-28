@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-25 21:54:59
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-26 20:17:51
+ * @LastEditTime: 2023-03-28 16:49:01
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\list.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -21,15 +21,7 @@
   <tm-app class="flex flex-col">
     <tm-navbar title="收货地址" color="#70DB93" fontColor="white" />
     <tm-sheet :margin="[20, 20]" :round="3" :shadow="2">
-      <tm-input
-        prefix="tmicon-search"
-        searchLabel="搜索"
-        placeholder="请输入关键词"
-        v-model.lazy="searchValue"
-        showClear
-        @search="onSearch"
-        @clear="onClear"
-      ></tm-input>
+      <tm-input prefix="tmicon-search" searchLabel="搜索" placeholder="请输入关键词" v-model.lazy="searchValue" showClear @search="onSearch" @clear="onClear"></tm-input>
     </tm-sheet>
     <view class="empty flex flex-row flex-row-center-center" v-if="addressList.length === 0 && !load">
       <tm-result class="mt-100" :showBtn="false" status="empty" title="暂无数据" />
@@ -50,7 +42,7 @@
       </tm-sheet>
     </view>
 
-    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'px' }">
+    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
       <view class="relative flex flex-row flex-row-center-center flex-around">
         <view class="flex flex-1 ma-10">
           <tm-button block color="red" @click="chooseaddress" :padding="[0, 10]" label="微信导入"></tm-button>
@@ -77,21 +69,17 @@ import { computed, reactive, ref } from 'vue'
 import { userAddressList, saveUserAddress } from '@/api/user'
 import { loading, hideLoading } from '@/utils/dialog'
 
-const _showSafe = ref<boolean>(false)
+import { useAppHook } from '@/store'
+
 const load = ref(true)
 const addressList = reactive<User.Address[]>([])
 const searchValue = ref('')
 
-let sys = uni.getSystemInfoSync()
-
-const win_bottom = sys?.safeAreaInsets?.bottom ?? 0
-if (win_bottom > 0) {
-  _showSafe.value = true
-}
+const appSotre = useAppHook()
+const safeBottom = appSotre.getSafeBottom()
 
 const _totalBarHeight = computed(() => {
-  if (_showSafe.value) return 90
-  return 75
+  return safeBottom + uni.$tm.u.torpx(60)
 })
 
 onLoad(() => {
