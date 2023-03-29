@@ -37,3 +37,14 @@ export const collect = (gid: string) => {
     gid
   })
 }
+
+/**
+ * 添加购物车
+ * @param gid
+ * @returns
+ */
+export const addCart = (gid: string) => {
+  return request.post('/api/v1/good/addcart', {
+    gid
+  })
+}

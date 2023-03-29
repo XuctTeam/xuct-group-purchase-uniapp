@@ -33,11 +33,11 @@ const proxy = getCurrentInstance()?.proxy ?? null
 const emits = defineEmits(['img-click'])
 const imgerror = ref(false)
 const props = defineProps({
-  //封面图片。
   id: {
     type: String,
     default: ''
   },
+  //封面图片。
   img: {
     type: String,
     default: ''
@@ -173,7 +173,7 @@ async function pushKey() {
     _nodeInfo.value = pos
   }
 }
-function onImgClick(e: any) {
+function onImgClick(e) {
   e.currentTarget.id = props.id
   emits('img-click', e)
 }

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-28 18:00:02
+ * @LastEditTime: 2023-03-29 10:56:05
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\index.nvue
  * @Description: 
  * 
@@ -56,8 +56,8 @@
           </view>
         </view>
         <view class="flex flex-row flex-1 ma-10 flex-row-center-end">
-          <tm-button color="red" :round="5" label="加入购物车"></tm-button>
-          <tm-button color="orange" :round="5" label="立即下单" :margin="[10, 0, 10, 0]"></tm-button>
+          <tm-button color="red" _class="round-l-24 round-r-0" linear="left" linear-deep="accent" :round="5" label="加入购物车" :loading="addLoading" @click="onAddCart"></tm-button>
+          <tm-button color="orange" _class="round-r-24 round-l-0" label="立即下单"></tm-button>
         </view>
       </view>
     </view>
@@ -77,13 +77,14 @@ import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { useUserHook, useAppHook } from '@/store'
 
-import { getGood, collect } from '@/api/good'
+import { getGood, collect, addCart } from '@/api/good'
 import { loading, hideLoading } from '@/utils/dialog'
 const _id = ref<string>('')
 const detail = ref<string>('')
 const name = ref('')
 const swiperImages: string[] = reactive([])
 const userCollect = ref<boolean>(false)
+const addLoading = ref<boolean>(false)
 
 const store = useUserHook()
 const appStore = useAppHook()
@@ -115,6 +116,18 @@ const onCllect = () => {
     })
 }
 
+const onAddCart = () => {
+  addLoading.value = true
+  addCart(_id.value)
+    .then(() => {
+      addLoading.value = false
+    })
+    .catch((err: any) => {
+      console.log(err)
+      addLoading.value = false
+    })
+}
+
 const _loadGood = () => {
   loading()
   getGood(_id.value)
@@ -122,8 +135,9 @@ const _loadGood = () => {
       const good: Good.GoodResult = res.data
       const swipers: string[] = good.swiperImages?.split(',') || []
       swiperImages.push(...swipers)
-      detail.value = good.detail || ''
+      detail.value = good.detail ?? ''
       name.value = good.name
+      userCollect.value = good.collect ?? false
       hideLoading()
     })
     .catch(err => {
