@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-21 18:33:48
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-29 09:22:31
+ * @LastEditTime: 2023-03-31 17:17:20
  * @FilePath: \xuct-group-purchase-uniapp\src\types\good.d.ts
  * @Description:
  *
@@ -17,7 +17,14 @@ declare namespace Good {
     startTime: Date
     endTime?: Date
     inventory: number
-    detail?: string,
-    collect? : boolean
+    detail?: string
+    collect?: boolean
+    browse: number
+  }
+
+  type CartResult = {
+    name: string
+    firstDrawing: string
+    num: number
   }
 }

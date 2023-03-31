@@ -1,0 +1,149 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-03-31 09:09:57
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-03-31 18:32:04
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
+<template>
+  <tm-app>
+    <tm-navbar title="购物车" color="#70DB93"></tm-navbar>
+    <view v-if="!logged">
+      <tm-result color="green" subTitle="登录后查看" btnText="去登录"></tm-result>
+    </view>
+    <view v-else>
+      <view v-if="cartGoods.length === 0 && !load">
+        <tm-result color="green" subTitle="购物车快饿瘪了 T.T" btnText="去购物" @click="toHome"></tm-result>
+      </view>
+      <view v-else>
+        <view class="top">
+          <tm-text :font-size="24" _class="font-weight-b" label="购物车"></tm-text>
+          <tm-button transprent text :shadow="0" size="normal" color="green" label="管理" :width="60" />
+        </view>
+        <view class="mt-n20" :style="{ paddingBottom: _totalBarHeight + 'rpx' }">
+          <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" :height="180" v-for="(item, index) in cartGoods" :key="index">
+            <tm-row :width="712" :column="16" color="blue-grey" :gutter="2">
+              <tm-col :col="2">
+                <tm-checkbox :round="10" color="red"></tm-checkbox>
+              </tm-col>
+              <tm-col :col="14" :height="180">
+                <view class="flex-1 flex flex-row" :style="{ width: '100%' }">
+                  <tm-image :width="180" :round="4" :height="180" :src="item.firstDrawing"></tm-image>
+                  <view class="right">
+                    <tm-text _class="font-weight-b text-overflow-2" :label="item.name"></tm-text>
+                    <view class="flex flex-row flex-row-center-between">
+                      <tm-text>123123</tm-text>
+                      <tm-stepper :max="200" :min="1" :defaultValue="item.num" circular></tm-stepper>
+                    </view>
+                  </view>
+                </view>
+              </tm-col>
+            </tm-row>
+          </tm-sheet>
+        </view>
+      </view>
+    </view>
+    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }" v-if="!!logged">
+      <view class="relative flex flex-row flex-around flex-row-center-between bottom pa-10">
+        <view class="ml-20">
+          <tm-checkbox :round="10" color="red" label="全选"></tm-checkbox>
+        </view>
+        <view class="flex flex-row flex-1 flex-row-center-between">
+          <view>123123</view>
+          <tm-button label="结算" size="small" color="green"></tm-button>
+        </view>
+      </view>
+    </view>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import { computed, reactive, ref } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmResult from '@/tmui/components/tm-result/tm-result.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmCheckbox from '@/tmui/components/tm-checkbox/tm-checkbox.vue'
+import tmImage from '@/tmui/components/tm-image/tm-image.vue'
+import tmStepper from '@/tmui/components/tm-stepper/tm-stepper.vue'
+import tmRow from '@/tmui/components/tm-row/tm-row.vue'
+import tmCol from '@/tmui/components/tm-col/tm-col.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+
+import { useUserHook, useAppHook } from '@/store'
+import { loading, hideLoading } from '@/utils/dialog'
+import { cartList } from '@/api/good'
+
+const cartGoods = reactive<Good.CartResult[]>([])
+const load = ref<boolean>(false)
+const store = useUserHook()
+const appStore = useAppHook()
+const logged = store.logged
+
+const _totalBarHeight = computed(() => {
+  if (!logged) {
+    return appStore.getSafeBottom()
+  }
+  return uni.$tm.u.torpx(60 + appStore.getSafeBottom())
+})
+
+const toHome = () => {
+  uni.$tm.u.routerTo('/pages/index/index', 'redirect')
+}
+
+onLoad(() => {
+  if (!logged) {
+    return
+  }
+  _load()
+})
+
+const _load = () => {
+  loading()
+  load.value = true
+  cartList()
+    .then(res => {
+      const item = [...res.data, ...res.data, ...res.data, ...res.data, ...res.data, ...res.data, ...res.data, ...res.data, ...res.data, ...res.data]
+      cartGoods.push(...item)
+      hideLoading()
+      load.value = false
+    })
+    .catch((err: any) => {
+      console.log(err)
+      hideLoading()
+      load.value = false
+    })
+}
+</script>
+<style>
+.top {
+  position: fixed;
+  z-index: 99;
+  background-color: #fff;
+  left: 0;
+  right: 0;
+  height: 80rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10rpx 30rpx;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 10rpx;
+  flex: 1;
+  width: 0;
+}
+
+.bottom {
+  height: 100%;
+}
+</style>

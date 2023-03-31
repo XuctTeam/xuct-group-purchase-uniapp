@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 08:58:16
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-27 17:21:00
+ * @LastEditTime: 2023-03-31 09:49:06
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -116,7 +116,7 @@ function click(e: any) {
 
 function floatClick(e: any) {
   uni.navigateTo({
-    url: '/pages/member/index/index'
+    url: e === 0 ? '/pages/cart/index' : '/pages/member/index/index'
   })
 }
 </script>

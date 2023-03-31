@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-29 10:56:05
+ * @LastEditTime: 2023-03-31 09:47:54
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\index.nvue
  * @Description: 
  * 
@@ -24,7 +24,7 @@
         <view class="flex flex-row">
           <tm-text color="grey" :font-size="26" label="热度"></tm-text>
           <view class="ml-8">
-            <tm-text color="orange" :font-size="26" label="30" />
+            <tm-text color="orange" :font-size="26" :label="browse" />
           </view>
         </view>
         <view class="flex flex-row">
@@ -42,16 +42,16 @@
       <view class="relative flex flex-row flex-around">
         <view class="flex flex-row flex-3 ma-10 flex-row-center-between">
           <view @click="toHome">
-            <tm-icon name="tmicon-home" :fontSize="40" />
-            <tm-text color="grey" :font-size="24" label="首页" />
+            <tm-icon name=" tmicon-aliwangwang" :fontSize="36" />
+            <tm-text color="grey" :font-size="24" label="客服" />
           </view>
-          <view>
-            <tm-icon name="tmicon-shoppingcart" :fontSize="40" />
+          <view @click="toCart">
+            <tm-icon name="tmicon-shoppingcart" :fontSize="36" />
             <tm-text color="grey" :font-size="24" label="购物车" />
           </view>
           <view>
-            <tm-icon name="tmicon-md-heart-empty" :fontSize="40" @click="onCllect" v-if="!userCollect" />
-            <tm-icon name="tmicon-md-heart" color="red" :fontSize="40" @click="onCllect" v-else />
+            <tm-icon name="tmicon-md-heart-empty" :fontSize="36" @click="onCllect" v-if="!userCollect" />
+            <tm-icon name="tmicon-md-heart" color="red" :fontSize="36" @click="onCllect" v-else />
             <tm-text color="grey" :font-size="24" label="收藏" />
           </view>
         </view>
@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, nextTick } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCarousel from '@/tmui/components/tm-carousel/tm-carousel.vue'
@@ -77,11 +77,12 @@ import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { useUserHook, useAppHook } from '@/store'
 
-import { getGood, collect, addCart } from '@/api/good'
+import { getGood, collect, addCart, browseGood } from '@/api/good'
 import { loading, hideLoading } from '@/utils/dialog'
 const _id = ref<string>('')
 const detail = ref<string>('')
-const name = ref('')
+const name = ref<string>('')
+const browse = ref<number>(1)
 const swiperImages: string[] = reactive([])
 const userCollect = ref<boolean>(false)
 const addLoading = ref<boolean>(false)
@@ -104,6 +105,10 @@ onLoad((opts: any) => {
   }
   _id.value = id
   _loadGood()
+
+  nextTick(() => {
+    _browseGood()
+  })
 })
 
 const onCllect = () => {
@@ -138,6 +143,7 @@ const _loadGood = () => {
       detail.value = good.detail ?? ''
       name.value = good.name
       userCollect.value = good.collect ?? false
+      browse.value = good.browse
       hideLoading()
     })
     .catch(err => {
@@ -146,8 +152,18 @@ const _loadGood = () => {
     })
 }
 
+const _browseGood = () => {
+  browseGood(_id.value)
+    .then(() => {})
+    .catch(() => {})
+}
+
 const toHome = () => {
   uni.$tm.u.routerTo('/pages/index/index', 'reLaunch')
+}
+
+const toCart = () => {
+  uni.$tm.u.routerTo('/pages/cart/index', 'navigate')
 }
 </script>
 <style>
@@ -155,5 +171,10 @@ const toHome = () => {
   font-size: 30upx;
   font-weight: bold;
   color: black;
+}
+
+.between {
+  flex-wrap: wrap;
+  align-content: space-between;
 }
 </style>
