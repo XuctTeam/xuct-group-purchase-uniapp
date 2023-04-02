@@ -34,6 +34,15 @@
       }
     },
     {
+      "path": "pages/order/confirm/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
       "path": "pages/member/index/index",
       "style": {
         "navigationBarTitleText": "",
@@ -51,7 +60,6 @@
         "transparentTitle": "always"
       }
     },
-
     {
       "path": "pages/member/login/index",
       "style": {
@@ -89,7 +97,6 @@
       }
     }
   ],
-
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni-app",

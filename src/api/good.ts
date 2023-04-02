@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 11:35:37
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-31 17:17:56
+ * @LastEditTime: 2023-04-02 22:09:55
  * @FilePath: \xuct-group-purchase-uniapp\src\api\good.ts
  * @Description:
  *
@@ -65,4 +65,24 @@ export const addCart = (gid: string) => {
  */
 export const cartList = () => {
   return request.get<Good.CartResult[]>('/api/v1/good/cart/list')
+}
+
+/**
+ * 修改购买数量
+ *
+ * @param gid
+ * @param num
+ */
+export const modifyCartNum = (gid: string, num: number) => {
+  return request.post('/api/v1/good/cart/update/num', {
+    gid,
+    num
+  })
+}
+
+/**
+ * 清空购物车
+ */
+export const cleanCart = () => {
+  return request.delete('/api/v1/good/cart/del/all')
 }

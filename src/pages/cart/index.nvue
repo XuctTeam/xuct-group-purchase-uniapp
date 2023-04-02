@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-31 18:32:04
+ * @LastEditTime: 2023-04-02 22:25:33
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -21,13 +21,13 @@
       <view v-else>
         <view class="top">
           <tm-text :font-size="24" _class="font-weight-b" label="购物车"></tm-text>
-          <tm-button transprent text :shadow="0" size="normal" color="green" label="管理" :width="60" />
+          <tm-button transprent text :shadow="0" size="normal" color="green" :label="!editStatus ? '管理' : '完成'" :width="60" @click="changeState" />
         </view>
         <view class="mt-n20" :style="{ paddingBottom: _totalBarHeight + 'rpx' }">
           <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" :height="180" v-for="(item, index) in cartGoods" :key="index">
             <tm-row :width="712" :column="16" color="blue-grey" :gutter="2">
               <tm-col :col="2">
-                <tm-checkbox :round="10" color="red"></tm-checkbox>
+                <tm-checkbox :round="10" color="red" @change="e => simpleCheckboxChangeState(e, item.goodId)" :value="!!!item.checked"></tm-checkbox>
               </tm-col>
               <tm-col :col="14" :height="180">
                 <view class="flex-1 flex flex-row" :style="{ width: '100%' }">
@@ -36,7 +36,7 @@
                     <tm-text _class="font-weight-b text-overflow-2" :label="item.name"></tm-text>
                     <view class="flex flex-row flex-row-center-between">
                       <tm-text>123123</tm-text>
-                      <tm-stepper :max="200" :min="1" :defaultValue="item.num" circular></tm-stepper>
+                      <tm-stepper :max="200" :min="1" :defaultValue="item.num" circular @change="e => chooseNumChange(e, item.goodId)"></tm-stepper>
                     </view>
                   </view>
                 </view>
@@ -49,11 +49,16 @@
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }" v-if="!!logged">
       <view class="relative flex flex-row flex-around flex-row-center-between bottom pa-10">
         <view class="ml-20">
-          <tm-checkbox :round="10" color="red" label="全选"></tm-checkbox>
+          <view v-if="!editStatus" class="flex flex-row">
+            <tm-text :font-size="24" _class="font-weight-b" label="已选择" />
+            <tm-text :font-size="24" _class="font-weight-b" :label="selectedNum" />
+            <tm-text :font-size="24" _class="font-weight-b" label="件" />
+          </view>
+          <tm-checkbox v-else :round="10" color="red" label="全选" @change="chooseAllChangeState" :modelValue="allCheckStatus"></tm-checkbox>
         </view>
-        <view class="flex flex-row flex-1 flex-row-center-between">
-          <view>123123</view>
-          <tm-button label="结算" size="small" color="green"></tm-button>
+        <view class="flex flex-row flex-1 flex-row-center-end">
+          <tm-button v-if="!editStatus" label="结算" color="green" @click="toConfirmOrder"></tm-button>
+          <tm-button v-else label="删除" color="red" @click="deleteGood"></tm-button>
         </view>
       </view>
     </view>
@@ -75,11 +80,13 @@ import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 
 import { useUserHook, useAppHook } from '@/store'
-import { loading, hideLoading } from '@/utils/dialog'
-import { cartList } from '@/api/good'
+import { loading, hideLoading, confirm, message } from '@/utils/dialog'
+import { cartList, cleanCart, modifyCartNum } from '@/api/good'
 
 const cartGoods = reactive<Good.CartResult[]>([])
-const load = ref<boolean>(false)
+const load = ref<boolean>(true)
+const editStatus = ref<boolean>(false)
+const allCheckStatus = ref<boolean>(false)
 const store = useUserHook()
 const appStore = useAppHook()
 const logged = store.logged
@@ -91,9 +98,9 @@ const _totalBarHeight = computed(() => {
   return uni.$tm.u.torpx(60 + appStore.getSafeBottom())
 })
 
-const toHome = () => {
-  uni.$tm.u.routerTo('/pages/index/index', 'redirect')
-}
+const selectedNum = computed(() => {
+  return cartGoods.filter(item => item.checked).length
+})
 
 onLoad(() => {
   if (!logged) {
@@ -102,12 +109,88 @@ onLoad(() => {
   _load()
 })
 
+const changeState = () => {
+  editStatus.value = !editStatus.value
+}
+
+const toHome = () => {
+  uni.$tm.u.routerTo('/pages/index/index', 'redirect')
+}
+
+const simpleCheckboxChangeState = (val: boolean, goodId: string) => {
+  const _cartGood = cartGoods.find(x => x.goodId === goodId)
+  if (!_cartGood) {
+    return
+  }
+  _cartGood.checked = val
+  //判断选择列表是否满足全选
+  if (val) {
+    const _allChecked = cartGoods.every(x => x.checked)
+    if (_allChecked) {
+      allCheckStatus.value = true
+    }
+    return
+  }
+  const _someNoneChecked = cartGoods.some(x => !!!x.checked)
+  if (allCheckStatus.value && _someNoneChecked) {
+    allCheckStatus.value = false
+  }
+}
+
+const chooseAllChangeState = (val: boolean) => {
+  cartGoods.forEach(item => {
+    item.checked = val
+  })
+}
+
+const deleteGood = () => {
+  const checkedsGood = cartGoods.filter(x => x.checked)
+  if (checkedsGood.length === cartGoods.length) {
+    confirm({
+      title: '是否清空购物车？',
+      success: () => {
+        _delete()
+      },
+      fail: () => {}
+    })
+    return
+  }
+}
+
+const chooseNumChange = (num: number, gid: string) => {
+  loading()
+  modifyCartNum(gid, num)
+    .then(() => {
+      hideLoading()
+    })
+    .catch((err: any) => {
+      console.log(err)
+      hideLoading()
+    })
+}
+
+const toConfirmOrder = () => {
+  if (selectedNum.value === 0) {
+    message({
+      title: '请选择商品',
+      icon: 'error'
+    })
+    return
+  }
+  uni.navigateTo({
+    url: '/pages/order/confirm/index',
+    success: () => {
+      uni.$once('cart::order::success', data => {})
+    },
+    fail: () => {}
+  })
+}
+
 const _load = () => {
   loading()
-  load.value = true
   cartList()
     .then(res => {
-      const item = [...res.data, ...res.data, ...res.data, ...res.data, ...res.data, ...res.data, ...res.data, ...res.data, ...res.data, ...res.data]
+      const item = res.data
       cartGoods.push(...item)
       hideLoading()
       load.value = false
@@ -116,6 +199,19 @@ const _load = () => {
       console.log(err)
       hideLoading()
       load.value = false
+    })
+}
+
+const _delete = () => {
+  loading()
+  cleanCart()
+    .then(() => {
+      cartGoods.length = 0
+      hideLoading()
+    })
+    .catch((err: any) => {
+      console.log(err)
+      hideLoading()
     })
 }
 </script>
