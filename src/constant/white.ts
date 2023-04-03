@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 15:51:01
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-22 21:48:37
+ * @LastEditTime: 2023-04-03 21:53:33
  * @FilePath: \xuct-group-purchase-uniapp\src\constant\white.ts
  * @Description:
  *
@@ -16,4 +16,6 @@ export const API_NOT_TOKEN = ['/api/v1/banner/list']
 /**
  * 需要登录的页面
  */
-export const PAGE_NEED = ['pages/member/setting/index', 'pages/member/address/list']
+export const PAGE_NEED = ['pages/member/setting/index', 'pages/member/address/list', 'pages/order/confirm/index']
+
+

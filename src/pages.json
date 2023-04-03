@@ -7,6 +7,15 @@
   // },
   "pages": [
     {
+      "path": "pages/order/confirm/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
       "path": "pages/cart/index",
       "style": {
         "navigationBarTitleText": "",
@@ -26,15 +35,6 @@
     },
     {
       "path": "pages/good/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-    {
-      "path": "pages/order/confirm/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",

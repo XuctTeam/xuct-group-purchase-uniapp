@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-21 18:33:48
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-02 21:06:49
+ * @LastEditTime: 2023-04-03 21:45:40
  * @FilePath: \xuct-group-purchase-uniapp\src\types\good.d.ts
  * @Description:
  *
@@ -28,5 +28,6 @@ declare namespace Good {
     firstDrawing: string
     num: number
     checked?: boolean
+    unit: string
   }
 }

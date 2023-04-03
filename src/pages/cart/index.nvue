@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-02 22:25:33
+ * @LastEditTime: 2023-04-03 21:00:48
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -47,18 +47,16 @@
       </view>
     </view>
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }" v-if="!!logged">
-      <view class="relative flex flex-row flex-around flex-row-center-between bottom pa-10">
+      <view class="relative flex flex-row flex-around flex-row-center-between pa-10 bottom">
         <view class="ml-20">
           <view v-if="!editStatus" class="flex flex-row">
-            <tm-text :font-size="24" _class="font-weight-b" label="已选择" />
-            <tm-text :font-size="24" _class="font-weight-b" :label="selectedNum" />
-            <tm-text :font-size="24" _class="font-weight-b" label="件" />
+            <tm-text _class="font-weight-b" :label="`已选择${selectedNum}件商品`"></tm-text>
           </view>
           <tm-checkbox v-else :round="10" color="red" label="全选" @change="chooseAllChangeState" :modelValue="allCheckStatus"></tm-checkbox>
         </view>
         <view class="flex flex-row flex-1 flex-row-center-end">
-          <tm-button v-if="!editStatus" label="结算" color="green" @click="toConfirmOrder"></tm-button>
-          <tm-button v-else label="删除" color="red" @click="deleteGood"></tm-button>
+          <tm-button v-if="!editStatus" label="结算" :round="10" color="green" @click="toConfirmOrder"></tm-button>
+          <tm-button v-else label="删除" color="red" :round="10" @click="deleteGood"></tm-button>
         </view>
       </view>
     </view>
@@ -81,7 +79,7 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 
 import { useUserHook, useAppHook } from '@/store'
 import { loading, hideLoading, confirm, message } from '@/utils/dialog'
-import { cartList, cleanCart, modifyCartNum } from '@/api/good'
+import { cartList, cleanCart, modifyCartNum, deleteCartGood } from '@/api/good'
 
 const cartGoods = reactive<Good.CartResult[]>([])
 const load = ref<boolean>(true)
@@ -95,7 +93,8 @@ const _totalBarHeight = computed(() => {
   if (!logged) {
     return appStore.getSafeBottom()
   }
-  return uni.$tm.u.torpx(60 + appStore.getSafeBottom())
+  const safeBottom = appStore.getSafeBottom()
+  return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
 })
 
 const selectedNum = computed(() => {
@@ -144,17 +143,24 @@ const chooseAllChangeState = (val: boolean) => {
 }
 
 const deleteGood = () => {
-  const checkedsGood = cartGoods.filter(x => x.checked)
-  if (checkedsGood.length === cartGoods.length) {
+  if (selectedNum.value === cartGoods.length) {
     confirm({
       title: '是否清空购物车？',
       success: () => {
-        _delete()
+        _cleanCart()
       },
       fail: () => {}
     })
     return
   }
+
+  confirm({
+    title: '是否删除选择商品？',
+    success: () => {
+      _deleteCart()
+    },
+    fail: () => {}
+  })
 }
 
 const chooseNumChange = (num: number, gid: string) => {
@@ -177,8 +183,9 @@ const toConfirmOrder = () => {
     })
     return
   }
+  const _ids = cartGoods.filter(x => x.checked).map(x => x.goodId)
   uni.navigateTo({
-    url: '/pages/order/confirm/index',
+    url: '/pages/order/confirm/index?gids=' + JSON.stringify(_ids),
     success: () => {
       uni.$once('cart::order::success', data => {})
     },
@@ -202,7 +209,7 @@ const _load = () => {
     })
 }
 
-const _delete = () => {
+const _cleanCart = () => {
   loading()
   cleanCart()
     .then(() => {
@@ -211,6 +218,20 @@ const _delete = () => {
     })
     .catch((err: any) => {
       console.log(err)
+      hideLoading()
+    })
+}
+
+const _deleteCart = () => {
+  const _delIds = cartGoods.filter(x => x.checked).map(x => x.goodId)
+  loading()
+  deleteCartGood(_delIds)
+    .then(() => {
+      cartGoods.length = 0
+      load.value = true
+      _load()
+    })
+    .catch((err: any) => {
       hideLoading()
     })
 }
@@ -237,9 +258,5 @@ const _delete = () => {
   margin-left: 10rpx;
   flex: 1;
   width: 0;
-}
-
-.bottom {
-  height: 100%;
 }
 </style>

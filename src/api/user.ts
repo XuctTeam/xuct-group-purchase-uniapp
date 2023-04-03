@@ -1,3 +1,13 @@
+/*
+ * @Author: Derek Xu
+ * @Date: 2023-03-27 10:11:35
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-04-03 20:20:49
+ * @FilePath: \xuct-group-purchase-uniapp\src\api\user.ts
+ * @Description:
+ *
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
+ */
 import request from '@/services/request'
 
 /**
@@ -50,4 +60,11 @@ export const getUserAddress = (id: string) => {
  */
 export const deleteUserAddress = (id: string) => {
   return request.delete('/api/v1/address?id=' + id)
+}
+
+/**
+ * 获取默认的通讯录地址
+ */
+export const getDefaultAddress = () => {
+  return request.get<User.Address>('/api/v1/address/default')
 }

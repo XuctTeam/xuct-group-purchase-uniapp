@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-31 09:47:54
+ * @LastEditTime: 2023-04-03 21:01:22
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\index.nvue
  * @Description: 
  * 
@@ -95,7 +95,8 @@ const _totalBarHeight = computed(() => {
   if (!logged) {
     return appStore.getSafeBottom()
   }
-  return uni.$tm.u.torpx(60 + appStore.getSafeBottom())
+  const safeBottom = appStore.getSafeBottom()
+  return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
 })
 
 onLoad((opts: any) => {
