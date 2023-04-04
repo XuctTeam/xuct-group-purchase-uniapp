@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-03 09:01:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-03 22:18:48
+ * @LastEditTime: 2023-04-04 09:20:32
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
@@ -35,28 +35,47 @@
     </tm-sheet>
     <view>
       <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
-        <tm-row :width="712" :column="10" color="blue-grey" :gutter="1" v-for="(item, index) in cartGoods" :key="index">
-          <tm-col :col="3" :height="160">
-            <tm-image :width="160" :height="160" :round="4" :src="item.firstDrawing"></tm-image>
-          </tm-col>
-          <tm-col :col="7">
-            <view class="right">
-              <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
-              <view class="flex flex-row flex-row-center-between pr-10">
-                <tm-text color="orange" :label="`单位：${item.unit}`"></tm-text>
-                <tm-text color="grey" :label="`×${item.num}`"></tm-text>
+        <view v-for="(item, index) in cartGoods" :key="index">
+          <tm-row :width="712" :column="10" color="blue-grey" :gutter="1">
+            <tm-col :col="3" :height="160">
+              <tm-image :width="160" :height="160" :round="4" :src="item.firstDrawing"></tm-image>
+            </tm-col>
+            <tm-col :col="7">
+              <view class="right">
+                <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
+                <view class="flex flex-row flex-row-center-between pr-10">
+                  <tm-text color="orange" :label="`单位：${item.unit}`"></tm-text>
+                  <tm-text color="grey" :label="`×${item.num}`"></tm-text>
+                </view>
               </view>
-            </view>
-          </tm-col>
-        </tm-row>
-        <tm-divider></tm-divider>
+            </tm-col>
+          </tm-row>
+          <tm-divider />
+        </view>
+        <view class="flex flex-row flex-row-center-between ma-20">
+          <tm-text :font-size="26" label="共计商品总数"></tm-text>
+          <tm-text :font-size="26" :label="`${sumNum}个`"></tm-text>
+        </view>
       </tm-sheet>
     </view>
+    <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
+      <tm-cell :margin="[0, 0]" :titleFontSize="30" title="使用积分" rightColor="red" rightText="暂不使用" @click="() => (showWin = !showWin)" />
+    </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 20]">
       <tm-text :font-size="26" label="备注信息"></tm-text>
       <tm-divider></tm-divider>
       <tm-input :inputPadding="[12]" placeholder="备注特殊要求" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
     </tm-sheet>
+
+    <tm-drawer placement="bottom" v-model:show="showWin">
+      <view class="ma-20">
+        <view class="flex flex-row flex-row-center-between">
+          <tm-text :font-size="26" label="可用积分"></tm-text>
+          <tm-text :font-size="26" label="可用积分"></tm-text>
+        </view>
+        <tm-divider></tm-divider>
+      </view>
+    </tm-drawer>
 
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
       <view class="relative flex flex-row flex-around flex-row-center-between bottom pa-10">
@@ -86,20 +105,25 @@ import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import tmRollNotice from '@/tmui/components/tm-roll-notice/tm-roll-notice.vue'
+import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
+
 import { useAppHook } from '@/store'
 import { computed, reactive, ref } from 'vue'
 import { getDefaultAddress } from '@/api/user'
-import { queryCartOrderList } from '@/api/good'
+import { goodList, queryCartOrderList } from '@/api/good'
 import { TEMPLATE_IDS } from '@/constant'
 import { onLoad } from '@dcloudio/uni-app'
 import { message, loading, hideLoading } from '@/utils/dialog'
 
 const appStore = useAppHook()
+
 const _totalBarHeight = computed(() => {
   const safeBottom = appStore.getSafeBottom()
   return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
 })
-const content = ref(['关注团到家公众号获取订单实时消息~'])
+
+const content = ref(['点击获取订单实时消息~'])
+const showWin = ref(false)
 const address = reactive<User.Address>({
   id: undefined
 })
@@ -119,6 +143,14 @@ onLoad((ops: any) => {
   _loadGood(JSON.parse(gids))
 })
 
+const sumNum = computed(() => {
+  return cartGoods
+    .map(item => item.num)
+    .reduce((prev, cur) => {
+      return prev + cur
+    }, 0)
+})
+
 const noticeClick = () => {
   uni.requestSubscribeMessage({
     tmplIds: TEMPLATE_IDS,
@@ -133,7 +165,7 @@ const addressClick = () => {
     url: '/pages/member/address/list?type=order',
     success: () => {
       uni.$once('address:selected::success', data => {
-        debugger
+        Object.assign(address, { ...data.address })
       })
     },
     fail: () => {}

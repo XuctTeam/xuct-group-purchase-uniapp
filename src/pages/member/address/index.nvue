@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 16:24:00
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-03 22:21:03
+ * @LastEditTime: 2023-04-04 08:53:36
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\index.nvue
  * @Description: 
  * 
@@ -141,7 +141,6 @@ const onDelete = () => {
 
 const onConfirm = (e: any) => {
   const { validate, data } = e
-  debugger
   if (!validate) {
     return
   }
