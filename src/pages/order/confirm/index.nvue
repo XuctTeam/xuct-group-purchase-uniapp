@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-03 09:01:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-04 09:20:32
+ * @LastEditTime: 2023-04-05 22:24:39
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
@@ -66,17 +66,14 @@
       <tm-divider></tm-divider>
       <tm-input :inputPadding="[12]" placeholder="备注特殊要求" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
     </tm-sheet>
-
-    <tm-drawer placement="bottom" v-model:show="showWin">
-      <view class="ma-20">
-        <view class="flex flex-row flex-row-center-between">
-          <tm-text :font-size="26" label="可用积分"></tm-text>
-          <tm-text :font-size="26" label="可用积分"></tm-text>
-        </view>
-        <tm-divider></tm-divider>
-      </view>
-    </tm-drawer>
-
+    <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 20]">
+      <tm-radio-group v-model="radiolist">
+        <tm-radio outlined value="apple" label="苹果基础示例"></tm-radio>
+        <tm-radio color="orange" value="banner" label="香蕉"></tm-radio>
+        <tm-radio color="pink" value="test" label="测试项"></tm-radio>
+        <tm-radio color="green" value="other" label="其它水果"></tm-radio>
+      </tm-radio-group>
+    </tm-sheet>
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
       <view class="relative flex flex-row flex-around flex-row-center-between bottom pa-10">
         <view class="ml-20">
@@ -95,6 +92,8 @@
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmRadio from '@/tmui/components/tm-radio/tm-radio.vue'
+import tmRadioGroup from '@/tmui/components/tm-radio-group/tm-radio-group.vue'
 import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
 import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
 import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
@@ -127,6 +126,7 @@ const showWin = ref(false)
 const address = reactive<User.Address>({
   id: undefined
 })
+const radiolist = ref('banner')
 const cartGoods = reactive<Good.CartResult[]>([])
 
 onLoad((ops: any) => {

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-25 21:54:59
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-04 08:51:18
+ * @LastEditTime: 2023-04-05 22:26:54
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\list.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -43,7 +43,7 @@
     </view>
 
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
-      <view class="relative flex flex-row flex-row-center-center flex-around">
+      <view class="relative flex flex-row flex-around flex-row-center-between bottom pa-10">
         <view class="flex flex-1 ma-10">
           <tm-button block color="red" @click="chooseaddress" :round="25" :padding="[0, 10]" label="微信导入"></tm-button>
         </view>
@@ -166,7 +166,7 @@ const onSelect = (addressId: string) => {
     return
   }
   uni.$emit('address:selected::success', {
-    address: addressList.find(x=>x.id === addressId)
+    address: addressList.find(x => x.id === addressId)
   })
   uni.$tm.u.routerTo('', 'navigateBack')
 }
