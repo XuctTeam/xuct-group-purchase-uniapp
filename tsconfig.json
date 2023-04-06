@@ -10,18 +10,10 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "types": ["@dcloudio/types"],
+    "types": ["@dcloudio/types", "pinia-plugin-persist-uni"],
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": [
-    "./src/*.vue",
-    "./src/**/*.vue",
-    "./src/*.nvue",
-    "./src/**/*.nvue",
-    "./src/*.ts",
-    "./src/*.d.ts",
-    "./src/**/*.ts",
-    ]
+  "include": ["./src/*.vue", "./src/**/*.vue", "./src/*.nvue", "./src/**/*.nvue", "./src/*.ts", "./src/*.d.ts", "./src/**/*.ts"]
 }

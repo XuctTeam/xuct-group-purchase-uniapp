@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-03 09:01:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-04 09:20:32
+ * @LastEditTime: 2023-04-06 11:47:53
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
@@ -66,17 +66,6 @@
       <tm-divider></tm-divider>
       <tm-input :inputPadding="[12]" placeholder="备注特殊要求" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
     </tm-sheet>
-
-    <tm-drawer placement="bottom" v-model:show="showWin">
-      <view class="ma-20">
-        <view class="flex flex-row flex-row-center-between">
-          <tm-text :font-size="26" label="可用积分"></tm-text>
-          <tm-text :font-size="26" label="可用积分"></tm-text>
-        </view>
-        <tm-divider></tm-divider>
-      </view>
-    </tm-drawer>
-
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
       <view class="relative flex flex-row flex-around flex-row-center-between bottom pa-10">
         <view class="ml-20">
@@ -89,6 +78,21 @@
         </view>
       </view>
     </view>
+    <!-- 积分弹出框  --->
+    <tmDrawer placement="bottom" v-model:show="showWin">
+      <tm-radio-group v-model="integralChoose">
+        <view class="felx flex-col flex-1">
+          <view class="pa-10"><tm-radio color="green" value="none" label="不使用"></tm-radio></view>
+          <view class="pa-10"><tm-radio color="green" value="all" label="全部使用"></tm-radio></view>
+          <view class="pt-10 pl-10 pr-10 flex flex-row flex-row-center-between">
+            <tm-radio color="green" value="part" label="使用部分"></tm-radio>
+            <tm-text :font-size="24" color="red" _class="font-weight-b" label="可用（32）分"></tm-text>
+          </view>
+        </view>
+      </tm-radio-group>
+      <tm-divider></tm-divider>
+      <view class="ma-20" v-if="integralChoose === 'part'"><tm-input placeholder="请输入积分" suffixLabel="分"></tm-input></view>
+    </tmDrawer>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -106,6 +110,8 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import tmRollNotice from '@/tmui/components/tm-roll-notice/tm-roll-notice.vue'
 import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
+import tmRadio from '@/tmui/components/tm-radio/tm-radio.vue'
+import tmRadioGroup from '@/tmui/components/tm-radio-group/tm-radio-group.vue'
 
 import { useAppHook } from '@/store'
 import { computed, reactive, ref } from 'vue'
@@ -127,6 +133,7 @@ const showWin = ref(false)
 const address = reactive<User.Address>({
   id: undefined
 })
+const integralChoose = ref('none')
 const cartGoods = reactive<Good.CartResult[]>([])
 
 onLoad((ops: any) => {
