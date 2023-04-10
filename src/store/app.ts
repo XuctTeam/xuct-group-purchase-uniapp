@@ -11,7 +11,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-const appStore = defineStore('appStore', () => {
+export const appStore = defineStore('appStore', () => {
   const safeBottom = ref(0)
 
   const initApp = () => {
@@ -24,8 +24,3 @@ const appStore = defineStore('appStore', () => {
   }
   return { initApp, getSafeBottom }
 })
-
-/** 在 setup 外使用 */
-export function useAppHook() {
-  return appStore()
-}

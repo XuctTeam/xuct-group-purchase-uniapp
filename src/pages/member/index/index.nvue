@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-15 22:02:25
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-27 14:20:36
+ * @LastEditTime: 2023-04-07 09:38:01
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -82,7 +82,7 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 
 // 导入storeToRefs
 import { storeToRefs } from 'pinia'
-import { useUserHook } from '@/store/user'
+import { useUserHook } from '@/store'
 import { ref } from 'vue'
 
 const store = useUserHook()

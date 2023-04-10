@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 09:15:21
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-22 15:52:03
+ * @LastEditTime: 2023-04-07 09:37:08
  * @FilePath: \xuct-group-purchase-uniapp\src\router\interceptLogin.ts
  * @Description:
  *
@@ -10,7 +10,7 @@
  */
 import { beforeEach, afterNotNext } from 'uni-crazy-router'
 import { PAGE_NEED } from '@/constant/white'
-import { useUserHook } from '@/store/user'
+import { useUserHook } from '@/store'
 import * as u from '@/tmui/tool/function/util'
 
 let intercept: any

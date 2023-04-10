@@ -2,14 +2,14 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 20:37:13
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-22 21:25:54
+ * @LastEditTime: 2023-04-07 09:38:31
  * @FilePath: \xuct-group-purchase-uniapp\src\services\upload.ts
  * @Description:
  *
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
  */
 
-import { useUserHook } from '@/store/user'
+import { useUserHook } from '@/store'
 import ENV_CONFIG from '@/config/env'
 const { BASE_API_URL } = ENV_CONFIG
 

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-21 10:14:41
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-06 18:08:00
+ * @LastEditTime: 2023-04-07 09:59:42
  * @FilePath: \xuct-group-purchase-uniapp\src\main.ts
  * @Description:
  *
@@ -13,17 +13,13 @@ import tmui from './tmui'
 import App from './App.vue'
 import config from '@/config'
 import { setupRouter } from './router'
-import { createPinia } from 'pinia'
-import piniaPersist from 'pinia-plugin-persist-uni'
+import * as Pinia from 'pinia'
 
 export function createApp() {
-  const app = createSSRApp(App)
-  const pinia = createPinia()
-  pinia.use(piniaPersist)
-  app.use(tmui, config)
-  app.use(pinia)
+  const app = createSSRApp(App).use(tmui, config)
   setupRouter(app)
   return {
-    app
+    app,
+    Pinia
   }
 }

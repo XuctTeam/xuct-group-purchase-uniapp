@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 16:49:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-22 19:29:23
+ * @LastEditTime: 2023-04-10 10:39:10
  * @FilePath: \xuct-group-purchase-uniapp\src\services\request.ts
  * @Description:
  *
@@ -10,7 +10,7 @@
  */
 
 import ajax from 'uni-ajax'
-import { useUserHook } from '@/store/user'
+import { useUserHook } from '@/store'
 import codeMessage from './codeMessage'
 import ENV_CONFIG from '@/config/env'
 import { API_NOT_TOKEN } from '@/constant/white'
@@ -99,13 +99,12 @@ instance.interceptors.response.use(
     if (statusCode === 401) {
       return refreshTokenHandler(() => instance(response.config))
     }
-    const { code, msg } = response.data
-
+    const { code, message } = response.data
     if (code !== 200) {
-      uni.$tm.u.toast(msg, true, 'error')
+      uni.$tm.u.toast(message || '请求异常', true, 'error')
       return Promise.reject({
         error: code,
-        message: msg
+        message
       })
     }
     return response.data

@@ -1,8 +1,8 @@
 <!--
  * @Author: Derek Xu
- * @Date: 2023-04-03 09:01:51
+ * @Date: 2023-04-06 18:28:56
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-06 11:47:53
+ * @LastEditTime: 2023-04-10 18:17:32
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
@@ -59,12 +59,12 @@
       </tm-sheet>
     </view>
     <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
-      <tm-cell :margin="[0, 0]" :titleFontSize="30" title="使用积分" rightColor="red" rightText="暂不使用" @click="() => (showWin = !showWin)" />
+      <tm-cell :margin="[0, 0]" :titleFontSize="30" title="使用积分" rightColor="red" :rightText="integralValue" @click="() => (showWin = !showWin)" />
     </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 20]">
       <tm-text :font-size="26" label="备注信息"></tm-text>
       <tm-divider></tm-divider>
-      <tm-input :inputPadding="[12]" placeholder="备注特殊要求" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
+      <tm-input :inputPadding="[12]" v-model="remarksValue" placeholder="备注特殊要求" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
     </tm-sheet>
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
       <view class="relative flex flex-row flex-around flex-row-center-between bottom pa-10">
@@ -74,24 +74,26 @@
           </view>
         </view>
         <view class="flex flex-row flex-1 flex-row-center-end">
-          <tm-button label="确认下单" :round="24" color="green"></tm-button>
+          <tm-button label="确认下单" :round="24" color="green" @click="placeOrderClick"></tm-button>
         </view>
       </view>
     </view>
     <!-- 积分弹出框  --->
-    <tmDrawer placement="bottom" v-model:show="showWin">
+    <tmDrawer placement="bottom" v-model:show="showWin" @ok="integraClick">
       <tm-radio-group v-model="integralChoose">
         <view class="felx flex-col flex-1">
-          <view class="pa-10"><tm-radio color="green" value="none" label="不使用"></tm-radio></view>
+          <view class="pa-10"><tm-radio color="green" value="none" label="暂不使用"></tm-radio></view>
           <view class="pa-10"><tm-radio color="green" value="all" label="全部使用"></tm-radio></view>
           <view class="pt-10 pl-10 pr-10 flex flex-row flex-row-center-between">
             <tm-radio color="green" value="part" label="使用部分"></tm-radio>
-            <tm-text :font-size="24" color="red" _class="font-weight-b" label="可用（32）分"></tm-text>
+            <tm-text :font-size="24" color="red" _class="font-weight-b" :label="`可用（${userInfo.integral ?? 0}）分`"></tm-text>
           </view>
         </view>
       </tm-radio-group>
       <tm-divider></tm-divider>
-      <view class="ma-20" v-if="integralChoose === 'part'"><tm-input placeholder="请输入积分" suffixLabel="分"></tm-input></view>
+      <view class="ma-20" v-if="integralChoose === 'part'">
+        <tm-input placeholder="请输入积分" suffixLabel="分" v-model="integralInput" />
+      </view>
     </tmDrawer>
   </tm-app>
 </template>
@@ -113,27 +115,34 @@ import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
 import tmRadio from '@/tmui/components/tm-radio/tm-radio.vue'
 import tmRadioGroup from '@/tmui/components/tm-radio-group/tm-radio-group.vue'
 
-import { useAppHook } from '@/store'
+import { useAppHook, useUserHook } from '@/store'
 import { computed, reactive, ref } from 'vue'
 import { getDefaultAddress } from '@/api/user'
 import { goodList, queryCartOrderList } from '@/api/good'
+import { placeOrder } from '@/api/order'
 import { TEMPLATE_IDS } from '@/constant'
 import { onLoad } from '@dcloudio/uni-app'
-import { message, loading, hideLoading } from '@/utils/dialog'
+import { message, loading, hideLoading, confirm } from '@/utils/dialog'
 
 const appStore = useAppHook()
+const userStore = useUserHook()
 
 const _totalBarHeight = computed(() => {
   const safeBottom = appStore.getSafeBottom()
   return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
 })
-
+const userInfo: User.UserInfo = userStore.getUserInfo
 const content = ref(['点击获取订单实时消息~'])
+const goodIds = reactive<string[]>([])
 const showWin = ref(false)
 const address = reactive<User.Address>({
   id: undefined
 })
 const integralChoose = ref('none')
+const integralInput = ref<number>(0)
+const integralValue = ref<string>('暂不使用')
+const remarksValue = ref<string>('')
+
 const cartGoods = reactive<Good.CartResult[]>([])
 
 onLoad((ops: any) => {
@@ -147,7 +156,9 @@ onLoad((ops: any) => {
     gids = JSON.stringify(['1'])
   }
   _loadAddress()
-  _loadGood(JSON.parse(gids))
+  const jsonGids = JSON.parse(gids)
+  _loadGood(jsonGids)
+  goodIds.push(...jsonGids)
 })
 
 const sumNum = computed(() => {
@@ -174,6 +185,42 @@ const addressClick = () => {
       uni.$once('address:selected::success', data => {
         Object.assign(address, { ...data.address })
       })
+    },
+    fail: () => {}
+  })
+}
+
+const integraClick = () => {
+  integralInput.value = uni.$tm.u.isNumber(integralInput.value, 0)
+  if (integralInput.value > (userInfo.integral ?? 0)) {
+    integralInput.value = userInfo.integral ?? 0
+  }
+  switch (integralChoose.value) {
+    case 'all':
+      integralValue.value = '全部使用'
+      break
+    case 'part':
+      integralValue.value = integralInput.value + '分'
+      break
+    default:
+      integralValue.value = '暂不使用'
+  }
+}
+
+const placeOrderClick = () => {
+  confirm({
+    title: '确认订单内容无误？',
+    success: () => {
+      loading()
+      placeOrder(address.id ?? '', integralInput.value, remarksValue.value, goodIds)
+        .then(() => {
+          hideLoading()
+          uni.$tm.u.routerTo('/pages/result/result', 'redirect')
+        })
+        .catch((err: any) => {
+          hideLoading()
+          console.log(err)
+        })
     },
     fail: () => {}
   })

@@ -95,6 +95,15 @@
         "titlePenetrate": "YES",
         "transparentTitle": "always"
       }
+    },
+    {
+      "path": "pages/public/userprotocol",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
     }
   ],
   "globalStyle": {
