@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 10:54:52
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-10 18:14:55
+ * @LastEditTime: 2023-04-11 18:13:48
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\result\result.nvue
  * @Description: 
  * 
@@ -11,11 +11,27 @@
 <template>
   <tm-app>
     <tm-navbar title="订单结果" color="#70DB93"></tm-navbar>
-    <tm-result color="green" status="success" title="下单成功" btnText="查看详情"></tm-result>
+    <tm-result color="green" status="success" title="下单成功" btnText="查看详情" @click="detailClick"></tm-result>
   </tm-app>
 </template>
 <script lang="ts" setup>
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmResult from '@/tmui/components/tm-result/tm-result.vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { ref } from 'vue'
+
+const orderValue = ref<string>('')
+
+onLoad((opts: any) => {
+  const { orderId } = opts
+  if (!orderId) {
+    return
+  }
+  orderValue.value = orderId
+})
+
+const detailClick = () => {
+  uni.$tm.u.routerTo('/pages/order/detail/index', 'navigate')
+}
 </script>

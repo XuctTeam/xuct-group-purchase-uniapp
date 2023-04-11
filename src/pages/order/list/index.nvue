@@ -1,0 +1,52 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-04-11 18:29:35
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-04-11 18:55:54
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\list\index.nvue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
+<template>
+  <tm-app>
+    <tm-navbar title="我的订单" color="#70DB93"></tm-navbar>
+    <tm-tabs @change="tabschange" :width="_width" showTabsLineAni :item-width="140" default-name="2">
+      <tm-tabs-pane v-for="(item, index) in tabsTitle" :key="index" :name="item.title" :title="item.title">
+        <tm-sheet :margin="[0, 0]">
+          <tm-text :font-size="30" _class="font-weight-b" color="red" :label="item + ';本组件可以开启swiper属性，你现在可以尝试左右滑动。开启左右滑动，页面最好禁用滚动，以防与页面事件冲突。(当然是兼容了WEB pc端)'"></tm-text>
+          <tm-text :font-size="30" _class="font-weight-b" :label="'开启左右滑动后，本组件已优化性能，只会渲染本身，以及前后的页面内容，也就是三个页面的内容，其它页面隐藏不显示。'"></tm-text>
+          <tm-divider></tm-divider>
+        </tm-sheet>
+      </tm-tabs-pane>
+    </tm-tabs>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmTabs from '@/tmui/components/tm-tabs/tm-tabs.vue'
+import tmTabsPane from '@/tmui/components/tm-tabs-pane/tm-tabs-pane.vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { computed, ref } from 'vue'
+import { useAppHook } from '@/store'
+
+const tabsTitle = ref([
+  { key: '1', title: '选项1', icon: 'tmicon-ios-leaf' },
+  { key: '2', title: '选项2', icon: 'tmicon-ios-umbrella' },
+  { key: '3', title: '选项3', dot: true, dotColor: 'yellow', icon: 'tmicon-ios-rocket' },
+  { key: '4', title: '选项4', dot: false, count: '3', icon: 'tmicon-ios-partly-sunny' }
+])
+
+const appStore = useAppHook()
+
+const _width = computed(() => {
+  return uni.$tm.u.torpx(appStore.getWindowWidth())
+})
+
+function tabschange(key: string | number) {
+  console.log(key)
+}
+
+onLoad((opts: any) => {})
+</script>
