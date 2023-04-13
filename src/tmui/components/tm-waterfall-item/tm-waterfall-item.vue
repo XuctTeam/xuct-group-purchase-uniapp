@@ -1,27 +1,8 @@
 <template>
-  <view
-    ref="itemWall"
-    class="absolute itemWall"
-    :style="[!isPush ? { transform: 'translateX(-1000px)' } : '', isPush ? { transform: `translateX(${_nodeInfo.left}px) translateY(${_nodeInfo.top}px)` } : '']"
-  >
+  <view ref="itemWall" class="absolute itemWall" :style="[!isPush ? { transform: 'translateX(-1000px)' } : '', isPush ? { transform: `translateX(${_nodeInfo.left}px) translateY(${_nodeInfo.top}px)` } : '']">
     <tm-sheet :margin="[0, 0]" :padding="[0, 0]" :round="props.round" :width="_width" unit="px" :color="props.color" _class="flex flex-col flex-col-top-start">
-      <tm-image
-        v-if="!imgerror && props.img"
-        @click="onImgClick"
-        :round="props.round"
-        @load="imgLoadSuccess"
-        @error="error"
-        :src="props.img"
-        unit="px"
-        :height="_nodeInfo.imgHeight"
-        :width="_nodeInfo.imgWidth"
-      ></tm-image>
-      <view
-        class="flex flex-row flex-row-center-center"
-        :userInteractionEnabled="false"
-        v-if="imgerror"
-        :style="[imgerror ? { height: _nodeInfo.imgWidth + 'px', width: _nodeInfo.imgWidth + 'px' } : '']"
-      >
+      <tm-image v-if="!imgerror && props.img" @click="onImgClick" :round="props.round" @load="imgLoadSuccess" @error="error" :src="props.img" unit="px" :height="_nodeInfo.imgHeight" :width="_nodeInfo.imgWidth"></tm-image>
+      <view class="flex flex-row flex-row-center-center" :userInteractionEnabled="false" v-if="imgerror" :style="[imgerror ? { height: _nodeInfo.imgWidth + 'px', width: _nodeInfo.imgWidth + 'px' } : '']">
         <tm-icon name="tmicon-exclamation-circle"></tm-icon>
       </view>
 

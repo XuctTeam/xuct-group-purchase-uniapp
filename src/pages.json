@@ -7,16 +7,7 @@
   // },
   "pages": [
     {
-      "path": "pages/order/confirm/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-    {
-      "path": "pages/cart/index",
+      "path": "pages/member/index/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -34,7 +25,7 @@
       }
     },
     {
-      "path": "pages/good/index",
+      "path": "pages/member/login/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -43,7 +34,7 @@
       }
     },
     {
-      "path": "pages/member/index/index",
+      "path": "pages/good/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -51,6 +42,7 @@
         "transparentTitle": "always"
       }
     },
+
     {
       "path": "pages/member/setting/index",
       "style": {
@@ -60,15 +52,7 @@
         "transparentTitle": "always"
       }
     },
-    {
-      "path": "pages/member/login/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
+
     {
       "path": "pages/member/userinfo/index",
       "style": {
@@ -106,7 +90,17 @@
       }
     },
     {
-      "path": "pages/order/result/index",
+      "path": "pages/cart/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    //订单
+    {
+      "path": "pages/order/list/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -124,7 +118,16 @@
       }
     },
     {
-      "path": "pages/order/list/index",
+      "path": "pages/order/confirm/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/order/result/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",

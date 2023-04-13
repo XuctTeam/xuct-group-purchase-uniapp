@@ -10,7 +10,7 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="订单确认" color="#70DB93"></tm-navbar>
+    <tm-navbar title="确认订单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <tm-roll-notice :shadow="2" :round="2" color="green" :margin="[10, 10]" :text="false" linear="right" fontColor="#fff" :list="content" @click="noticeClick" />
     <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
       <tm-cell :margin="[0, 0]" :titleFontSize="30" showAvatar @click="addressClick">

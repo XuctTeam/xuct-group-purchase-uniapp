@@ -10,7 +10,7 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="编辑地址" color="#70DB93" fontColor="white" />
+    <tm-navbar title="编辑地址" color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <tm-form ref="form" @submit="onConfirm" v-model="address" :label-width="170" :margin="[10, 10]">
       <tm-form-item required label="收货人" field="userName" :rules="[{ required: true, message: '收货人不能为空' }]">
         <tm-input :inputPadding="[0, 0]" placeholder="请输入收货人" v-model.lazy="address.userName" :transprent="true" :showBottomBotder="false"></tm-input>

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 18:54:33
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-03 09:05:33
+ * @LastEditTime: 2023-04-13 14:49:02
  * @FilePath: \xuct-group-purchase-uniapp\src\utils\dialog.ts
  * @Description:
  *
@@ -38,9 +38,9 @@ export const confirm = ({ title, success, fail }: DialogOpt) => {
   })
 }
 
-export const loading = () => {
+export const loading = (title?: string) => {
   uni.showLoading({
-    title: '加载中',
+    title: title ?? '加载中',
     mask: true
   })
 }

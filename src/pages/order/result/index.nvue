@@ -10,7 +10,7 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="订单结果" color="#70DB93"></tm-navbar>
+    <tm-navbar title="订单结果" color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <tm-result color="green" status="success" title="下单成功" btnText="查看详情" @click="detailClick"></tm-result>
   </tm-app>
 </template>

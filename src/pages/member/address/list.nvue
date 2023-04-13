@@ -19,7 +19,7 @@
 -->
 <template>
   <tm-app class="flex flex-col">
-    <tm-navbar title="收货地址" color="#70DB93" fontColor="white" />
+    <tm-navbar title="收货地址" color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <tm-sheet :margin="[20, 20]" :round="3" :shadow="2">
       <tm-input prefix="tmicon-search" searchLabel="搜索" placeholder="请输入关键词" v-model.lazy="searchValue" showClear @search="onSearch" @clear="onClear"></tm-input>
     </tm-sheet>

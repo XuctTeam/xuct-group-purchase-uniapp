@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 13:42:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-07 09:38:16
+ * @LastEditTime: 2023-04-13 14:49:37
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\login\index.nvue
  * @Description: 
  * 
@@ -18,13 +18,34 @@
         </view>
       </view>
       <view class="login-tip">
-        <view class="login-tip-big">申请获取以下权限</view>
-        <view class="login-tip-small">获得你的公开信息 （昵称、头像等）</view>
+        <view class="login-tip-big">为提供优质服务，团到家需要您的以下信息</view>
+        <view class="login-tip-small">你的公开信息 （昵称、头像等）</view>
       </view>
     </view>
     <view class="login-b flc">
       <tm-button :round="6" label="拒绝" @click="reject"></tm-button>
       <tm-button :round="6" :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" linear="left" label="允许" @click="login"></tm-button>
+    </view>
+    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
+      <view class="relative flex flex-row flex-around flex-row-center-center pa-10 bottom">
+        <!-- 请注意我这里使用了标准的写法v-slot:default="{checked}" -->
+        <!-- 如果组件没有插槽数据,变成v-slot:default -->
+        <!-- 那怕你不使用数据,也要这么写.如果不写template v-slot:default="{checked}"> 将会产生兼容性,已知微信小程序会丢失插槽内容 -->
+        <tm-checkbox :round="25" :size="36" color="green" @change="checkChange">
+          <template v-slot:default="{ checked }">
+            <view class="flex flex-row">
+              <tm-text color="grey" label="我已经阅读并同意"></tm-text>
+              <view>
+                <tm-text color="success" label="《服务协议》"></tm-text>
+              </view>
+              <tm-text color="grey" label="和"></tm-text>
+              <view>
+                <tm-text color="success" label="《隐私协议》"></tm-text>
+              </view>
+            </view>
+          </template>
+        </tm-checkbox>
+      </view>
     </view>
   </tm-app>
 </template>
@@ -32,14 +53,35 @@
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
-
+import tmCheckbox from '@/tmui/components/tm-checkbox/tm-checkbox.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import { computed, ref } from 'vue'
 import { loginByCode } from '@/api/login'
-import { useUserHook } from '@/store'
-import { confirm, loading, hideLoading } from '@/utils/dialog'
+import { useAppHook, useUserHook } from '@/store'
+import { confirm, loading, hideLoading, message } from '@/utils/dialog'
+
+const checked = ref<boolean>(false)
 
 const userStore = useUserHook()
+const appStore = useAppHook()
+
+const _totalBarHeight = computed(() => {
+  const safeBottom = appStore.getSafeBottom()
+  return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
+})
+
+const checkChange = (e: any) => {
+  checked.value = e
+}
 
 const login = () => {
+  if (!checked.value) {
+    message({
+      title: '请勾选协议',
+      icon: 'error'
+    })
+    return
+  }
   _login()
     .then((res: any) => {
       const { tokenValue, ...user } = res
@@ -74,7 +116,7 @@ const _login = () => {
     uni.login({
       provider: 'weixin', //使用微信登录
       success: async loginRes => {
-        loading()
+        loading('登录中...')
         try {
           const loinResult = await loginByCode(loginRes.code)
           const { tokenValue, user } = loinResult.data

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-03 21:01:22
+ * @LastEditTime: 2023-04-13 18:09:24
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\index.nvue
  * @Description: 
  * 
@@ -10,7 +10,7 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="商品详情" color="#70DB93"></tm-navbar>
+    <tm-navbar title="商品详情" color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
     <tm-sheet :margin="[10, 10, 10, 10]" :height="140" :round="4" :shadow="4">
       <view class="title">{{ name }}</view>
@@ -56,8 +56,8 @@
           </view>
         </view>
         <view class="flex flex-row flex-1 ma-10 flex-row-center-end">
-          <tm-button color="red" _class="round-l-24 round-r-0" linear="left" linear-deep="accent" :round="5" label="加入购物车" :loading="addLoading" @click="onAddCart"></tm-button>
-          <tm-button color="orange" _class="round-r-24 round-l-0" label="立即下单"></tm-button>
+          <tm-button color="rgba(235, 242, 237, 1)" fontColor="green"  _class="round-l-24 round-r-0" :round="5" label="加入购物车" :loading="addLoading" @click="onAddCart"></tm-button>
+          <tm-button color="green" _class="round-r-24 round-l-0" label="立即下单"></tm-button>
         </view>
       </view>
     </view>

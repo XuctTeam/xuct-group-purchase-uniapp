@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 08:58:16
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-31 09:49:06
+ * @LastEditTime: 2023-04-13 17:14:18
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -10,29 +10,15 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="团到家" color="#70DB93" hideHome></tm-navbar>
-    <tm-carousel autoplay :margin="[0, 16]" :round="3" :width="700" :height="300" :list="bannerImages" :display-multiple-items="0" rangKey="image"></tm-carousel>
-    <tm-sheet :margin="[16, 16]" :shadow="4" :round="4">
-      <tm-grid :width="680" :col="4">
-        <tm-grid-item :height="140">
-          <tm-image :width="80" :height="80" src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico01.png"></tm-image>
-          <view style="margin-top: 6px">
-            <tm-text _class="text-overflow-1" :font-size="24" label="限时抢购"></tm-text>
-          </view>
-        </tm-grid-item>
-        <tm-grid-item color="orange" :height="140">
-          <tm-image :width="80" :height="80" src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico02.png"></tm-image>
-          <view style="margin-top: 6px">
-            <tm-text _class="text-overflow-1" :font-size="24" label="限时抢购"></tm-text>
-          </view>
-        </tm-grid-item>
-        <tm-grid-item color="green" :height="140">
-          <tm-image :width="80" :height="80" src="http://wdl.jianbaizhan.com//dl-mall-shopping/static/images/index/nav-ico03.png"></tm-image>
-          <view style="margin-top: 6px">
-            <tm-text _class="text-overflow-1" :font-size="24" label="限时抢购"></tm-text>
-          </view>
-        </tm-grid-item>
-      </tm-grid>
+    <tm-navbar title="团到家" hideHome color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <tm-sheet :margin="[20, 20]" :padding="[0, 0, 0, 20]" :height="520" :round="10">
+      <tm-carousel autoplay :round="10" :margin="[0, 0]" :width="700" :height="300" :list="bannerImages" :display-multiple-items="0" rangKey="image"></tm-carousel>
+      <tm-row :width="700" :column="4" :margin="[0, 30]">
+        <tm-col transprent :height="200" v-for="(item, index) in menus" :key="index">
+          <tm-image :width="140" :height="140" :src="`/static/images/menu-${item.id}.png`"></tm-image>
+          <tm-text _class="text-overflow-1" color="rgba(153, 153, 153, 1)" :font-size="28" :label="item.title"></tm-text>
+        </tm-col>
+      </tm-row>
     </tm-sheet>
 
     <view class="flex flex-col flex-col-top-center">
@@ -40,15 +26,19 @@
         <tm-waterfall-item :img="item.firstDrawing" :id="item.id" v-for="(item, index) in goodInfos" :key="index" @img-click="click">
           <view class="pt-12 pb-12 px-12" @click="$event => click">
             <tm-text :label="item.name" _class="text-overflow-2"></tm-text>
-            <view class="flex flex-row flex-row-bottom-start mt-24">
-              <tm-text color="orange" :font-size="24" label="库存"></tm-text>
+            <view class="flex flex-row flex-row-center-start mt-10 mb-10">
+              <tm-tag color="green" label="礼物" size="xs"></tm-tag>
+              <tm-tag color="orange" label="包送" size="xs"></tm-tag>
+            </view>
+            <view class="flex flex-row flex-row-bottom-start mb-10">
+              <tm-text color="grey" :font-size="24" label="库存:"></tm-text>
               <tm-text color="grey" :font-size="24" :label="item.inventory"></tm-text>
             </view>
           </view>
         </tm-waterfall-item>
       </tm-waterfall>
     </view>
-    <tm-float-button :actions="fabActions" actionsPos="top" position="br" :btn="{ icon: 'tmicon-plus', linear: 'bottom', color: 'green' }" @change="floatClick"></tm-float-button>
+    <tm-float-button :actions="fabActions" actionsPos="top" position="br" :btn="{ icon: 'tmicon-plus', color: 'rgba(61, 185, 99, 1)' }" @change="floatClick"></tm-float-button>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -62,9 +52,10 @@ import tmWaterfallItem from '@/tmui/components/tm-waterfall-item/tm-waterfall-it
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCarousel from '@/tmui/components/tm-carousel/tm-carousel.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
-import tmGrid from '@/tmui/components/tm-grid/tm-grid.vue'
-import tmGridItem from '@/tmui/components/tm-grid-item/tm-grid-item.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
+import tmTag from '@/tmui/components/tm-tag/tm-tag.vue'
+import tmRow from '@/tmui/components/tm-row/tm-row.vue'
+import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 import { bannerList } from '@/api/banner'
 import { goodList } from '@/api/good'
 
@@ -73,8 +64,15 @@ const goodInfos = reactive<Good.GoodResult[]>([])
 const bannerImages = reactive<API.BannerResult[]>([])
 
 const fabActions = [
-  { icon: 'tmicon-shopping-cart-fill', color: 'red', linear: 'top', label: '购物车' },
-  { icon: 'tmicon-user-fill', color: 'blue', label: '我的' }
+  { icon: 'tmicon-shopping-cart-fill', color: 'red', label: '购物车' },
+  { icon: 'tmicon-user-fill', color: 'orange', label: '我的' }
+]
+
+const menus = [
+  { id: '1', title: '热销榜单' },
+  { id: '2', title: '包邮产品' },
+  { id: '3', title: '奶类蛋品' },
+  { id: '4', title: '酒水饮料' }
 ]
 
 onLoad(() => {
@@ -120,3 +118,9 @@ function floatClick(e: any) {
   })
 }
 </script>
+<style>
+.search {
+  background-color: #69c261;
+  height: 200rpx;
+}
+</style>
