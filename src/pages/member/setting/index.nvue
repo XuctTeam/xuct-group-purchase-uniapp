@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 12:22:42
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-13 18:17:14
+ * @LastEditTime: 2023-04-13 23:00:20
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\setting\index.nvue
  * @Description: 
  * 
@@ -17,7 +17,7 @@
         <view class="font-weight-b">基础资料</view>
       </view>
       <tm-divider></tm-divider>
-      <tm-cell :titleFontSize="28" bottomBorder title="个人资料" :margin="[0, 0]" url="/pages/member/userinfo/index" />
+      <tm-cell :titleFontSize="28" bottomBorder title="个人资料" :margin="[0, 0]" @click="personClick" />
       <tm-cell :titleFontSize="28" bottomBorder title="意见反馈" :margin="[0, 0]" />
     </tm-sheet>
     <tm-sheet :margin="[20, 20]" :shadow="4" :round="2">
@@ -38,6 +38,32 @@
       <tm-cell :titleFontSize="28" bottomBorder title="隐私协议" :margin="[0, 0]" url="/pages/public/userprotocol" />
       <tm-cell :titleFontSize="28" bottomBorder title="版本号" :rightText="versionRef" :margin="[0, 0]" />
     </tm-sheet>
+
+    <tm-drawer placement="bottom" v-model:show="showWin" okText="保存" okColor="green" :overlayClick="false" @ok="onSave">
+      <tm-cell showAvatar :avatar="userInfo.avatar" :avatarSize="80" :margin="[0, 0]" :titleFontSize="30" bottomBorder>
+        <template v-slot:right>
+          <tm-button color="green" size="small" text label="更新" @chooseavatar="chooseavatar" open-type="chooseAvatar"></tm-button>
+        </template>
+      </tm-cell>
+      <tm-cell title="昵称" bottomBorder>
+        <template v-slot:right>
+          <input
+            type="nickname"
+            class="nickname_input"
+            placeholder-class="nickname_placeholder"
+            placeholder="请输入昵称"
+            maxlength="15"
+            :value="nickNameRef"
+            @change="nickNameChage"
+          />
+        </template>
+      </tm-cell>
+      <tm-cell title="手机号" bottomBorder>
+        <template v-slot:right>
+          <input class="nickname_input" placeholder-class="nickname_placeholder" placeholder="请输入手机号" maxlength="15" :value="phoneRef" @change="phoneChage" />
+        </template>
+      </tm-cell>
+    </tm-drawer>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -46,11 +72,26 @@ import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
 import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
-import { ref } from 'vue'
+import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
+import tmAvatar from '@/tmui/components/tm-avatar/tm-avatar.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+
+import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { getConfig } from '@/api/config'
+import { message } from '@/utils/dialog'
+import { useUserHook } from '@/store'
+
+import { upload } from '@/services/upload'
+import { saveUserInfo } from '@/api/user'
 
 const versionRef = ref<string>('')
+const showWin = ref(false)
+const userStore = useUserHook()
+const userInfo = userStore.getUserInfo
+
+const nickNameRef = ref<string>(userInfo?.nickname || '')
+const phoneRef = ref<string>(userInfo?.phone || '')
 
 onLoad(() => {
   getConfig(2).then(res => {
@@ -58,4 +99,79 @@ onLoad(() => {
     versionRef.value = content
   })
 })
+
+const personClick = () => {
+  showWin.value = true
+}
+
+const chooseavatar = (avatar: any) => {
+  const tempPath = avatar?.detail?.avatarUrl
+  if (!tempPath) {
+    message({
+      title: '头像选择失败',
+      icon: 'error'
+    })
+    return
+  }
+  upload(tempPath, {}, ({ code, data }: API.UploadResult) => {
+    if (code === -1) {
+      message({
+        title: data,
+        icon: 'error'
+      })
+      return
+    }
+    userStore.setUserInfo({ ...userInfo, avatar: data })
+  })
+}
+
+const nickNameChage = (e: any) => {
+  nickNameRef.value = e.detail?.value
+}
+
+const phoneChage = (e: any) => {
+  phoneRef.value = e.detail?.value
+}
+
+const onSave = () => {
+  if (!phoneRef.value) {
+    message({
+      title: '电话不能为空',
+      icon: 'error'
+    })
+    throw new Event('')
+  }
+
+  if (!uni.$tm.u.isPhone(phoneRef.value)) {
+    message({
+      title: '手机格式错误',
+      icon: 'error'
+    })
+    return Promise.reject('')
+  }
+
+  if (!nickNameRef.value) {
+    message({
+      title: '昵称不能为空',
+      icon: 'error'
+    })
+    return
+  }
+  saveUserInfo(phoneRef.value, nickNameRef.value)
+    .then(() => {
+      userStore.setUserInfo({ ...userInfo, nickname: nickNameRef.value, phone: phoneRef.value })
+      showWin.value = false
+    })
+    .catch((err: any) => {
+      console.log(err)
+      showWin.value = false
+    })
+}
 </script>
+
+<style>
+.nickname_placeholder,
+.nickname_input {
+  text-align: right;
+}
+</style>
