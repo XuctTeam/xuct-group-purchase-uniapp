@@ -24,7 +24,13 @@ declare namespace API {
   }
 
   type ConfigResult = {
-    type: number,
+    type: number
     content: string
+  }
+
+  type PageResult<T> = {
+    pageTotal: number
+    total: number
+    list: T[]
   }
 }

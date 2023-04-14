@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-06 18:28:56
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-11 18:26:42
+ * @LastEditTime: 2023-04-14 18:30:00
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
@@ -25,39 +25,31 @@
             <view class="flex flex-row">
               <tm-text :label="`${address.userName}-${address.telNumber}`"></tm-text>
             </view>
-            <view class="flex flex-row">
+            <view class="flex flex-row flex-row-center-center">
               <tm-text :label="`${address.provinceName}-${address.cityName}-${address.countyName}`"></tm-text>
+              <tm-text color="grey" :font-size="24" :label="address.detailInfo"></tm-text>
             </view>
-            <tm-text color="grey" :font-size="24" :label="address.detailInfo"></tm-text>
           </view>
         </template>
       </tm-cell>
     </tm-sheet>
-    <view>
-      <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
-        <view v-for="(item, index) in cartGoods" :key="index">
-          <tm-row :width="712" :column="10" color="blue-grey" :gutter="1">
-            <tm-col :col="3" :height="160">
-              <tm-image :width="160" :height="160" :round="4" :src="item.firstDrawing"></tm-image>
-            </tm-col>
-            <tm-col :col="7">
-              <view class="right">
-                <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
-                <view class="flex flex-row flex-row-center-between pr-10">
-                  <tm-text color="orange" :label="`单位：${item.unit}`"></tm-text>
-                  <tm-text color="grey" :label="`×${item.num}`"></tm-text>
-                </view>
-              </view>
-            </tm-col>
-          </tm-row>
-          <tm-divider />
+    <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
+      <view v-for="(item, index) in cartGoods" :key="index" class="flex flex-row pa-10">
+        <tm-image :width="160" :height="160" :round="4" :src="item.firstDrawing" />
+        <view class="right">
+          <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
+          <view class="flex flex-row flex-row-center-between pr-10">
+            <tm-text color="orange" :label="`单位：${item.unit}`"></tm-text>
+            <tm-text color="grey" :label="`×${item.num}`"></tm-text>
+          </view>
         </view>
-        <view class="flex flex-row flex-row-center-between ma-20">
-          <tm-text :font-size="26" label="共计商品总数"></tm-text>
-          <tm-text :font-size="26" :label="`${sumNum}个`"></tm-text>
-        </view>
-      </tm-sheet>
-    </view>
+      </view>
+      <tm-divider />
+      <view class="flex flex-row flex-row-center-between ma-20">
+        <tm-text :font-size="26" label="共计商品总数"></tm-text>
+        <tm-text :font-size="26" :label="`${sumNum}个`"></tm-text>
+      </view>
+    </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
       <tm-cell :margin="[0, 0]" :titleFontSize="30" title="使用积分" rightColor="red" :rightText="integralValue" @click="() => (showWin = !showWin)" />
     </tm-sheet>
@@ -66,6 +58,8 @@
       <tm-divider></tm-divider>
       <tm-input :inputPadding="[12]" v-model="remarksValue" placeholder="备注特殊要求" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
     </tm-sheet>
+    <view :style="{ height: _totalBarHeight + 'rpx' }"></view>
+
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
       <view class="relative flex flex-row flex-around flex-row-center-between bottom pa-10">
         <view class="ml-20">
@@ -106,8 +100,6 @@ import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
 import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
-import tmRow from '@/tmui/components/tm-row/tm-row.vue'
-import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import tmRollNotice from '@/tmui/components/tm-roll-notice/tm-roll-notice.vue'
@@ -122,15 +114,16 @@ import { goodList, queryCartOrderList } from '@/api/good'
 import { placeOrder } from '@/api/order'
 import { TEMPLATE_IDS } from '@/constant'
 import { onLoad } from '@dcloudio/uni-app'
-import { message, loading, hideLoading, confirm } from '@/utils/dialog'
+import { loading, hideLoading, confirm } from '@/utils/dialog'
 
 const appStore = useAppHook()
 const userStore = useUserHook()
+const safeBottom = appStore.getSafeBottom()
 
 const _totalBarHeight = computed(() => {
-  const safeBottom = appStore.getSafeBottom()
   return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
 })
+
 const userInfo: User.UserInfo = userStore.getUserInfo
 const content = ref(['点击获取订单实时消息~'])
 const goodIds = reactive<string[]>([])
@@ -261,6 +254,7 @@ const _loadGood = (gids: string[]) => {
   flex-direction: column;
   justify-content: space-between;
   height: 160rpx;
-  padding: 10rpx 2rpx;
+  flex: 1;
+  padding: 10rpx;
 }
 </style>

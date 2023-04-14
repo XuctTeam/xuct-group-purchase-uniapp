@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-13 17:18:44
+ * @LastEditTime: 2023-04-14 18:52:09
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -16,7 +16,7 @@
     </view>
     <view v-else>
       <view v-if="cartGoods.length === 0 && !load">
-        <tm-result color="green" icon="tmicon-shopping-cart-fill"  title="空空如也哦~" subTitle="购物车快饿瘪了 T.T" btnText="去购物" @click="toHome"></tm-result>
+        <tm-result color="green" icon="tmicon-shopping-cart-fill" title="空空如也哦~" subTitle="购物车快饿瘪了 T.T" btnText="去购物" @click="toHome"></tm-result>
       </view>
       <view v-else>
         <view class="top">
@@ -24,24 +24,22 @@
           <tm-button transprent text :shadow="0" size="normal" color="green" :label="!editStatus ? '管理' : '完成'" :width="60" @click="changeState" />
         </view>
         <view class="mt-n20" :style="{ paddingBottom: _totalBarHeight + 'rpx' }">
-          <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" :height="180" v-for="(item, index) in cartGoods" :key="index">
-            <tm-row :width="712" :column="16" color="blue-grey" :gutter="2">
-              <tm-col :col="2">
+          <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" :height="200" v-for="(item, index) in cartGoods" :key="index">
+            <view class="flex flex-row flex-1 flex-row-center-start">
+              <view class="checkbox">
                 <tm-checkbox :round="10" color="green" @change="e => simpleCheckboxChangeState(e, item.goodId)" :value="!!!item.checked"></tm-checkbox>
-              </tm-col>
-              <tm-col :col="14" :height="180">
-                <view class="flex-1 flex flex-row" :style="{ width: '100%' }">
-                  <tm-image :width="180" :round="4" :height="180" :src="item.firstDrawing"></tm-image>
-                  <view class="right">
-                    <tm-text _class="font-weight-b text-overflow-2" :label="item.name"></tm-text>
-                    <view class="flex flex-row flex-row-center-between">
-                      <tm-text>123123</tm-text>
-                      <tm-stepper :max="200" :min="1" :defaultValue="item.num" circular @change="e => chooseNumChange(e, item.goodId)"></tm-stepper>
-                    </view>
+              </view>
+              <view class="flex flex-row flex-1">
+                <tm-image :width="180" :round="4" :height="180" :src="item.firstDrawing"></tm-image>
+                <view class="flex flex-1 flex-col pa-10 detail">
+                  <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
+                  <view class="flex flex-row flex-row-center-between">
+                    <tm-text>123123</tm-text>
+                    <tm-stepper :max="200" :min="1" :defaultValue="item.num" circular @change="e => chooseNumChange(e, item.goodId)"></tm-stepper>
                   </view>
                 </view>
-              </tm-col>
-            </tm-row>
+              </view>
+            </view>
           </tm-sheet>
         </view>
       </view>
@@ -72,8 +70,6 @@ import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmCheckbox from '@/tmui/components/tm-checkbox/tm-checkbox.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmStepper from '@/tmui/components/tm-stepper/tm-stepper.vue'
-import tmRow from '@/tmui/components/tm-row/tm-row.vue'
-import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 
@@ -251,12 +247,12 @@ const _deleteCart = () => {
   padding: 10rpx 30rpx;
 }
 
-.right {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-left: 10rpx;
-  flex: 1;
+.checkbox {
+  width: 80rpx;
+}
+
+.detail {
   width: 0;
+  justify-content: space-between;
 }
 </style>

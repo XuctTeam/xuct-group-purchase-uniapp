@@ -5,9 +5,15 @@
   // 		"^tm-(.*)": "@/tmui/components/tm-$1/tm-$1.vue"
   // 	}
   // },
+
+  "easycom": {
+    "custom": {
+      "^(?!z-paging-refresh|z-paging-load-more)z-paging(.*)": "z-paging/components/z-paging$1/z-paging$1.vue"
+    }
+  },
   "pages": [
     {
-      "path": "pages/member/setting/index",
+      "path": "pages/cart/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -15,8 +21,9 @@
         "transparentTitle": "always"
       }
     },
+    //订单
     {
-      "path": "pages/member/index/index",
+      "path": "pages/order/list/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -34,7 +41,7 @@
       }
     },
     {
-      "path": "pages/member/login/index",
+      "path": "pages/good/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -43,7 +50,25 @@
       }
     },
     {
-      "path": "pages/good/index",
+      "path": "pages/member/index/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/member/setting/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/member/login/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -71,25 +96,6 @@
     },
     {
       "path": "pages/public/userprotocol",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-    {
-      "path": "pages/cart/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-    //订单
-    {
-      "path": "pages/order/list/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",

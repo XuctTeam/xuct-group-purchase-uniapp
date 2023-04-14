@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-11 18:16:11
+ * @LastEditTime: 2023-04-14 15:58:41
  * @FilePath: \xuct-group-purchase-uniapp\src\api\order.ts
  * @Description:
  *
@@ -25,5 +25,21 @@ export const placeOrder = (addressId: string, integral: number, remarks: string,
     integral,
     remarks,
     goodIds
+  })
+}
+
+/**
+ * 分页订单列表
+ *
+ * @param status
+ * @param pageNo
+ * @param pageSize
+ * @returns
+ */
+export const pageOrderList = (pageNo: number, pageSize: number, status: string) => {
+  return request.get<API.PageResult<Order.OrderResult>>('/api/v1/order/list', {
+    status,
+    pageNo,
+    pageSize
   })
 }

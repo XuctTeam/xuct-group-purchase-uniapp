@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 12:22:42
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-13 23:00:20
+ * @LastEditTime: 2023-04-14 09:03:45
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\setting\index.nvue
  * @Description: 
  * 
@@ -39,23 +39,15 @@
       <tm-cell :titleFontSize="28" bottomBorder title="版本号" :rightText="versionRef" :margin="[0, 0]" />
     </tm-sheet>
 
-    <tm-drawer placement="bottom" v-model:show="showWin" okText="保存" okColor="green" :overlayClick="false" @ok="onSave">
-      <tm-cell showAvatar :avatar="userInfo.avatar" :avatarSize="80" :margin="[0, 0]" :titleFontSize="30" bottomBorder>
+    <tm-drawer placement="bottom" v-model:show="showWin" okText="保存" okColor="green" @ok="onSave">
+      <tm-cell showAvatar :avatar="userInfo.avatar" :avatarSize="80" :titleFontSize="30" bottomBorder>
         <template v-slot:right>
           <tm-button color="green" size="small" text label="更新" @chooseavatar="chooseavatar" open-type="chooseAvatar"></tm-button>
         </template>
       </tm-cell>
       <tm-cell title="昵称" bottomBorder>
         <template v-slot:right>
-          <input
-            type="nickname"
-            class="nickname_input"
-            placeholder-class="nickname_placeholder"
-            placeholder="请输入昵称"
-            maxlength="15"
-            :value="nickNameRef"
-            @change="nickNameChage"
-          />
+          <input type="nickname" class="nickname_input" placeholder-class="nickname_placeholder" placeholder="请输入昵称" maxlength="15" :value="nickNameRef" @change="nickNameChage" />
         </template>
       </tm-cell>
       <tm-cell title="手机号" bottomBorder>
@@ -79,7 +71,7 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { getConfig } from '@/api/config'
-import { message } from '@/utils/dialog'
+import { hideLoading, loading, message } from '@/utils/dialog'
 import { useUserHook } from '@/store'
 
 import { upload } from '@/services/upload'
@@ -157,13 +149,16 @@ const onSave = () => {
     })
     return
   }
+  loading()
   saveUserInfo(phoneRef.value, nickNameRef.value)
     .then(() => {
+      hideLoading()
       userStore.setUserInfo({ ...userInfo, nickname: nickNameRef.value, phone: phoneRef.value })
       showWin.value = false
     })
     .catch((err: any) => {
       console.log(err)
+      hideLoading()
       showWin.value = false
     })
 }

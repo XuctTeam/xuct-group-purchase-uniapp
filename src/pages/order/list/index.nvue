@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:29:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-11 18:55:54
+ * @LastEditTime: 2023-04-14 18:04:48
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\list\index.nvue
  * @Description: 
  * 
@@ -10,43 +10,133 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="我的订单" color="#70DB93"></tm-navbar>
-    <tm-tabs @change="tabschange" :width="_width" showTabsLineAni :item-width="140" default-name="2">
-      <tm-tabs-pane v-for="(item, index) in tabsTitle" :key="index" :name="item.title" :title="item.title">
-        <tm-sheet :margin="[0, 0]">
-          <tm-text :font-size="30" _class="font-weight-b" color="red" :label="item + ';本组件可以开启swiper属性，你现在可以尝试左右滑动。开启左右滑动，页面最好禁用滚动，以防与页面事件冲突。(当然是兼容了WEB pc端)'"></tm-text>
-          <tm-text :font-size="30" _class="font-weight-b" :label="'开启左右滑动后，本组件已优化性能，只会渲染本身，以及前后的页面内容，也就是三个页面的内容，其它页面隐藏不显示。'"></tm-text>
-          <tm-divider></tm-divider>
-        </tm-sheet>
-      </tm-tabs-pane>
-    </tm-tabs>
+    <z-paging ref="paging" v-model="orderList" @query="queryList" autoShowBackToTop loadingFullFixed autoShowSystemLoading safeAreaInsetBottom autoScrollToTopWhenReload autoCleanListWhenReload>
+      <!-- 之后-vue3 -->
+      <template #top>
+        <view>
+          <tm-navbar title="我的订单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+          <tm-sheet :margin="[0, 0]" :padding="[20, 30]">
+            <tm-input prefix="tmicon-search" searchLabel="搜索" placeholderStyle="fontSize: 10rpx;" focusColor="green" placeholder="订单编号"></tm-input>
+          </tm-sheet>
+          <tm-tabs :list="tabsTitle" @change="tabschange" :width="_width" showTabsLineAni :item-width="140" v-model:active-name="tabActiveRef" tabsLineAniColor="green" activeFontColor="green"></tm-tabs>
+        </view>
+      </template>
+      <view v-for="(item, index) in orderList" :key="index">
+        <tm-card :status="formateStatus(item.status)" :margin="[10, 10]" :title="`编号:${item.id}`" statusColor="green" content="这是一个基础卡片示例，非常简单且实用。这是一个基础卡片示例，非常简单且实用。">
+          <template v-slot:content>
+            <view class="pa-10">
+              <view v-for="(i, ind) in item.items" :key="ind" class="flex flex-row pt-10 pb-10">
+                <tm-image :width="160" :height="160" :round="4" :src="i.goodFirstDrawing"></tm-image>
+                <view class="right">
+                  <tm-text _class="text-overflow-2" :label="i.goodName" />
+                  <view class="flex flex-row flex-row-center-between">
+                    <tm-text color="orange" :label="`单位：${i.goodUnit}`" />
+                    <tm-text color="grey" :label="`×${i.num}`" />
+                  </view>
+                </view>
+              </view>
+              <tm-divider />
+              <view class="flex flex-row flex-row-center-between">
+                <tm-text :font-size="26" color="grey" label="共计商品类型"></tm-text>
+                <tm-text :font-size="26" color="grey" :label="`${item.goodNum}类`"></tm-text>
+              </view>
+            </view>
+          </template>
+          <template v-slot:action>
+            <view class="flex flex-row flex-row-center-end flex-1">
+              <tm-button :round="24" size="small" :margin="[24, 0]" label="确认" :font-size="24" color="green"></tm-button>
+              <tm-button :round="24" size="small" label="取消" :font-size="24" color="white"></tm-button>
+            </view>
+          </template>
+        </tm-card>
+      </view>
+    </z-paging>
   </tm-app>
 </template>
 <script lang="ts" setup>
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmTabs from '@/tmui/components/tm-tabs/tm-tabs.vue'
-import tmTabsPane from '@/tmui/components/tm-tabs-pane/tm-tabs-pane.vue'
+import tmCard from '@/tmui/components/tm-card/tm-card.vue'
+import tmInput from '@/tmui/components/tm-input/tm-input.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmImage from '@/tmui/components/tm-image/tm-image.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
+
 import { onLoad } from '@dcloudio/uni-app'
 import { computed, ref } from 'vue'
 import { useAppHook } from '@/store'
+import { pageOrderList } from '@/api/order'
+import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 
 const tabsTitle = ref([
-  { key: '1', title: '选项1', icon: 'tmicon-ios-leaf' },
-  { key: '2', title: '选项2', icon: 'tmicon-ios-umbrella' },
-  { key: '3', title: '选项3', dot: true, dotColor: 'yellow', icon: 'tmicon-ios-rocket' },
-  { key: '4', title: '选项4', dot: false, count: '3', icon: 'tmicon-ios-partly-sunny' }
+  { key: '0', title: '全部' },
+  { key: '1', title: '待付款' },
+  { key: '2', title: '待发货' },
+  { key: '3', title: '待收货' },
+  { key: '4', title: '已完成' }
 ])
-
 const appStore = useAppHook()
-
 const _width = computed(() => {
   return uni.$tm.u.torpx(appStore.getWindowWidth())
 })
+const paging = ref<any>(null)
+const tabActiveRef = ref<string>('0')
+let orderList = ref<Order.OrderResult[]>([])
+const DayJs = dayjs.default
 
-function tabschange(key: string | number) {
-  console.log(key)
+const queryList = (pageNo: number, pageSize: number) => {
+  pageOrderList(pageNo, pageSize, tabActiveRef.value || '0')
+    .then(res => {
+      paging.value.complete(res.data.list)
+    })
+    .catch((err: any) => {
+      //如果请求失败写paging.value.complete(false)，会自动展示错误页面
+      //注意，每次都需要在catch中写这句话很麻烦，z-paging提供了方案可以全局统一处理
+      //在底层的网络请求抛出异常时，写uni.$emit('z-paging-error-emit');即可
+      console.log(err)
+      paging.value.complete(false)
+    })
 }
 
-onLoad((opts: any) => {})
+const tabschange = (key: string | number) => {
+  paging.value.reload()
+}
+
+const formateStatus = (status: number) => {
+  switch (status) {
+    case 1:
+      return '待付款'
+    case 2:
+      return '待发货'
+    case 3:
+      return '待收货'
+    default:
+      return '已完成'
+  }
+}
+
+onLoad((opts: any) => {
+  const { key } = opts
+  if (!key) {
+    return
+  }
+  tabActiveRef.value = key
+})
 </script>
+<style>
+.item-image {
+  width: 120rpx;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  height: 160rpx;
+  padding: 10rpx;
+}
+</style>
