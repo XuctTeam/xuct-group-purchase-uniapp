@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 12:22:42
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-14 09:03:45
+ * @LastEditTime: 2023-04-16 20:39:38
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\setting\index.nvue
  * @Description: 
  * 
@@ -40,14 +40,22 @@
     </tm-sheet>
 
     <tm-drawer placement="bottom" v-model:show="showWin" okText="保存" okColor="green" @ok="onSave">
-      <tm-cell showAvatar :avatar="userInfo.avatar" :avatarSize="80" :titleFontSize="30" bottomBorder>
+      <tm-cell showAvatar :avatar="userInfo.avatal ?? '/static/images/me.png'" :avatarSize="80" :titleFontSize="30" bottomBorder>
         <template v-slot:right>
           <tm-button color="green" size="small" text label="更新" @chooseavatar="chooseavatar" open-type="chooseAvatar"></tm-button>
         </template>
       </tm-cell>
       <tm-cell title="昵称" bottomBorder>
         <template v-slot:right>
-          <input type="nickname" class="nickname_input" placeholder-class="nickname_placeholder" placeholder="请输入昵称" maxlength="15" :value="nickNameRef" @change="nickNameChage" />
+          <input
+            type="nickname"
+            class="nickname_input"
+            placeholder-class="nickname_placeholder"
+            placeholder="请输入昵称"
+            maxlength="15"
+            :value="nickNameRef"
+            @change="nickNameChage"
+          />
         </template>
       </tm-cell>
       <tm-cell title="手机号" bottomBorder>

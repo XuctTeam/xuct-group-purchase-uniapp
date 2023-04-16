@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-25 21:54:59
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-05 22:26:54
+ * @LastEditTime: 2023-04-15 08:12:56
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\list.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -20,14 +20,14 @@
 <template>
   <tm-app class="flex flex-col">
     <tm-navbar title="收货地址" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <tm-sheet :margin="[20, 20]" :round="3" :shadow="2">
-      <tm-input prefix="tmicon-search" searchLabel="搜索" placeholder="请输入关键词" v-model.lazy="searchValue" showClear @search="onSearch" @clear="onClear"></tm-input>
+    <tm-sheet :margin="[0, 0]" :padding="[20, 30]">
+      <tm-input prefix="tmicon-search" searchLabel="搜索" focusColor="green" placeholder="按名字或电话搜索" @search="onSearch"></tm-input>
     </tm-sheet>
-    <view class="empty flex flex-row flex-row-center-center" v-if="addressList.length === 0 && !load">
-      <tm-result class="mt-100" :showBtn="false" status="empty" title="暂无数据" />
+    <view class="flex flex-row flex-row-center-center" v-if="addressList.length === 0 && !load">
+      <tm-result :showBtn="false" status="empty" color="green" subTitle="请稍后重试" title="暂无数据" />
     </view>
     <view class="list" v-else>
-      <tm-sheet v-for="(item, index) in addressList" :key="index" :round="3" :shadow="2" :margin="[20, 20]" @click="onSelect(item.id)">
+      <tm-sheet v-for="(item, index) in addressList" :key="index" :round="3" :shadow="2" :margin="[10]" @click="onSelect(item.id ?? '')">
         <view class="flex flex-row flex-row-center-between">
           <view>
             <view class="flex flex-row flex-row-center-between">
@@ -45,7 +45,7 @@
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
       <view class="relative flex flex-row flex-around flex-row-center-between bottom pa-10">
         <view class="flex flex-1 ma-10">
-          <tm-button block color="red" @click="chooseaddress" :round="25" :padding="[0, 10]" label="微信导入"></tm-button>
+          <tm-button block text @click="chooseaddress" :round="25" :padding="[0, 10]" label="微信导入"></tm-button>
         </view>
         <view class="flex flex-1 ma-10">
           <tm-button block color="green" :padding="[0, 10]" :round="25" label="新增" @click="toAdd"></tm-button>
@@ -153,6 +153,7 @@ const toAdd = () => {
 }
 
 const onSearch = (e: any) => {
+  debugger
   _load(e)
 }
 
@@ -172,10 +173,6 @@ const onSelect = (addressId: string) => {
 }
 </script>
 <style>
-.empty {
-  height: 400px;
-}
-
 .list {
   flex: 1;
   padding-bottom: 90px;

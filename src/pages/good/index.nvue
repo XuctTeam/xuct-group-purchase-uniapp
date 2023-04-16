@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-13 18:09:24
+ * @LastEditTime: 2023-04-16 16:41:58
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\index.nvue
  * @Description: 
  * 
@@ -56,8 +56,16 @@
           </view>
         </view>
         <view class="flex flex-row flex-1 ma-10 flex-row-center-end">
-          <tm-button color="rgba(235, 242, 237, 1)" fontColor="green"  _class="round-l-24 round-r-0" :round="5" label="加入购物车" :loading="addLoading" @click="onAddCart"></tm-button>
-          <tm-button color="green" _class="round-r-24 round-l-0" label="立即下单"></tm-button>
+          <tm-button
+            color="rgba(235, 242, 237, 1)"
+            fontColor="green"
+            _class="round-l-24 round-r-0"
+            :round="5"
+            label="加入购物车"
+            :loading="addLoading"
+            @click="onAddCart"
+          ></tm-button>
+          <tm-button color="green" _class="round-r-24 round-l-0" label="立即下单" @click="onFastConfirm"></tm-button>
         </view>
       </view>
     </view>
@@ -157,6 +165,11 @@ const _browseGood = () => {
   browseGood(_id.value)
     .then(() => {})
     .catch(() => {})
+}
+
+const onFastConfirm = () => {
+  const gids = [_id.value]
+  uni.$tm.u.routerTo('/pages/order/confirm/index?scene=good&gids=' + JSON.stringify(gids), 'navigate')
 }
 
 const toHome = () => {

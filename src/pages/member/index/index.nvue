@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-15 22:02:25
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-14 17:16:24
+ * @LastEditTime: 2023-04-14 21:39:28
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -15,7 +15,7 @@
       <view class="head_top">
         <view class="avatar flex flex-row flex-row-center-start">
           <template v-if="logged">
-            <tm-avatar trigger :img="userInfo.avatar" :round="12" />
+            <tm-avatar trigger :img="userInfo.avatal ?? '/static/images/me.png'" :round="12" />
             <view class="ml-10">
               <tm-text :font-size="32" color="rgba(51, 51, 51, 1)" :label="userInfo.nickname" />
             </view>
@@ -26,7 +26,19 @@
             </view>
             <view class="flex flex-row flex-1 ml-10 flex-row-center-between">
               <tm-text :font-size="32" _class="font-weight-b" label="登录参与团购"></tm-text>
-              <tm-button color="red" icon="tmicon-account" :width="60" :round="10" :height="60" :fontSize="28" :margin="[50, 10]" :shadow="0" text size="normal" url="/pages/member/login/index"></tm-button>
+              <tm-button
+                color="red"
+                icon="tmicon-account"
+                :width="60"
+                :round="10"
+                :height="60"
+                :fontSize="28"
+                :margin="[50, 10]"
+                :shadow="0"
+                text
+                size="normal"
+                url="/pages/member/login/index"
+              ></tm-button>
             </view>
           </view>
         </view>

@@ -5,13 +5,21 @@
   // 		"^tm-(.*)": "@/tmui/components/tm-$1/tm-$1.vue"
   // 	}
   // },
-
   "easycom": {
     "custom": {
       "^(?!z-paging-refresh|z-paging-load-more)z-paging(.*)": "z-paging/components/z-paging$1/z-paging$1.vue"
     }
   },
   "pages": [
+    {
+      "path": "pages/member/index/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
     {
       "path": "pages/cart/index",
       "style": {
@@ -21,7 +29,6 @@
         "transparentTitle": "always"
       }
     },
-    //订单
     {
       "path": "pages/order/list/index",
       "style": {
@@ -42,15 +49,6 @@
     },
     {
       "path": "pages/good/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-    {
-      "path": "pages/member/index/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",

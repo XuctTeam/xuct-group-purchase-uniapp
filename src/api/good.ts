@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 11:35:37
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-03 21:17:04
+ * @LastEditTime: 2023-04-16 16:33:33
  * @FilePath: \xuct-group-purchase-uniapp\src\api\good.ts
  * @Description:
  *
@@ -101,15 +101,4 @@ export const deleteCartGood = (gids: string[]) => {
  */
 export const cleanCart = () => {
   return request.delete('/api/v1/good/cart/del/all')
-}
-
-/**
- * 获取预下单购物车的商品
- *
- * @param gids  商品IDS
- */
-export const queryCartOrderList = (gids: string[]) => {
-  return request.post<Good.CartResult[]>('/api/v1/good/cart/order/list', {
-    gids
-  })
 }

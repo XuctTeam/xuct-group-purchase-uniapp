@@ -9,18 +9,31 @@
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
  */
 import request from '@/services/request'
-import internal from 'stream'
+
+/**
+ * 获取预下单购物车的商品
+ *
+ * @param gids  商品IDS
+ */
+export const getConfirmOrderDetail = (scene: string, gids: string[]) => {
+  return request.post<Good.CartResult[]>('/api/v1/order/confirm/detail', {
+    scene,
+    gids
+  })
+}
 
 /**
  * 下订单
+ * @param scene  cart 购物车 good 直接购买
  * @param addressId
  * @param integral
  * @param remarks
  * @param goodIds
  * @returns
  */
-export const placeOrder = (addressId: string, integral: number, remarks: string, goodIds: string[]) => {
+export const placeOrder = (scene: string, addressId: string, integral: number, remarks: string, goodIds: string[]) => {
   return request.post<string>('/api/v1/order', {
+    scene,
     addressId,
     integral,
     remarks,

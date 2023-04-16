@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:10:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-11 18:12:26
+ * @LastEditTime: 2023-04-16 21:42:46
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\detail\index.nvue
  * @Description: 
  * 
@@ -10,23 +10,50 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="订单详情" color="#70DB93"></tm-navbar>
+    <tm-navbar title="订单详情" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <tm-sheet :margin="[10, 10]" :round="3" :shadow="2">
+      <tm-cell :margin="[0, 0]" :titleFontSize="30" title="头像 Avatar"></tm-cell>
+    </tm-sheet>
+    <tm-sheet :margin="[10, 10]" :round="3" :shadow="2">
+      <view class="flex flex-col">
+        <tm-text :font-size="24" _class="font-weight-b" label="基础示例,更多见文档"></tm-text>
+        <tm-text :font-size="24" _class="font-weight-b" label="基础示例,更多见文档"></tm-text>
+      </view>
+    </tm-sheet>
+    <tm-sheet :margin="[10, 10]" :round="3" :shadow="2">
+      <view class="flex flex-col">
+        <tm-text :font-size="24" _class="font-weight-b" label="基础示例,更多见文档"></tm-text>
+        <tm-text :font-size="24" _class="font-weight-b" label="基础示例,更多见文档"></tm-text>
+      </view>
+    </tm-sheet>
+    <tm-sheet :margin="[10, 10]" :round="3" :shadow="2">
+      <view class="flex flex-col">
+        <tm-text :font-size="24" _class="font-weight-b" label="基础示例,更多见文档"></tm-text>
+        <tm-text :font-size="24" _class="font-weight-b" label="基础示例,更多见文档"></tm-text>
+      </view>
+    </tm-sheet>
   </tm-app>
 </template>
 <script lang="ts" setup>
-import tmApp from '@/tmui/components/tm-app/tm-app.vue'
-import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
-import tmResult from '@/tmui/components/tm-result/tm-result.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
 
 const orderValue = ref<string>('')
 
 onLoad((opts: any) => {
   const { orderId } = opts
-  if (!orderId) {
-    return
-  }
-  orderValue.value = orderId
+  // if (!orderId) {
+  //   orderId = '1647579995335041026'
+  // }
+  // if (!orderId) {
+  //   return
+  // }
+  orderValue.value = '1647579995335041026'
 })
+
+const _loadData = () => {}
 </script>
