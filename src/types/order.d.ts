@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-14 14:17:36
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-17 13:59:10
+ * @LastEditTime: 2023-04-17 18:32:03
  * @FilePath: \xuct-group-purchase-uniapp\src\types\order.d.ts
  * @Description:
  *
@@ -19,6 +19,7 @@ declare namespace Order {
     deliverTime?: Date
     serveTime?: Date
     integral: number
+    rush: number
     items?: OrderItemResult[]
     address?: User.Address
   }

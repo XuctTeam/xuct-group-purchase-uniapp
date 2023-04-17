@@ -12,6 +12,15 @@
   },
   "pages": [
     {
+      "path": "pages/order/list/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
       "path": "pages/index/index",
       "style": {
         "navigationBarTitleText": "",
@@ -92,15 +101,7 @@
         "transparentTitle": "always"
       }
     },
-    {
-      "path": "pages/order/list/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
+
     {
       "path": "pages/order/detail/index",
       "style": {

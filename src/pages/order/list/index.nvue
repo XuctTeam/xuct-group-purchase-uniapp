@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:29:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-17 09:16:32
+ * @LastEditTime: 2023-04-17 18:45:22
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\list\index.nvue
  * @Description: 
  * 
@@ -21,10 +21,10 @@
           <tm-tabs :list="tabsTitle" @change="tabschange" :width="_width" showTabsLineAni :item-width="140" v-model:active-name="tabActiveRef" tabsLineAniColor="green" activeFontColor="green"></tm-tabs>
         </view>
       </template>
-      <view v-for="(item, index) in orderList" :key="index" @click="onDetailClick(item.id)">
+      <view v-for="(item, index) in orderList" :key="index">
         <tm-card :status="formateStatus(item.status)" :margin="[10, 10]" :title="`编号:${item.id}`" statusColor="green">
           <template v-slot:content>
-            <view class="pa-10">
+            <view class="pa-10" @click="onDetailClick(item.id)">
               <view v-for="(i, ind) in item.items" :key="ind" class="flex flex-row pt-10 pb-10">
                 <tm-image :width="160" :height="160" :round="4" :src="i.goodFirstDrawing"></tm-image>
                 <view class="right">
@@ -36,16 +36,25 @@
                 </view>
               </view>
               <tm-divider />
-              <view class="flex flex-row flex-row-center-between">
+              <view class="flex flex-row flex-row-center-between pa-10">
                 <tm-text :font-size="26" color="grey" label="共计商品"></tm-text>
                 <tm-text :font-size="26" color="grey" :label="`×${item.goodNum}`"></tm-text>
               </view>
             </view>
           </template>
-          <template v-slot:action>
+          <template v-slot:action v-if="item.status !== 4">
             <view class="flex flex-row flex-row-center-end flex-1">
-              <tm-button :round="24" size="small" :margin="[24, 0]" label="确认" :font-size="24" color="green"></tm-button>
-              <tm-button :round="24" size="small" label="取消" :font-size="24" color="white"></tm-button>
+              <template v-if="item.status === 1">
+                <tm-button :round="24" size="small" :margin="[24, 0]" label="付款" :font-size="24" color="green"></tm-button>
+                <tm-button :round="24" size="small" label="取消订单" :font-size="24" color="orange" @click="onCancelOrder(item.id)"></tm-button>
+              </template>
+              <template v-else-if="item.status === 2">
+                <tm-button :round="24" size="small" :margin="[24, 0]" :label="item.rush ? '已催单' : '催单'" :disabled="!!item.rush" :font-size="24" color="green"></tm-button>
+                <tm-button :round="24" size="small" label="取消订单" :font-size="24" color="orange" @click="onCancelOrder(item.id)"></tm-button>
+              </template>
+              <template v-else>
+                <tm-button :round="24" size="small" :margin="[24, 0]" label="收货" :font-size="24" color="green"></tm-button>
+              </template>
             </view>
           </template>
         </tm-card>
@@ -69,6 +78,8 @@ import { onLoad } from '@dcloudio/uni-app'
 import { computed, ref } from 'vue'
 import { useAppHook } from '@/store'
 import { pageOrderList } from '@/api/order'
+import { confirm } from '@/utils/dialog'
+import { cancelOrder } from '@/api/order'
 
 const tabsTitle = ref([
   { key: '0', title: '全部' },
@@ -126,6 +137,24 @@ onLoad((opts: any) => {
 
 const onDetailClick = (orderId: string) => {
   uni.$tm.u.routerTo('/pages/order/detail/index?orderId=' + orderId, 'navigate')
+}
+
+const onCancelOrder = (orderId: string) => {
+  confirm({
+    title: '确定取消订单吗？',
+    success: ()=>{_cancelOrder(orderId)},
+    fail: () => {}
+  })
+}
+
+const _cancelOrder = (orderId: string) => {
+  cancelOrder(orderId)
+    .then(() => {
+      paging.value.reload()
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
 }
 </script>
 <style>
