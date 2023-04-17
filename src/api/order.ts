@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-17 18:44:25
+ * @LastEditTime: 2023-04-17 22:16:15
  * @FilePath: \xuct-group-purchase-uniapp\src\api\order.ts
  * @Description:
  *
@@ -67,10 +67,33 @@ export const getOrderDetail = (orderId: string) => {
 }
 
 /**
- * 取消订单
+ * 申请取消
  *
  * @param order
  */
-export const cancelOrder = (orderId: string) => {
-  return request.delete('/api/v1/order/cancel?orderId='+ orderId)
+export const refundOrder = (orderId: string, reason: string) => {
+  return request.delete('/api/v1/order/refund=', {
+    orderId,
+    reason
+  })
+}
+
+/**
+ * 催单
+ *
+ * @param orderId
+ * @returns
+ */
+export const rushOrder = (orderId: string) => {
+  return request.post('/api/v1/order/rush', { orderId })
+}
+
+/**
+ * 收货
+ *
+ * @param orderId
+ * @returns
+ */
+export const receiverOrder = (orderId: string) => {
+  return request.post('/api/v1/order/receive', { orderId })
 }

@@ -1,0 +1,133 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-04-17 22:37:03
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-04-17 23:36:36
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\index.nvue
+ * @Description: 
+ * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
+-->
+<template>
+  <tm-app>
+    <tm-navbar title="申请退单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
+      <view class="pa-10 flex flex-row flex-row-center-between">
+        <tm-text _class="text-overflow-2" :fontSize="28" label="订单编号"></tm-text>
+        <tm-text _class="text-overflow-2" :fontSize="28" :label="orderIdRef"></tm-text>
+      </view>
+      <tm-divider></tm-divider>
+      <view v-for="(item, index) in orderInfo.items" :key="index" class="flex flex-row pa-10">
+        <tm-image :width="160" :height="160" :round="4" :src="item.goodFirstDrawing" />
+        <view class="right">
+          <tm-text _class="text-overflow-2" :label="item.goodName"></tm-text>
+          <view class="flex flex-row flex-row-center-between pr-10">
+            <tm-text color="orange" :label="`单位：${item.goodUnit}`"></tm-text>
+            <tm-text color="grey" :label="`×${item.num}`"></tm-text>
+          </view>
+        </view>
+      </view>
+    </tm-sheet>
+    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
+      <view class="pa-10 flex flex-row flex-row-center-between">
+        <tm-text _class="text-overflow-2" :fontSize="28" label="退款原因"></tm-text>
+      </view>
+      <tm-divider></tm-divider>
+      <tm-radio-group v-model="radiolist" direction="col">
+        <tm-radio outlined value="apple" label="商品质量问题"></tm-radio>
+        <tm-radio color="orange" value="banner" label="地址选错了"></tm-radio>
+        <tm-radio color="pink" value="test" label="购买的商品或数量错了"></tm-radio>
+        <tm-radio color="green" value="other" label="其他原因"></tm-radio>
+      </tm-radio-group>
+    </tm-sheet>
+    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
+      <view class="pa-10 flex flex-row flex-row-center-between">
+        <tm-text _class="text-overflow-2" :fontSize="28" label="图片补充"></tm-text>
+      </view>
+      <tm-divider></tm-divider>
+      <tm-upload showSort :onStart="onStart" color="green" v-model="imageList" ref="up" :width="636" :rows="4" url="https://mockapi.eolink.com/tNYKNA7ac71aa90bcbe83c5815871a5b419601e96a5524d/upload"> </tm-upload>
+    </tm-sheet>
+    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
+      <view class="pa-10 flex flex-row flex-row-center-between">
+        <tm-text _class="text-overflow-2" :fontSize="28" label="原因描述"></tm-text>
+      </view>
+      <tm-divider></tm-divider>
+      <tm-input :inputPadding="[12]" placeholder="文本域，输入自动增高。" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
+    </tm-sheet>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmImage from '@/tmui/components/tm-image/tm-image.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
+import tmRadio from '@/tmui/components/tm-radio/tm-radio.vue'
+import tmRadioGroup from '@/tmui/components/tm-radio-group/tm-radio-group.vue'
+import tmInput from '@/tmui/components/tm-input/tm-input.vue'
+import tmUpload from '@/tmui/components/tm-upload/tm-upload.vue'
+
+import { onLoad } from '@dcloudio/uni-app'
+import { reactive, ref } from 'vue'
+import { hideLoading, loading } from '@/utils/dialog'
+import { getOrderDetail } from '@/api/order'
+
+const orderInfo = reactive<Order.OrderResult>({
+  id: '',
+  createTime: new Date(),
+  goodNum: 1,
+  totalPrice: 0,
+  status: 1,
+  integral: 0,
+  rush: 0,
+  address: {
+    provinceName: '',
+    cityName: '',
+    countyName: '',
+    userName: '',
+    telNumber: '',
+    detailInfo: ''
+  }
+})
+const up = ref<InstanceType<typeof tmUpload> | null>(null)
+const orderIdRef = ref<string>('')
+const radiolist = ref('banner')
+const imageList = ref([])
+
+onLoad((opts: any) => {
+  const { orderId } = opts
+  if (!orderId) {
+    return
+  }
+  orderIdRef.value = orderId
+  _loadData(orderId)
+})
+
+const onStart = (item: any) => {
+  console.log(item)
+  return true
+}
+
+const _loadData = (orderId: string) => {
+  loading()
+  getOrderDetail(orderId)
+    .then((res) => {
+      Object.assign(orderInfo, res.data)
+      hideLoading()
+    })
+    .catch((err: any) => {
+      console.log(err)
+      hideLoading()
+    })
+}
+</script>
+<style>
+.right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 160rpx;
+  flex: 1;
+  padding: 10rpx;
+}
+</style>

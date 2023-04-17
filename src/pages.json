@@ -101,7 +101,15 @@
         "transparentTitle": "always"
       }
     },
-
+    {
+      "path": "pages/order/refund/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
     {
       "path": "pages/order/detail/index",
       "style": {
