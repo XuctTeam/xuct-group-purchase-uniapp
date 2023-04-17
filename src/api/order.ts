@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-14 15:58:41
+ * @LastEditTime: 2023-04-17 09:24:08
  * @FilePath: \xuct-group-purchase-uniapp\src\api\order.ts
  * @Description:
  *
@@ -55,4 +55,13 @@ export const pageOrderList = (pageNo: number, pageSize: number, status: string) 
     pageNo,
     pageSize
   })
+}
+
+/**
+ * 获取订单详情
+ *
+ * @param orderId
+ */
+export const getOrderDetail = (orderId: string) => {
+  return request.get<Order.OrderResult>('/api/v1/order/', { orderId })
 }

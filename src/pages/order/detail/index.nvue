@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:10:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-16 21:42:46
+ * @LastEditTime: 2023-04-17 14:01:20
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\detail\index.nvue
  * @Description: 
  * 
@@ -11,25 +11,85 @@
 <template>
   <tm-app>
     <tm-navbar title="订单详情" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <tm-sheet :margin="[10, 10]" :round="3" :shadow="2">
-      <tm-cell :margin="[0, 0]" :titleFontSize="30" title="头像 Avatar"></tm-cell>
+    <tm-sheet :margin="[10, 10]" :round="3" :shadow="2" :padding="[10]">
+      <tm-cell :margin="[0, 0]">
+        <template v-slot:title>
+          <view class="flex flex-row flex-row-center-center mb-10">
+            <tm-icon :font-size="26" name="tmicon-tag"></tm-icon>
+            <view class="ml-10">
+              <tm-text :font-size="32" _class="font-weight-b" label="123123123"></tm-text>
+            </view>
+          </view>
+          <tm-text :font-size="22" color="grey" label="您的订单已签收"></tm-text>
+        </template>
+      </tm-cell>
     </tm-sheet>
-    <tm-sheet :margin="[10, 10]" :round="3" :shadow="2">
-      <view class="flex flex-col">
-        <tm-text :font-size="24" _class="font-weight-b" label="基础示例,更多见文档"></tm-text>
-        <tm-text :font-size="24" _class="font-weight-b" label="基础示例,更多见文档"></tm-text>
+    <tm-sheet :margin="[10, 10]" :round="3" :shadow="2" :padding="[10]">
+      <tm-cell :margin="[0, 0]">
+        <template v-slot:title>
+          <view class="flex flex-row flex-1 flex-row-center-center mb-10">
+            <tm-icon :font-size="26" name="tmicon-position"></tm-icon>
+            <view class="flex flex-row flex-row-bottom-center ml-10">
+              <view><tm-text :font-size="32" _class="font-weight-b" :label="orderInfo.address?.userName"></tm-text></view>
+              <view class="ml-20"><tm-text :font-size="24" :label="orderInfo.address?.telNumber"></tm-text></view>
+            </view>
+          </view>
+          <tm-text :font-size="22" color="grey" :label="`地址：${orderInfo.address?.provinceName}${orderInfo.address?.cityName}${orderInfo.address?.countyName}${orderInfo.address?.detailInfo}`"></tm-text>
+        </template>
+        <template v-slot:right></template>
+      </tm-cell>
+    </tm-sheet>
+    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
+      <view v-for="(item, index) in orderInfo.items" :key="index" class="flex flex-row pa-10">
+        <tm-image :width="160" :height="160" :round="4" :src="item.goodFirstDrawing" />
+        <view class="right">
+          <tm-text _class="text-overflow-2" :label="item.goodName"></tm-text>
+          <view class="flex flex-row flex-row-center-between pr-10">
+            <tm-text color="orange" :label="`单位：${item.goodUnit}`"></tm-text>
+            <tm-text color="grey" :label="`×${item.num}`"></tm-text>
+          </view>
+        </view>
       </view>
     </tm-sheet>
-    <tm-sheet :margin="[10, 10]" :round="3" :shadow="2">
-      <view class="flex flex-col">
-        <tm-text :font-size="24" _class="font-weight-b" label="基础示例,更多见文档"></tm-text>
-        <tm-text :font-size="24" _class="font-weight-b" label="基础示例,更多见文档"></tm-text>
+    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
+      <view class="flex flex-row pa-20">
+        <view class="w-80"><tm-text color="grey" :font-size="26" label="备注："></tm-text></view>
+        <tm-text :font-size="26" :label="orderInfo.remarks ?? '暂无'"></tm-text>
       </view>
     </tm-sheet>
-    <tm-sheet :margin="[10, 10]" :round="3" :shadow="2">
-      <view class="flex flex-col">
-        <tm-text :font-size="24" _class="font-weight-b" label="基础示例,更多见文档"></tm-text>
-        <tm-text :font-size="24" _class="font-weight-b" label="基础示例,更多见文档"></tm-text>
+    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
+      <view class="flex flex-row flex-row-center-between pa-20">
+        <view class="flex flex-row">
+          <view class="w-140"><tm-text color="grey" :font-size="26" label="订单编号："></tm-text></view>
+          <tm-text :font-size="26" :label="orderInfo.id"></tm-text>
+        </view>
+        <tm-button :shadow="0" size="small" :margin="[0]" :padding="[0]" label="复制" color="green" text @click="copyClick" />
+      </view>
+      <view class="flex flex-row pa-20">
+        <view class="w-140"><tm-text color="grey" :font-size="26" label="下单时间："></tm-text></view>
+        <tm-text :font-size="26" :label="formatData(orderInfo.createTime)"></tm-text>
+      </view>
+      <view class="flex flex-row pa-20">
+        <view class="w-140"><tm-text color="grey" :font-size="26" label="送货时间："></tm-text></view>
+        <tm-text :font-size="26" :label="orderInfo.deliverTime ? formatData(orderInfo.deliverTime) : ''"></tm-text>
+      </view>
+      <view class="flex flex-row pa-20">
+        <view class="w-140"><tm-text color="grey" :font-size="26" label="送达时间："></tm-text></view>
+        <tm-text :font-size="26" :label="orderInfo.serveTime ? formatData(orderInfo.serveTime) : ''"></tm-text>
+      </view>
+    </tm-sheet>
+    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
+      <view class="flex flex-row flex-row-center-between pa-20">
+        <view class="w-140"><tm-text color="grey" :font-size="26" label="积分使用："></tm-text></view>
+        <tm-text :font-size="26" :label="`${orderInfo.integral ?? 0}分`"></tm-text>
+      </view>
+      <view class="flex flex-row flex-row-center-between pa-20">
+        <view class="w-140"><tm-text color="grey" :font-size="26" label="商品小计："></tm-text></view>
+        <tm-text :font-size="26" :label="orderInfo.goodNum"></tm-text>
+      </view>
+      <view class="flex flex-row flex-row-center-between pa-20">
+        <view class="w-140"><tm-text color="grey" :font-size="26" label="总计金额："></tm-text></view>
+        <tm-text :font-size="26" :label="orderInfo.totalPrice ?? 0"></tm-text>
       </view>
     </tm-sheet>
   </tm-app>
@@ -39,21 +99,82 @@ import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
+import tmImage from '@/tmui/components/tm-image/tm-image.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 
-const orderValue = ref<string>('')
+import { getOrderDetail } from '@/api/order'
+import { reactive } from 'vue'
+import { loading, hideLoading, message } from '@/utils/dialog'
+import * as dayjs from '@/tmui/tool/dayjs/esm/index'
+const DayJs = dayjs.default
+
+const orderInfo = reactive<Order.OrderResult>({
+  id: '',
+  createTime: new Date(),
+  goodNum: 1,
+  totalPrice: 0,
+  status: 1,
+  integral: 0,
+  address: {
+    provinceName: '',
+    cityName: '',
+    countyName: '',
+    userName: '',
+    telNumber: '',
+    detailInfo: ''
+  }
+})
 
 onLoad((opts: any) => {
   const { orderId } = opts
-  // if (!orderId) {
-  //   orderId = '1647579995335041026'
-  // }
-  // if (!orderId) {
-  //   return
-  // }
-  orderValue.value = '1647579995335041026'
+  if (!orderId) {
+    return
+  }
+  orderInfo.id = orderId
+  _loadData(orderInfo.id)
 })
 
-const _loadData = () => {}
+const _loadData = (orderId: string) => {
+  loading()
+  getOrderDetail(orderId)
+    .then(res => {
+      Object.assign(orderInfo, res.data)
+      hideLoading()
+    })
+    .catch((err: any) => {
+      console.log(err)
+      hideLoading()
+    })
+}
+
+const formatData = (date: Date) => {
+  return DayJs(date).format('YYYY-MM-DD HH:mm:ss')
+}
+
+const copyClick = () => {
+  uni.setClipboardData({
+    data: orderInfo.id, //要被复制的内容
+    success: () => {
+      //复制成功的回调函数
+      message({
+        title: '复制成功',
+        icon: 'success'
+      })
+    }
+  })
+}
 </script>
+<style>
+.right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 160rpx;
+  flex: 1;
+  padding: 10rpx;
+}
+</style>

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:29:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-14 21:08:34
+ * @LastEditTime: 2023-04-17 09:16:32
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\list\index.nvue
  * @Description: 
  * 
@@ -10,17 +10,7 @@
 -->
 <template>
   <tm-app>
-    <z-paging
-      ref="paging"
-      v-model="orderList"
-      @query="queryList"
-      autoShowBackToTop
-      loadingFullFixed
-      autoShowSystemLoading
-      safeAreaInsetBottom
-      autoScrollToTopWhenReload
-      autoCleanListWhenReload
-    >
+    <z-paging ref="paging" v-model="orderList" @query="queryList" autoShowBackToTop loadingFullFixed autoShowSystemLoading safeAreaInsetBottom autoScrollToTopWhenReload autoCleanListWhenReload>
       <!-- 之后-vue3 -->
       <template #top>
         <view>
@@ -28,26 +18,11 @@
           <tm-sheet :margin="[0, 0]" :padding="[20, 30]">
             <tm-input prefix="tmicon-search" searchLabel="搜索" placeholderStyle="fontSize: 10rpx;" focusColor="green" placeholder="订单编号"></tm-input>
           </tm-sheet>
-          <tm-tabs
-            :list="tabsTitle"
-            @change="tabschange"
-            :width="_width"
-            showTabsLineAni
-            :item-width="140"
-            v-model:active-name="tabActiveRef"
-            tabsLineAniColor="green"
-            activeFontColor="green"
-          ></tm-tabs>
+          <tm-tabs :list="tabsTitle" @change="tabschange" :width="_width" showTabsLineAni :item-width="140" v-model:active-name="tabActiveRef" tabsLineAniColor="green" activeFontColor="green"></tm-tabs>
         </view>
       </template>
-      <view v-for="(item, index) in orderList" :key="index">
-        <tm-card
-          :status="formateStatus(item.status)"
-          :margin="[10, 10]"
-          :title="`编号:${item.id}`"
-          statusColor="green"
-          content="这是一个基础卡片示例，非常简单且实用。这是一个基础卡片示例，非常简单且实用。"
-        >
+      <view v-for="(item, index) in orderList" :key="index" @click="onDetailClick(item.id)">
+        <tm-card :status="formateStatus(item.status)" :margin="[10, 10]" :title="`编号:${item.id}`" statusColor="green">
           <template v-slot:content>
             <view class="pa-10">
               <view v-for="(i, ind) in item.items" :key="ind" class="flex flex-row pt-10 pb-10">
@@ -94,7 +69,6 @@ import { onLoad } from '@dcloudio/uni-app'
 import { computed, ref } from 'vue'
 import { useAppHook } from '@/store'
 import { pageOrderList } from '@/api/order'
-import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 
 const tabsTitle = ref([
   { key: '0', title: '全部' },
@@ -110,7 +84,6 @@ const _width = computed(() => {
 const paging = ref<any>(null)
 const tabActiveRef = ref<string>('0')
 let orderList = ref<Order.OrderResult[]>([])
-const DayJs = dayjs.default
 
 const queryList = (pageNo: number, pageSize: number) => {
   pageOrderList(pageNo, pageSize, tabActiveRef.value || '0')
@@ -150,6 +123,10 @@ onLoad((opts: any) => {
   }
   tabActiveRef.value = key
 })
+
+const onDetailClick = (orderId: string) => {
+  uni.$tm.u.routerTo('/pages/order/detail/index?orderId=' + orderId, 'navigate')
+}
 </script>
 <style>
 .item-image {
