@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 20:37:13
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-07 09:38:31
+ * @LastEditTime: 2023-04-18 13:49:26
  * @FilePath: \xuct-group-purchase-uniapp\src\services\upload.ts
  * @Description:
  *
@@ -18,14 +18,14 @@ export const upload = (filePath: string, formData: any, callback: Function) => {
   const token = store.getToken
 
   uni.uploadFile({
-    url: BASE_API_URL + '/api/v1/user/avatar/upload', //仅为示例，非真实的接口地址
+    url: BASE_API_URL + '/api/v1/user/avatar/upload',
     filePath: filePath,
     name: 'file',
     formData: formData,
     header: {
       satoken: 'Bearer ' + token
     },
-    success: uploadFileRes => {
+    success: (uploadFileRes) => {
       console.log(uploadFileRes.data)
       if (callback instanceof Function) {
         callback({
@@ -34,7 +34,7 @@ export const upload = (filePath: string, formData: any, callback: Function) => {
         })
       }
     },
-    fail: message => {
+    fail: (message) => {
       callback({
         code: -1,
         data: message

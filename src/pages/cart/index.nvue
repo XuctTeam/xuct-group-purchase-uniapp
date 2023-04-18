@@ -27,7 +27,7 @@
           <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" :height="200" v-for="(item, index) in cartGoods" :key="index">
             <view class="flex flex-row flex-1 flex-row-center-start">
               <view class="checkbox">
-                <tm-checkbox :round="10" color="green" @change="e => simpleCheckboxChangeState(e, item.goodId)" :value="!!!item.checked"></tm-checkbox>
+                <tm-checkbox :round="10" color="green" @change="(e) => simpleCheckboxChangeState(e, item.goodId)" :value="!!!item.checked"></tm-checkbox>
               </view>
               <view class="flex flex-row flex-1">
                 <tm-image :width="180" :round="4" :height="180" :src="item.firstDrawing"></tm-image>
@@ -35,7 +35,7 @@
                   <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
                   <view class="flex flex-row flex-row-center-between">
                     <tm-text>123123</tm-text>
-                    <tm-stepper :max="200" :min="1" :defaultValue="item.num" circular @change="e => chooseNumChange(e, item.goodId)"></tm-stepper>
+                    <tm-stepper :max="200" :min="1" :defaultValue="item.num" circular @change="(e) => chooseNumChange(e, item.goodId)"></tm-stepper>
                   </view>
                 </view>
               </view>
@@ -94,7 +94,7 @@ const _totalBarHeight = computed(() => {
 })
 
 const selectedNum = computed(() => {
-  return cartGoods.filter(item => item.checked).length
+  return cartGoods.filter((item) => item.checked).length
 })
 
 onLoad(() => {
@@ -113,27 +113,27 @@ const toHome = () => {
 }
 
 const simpleCheckboxChangeState = (val: boolean, goodId: string) => {
-  const _cartGood = cartGoods.find(x => x.goodId === goodId)
+  const _cartGood = cartGoods.find((x) => x.goodId === goodId)
   if (!_cartGood) {
     return
   }
   _cartGood.checked = val
   //判断选择列表是否满足全选
   if (val) {
-    const _allChecked = cartGoods.every(x => x.checked)
+    const _allChecked = cartGoods.every((x) => x.checked)
     if (_allChecked) {
       allCheckStatus.value = true
     }
     return
   }
-  const _someNoneChecked = cartGoods.some(x => !!!x.checked)
+  const _someNoneChecked = cartGoods.some((x) => !!!x.checked)
   if (allCheckStatus.value && _someNoneChecked) {
     allCheckStatus.value = false
   }
 }
 
 const chooseAllChangeState = (val: boolean) => {
-  cartGoods.forEach(item => {
+  cartGoods.forEach((item) => {
     item.checked = val
   })
 }
@@ -179,11 +179,11 @@ const toConfirmOrder = () => {
     })
     return
   }
-  const _ids = cartGoods.filter(x => x.checked).map(x => x.goodId)
+  const _ids = cartGoods.filter((x) => x.checked).map((x) => x.goodId)
   uni.navigateTo({
     url: '/pages/order/confirm/index?scene=cart&gids=' + JSON.stringify(_ids),
     success: () => {
-      uni.$once('cart::order::success', data => {})
+      uni.$once('cart::order::success', (data) => {})
     },
     fail: () => {}
   })
@@ -192,7 +192,7 @@ const toConfirmOrder = () => {
 const _load = () => {
   loading()
   cartList()
-    .then(res => {
+    .then((res) => {
       const item = res.data
       cartGoods.push(...item)
       hideLoading()
@@ -219,7 +219,7 @@ const _cleanCart = () => {
 }
 
 const _deleteCart = () => {
-  const _delIds = cartGoods.filter(x => x.checked).map(x => x.goodId)
+  const _delIds = cartGoods.filter((x) => x.checked).map((x) => x.goodId)
   loading()
   deleteCartGood(_delIds)
     .then(() => {

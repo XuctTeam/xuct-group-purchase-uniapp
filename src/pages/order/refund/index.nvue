@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-17 22:37:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-17 23:36:36
+ * @LastEditTime: 2023-04-18 16:52:54
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -12,8 +12,8 @@
     <tm-navbar title="申请退单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
       <view class="pa-10 flex flex-row flex-row-center-between">
-        <tm-text _class="text-overflow-2" :fontSize="28" label="订单编号"></tm-text>
-        <tm-text _class="text-overflow-2" :fontSize="28" :label="orderIdRef"></tm-text>
+        <tm-text _class="font-weight-b" :fontSize="28" label="订单编号"></tm-text>
+        <tm-text :fontSize="28" :label="orderIdValue"></tm-text>
       </view>
       <tm-divider></tm-divider>
       <view v-for="(item, index) in orderInfo.items" :key="index" class="flex flex-row pa-10">
@@ -28,8 +28,26 @@
       </view>
     </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
-      <view class="pa-10 flex flex-row flex-row-center-between">
-        <tm-text _class="text-overflow-2" :fontSize="28" label="退款原因"></tm-text>
+      <view class="pa-10">
+        <tm-text _class="font-weight-b" :fontSize="28" label="订单详情"></tm-text>
+      </view>
+      <tm-divider></tm-divider>
+      <view class="flex flex-row pa-20">
+        <view class="w-140"><tm-text color="grey" :font-size="26" label="下单时间："></tm-text></view>
+        <tm-text :font-size="26" :label="formatData(orderInfo.createTime)"></tm-text>
+      </view>
+      <view class="flex flex-row pa-20">
+        <view class="w-140"><tm-text color="grey" :font-size="26" label="送货时间："></tm-text></view>
+        <tm-text :font-size="26" :label="orderInfo.deliverTime ? formatData(orderInfo.deliverTime) : ''"></tm-text>
+      </view>
+      <view class="flex flex-row pa-20">
+        <view class="w-140"><tm-text color="grey" :font-size="26" label="送达时间："></tm-text></view>
+        <tm-text :font-size="26" :label="orderInfo.serveTime ? formatData(orderInfo.serveTime) : ''"></tm-text>
+      </view>
+    </tm-sheet>
+    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
+      <view class="pa-10">
+        <tm-text _class="font-weight-b" :fontSize="28" label="退单原因"></tm-text>
       </view>
       <tm-divider></tm-divider>
       <tm-radio-group v-model="radiolist" direction="col">
@@ -40,19 +58,23 @@
       </tm-radio-group>
     </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
-      <view class="pa-10 flex flex-row flex-row-center-between">
-        <tm-text _class="text-overflow-2" :fontSize="28" label="图片补充"></tm-text>
-      </view>
+      <tm-text _class="font-weight-b" :fontSize="28" label="图片补充"></tm-text>
       <tm-divider></tm-divider>
-      <tm-upload showSort :onStart="onStart" color="green" v-model="imageList" ref="up" :width="636" :rows="4" url="https://mockapi.eolink.com/tNYKNA7ac71aa90bcbe83c5815871a5b419601e96a5524d/upload"> </tm-upload>
+      <tm-upload showSort :onStart="onStart" color="green" v-model="imageList" :header="uploadHeader" ref="up" :width="636" :rows="3" :maxFile="3" :url="uploadUrlValue"> </tm-upload>
     </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
       <view class="pa-10 flex flex-row flex-row-center-between">
-        <tm-text _class="text-overflow-2" :fontSize="28" label="原因描述"></tm-text>
+        <tm-text _class="font-weight-b" :fontSize="28" label="原因描述"></tm-text>
       </view>
       <tm-divider></tm-divider>
-      <tm-input :inputPadding="[12]" placeholder="文本域，输入自动增高。" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
+      <tm-input :inputPadding="[12]" placeholder="填写原因" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
     </tm-sheet>
+    <view :style="{ height: _totalBarHeight + 'rpx' }"></view>
+    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
+      <view class="relative flex flex-1 pa-10 bottom">
+        <tm-button label="提交" :round="10" color="green" block></tm-button>
+      </view>
+    </view>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -66,11 +88,16 @@ import tmRadio from '@/tmui/components/tm-radio/tm-radio.vue'
 import tmRadioGroup from '@/tmui/components/tm-radio-group/tm-radio-group.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import tmUpload from '@/tmui/components/tm-upload/tm-upload.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 
 import { onLoad } from '@dcloudio/uni-app'
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { hideLoading, loading } from '@/utils/dialog'
 import { getOrderDetail } from '@/api/order'
+import { useAppHook, useUserHook } from '@/store'
+import * as dayjs from '@/tmui/tool/dayjs/esm/index'
+import ENV_CONFIG from '@/config/env'
+const DayJs = dayjs.default
 
 const orderInfo = reactive<Order.OrderResult>({
   id: '',
@@ -89,23 +116,39 @@ const orderInfo = reactive<Order.OrderResult>({
     detailInfo: ''
   }
 })
+const appStore = useAppHook()
+const userStore = useUserHook()
+const { BASE_API_URL } = ENV_CONFIG
+const _totalBarHeight = computed(() => {
+  const safeBottom = appStore.getSafeBottom()
+  return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
+})
+
 const up = ref<InstanceType<typeof tmUpload> | null>(null)
-const orderIdRef = ref<string>('')
+const orderIdValue = ref<string>('')
 const radiolist = ref('banner')
 const imageList = ref([])
+const uploadUrlValue = ref<string>(BASE_API_URL + '/api/v1/order/refund/upload')
+const uploadHeader = {
+  satoken: 'Bearer ' + userStore.getToken
+}
 
 onLoad((opts: any) => {
   const { orderId } = opts
   if (!orderId) {
     return
   }
-  orderIdRef.value = orderId
+  orderIdValue.value = orderId
   _loadData(orderId)
 })
 
 const onStart = (item: any) => {
   console.log(item)
   return true
+}
+
+const formatData = (date: Date) => {
+  return DayJs(date).format('YYYY-MM-DD HH:mm:ss')
 }
 
 const _loadData = (orderId: string) => {

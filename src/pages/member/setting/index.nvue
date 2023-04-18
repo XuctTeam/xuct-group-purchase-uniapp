@@ -47,15 +47,7 @@
       </tm-cell>
       <tm-cell title="昵称" bottomBorder>
         <template v-slot:right>
-          <input
-            type="nickname"
-            class="nickname_input"
-            placeholder-class="nickname_placeholder"
-            placeholder="请输入昵称"
-            maxlength="15"
-            :value="nickNameRef"
-            @change="nickNameChage"
-          />
+          <input type="nickname" class="nickname_input" placeholder-class="nickname_placeholder" placeholder="请输入昵称" maxlength="15" :value="nickNameRef" @change="nickNameChage" />
         </template>
       </tm-cell>
       <tm-cell title="手机号" bottomBorder>
@@ -94,7 +86,7 @@ const nickNameRef = ref<string>(userInfo?.nickname || '')
 const phoneRef = ref<string>(userInfo?.phone || '')
 
 onLoad(() => {
-  getConfig(2).then(res => {
+  getConfig(2).then((res) => {
     const { content } = res.data
     versionRef.value = content
   })

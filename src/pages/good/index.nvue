@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-17 10:23:01
+ * @LastEditTime: 2023-04-18 09:22:45
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\index.nvue
  * @Description: 
  * 
@@ -35,9 +35,10 @@
         </view>
       </view>
     </tm-sheet>
-    <view class="pl-10 pr-10 pt-10" :style="{ paddingBottom: _totalBarHeight + 'rpx' }">
+    <view class="pl-10 pr-10 pt-10">
       <tm-html :content="detail" />
     </view>
+    <view :style="{ height: _totalBarHeight + 'rpx' }"></view>
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }" v-if="!!logged">
       <view class="relative flex flex-row flex-around">
         <view class="flex flex-row flex-3 ma-10 flex-row-center-between">
@@ -117,7 +118,7 @@ const onCllect = () => {
     .then(() => {
       userCollect.value = !userCollect.value
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err)
     })
 }
@@ -137,7 +138,7 @@ const onAddCart = () => {
 const _loadGood = () => {
   loading()
   getGood(_id.value)
-    .then(res => {
+    .then((res) => {
       const good: Good.GoodResult = res.data
       const swipers: string[] = good.swiperImages?.split(',') || []
       swiperImages.push(...swipers)
@@ -147,7 +148,7 @@ const _loadGood = () => {
       browse.value = good.browse
       hideLoading()
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err)
       hideLoading()
     })
