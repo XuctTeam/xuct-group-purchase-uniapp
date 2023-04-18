@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-17 22:16:15
+ * @LastEditTime: 2023-04-18 23:24:07
  * @FilePath: \xuct-group-purchase-uniapp\src\api\order.ts
  * @Description:
  *
@@ -71,10 +71,12 @@ export const getOrderDetail = (orderId: string) => {
  *
  * @param order
  */
-export const refundOrder = (orderId: string, reason: string) => {
-  return request.delete('/api/v1/order/refund=', {
+export const refundOrder = (orderId: string, refundType: string, refundReason?: string, refundImages?: string[]) => {
+  return request.post('/api/v1/order/refund', {
     orderId,
-    reason
+    refundType,
+    refundReason,
+    refundImages
   })
 }
 

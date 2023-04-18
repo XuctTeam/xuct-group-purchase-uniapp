@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-17 22:37:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-18 16:52:54
+ * @LastEditTime: 2023-04-18 23:29:11
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -50,11 +50,8 @@
         <tm-text _class="font-weight-b" :fontSize="28" label="退单原因"></tm-text>
       </view>
       <tm-divider></tm-divider>
-      <tm-radio-group v-model="radiolist" direction="col">
-        <tm-radio outlined value="apple" label="商品质量问题"></tm-radio>
-        <tm-radio color="orange" value="banner" label="地址选错了"></tm-radio>
-        <tm-radio color="pink" value="test" label="购买的商品或数量错了"></tm-radio>
-        <tm-radio color="green" value="other" label="其他原因"></tm-radio>
+      <tm-radio-group v-model="refundTypeValue" direction="col">
+        <tm-radio color="green" v-for="(item, index) in radioItemds" :value="item.key" :label="item.label" :key="index" />
       </tm-radio-group>
     </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
@@ -67,12 +64,12 @@
         <tm-text _class="font-weight-b" :fontSize="28" label="原因描述"></tm-text>
       </view>
       <tm-divider></tm-divider>
-      <tm-input :inputPadding="[12]" placeholder="填写原因" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
+      <tm-input v-model="refundReasonValue" :inputPadding="[12]" placeholder="填写原因" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
     </tm-sheet>
     <view :style="{ height: _totalBarHeight + 'rpx' }"></view>
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
       <view class="relative flex flex-1 pa-10 bottom">
-        <tm-button label="提交" :round="10" color="green" block></tm-button>
+        <tm-button label="提交" :round="10" color="green" block @click="onRefundClick"></tm-button>
       </view>
     </view>
   </tm-app>
@@ -93,7 +90,7 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { computed, reactive, ref } from 'vue'
 import { hideLoading, loading } from '@/utils/dialog'
-import { getOrderDetail } from '@/api/order'
+import { getOrderDetail, refundOrder } from '@/api/order'
 import { useAppHook, useUserHook } from '@/store'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import ENV_CONFIG from '@/config/env'
@@ -126,8 +123,29 @@ const _totalBarHeight = computed(() => {
 
 const up = ref<InstanceType<typeof tmUpload> | null>(null)
 const orderIdValue = ref<string>('')
-const radiolist = ref('banner')
+const refundTypeValue = ref('1')
 const imageList = ref([])
+const refundReasonValue = ref<string>('')
+
+const radioItemds = [
+  {
+    key: '1',
+    label: '商品质量问题'
+  },
+  {
+    key: '2',
+    label: '地址选错了'
+  },
+  {
+    key: '3',
+    label: '购买的商品或数量错了'
+  },
+  {
+    key: '4',
+    label: '其他原因'
+  }
+]
+
 const uploadUrlValue = ref<string>(BASE_API_URL + '/api/v1/order/refund/upload')
 const uploadHeader = {
   satoken: 'Bearer ' + userStore.getToken
@@ -149,6 +167,25 @@ const onStart = (item: any) => {
 
 const formatData = (date: Date) => {
   return DayJs(date).format('YYYY-MM-DD HH:mm:ss')
+}
+
+const onRefundClick = () => {
+  loading()
+  refundOrder(
+    orderIdValue.value,
+    refundTypeValue.value,
+    refundReasonValue.value,
+    imageList.value.filter((x: any) => x.response?.code === 200).map((x: any) => x.response.data)
+  )
+    .then(() => {
+      hideLoading()
+      uni.$emit('order::refund::success')
+      uni.$tm.u.routerTo('', 'navigateBack')
+    })
+    .catch((err) => {
+      console.log(err)
+      hideLoading()
+    })
 }
 
 const _loadData = (orderId: string) => {

@@ -175,7 +175,11 @@ const onReciverOrder = (orderId: string) => {
 const onRefundOrder = (orderId: string) => {
   uni.navigateTo({
     url: '/pages/order/refund/index?orderId=' + orderId,
-    success: () => {}
+    success: () => {
+      uni.$once('order::refund::success', () => {
+        paging.value.reload()
+      })
+    }
   })
 }
 
