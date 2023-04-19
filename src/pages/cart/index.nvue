@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-16 16:39:37
+ * @LastEditTime: 2023-04-19 18:57:28
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -10,9 +10,9 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="商品详情" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <tm-navbar title="购物车" color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <view v-if="!logged">
-      <tm-result color="green" subTitle="登录后查看" btnText="去登录"></tm-result>
+      <tm-result color="green" title="购物车空空如也~" subTitle="登录后查看" btnText="点我登录" @click="goLoginClick"></tm-result>
     </view>
     <view v-else>
       <view v-if="cartGoods.length === 0 && !load">
@@ -61,7 +61,7 @@
   </tm-app>
 </template>
 <script lang="ts" setup>
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
@@ -76,14 +76,15 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import { useUserHook, useAppHook } from '@/store'
 import { loading, hideLoading, confirm, message } from '@/utils/dialog'
 import { cartList, cleanCart, modifyCartNum, deleteCartGood } from '@/api/good'
+import { storeToRefs } from 'pinia'
 
 const cartGoods = reactive<Good.CartResult[]>([])
 const load = ref<boolean>(true)
 const editStatus = ref<boolean>(false)
 const allCheckStatus = ref<boolean>(false)
-const store = useUserHook()
+const userStore = useUserHook()
 const appStore = useAppHook()
-const logged = store.logged
+const { logged } = storeToRefs(userStore)
 
 const _totalBarHeight = computed(() => {
   if (!logged) {
@@ -98,10 +99,16 @@ const selectedNum = computed(() => {
 })
 
 onLoad(() => {
-  if (!logged) {
+  if (!logged.value) {
     return
   }
   _load()
+})
+
+watch(logged, (newValue, oldValue) => {
+  if (!oldValue && newValue) {
+    _load()
+  }
 })
 
 const changeState = () => {
@@ -110,6 +117,10 @@ const changeState = () => {
 
 const toHome = () => {
   uni.$tm.u.routerTo('/pages/index/index', 'redirect')
+}
+
+const goLoginClick = () => {
+  uni.$tm.u.routerTo('/pages/member/login/index', 'navigate')
 }
 
 const simpleCheckboxChangeState = (val: boolean, goodId: string) => {
@@ -162,11 +173,11 @@ const deleteGood = () => {
 const chooseNumChange = (num: number, gid: string) => {
   loading()
   modifyCartNum(gid, num)
-    .then(() => {
-      hideLoading()
-    })
+    .then(() => {})
     .catch((err: any) => {
       console.log(err)
+    })
+    .finally(() => {
       hideLoading()
     })
 }
@@ -195,13 +206,14 @@ const _load = () => {
     .then((res) => {
       const item = res.data
       cartGoods.push(...item)
-      hideLoading()
       load.value = false
     })
     .catch((err: any) => {
       console.log(err)
-      hideLoading()
       load.value = false
+    })
+    .finally(() => {
+      hideLoading()
     })
 }
 
@@ -210,10 +222,11 @@ const _cleanCart = () => {
   cleanCart()
     .then(() => {
       cartGoods.length = 0
-      hideLoading()
     })
     .catch((err: any) => {
       console.log(err)
+    })
+    .finally(() => {
       hideLoading()
     })
 }
@@ -227,7 +240,8 @@ const _deleteCart = () => {
       load.value = true
       _load()
     })
-    .catch((err: any) => {
+    .catch((err: any) => {})
+    .finally(() => {
       hideLoading()
     })
 }

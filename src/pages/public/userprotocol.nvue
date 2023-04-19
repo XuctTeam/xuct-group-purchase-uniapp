@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-07 15:13:41
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-10 13:48:37
+ * @LastEditTime: 2023-04-19 17:15:28
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\public\userprotocol.nvue
  * @Description: 
  * 
@@ -10,8 +10,8 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="隐私协议" color="#70DB93" fontColor="white" />
-    <view class="pa-32 content">
+    <tm-navbar title="隐私协议" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <view class="pa-20 content">
       <tm-html :content="rx"></tm-html>
     </view>
   </tm-app>
@@ -35,13 +35,14 @@ onLoad(() => {
 const _load = () => {
   loading()
   getConfig(0)
-    .then(res => {
+    .then((res) => {
       const { content } = res.data
       rx.value = content
-      hideLoading()
     })
     .catch((err: any) => {
       console.log(err)
+    })
+    .finally(() => {
       hideLoading()
     })
 }

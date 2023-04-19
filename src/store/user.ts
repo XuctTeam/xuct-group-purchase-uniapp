@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-19 14:23:29
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-07 09:58:46
+ * @LastEditTime: 2023-04-19 18:42:11
  * @FilePath: \xuct-group-purchase-uniapp\src\store\user.ts
  * @Description:
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved.
@@ -34,5 +34,13 @@ export const userStore = defineStore('userStore', () => {
     Object.assign(userInfo, { ...user })
     u.setCookie(StoreEnum.USER, userInfo)
   }
-  return { getToken, logged, getUserId, getUserInfo, setToken, setUserInfo }
+
+  function setLogout() {
+    Object.assign(userInfo, {})
+    token.value = ''
+    u.delCookie(StoreEnum.USER)
+    u.delCookie(StoreEnum.TOKEN)
+  }
+
+  return { getToken, logged, getUserId, getUserInfo, setToken, setUserInfo, setLogout }
 })

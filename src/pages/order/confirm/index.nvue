@@ -157,7 +157,7 @@ onLoad((ops: any) => {
 
 const sumNum = computed(() => {
   return cartGoods
-    .map(item => item.num)
+    .map((item) => item.num)
     .reduce((prev, cur) => {
       return prev + cur
     }, 0)
@@ -166,7 +166,7 @@ const sumNum = computed(() => {
 const noticeClick = () => {
   uni.requestSubscribeMessage({
     tmplIds: TEMPLATE_IDS,
-    complete: res => {
+    complete: (res) => {
       console.log(res)
     }
   })
@@ -176,7 +176,7 @@ const addressClick = () => {
   uni.navigateTo({
     url: '/pages/member/address/list?type=order',
     success: () => {
-      uni.$once('address:selected::success', data => {
+      uni.$once('address:selected::success', (data) => {
         Object.assign(address, { ...data.address })
       })
     },
@@ -208,13 +208,14 @@ const placeOrderClick = () => {
       loading()
       placeOrder(_scene.value, address.id ?? '', integralInput.value, remarksValue.value, goodIds)
         .then((res: any) => {
-          hideLoading()
           const orderId = res.data
           uni.$tm.u.routerTo('/pages/order/result/index?orderId=' + orderId, 'redirect')
         })
         .catch((err: any) => {
-          hideLoading()
           console.log(err)
+        })
+        .finally(() => {
+          hideLoading()
         })
     },
     fail: () => {}
@@ -223,7 +224,7 @@ const placeOrderClick = () => {
 
 const _loadAddress = () => {
   getDefaultAddress()
-    .then(res => {
+    .then((res) => {
       const { data } = res
       if (!data) {
         return
@@ -238,7 +239,7 @@ const _loadAddress = () => {
 const _loadDetail = (scene: string, gids: string[]) => {
   loading()
   getConfirmOrderDetail(scene, gids)
-    .then(res => {
+    .then((res) => {
       cartGoods.push(...res.data)
       hideLoading()
     })

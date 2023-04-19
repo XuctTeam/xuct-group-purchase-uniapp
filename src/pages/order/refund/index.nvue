@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-17 22:37:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-18 23:29:11
+ * @LastEditTime: 2023-04-19 11:56:23
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -50,14 +50,14 @@
         <tm-text _class="font-weight-b" :fontSize="28" label="退单原因"></tm-text>
       </view>
       <tm-divider></tm-divider>
-      <tm-radio-group v-model="refundTypeValue" direction="col">
+      <tm-radio-group v-model="refundTypeValue" direction="col" :style="{ display: 'flex' }">
         <tm-radio color="green" v-for="(item, index) in radioItemds" :value="item.key" :label="item.label" :key="index" />
       </tm-radio-group>
     </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
       <tm-text _class="font-weight-b" :fontSize="28" label="图片补充"></tm-text>
       <tm-divider></tm-divider>
-      <tm-upload showSort :onStart="onStart" color="green" v-model="imageList" :header="uploadHeader" ref="up" :width="636" :rows="3" :maxFile="3" :url="uploadUrlValue"> </tm-upload>
+      <tm-upload showSort :onStart="onStart" color="green" v-model="imageList" :header="uploadHeader" ref="up" :width="636" :rows="3" :maxFile="3" :url="uploadUrlValue" @fail="onUploadFail"> </tm-upload>
     </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
       <view class="pa-10 flex flex-row flex-row-center-between">
@@ -169,21 +169,27 @@ const formatData = (date: Date) => {
   return DayJs(date).format('YYYY-MM-DD HH:mm:ss')
 }
 
+const onUploadFail = () => {
+  debugger
+}
+
 const onRefundClick = () => {
   loading()
-  refundOrder(
-    orderIdValue.value,
-    refundTypeValue.value,
-    refundReasonValue.value,
-    imageList.value.filter((x: any) => x.response?.code === 200).map((x: any) => x.response.data)
-  )
+  const _images = imageList.value
+    .filter((x: any) => {
+      return JSON.parse(x.response).code === 200
+    })
+    .map((x: any) => {
+      return JSON.parse(x.response).data
+    })
+  refundOrder(orderIdValue.value, refundTypeValue.value, refundReasonValue.value, _images)
     .then(() => {
-      hideLoading()
       uni.$emit('order::refund::success')
       uni.$tm.u.routerTo('', 'navigateBack')
     })
     .catch((err) => {
       console.log(err)
+    }).finally(() => {
       hideLoading()
     })
 }
@@ -193,10 +199,11 @@ const _loadData = (orderId: string) => {
   getOrderDetail(orderId)
     .then((res) => {
       Object.assign(orderInfo, res.data)
-      hideLoading()
     })
     .catch((err: any) => {
       console.log(err)
+    })
+    .finally(() => {
       hideLoading()
     })
 }

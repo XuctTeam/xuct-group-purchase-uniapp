@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-14 14:17:36
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-17 18:32:03
+ * @LastEditTime: 2023-04-19 14:30:19
  * @FilePath: \xuct-group-purchase-uniapp\src\types\order.d.ts
  * @Description:
  *
@@ -30,5 +30,13 @@ declare namespace Order {
     goodUnit: string
     num: number
     price: number
+  }
+
+  type OrderSumResult = {
+    toBePaidCount: number
+    toBeSendCount: number
+    toBeReceivedCount: number
+    toBeEvaluationCount: number
+    toBeService: number
   }
 }

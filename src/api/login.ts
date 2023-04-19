@@ -19,3 +19,10 @@ export const loginByCode = (code: string) => {
     code
   })
 }
+
+/**
+ * 退出登录
+ */
+export const logout = () => {
+  return request.delete('/api/v1/login')
+}

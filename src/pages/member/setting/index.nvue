@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 12:22:42
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-16 20:39:38
+ * @LastEditTime: 2023-04-19 18:45:07
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\setting\index.nvue
  * @Description: 
  * 
@@ -39,8 +39,10 @@
       <tm-cell :titleFontSize="28" bottomBorder title="版本号" :rightText="versionRef" :margin="[0, 0]" />
     </tm-sheet>
 
+    <tm-button block label="退出登录" color="orange" :margin="[10, 20]" @click="onQuitClick"></tm-button>
+
     <tm-drawer placement="bottom" v-model:show="showWin" okText="保存" okColor="green" @ok="onSave">
-      <tm-cell showAvatar :avatar="userInfo.avatal ?? '/static/images/me.png'" :avatarSize="80" :titleFontSize="30" bottomBorder>
+      <tm-cell showAvatar :avatar="userInfo.avatar ?? '/static/images/me.png'" :avatarSize="80" :titleFontSize="30" bottomBorder>
         <template v-slot:right>
           <tm-button color="green" size="small" text label="更新" @chooseavatar="chooseavatar" open-type="chooseAvatar"></tm-button>
         </template>
@@ -71,11 +73,12 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { getConfig } from '@/api/config'
-import { hideLoading, loading, message } from '@/utils/dialog'
+import { confirm, hideLoading, loading, message } from '@/utils/dialog'
 import { useUserHook } from '@/store'
 
 import { upload } from '@/services/upload'
 import { saveUserInfo } from '@/api/user'
+import { logout } from '@/api/login'
 
 const versionRef = ref<string>('')
 const showWin = ref(false)
@@ -152,15 +155,35 @@ const onSave = () => {
   loading()
   saveUserInfo(phoneRef.value, nickNameRef.value)
     .then(() => {
-      hideLoading()
       userStore.setUserInfo({ ...userInfo, nickname: nickNameRef.value, phone: phoneRef.value })
       showWin.value = false
     })
     .catch((err: any) => {
       console.log(err)
-      hideLoading()
       showWin.value = false
     })
+    .finally(() => {
+      hideLoading()
+    })
+}
+
+const onQuitClick = () => {
+  confirm({
+    title: '确定登出吗？',
+    success: () => {
+      loading()
+      logout()
+        .then(() => {
+          userStore.setLogout()
+          uni.$tm.u.routerTo('', 'navigateBack')
+        })
+        .catch((err: any) => {})
+        .finally(() => {
+          hideLoading()
+        })
+    },
+    fail: () => {}
+  })
 }
 </script>
 

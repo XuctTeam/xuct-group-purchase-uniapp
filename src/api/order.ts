@@ -2,13 +2,18 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-18 23:24:07
+ * @LastEditTime: 2023-04-19 14:07:00
  * @FilePath: \xuct-group-purchase-uniapp\src\api\order.ts
  * @Description:
  *
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
  */
 import request from '@/services/request'
+
+
+export const sumCount = () => {
+  return request.get<Order.OrderSumResult>('/api/v1/order/sum')
+}
 
 /**
  * 获取预下单购物车的商品
@@ -98,4 +103,13 @@ export const rushOrder = (orderId: string) => {
  */
 export const receiverOrder = (orderId: string) => {
   return request.post('/api/v1/order/receive', { orderId })
+}
+
+/**
+ * 删除订单
+ * 
+ * @param orderId 
+ */
+export const cancelOrder = (orderId: string) => {
+  return request.delete('/api/v1/order', { orderId })
 }

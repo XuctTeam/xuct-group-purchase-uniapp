@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 13:42:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-13 14:49:37
+ * @LastEditTime: 2023-04-19 15:01:22
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\login\index.nvue
  * @Description: 
  * 
@@ -10,7 +10,7 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="授权登录" color="#70DB93" fontColor="white" />
+    <tm-navbar title="登录" color="#32CD32" fontColor="#fff" :shadow="0"></tm-navbar>
     <view class="login-m">
       <view class="login-item">
         <view class="logo">
@@ -23,8 +23,8 @@
       </view>
     </view>
     <view class="login-b flc">
-      <tm-button :round="6" label="拒绝" @click="reject"></tm-button>
-      <tm-button :round="6" :linear-color="['#ea3c2d', '#ff9d14']" color="orange" font-color="white" linear="left" label="允许" @click="login"></tm-button>
+      <tm-button :round="6" color="white" label="拒绝" @click="reject"></tm-button>
+      <tm-button :round="6" color="green" font-color="white" label="允许" @click="login"></tm-button>
     </view>
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
       <view class="relative flex flex-row flex-around flex-row-center-center pa-10 bottom">
@@ -115,7 +115,7 @@ const _login = () => {
   return new Promise((resolve, reject) => {
     uni.login({
       provider: 'weixin', //使用微信登录
-      success: async loginRes => {
+      success: async (loginRes) => {
         loading('登录中...')
         try {
           const loinResult = await loginByCode(loginRes.code)

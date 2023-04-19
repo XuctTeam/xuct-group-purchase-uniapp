@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-15 22:02:25
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-14 21:39:28
+ * @LastEditTime: 2023-04-19 18:44:02
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -15,58 +15,73 @@
       <view class="head_top">
         <view class="avatar flex flex-row flex-row-center-start">
           <template v-if="logged">
-            <tm-avatar trigger :img="userInfo.avatal ?? '/static/images/me.png'" :round="12" />
-            <view class="ml-10">
-              <tm-text :font-size="32" color="rgba(51, 51, 51, 1)" :label="userInfo.nickname" />
+            <tm-avatar :size="120" :img="userInfo.avatar ?? '/static/images/me.png'" :round="25" />
+            <view class="flex flex-col flex-col-bottom-start ml-20">
+              <tm-text :font-size="34" color="white" :label="userInfo.nickname" />
+              <view class="flex flex-row flex-row-center-start mt-26" v-if="userInfo.phone">
+                <tm-icon :font-size="26" name="tmicon-gem" color="white"></tm-icon>
+                <view class="ml-4">
+                  <tm-text :font-size="28" color="white" :label="userInfo.phone" />
+                </view>
+              </view>
+              <view class="mt-20" v-else>
+                <tm-button :round="10" icon="tmicon-md-phone-portrait" :fontSize="24" color="green" :width="160" :height="50" :margin="[0]" :padding="[0]" label="绑定手机" openType="getPhoneNumber" @getphonenumber="getphonenumber"></tm-button>
+              </view>
             </view>
           </template>
-          <view class="flex flex-row flex-row-center-start flex-1 pl-10" v-else>
+          <view class="flex flex-row flex-row-center-start" v-else>
             <view class="user-head-img">
               <open-data type="userAvatarUrl"></open-data>
             </view>
-            <view class="flex flex-row flex-1 ml-10 flex-row-center-between">
-              <tm-text :font-size="32" _class="font-weight-b" label="登录参与团购"></tm-text>
-              <tm-button
-                color="red"
-                icon="tmicon-account"
-                :width="60"
-                :round="10"
-                :height="60"
-                :fontSize="28"
-                :margin="[50, 10]"
-                :shadow="0"
-                text
-                size="normal"
-                url="/pages/member/login/index"
-              ></tm-button>
+            <view class="ml-20">
+              <tm-text :font-size="28" _class="font-weight-b" color="white" label="未登录"></tm-text>
+              <tm-button color="green" borderStyle="dashed" :round="5" size="small" url="/pages/member/login/index" label="点我登录" :margin="[0, 10]"></tm-button>
             </view>
           </view>
         </view>
       </view>
       <view class="menu">
+        <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]" :height="120">
+          <tm-row :width="720" :column="3" :gutter="5">
+            <tm-col :margin="[4, 0]" :height="120" :borderGutter="[0, 0, index === 2 ? 0 : 1, 0]" v-for="(item, index) in meSelfSumItems" :key="index">
+              <view class="flex-1 flex flex-col flex-col-center-center">
+                <tm-text :label="item.nums"></tm-text>
+                <view class="mt-14">
+                  <tm-text color="grey" :fontSize="24" :label="item.name"></tm-text>
+                </view>
+              </view>
+            </tm-col>
+          </tm-row>
+        </tm-sheet>
+
         <!-- 订单列表信息 -->
-        <tm-sheet :round="3" :shadow="2" :margin="[20, 30, 20, 10]">
+        <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
           <tm-cell :margin="[0, 0]" rightText="全部订单" url="/pages/order/list/index">
             <template v-slot:title>
               <tm-text :font-size="30" _class="font-weight-b" label="我的订单"></tm-text>
             </template>
           </tm-cell>
-          <tm-grid :col="4" class="border-t-1" :width="686">
-            <tm-grid-item dot v-for="(item, index) in orderItems" :key="index" :height="160" @click="orderItemClick(item.key)">
-              <tm-icon :font-size="58" :name="item.icon"></tm-icon>
+          <tm-grid :col="5" class="border-t-1" :width="720">
+            <tm-grid-item :count="item.nums" v-for="(item, index) in orderItems" color="orange" :key="index" :height="160" @click="orderItemClick(item.key)">
+              <template v-if="item.width">
+                <tm-icon :name="item.icon" :_style="{ width: item.width + 'rpx', height: item.height + 'rpx' }"></tm-icon>
+              </template>
+              <template v-else>
+                <tm-icon :font-size="48" :name="item.icon"></tm-icon>
+              </template>
               <tm-text _class="pt-16" color="rgba(102, 102, 102, 1)" :font-size="24" :label="item.name"></tm-text>
             </tm-grid-item>
           </tm-grid>
         </tm-sheet>
         <!--我的服务-->
-        <tm-sheet :round="3" :shadow="2" :margin="[20, 30, 20, 10]">
+        <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
           <tm-cell :margin="[0, 0]">
             <template v-slot:title>
               <tm-text :font-size="30" _class="font-weight-b" label="我的服务"></tm-text>
             </template>
             <template v-slot:right><view></view></template>
           </tm-cell>
-          <tm-grid :col="4" class="border-t-1" :width="680">
+          <tm-grid :col="4" class="border-t-1" :width="720">
             <tm-grid-item :height="160" v-for="(item, index) in serviceItems" :key="index" @click="serviceItemClick(item.code)">
               <tm-icon :font-size="60" :name="item.icon"></tm-icon>
               <tm-text _class="pt-16" color="rgba(102, 102, 102, 1)" :font-size="24" :label="item.name"></tm-text>
@@ -78,6 +93,8 @@
   </tm-app>
 </template>
 <script lang="ts" setup>
+import { ref, reactive, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
 import tmAvatar from '@/tmui/components/tm-avatar/tm-avatar.vue'
@@ -88,19 +105,40 @@ import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import tmRow from '@/tmui/components/tm-row/tm-row.vue'
+import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 
 // 导入storeToRefs
-import { storeToRefs } from 'pinia'
 import { useUserHook } from '@/store'
-import { ref } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { sumCount } from '@/api/order'
+import { bindPhone } from '@/api/user'
 
-const store = useUserHook()
+const userStore = useUserHook()
 
 // 解构的时候调用storeToRefs
-const { logged } = storeToRefs(store)
-const userInfo = store.getUserInfo
+const { logged } = storeToRefs(userStore)
+const userInfo = userStore.getUserInfo
 
-const orderItems = ref([
+const meSelfSumItems = reactive([
+  {
+    key: '1',
+    name: '我的积分',
+    nums: 0
+  },
+  {
+    key: '2',
+    name: '我的足迹',
+    nums: 0
+  },
+  {
+    key: '3',
+    name: '我的收藏',
+    nums: 0
+  }
+])
+
+const orderItems = reactive([
   {
     key: '1',
     name: '待付款',
@@ -124,12 +162,20 @@ const orderItems = ref([
     name: '待评价',
     icon: '/static/images/me-ic-evaluate.png',
     nums: 0
+  },
+  {
+    key: '5',
+    name: '退单/售后',
+    icon: '/static/images/me-ic-service.png',
+    nums: 0,
+    width: 60,
+    height: 50
   }
 ])
 
 const serviceItems = ref([
   {
-    name: '我的地址',
+    name: '地址管理',
     icon: '/static/images/me-address.png',
     code: 'address'
   },
@@ -144,14 +190,49 @@ const serviceItems = ref([
     code: 'setting'
   },
   {
-    name: '客服及帮助',
+    name: '客服服务',
     icon: '/static/images/me-message.png',
+    code: 'setting'
+  },
+  {
+    name: '浏览历史',
+    icon: '/static/images/me-good-brose.png',
+    code: 'setting'
+  },
+  {
+    name: '订单回收',
+    icon: '/static/images/me-order-delete.png',
     code: 'setting'
   }
 ])
 
+onLoad(() => {
+  if (!logged.value) {
+    return
+  }
+  _loadOrderSum()
+})
+
+watch(logged, (newValue, oldValue) => {
+  if (!oldValue && newValue) {
+    _loadOrderSum()
+    return
+  }
+  //退出登录
+  if (!newValue && oldValue) {
+    orderItems.forEach((x) => (x.nums = 0))
+  }
+})
+
 const orderItemClick = (index: any) => {
-  uni.$tm.u.routerTo('/pages/order/list/index?key=' + index, 'navigate')
+  switch (index) {
+    case '1':
+    case '2':
+    case '3':
+      uni.$tm.u.routerTo('/pages/order/list/index?key=' + index, 'navigate')
+      break
+    default:
+  }
 }
 
 const serviceItemClick = (code: string) => {
@@ -162,10 +243,52 @@ const serviceItemClick = (code: string) => {
   uni.$tm.u.routerTo('/pages/member/address/list', 'navigate')
 }
 
-function goToLogin() {
-  uni.navigateTo({
-    url: '/pages/member/login/index'
-  })
+const getphonenumber = (e: any) => {
+  const { detail } = e
+  if (!detail) {
+    return
+  }
+  const { errMsg, code, encryptedData, iv } = detail
+  if (errMsg.indexOf('fail') > 0) {
+    return
+  }
+
+  bindPhone(code, encryptedData, iv)
+    .then((res) => {
+      userStore.setUserInfo({ ...userInfo, phone: res.data })
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+}
+
+const _loadOrderSum = () => {
+  sumCount()
+    .then((res) => {
+      const { toBePaidCount, toBeSendCount, toBeReceivedCount, toBeEvaluationCount, toBeService } = res.data
+      orderItems.forEach((x) => {
+        switch (x.key) {
+          case '1':
+            x.nums = toBePaidCount
+            break
+          case '2':
+            x.nums = toBeSendCount
+            break
+          case '3':
+            x.nums = toBeReceivedCount
+            break
+          case '4':
+            x.nums = toBeEvaluationCount
+            break
+          case '5':
+            x.nums = toBeService
+            break
+        }
+      })
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
 }
 </script>
 <style>
@@ -201,15 +324,15 @@ function goToLogin() {
 
 .menu {
   position: absolute;
-  top: 160rpx;
+  top: 170rpx;
   right: 0;
   left: 0;
   overflow: hidden;
 }
 
 .user-head-img {
-  width: 100upx;
-  height: 100upx;
+  width: 120upx;
+  height: 120upx;
   border-radius: 50%;
   overflow: hidden;
   background-color: rgba(255, 255, 255, 0.7);

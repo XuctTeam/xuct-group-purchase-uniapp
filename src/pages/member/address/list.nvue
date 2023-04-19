@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-25 21:54:59
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-15 08:12:56
+ * @LastEditTime: 2023-04-19 14:35:39
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\list.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -28,10 +28,10 @@
     </view>
     <view class="list" v-else>
       <tm-sheet v-for="(item, index) in addressList" :key="index" :round="3" :shadow="2" :margin="[10]" @click="onSelect(item.id ?? '')">
-        <view class="flex flex-row flex-row-center-between">
+        <view class="flex flex-row flex-row-center-between pa-10">
           <view>
-            <view class="flex flex-row flex-row-center-between">
-              <tm-tag color="red" size="s" label="默认" v-if="item.firstChoose === 1"></tm-tag>
+            <view class="flex flex-row flex-row-center-between mb-10">
+              <tm-tag color="green" size="s" label="默认" v-if="item.firstChoose === 1" :margin="[0, 0, 10, 0]"></tm-tag>
               <tm-text :font-size="30" :label="`${item.provinceName}${item.cityName}${item.countyName}`"></tm-text>
             </view>
             <tm-text :font-size="28" :label="item.detailInfo"></tm-text>
@@ -96,14 +96,15 @@ const _load = (_search: string) => {
   load.value = true
   loading()
   userAddressList(_search)
-    .then(res => {
+    .then((res) => {
       addressList.push(...res.data)
       load.value = false
-      hideLoading()
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err)
       load.value = false
+    })
+    .finally(() => {
       hideLoading()
     })
 }
@@ -132,7 +133,7 @@ const onEdit = (id: string) => {
   uni.navigateTo({
     url: './index?id=' + id,
     success: () => {
-      uni.$once('address:add::success', data => {
+      uni.$once('address:add::success', (data) => {
         _load('')
         console.log('新增成功返回')
       })
@@ -144,7 +145,7 @@ const toAdd = () => {
   uni.navigateTo({
     url: './index',
     success: () => {
-      uni.$once('address:add::success', data => {
+      uni.$once('address:add::success', (data) => {
         _load('')
         console.log('新增成功返回')
       })
@@ -167,7 +168,7 @@ const onSelect = (addressId: string) => {
     return
   }
   uni.$emit('address:selected::success', {
-    address: addressList.find(x => x.id === addressId)
+    address: addressList.find((x) => x.id === addressId)
   })
   uni.$tm.u.routerTo('', 'navigateBack')
 }

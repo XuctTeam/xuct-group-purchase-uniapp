@@ -142,12 +142,13 @@ onLoad((opts: any) => {
 const _loadData = (orderId: string) => {
   loading()
   getOrderDetail(orderId)
-    .then(res => {
+    .then((res) => {
       Object.assign(orderInfo, res.data)
-      hideLoading()
     })
     .catch((err: any) => {
       console.log(err)
+    })
+    .finally(() => {
       hideLoading()
     })
 }

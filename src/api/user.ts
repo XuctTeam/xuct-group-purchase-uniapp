@@ -25,6 +25,20 @@ export const saveUserInfo = (phone: string, nickname: string) => {
 }
 
 /**
+ * 绑定手机号
+ *
+ * @param code
+ * @param encryptedData
+ * @param iv
+ */
+export const bindPhone = (code: string, encryptedData: string, iv: string) => {
+  return request.post<string>('/api/v1/user/bind/phone', {
+    code,
+    encryptedData,
+    iv
+  })
+}
+/**
  * 获取用户地址列表
  * @returns
  */
