@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 16:49:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-10 10:39:10
+ * @LastEditTime: 2023-04-19 23:18:37
  * @FilePath: \xuct-group-purchase-uniapp\src\services\request.ts
  * @Description:
  *
@@ -43,11 +43,11 @@ const executeQueue = (error: any) => {
   requestQueue = []
 }
 
-// 刷新 Token 请求
-const refreshToken = () => instance.post('/oauth/token')
+// 验证 Token 请求
+const checkToken = () => instance.post('/api/v1/login/token/check')
 
-// 刷新 Token 请求处理，参数为刷新成功后的回调函数
-const refreshTokenHandler = (afresh: any) => {
+// 验证 Token 请求处理，参数为刷新成功后的回调函数
+const checkTokenHandler = (afresh: any) => {
   // 如果当前是在请求刷新 Token 中，则将期间的请求暂存起来
   if (isRefreshing) {
     return new Promise((resolve: any, reject: any) => {
@@ -56,18 +56,20 @@ const refreshTokenHandler = (afresh: any) => {
   }
 
   isRefreshing = true
+  const store = useUserHook()
 
   return new Promise((resolve, reject) => {
-    refreshToken()
+    checkToken()
       // 假设请求成功接口返回的 code === 0 为刷新成功，其他情况都是刷新失败
-      .then(res => (res.data.code === 0 ? res : Promise.reject(res)))
-      .then(res => {
-        uni.setStorageSync('TOKEN', res.data.data)
+      .then((res: any) => {
+        return res.code === 200 && res.data ? res : Promise.reject(res)
+      })
+      .then((res) => {
         resolve(afresh?.())
         executeQueue(null)
       })
-      .catch(err => {
-        uni.removeStorageSync('TOKEN')
+      .catch((err) => {
+        store.setLogout()
         reject(err)
         executeQueue(err)
       })
@@ -78,7 +80,7 @@ const refreshTokenHandler = (afresh: any) => {
 }
 
 instance.interceptors.request.use(
-  config => {
+  (config) => {
     const store = useUserHook()
     const token = store.getToken
     const url = config.url
@@ -87,18 +89,13 @@ instance.interceptors.request.use(
     }
     return config
   },
-  error => {
+  (error) => {
     return Promise.reject(error)
   }
 )
 
 instance.interceptors.response.use(
-  response => {
-    const { statusCode } = response
-    // 假设接口返回的 code === 401 时则需要刷新 Token
-    if (statusCode === 401) {
-      return refreshTokenHandler(() => instance(response.config))
-    }
+  (response) => {
     const { code, message } = response.data
     if (code !== 200) {
       uni.$tm.u.toast(message || '请求异常', true, 'error')
@@ -109,9 +106,13 @@ instance.interceptors.response.use(
     }
     return response.data
   },
-  error => {
-    const { errno } = error
-    const _tips = codeKeys[errno] || '请求异常！'
+  (error) => {
+    const { statusCode } = error
+    // 假设接口返回的 code === 401 时则需要刷新 Token
+    if (statusCode === 401) {
+      return checkTokenHandler(() => instance(error.config))
+    }
+    const _tips = codeKeys[statusCode] || '请求异常！'
     uni.$tm.u.toast(_tips, true, 'error')
     return Promise.reject(error)
   }

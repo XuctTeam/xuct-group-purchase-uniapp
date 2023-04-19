@@ -93,6 +93,15 @@
       }
     },
     {
+      "path": "pages/member/collect/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
       "path": "pages/public/userprotocol",
       "style": {
         "navigationBarTitleText": "",

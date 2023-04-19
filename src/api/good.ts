@@ -102,3 +102,10 @@ export const deleteCartGood = (gids: string[]) => {
 export const cleanCart = () => {
   return request.delete('/api/v1/good/cart/del/all')
 }
+
+/**
+ * 查询用户收藏商品
+ */
+export const collectList = () => {
+  return request.get<Good.GoodResult>('/api/v1/good/user/collect')
+}

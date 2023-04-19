@@ -2,8 +2,8 @@
  * @Author: Derek Xu
  * @Date: 2023-04-19 19:01:43
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-19 19:02:05
- * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\collect.nvue
+ * @LastEditTime: 2023-04-19 22:21:18
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\collect\index.nvue
  * @Description: 
  * 
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
@@ -11,10 +11,46 @@
 <template>
   <tm-app>
     <tm-navbar title="我的收藏" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" :height="200" v-for="(item, index) in collectData" :key="index">
+      <view class="flex flex-row flex-1">
+        <tm-image :width="180" :round="4" :height="180" :src="item.firstDrawing"></tm-image>
+        <view class="flex flex-1 flex-col pa-10 detail">
+          <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
+          <view class="flex flex-row flex-row-center-between">
+            <tm-text>123123</tm-text>
+          </view>
+        </view>
+      </view>
+    </tm-sheet>
   </tm-app>
 </template>
 <script lang="ts" setup>
 import { computed, reactive, ref, nextTick } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { loading, hideLoading } from '@/utils/dialog'
+import { collectList } from '@/api/good'
+
+const collectData = reactive<Good.GoodResult[]>([])
+
+onLoad(() => {
+  initData()
+})
+
+const initData = () => {
+  loading()
+  collectList()
+    .then((res) => {
+      debugger
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+    .finally(() => {
+      hideLoading()
+    })
+}
 </script>
