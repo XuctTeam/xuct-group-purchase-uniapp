@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-19 19:01:43
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-19 22:21:18
+ * @LastEditTime: 2023-04-20 14:13:45
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\collect\index.nvue
  * @Description: 
  * 
@@ -11,17 +11,31 @@
 <template>
   <tm-app>
     <tm-navbar title="我的收藏" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" :height="200" v-for="(item, index) in collectData" :key="index">
-      <view class="flex flex-row flex-1">
-        <tm-image :width="180" :round="4" :height="180" :src="item.firstDrawing"></tm-image>
-        <view class="flex flex-1 flex-col pa-10 detail">
-          <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
-          <view class="flex flex-row flex-row-center-between">
-            <tm-text>123123</tm-text>
+    <template v-if="collectData.length === 0 && !loadValue">
+      <tm-result :showBtn="false" color="green" title="空空如也哦~" subTitle="快去收藏吧"></tm-result>
+    </template>
+    <template v-else>
+      <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" v-for="(item, index) in collectData" :key="index">
+        <tm-slide-switch :width="700" :height="140">
+          <view class="flex flex-row flex-1" @click="itemClick(item.id)">
+            <tm-image :width="140" :round="4" :height="140" :src="item.firstDrawing"></tm-image>
+            <view class="flex flex-1 flex-col flex-col-between-center pa-10 w-0">
+              <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
+              <view class="flex flex-row flex-row-center-between">
+                <tm-text color="orange" :label="`单位：${item.unit}`" />
+              </view>
+            </view>
           </view>
-        </view>
-      </view>
-    </tm-sheet>
+          <template v-slot:right>
+            <view class="flex flex-row flex-row-center-end">
+              <tm-sheet :width="100" _class="flex flex-row flex-row-center-center" :height="140" color="green" no-level :margin="[0]" :padding="[0]">
+                <tm-text :userInteractionEnabled="false" label="取消" @click="onCllect(item.id)"></tm-text>
+              </tm-sheet>
+            </view>
+          </template>
+        </tm-slide-switch>
+      </tm-sheet>
+    </template>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -30,9 +44,15 @@ import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import tmImage from '@/tmui/components/tm-image/tm-image.vue'
+import tmSlideSwitch from '@/tmui/components/tm-slide-switch/tm-slide-switch.vue'
+import tmResult from '@/tmui/components/tm-result/tm-result.vue'
+
 import { onLoad } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
-import { collectList } from '@/api/good'
+import { collect, collectList } from '@/api/good'
+
+const loadValue = ref<boolean>(false)
 
 const collectData = reactive<Good.GoodResult[]>([])
 
@@ -42,15 +62,52 @@ onLoad(() => {
 
 const initData = () => {
   loading()
+  loadValue.value = true
   collectList()
     .then((res) => {
-      debugger
+      collectData.push(...res.data)
     })
     .catch((err: any) => {
       console.log(err)
     })
     .finally(() => {
+      loadValue.value = false
       hideLoading()
     })
+}
+
+const itemClick = (gid: string) => {
+  uni.navigateTo({
+    url: '/pages/good/index?scene=collect&id=' + gid,
+    success: () => {
+      uni.$once('good::view::refresh', (data) => {
+        const { gid, collect } = data
+        if (collect) {
+          return
+        }
+        _removeItem(gid)
+      })
+    }
+  })
+}
+
+const onCllect = (gid: string) => {
+  collect(gid)
+    .then(() => {
+      _removeItem(gid)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+
+const _removeItem = (gid: string) => {
+  const _values = collectData.filter((i) => {
+    return i.id !== gid
+  })
+  setTimeout(() => {
+    collectData.length = 0
+    collectData.push(..._values)
+  }, 500)
 }
 </script>

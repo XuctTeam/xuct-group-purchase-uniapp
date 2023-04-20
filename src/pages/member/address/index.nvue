@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 16:24:00
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-19 11:53:48
+ * @LastEditTime: 2023-04-20 14:47:02
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\index.nvue
  * @Description: 
  * 
@@ -120,7 +120,7 @@ const onDelete = () => {
     return
   }
   confirm({
-    title: '确认删除吗?',
+    title: '确定删除吗?',
     success: () => {
       deleteUserAddress(address.id ?? '')
         .then(() => {

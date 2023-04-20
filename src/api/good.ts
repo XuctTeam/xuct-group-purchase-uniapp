@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 11:35:37
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-16 16:33:33
+ * @LastEditTime: 2023-04-20 09:52:16
  * @FilePath: \xuct-group-purchase-uniapp\src\api\good.ts
  * @Description:
  *
@@ -107,5 +107,5 @@ export const cleanCart = () => {
  * 查询用户收藏商品
  */
 export const collectList = () => {
-  return request.get<Good.GoodResult>('/api/v1/good/user/collect')
+  return request.get<Good.GoodResult[]>('/api/v1/good/user/collect')
 }

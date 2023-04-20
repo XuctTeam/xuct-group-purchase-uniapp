@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-19 18:57:28
+ * @LastEditTime: 2023-04-20 10:23:56
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -31,10 +31,10 @@
               </view>
               <view class="flex flex-row flex-1">
                 <tm-image :width="180" :round="4" :height="180" :src="item.firstDrawing"></tm-image>
-                <view class="flex flex-1 flex-col pa-10 detail">
+                <view class="flex flex-1 flex-col pa-10 w-0 flex-col-between-center">
                   <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
                   <view class="flex flex-row flex-row-center-between">
-                    <tm-text>123123</tm-text>
+                    <tm-text color="orange" :label="`单位：${item.unit}`" />
                     <tm-stepper :max="200" :min="1" :defaultValue="item.num" circular @change="(e) => chooseNumChange(e, item.goodId)"></tm-stepper>
                   </view>
                 </view>
@@ -263,10 +263,5 @@ const _deleteCart = () => {
 
 .checkbox {
   width: 80rpx;
-}
-
-.detail {
-  width: 0;
-  justify-content: space-between;
 }
 </style>

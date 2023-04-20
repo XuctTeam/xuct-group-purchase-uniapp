@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 18:54:33
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-13 14:49:02
+ * @LastEditTime: 2023-04-20 14:09:40
  * @FilePath: \xuct-group-purchase-uniapp\src\utils\dialog.ts
  * @Description:
  *
@@ -48,7 +48,7 @@ export const loading = (title?: string) => {
 export const hideLoading = () => {
   setTimeout(() => {
     uni.hideLoading()
-  }, 1000)
+  }, 300)
 }
 
 /**

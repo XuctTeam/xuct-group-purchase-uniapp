@@ -20,6 +20,7 @@ declare namespace Good {
     detail?: string
     collect?: boolean
     browse: number
+    unit?: string
   }
 
   type CartResult = {

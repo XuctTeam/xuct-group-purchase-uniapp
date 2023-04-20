@@ -147,7 +147,7 @@ function nvuegetClientRect() {
       .createSelectorQuery()
       .in(proxy)
       .select('.itemWall')
-      .boundingClientRect(res => {
+      .boundingClientRect((res) => {
         if (res.height === 0 && res.width === 0) {
           nvuegetClientRect()
         } else {

@@ -19,6 +19,10 @@
   height: 100%;
 }
 
+.w-0 {
+  width: 0;
+}
+
 .w-140 {
   width: 140rpx;
 }
@@ -33,4 +37,8 @@
 
 .w-60 {
   width: 60rpx;
+}
+
+.flex-col-between-center {
+  justify-content: space-between !important;
 }

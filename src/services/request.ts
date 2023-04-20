@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 16:49:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-19 23:18:37
+ * @LastEditTime: 2023-04-20 09:33:09
  * @FilePath: \xuct-group-purchase-uniapp\src\services\request.ts
  * @Description:
  *
@@ -64,7 +64,7 @@ const checkTokenHandler = (afresh: any) => {
       .then((res: any) => {
         return res.code === 200 && res.data ? res : Promise.reject(res)
       })
-      .then((res) => {
+      .then(() => {
         resolve(afresh?.())
         executeQueue(null)
       })

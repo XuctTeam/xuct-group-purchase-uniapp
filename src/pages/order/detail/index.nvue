@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:10:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-17 23:06:48
+ * @LastEditTime: 2023-04-20 16:36:36
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\detail\index.nvue
  * @Description: 
  * 
@@ -10,7 +10,7 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="订单详情" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <tm-navbar title="订单详情" color="#32CD32" fontColor="#fff" blur :beforeBack="backClick"></tm-navbar>
     <tm-sheet :margin="[10, 10]" :round="3" :shadow="2" :padding="[10]">
       <tm-cell :margin="[0, 0]">
         <template v-slot:title>
@@ -92,11 +92,24 @@
         <tm-text :font-size="26" :label="orderInfo.totalPrice ?? 0"></tm-text>
       </view>
     </tm-sheet>
+
+    <view :style="{ height: _totalBarHeight + 'rpx' }"></view>
+    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
+      <view class="relative flex flex-row flex-around flex-row-center-end pa-10 bottom">
+        sdfsdfsdf
+        <template v-if="orderInfo.status === 1 || orderInfo.status === 2">
+          <tm-button :round="24" size="small" :margin="[24, 0]" :label="orderInfo.rush ? '已催单' : '催单'" :disabled="!!orderInfo.rush" :font-size="24" color="orange"></tm-button>
+          <tm-button :round="24" size="small" label="申请退单" :font-size="24" color="green" @click="refundClick"></tm-button>
+        </template>
+        <tm-button v-if="orderInfo.status === 3" size="small" label="收货" color="green" :round="10" @click="receiverClick"></tm-button>
+        <tm-button v-if="orderInfo.status === 4" size="small" label="删除" color="white" :round="10" @click="deleteOrderClick"></tm-button>
+      </view>
+    </view>
   </tm-app>
 </template>
 <script lang="ts" setup>
 import { onLoad } from '@dcloudio/uni-app'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
@@ -106,12 +119,18 @@ import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 
-import { getOrderDetail } from '@/api/order'
+import { cancelOrder, getOrderDetail, receiverOrder } from '@/api/order'
 import { reactive } from 'vue'
-import { loading, hideLoading, message } from '@/utils/dialog'
+import { loading, hideLoading, message, confirm } from '@/utils/dialog'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
+import { useAppHook } from '@/store'
 const DayJs = dayjs.default
+const appStore = useAppHook()
 
+const _totalBarHeight = computed(() => {
+  const safeBottom = appStore.getSafeBottom()
+  return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
+})
 const orderInfo = reactive<Order.OrderResult>({
   id: '',
   createTime: new Date(),
@@ -129,6 +148,7 @@ const orderInfo = reactive<Order.OrderResult>({
     detailInfo: ''
   }
 })
+const refunded = ref<boolean>(false)
 
 onLoad((opts: any) => {
   const { orderId } = opts
@@ -168,6 +188,55 @@ const copyClick = () => {
       })
     }
   })
+}
+
+const deleteOrderClick = () => {
+  confirm({
+    title: '确定删除吗？',
+    success: () => {
+      cancelOrder(orderInfo.id)
+        .then(() => {
+          _refreshAndBack()
+        })
+        .catch((err: any) => {
+          console.log(err)
+        })
+    },
+    fail: () => {}
+  })
+}
+
+const receiverClick = () => {
+  confirm({
+    title: '确定收货吗？',
+    success: () => {
+      receiverOrder(orderInfo.id)
+        .then(() => {
+          _refreshAndBack()
+        })
+        .catch((err: any) => {
+          console.log(err)
+        })
+    },
+    fail: () => {}
+  })
+}
+
+const refundClick = () => {
+
+}
+
+const backClick = () => {
+  if (!refunded.value) {
+    return true
+  }
+  uni.$emit('order::refresh::success')
+  return true
+}
+
+const _refreshAndBack = () => {
+  uni.$emit('order::refresh::success')
+  uni.$tm.u.routerTo('', 'navigateBack')
 }
 </script>
 <style>

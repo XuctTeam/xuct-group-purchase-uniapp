@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 12:22:42
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-19 18:45:07
+ * @LastEditTime: 2023-04-20 14:19:57
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\setting\index.nvue
  * @Description: 
  * 
@@ -11,7 +11,7 @@
 <template>
   <tm-app>
     <tm-navbar title="个人设置" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <tm-sheet :margin="[20, 20]" :shadow="4" :round="2">
+    <tm-sheet :margin="[10, 20]" :shadow="4" :round="2">
       <view class="flex flex-row flex-row-center-start">
         <tm-divider color="green" :border="14" real-color vertical :height="30"></tm-divider>
         <view class="font-weight-b">基础资料</view>
@@ -20,7 +20,7 @@
       <tm-cell :titleFontSize="28" bottomBorder title="个人资料" :margin="[0, 0]" @click="personClick" />
       <tm-cell :titleFontSize="28" bottomBorder title="意见反馈" :margin="[0, 0]" />
     </tm-sheet>
-    <tm-sheet :margin="[20, 20]" :shadow="4" :round="2">
+    <tm-sheet :margin="[10, 20]" :shadow="4" :round="2">
       <view class="flex flex-row flex-row-center-start">
         <tm-divider color="green" :border="14" real-color vertical :height="30"></tm-divider>
         <view class="font-weight-b">售后及服务</view>
@@ -29,7 +29,7 @@
       <tm-cell :titleFontSize="28" bottomBorder title="联系团长" :margin="[0, 0]" url="/pages/member/userinfo/index" />
       <tm-cell :titleFontSize="28" bottomBorder title="意见反馈" :margin="[0, 0]" />
     </tm-sheet>
-    <tm-sheet :margin="[20, 20]" :shadow="4" :round="2">
+    <tm-sheet :margin="[10, 20]" :shadow="4" :round="2">
       <view class="flex flex-row flex-row-center-start">
         <tm-divider color="green" :border="14" real-color vertical :height="30"></tm-divider>
         <view class="font-weight-b">产品介绍</view>
@@ -39,7 +39,7 @@
       <tm-cell :titleFontSize="28" bottomBorder title="版本号" :rightText="versionRef" :margin="[0, 0]" />
     </tm-sheet>
 
-    <tm-button block label="退出登录" color="orange" :margin="[10, 20]" @click="onQuitClick"></tm-button>
+    <tm-button block label="退出登录" color="green" :margin="[10, 20]" @click="onQuitClick"></tm-button>
 
     <tm-drawer placement="bottom" v-model:show="showWin" okText="保存" okColor="green" @ok="onSave">
       <tm-cell showAvatar :avatar="userInfo.avatar ?? '/static/images/me.png'" :avatarSize="80" :titleFontSize="30" bottomBorder>
@@ -61,21 +61,18 @@
   </tm-app>
 </template>
 <script lang="ts" setup>
+import { ref } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
 import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
 import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
-import tmAvatar from '@/tmui/components/tm-avatar/tm-avatar.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
-
-import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { getConfig } from '@/api/config'
 import { confirm, hideLoading, loading, message } from '@/utils/dialog'
 import { useUserHook } from '@/store'
-
 import { upload } from '@/services/upload'
 import { saveUserInfo } from '@/api/user'
 import { logout } from '@/api/login'

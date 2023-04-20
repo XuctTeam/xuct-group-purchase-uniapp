@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:29:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-19 10:53:05
+ * @LastEditTime: 2023-04-20 15:52:44
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\list\index.nvue
  * @Description: 
  * 
@@ -49,13 +49,10 @@
                   <tm-button :round="24" size="small" :margin="[24, 0]" label="付款" :font-size="24" color="green"></tm-button>
                   <tm-button :round="24" size="small" label="取消订单" :font-size="24" color="orange" @click="onCancelOrder(item.id)"></tm-button>
                 </template>
-                <template v-else-if="item.status === 2">
+                <template v-if="item.status === 2 || item.status === 3">
                   <tm-button :round="24" size="small" :margin="[24, 0]" :label="item.rush ? '已催单' : '催单'" :disabled="!!item.rush" :font-size="24" color="orange" @click="onRushOrderOrder(item.id)"></tm-button>
-                  <tm-button :round="24" size="small" label="申请退单" :font-size="24" color="green" @click="onRefundOrder(item.id)"></tm-button>
-                </template>
-                <template v-else>
-                  <tm-button :round="24" size="small" :margin="[24, 0]" :label="item.rush ? '已催单' : '催单'" :disabled="!!item.rush" :font-size="24" color="orange" @click="onRushOrderOrder(item.id)"></tm-button>
-                  <tm-button :round="24" size="small" :margin="[24, 0]" label="收货" :font-size="24" color="green" @click="onReciverOrder(item.id)"></tm-button>
+                  <tm-button v-if="item.status === 2" :round="24" size="small" label="申请退单" :font-size="24" color="green" @click="onRefundOrder(item.id)"></tm-button>
+                  <tm-button v-else :round="24" size="small" :margin="[24, 0]" label="收货" :font-size="24" color="green" @click="onReciverOrder(item.id)"></tm-button>
                 </template>
               </template>
               <template v-else>
@@ -99,7 +96,6 @@ const _width = computed(() => {
   return uni.$tm.u.torpx(appStore.getWindowWidth())
 })
 const paging = ref<any>(null)
-const showWin = ref(false)
 const tabActiveRef = ref<string>('0')
 let orderList = ref<Order.OrderResult[]>([])
 
@@ -143,7 +139,14 @@ onLoad((opts: any) => {
 })
 
 const onDetailClick = (orderId: string) => {
-  uni.$tm.u.routerTo('/pages/order/detail/index?orderId=' + orderId, 'navigate')
+  uni.navigateTo({
+    url: '/pages/order/detail/index?orderId=' + orderId,
+    success: () => {
+      uni.$once('order::refresh::success', () => {
+        paging.value.reload()
+      })
+    }
+  })
 }
 
 const onCancelOrder = (orderId: string) => {
@@ -168,7 +171,7 @@ const onRushOrderOrder = (orderId: string) => {
 
 const onReciverOrder = (orderId: string) => {
   confirm({
-    title: '确认收货吗？',
+    title: '确定收货吗？',
     success: () => {
       _receiverOrder(orderId)
     },
