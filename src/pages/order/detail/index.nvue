@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:10:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-20 16:36:36
+ * @LastEditTime: 2023-04-21 11:05:23
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\detail\index.nvue
  * @Description: 
  * 
@@ -96,10 +96,9 @@
     <view :style="{ height: _totalBarHeight + 'rpx' }"></view>
     <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
       <view class="relative flex flex-row flex-around flex-row-center-end pa-10 bottom">
-        sdfsdfsdf
         <template v-if="orderInfo.status === 1 || orderInfo.status === 2">
-          <tm-button :round="24" size="small" :margin="[24, 0]" :label="orderInfo.rush ? '已催单' : '催单'" :disabled="!!orderInfo.rush" :font-size="24" color="orange"></tm-button>
-          <tm-button :round="24" size="small" label="申请退单" :font-size="24" color="green" @click="refundClick"></tm-button>
+          <tm-button v-if="orderInfo.refundStatus === 0" :round="24" size="small" :margin="[24, 0]" :label="orderInfo.rush ? '已催单' : '催单'" :disabled="!!orderInfo.rush" :font-size="24" color="orange"></tm-button>
+          <tm-button :round="24" size="small" :label="orderInfo.refundStatus === 0 ? '申请退单' : '已退单'" :disabled="orderInfo.refundStatus !== 0" :font-size="24" color="green" @click="refundClick"></tm-button>
         </template>
         <tm-button v-if="orderInfo.status === 3" size="small" label="收货" color="green" :round="10" @click="receiverClick"></tm-button>
         <tm-button v-if="orderInfo.status === 4" size="small" label="删除" color="white" :round="10" @click="deleteOrderClick"></tm-button>
@@ -139,6 +138,7 @@ const orderInfo = reactive<Order.OrderResult>({
   status: 1,
   integral: 0,
   rush: 0,
+  refundStatus: 0,
   address: {
     provinceName: '',
     cityName: '',
@@ -148,7 +148,6 @@ const orderInfo = reactive<Order.OrderResult>({
     detailInfo: ''
   }
 })
-const refunded = ref<boolean>(false)
 
 onLoad((opts: any) => {
   const { orderId } = opts
@@ -223,11 +222,18 @@ const receiverClick = () => {
 }
 
 const refundClick = () => {
-
+  uni.navigateTo({
+    url: '/pages/order/refund/index?orderId=' + orderInfo.id,
+    success: () => {
+      uni.$once('order::refund::success', () => {
+        orderInfo.refundStatus = 1
+      })
+    }
+  })
 }
 
 const backClick = () => {
-  if (!refunded.value) {
+  if (orderInfo.refundStatus === 0) {
     return true
   }
   uni.$emit('order::refresh::success')

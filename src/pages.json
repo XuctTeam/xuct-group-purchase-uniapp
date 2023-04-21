@@ -102,15 +102,6 @@
       }
     },
     {
-      "path": "pages/public/userprotocol",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-    {
       "path": "pages/order/refund/index",
       "style": {
         "navigationBarTitleText": "",
@@ -139,6 +130,24 @@
     },
     {
       "path": "pages/order/result/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/public/userprotocol",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/services/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",

@@ -1,0 +1,73 @@
+<template>
+  <tm-app>
+    <tm-navbar title="我的留言" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <!-- 聊天界面展示https://www.bilibili.com/video/BV1hT4y1P75N?p=22  搭建1和2 -->
+    <view class="content">
+ 
+ <!-- 聊天内容 -->
+ <scroll-view class="chat" scroll-y="true" scroll-with-animation="true" :scroll-into-view="scrollToView">
+     <view class="chat-main" :style="{paddingBottom:inputh+'px'}">
+         <view class="chat-ls" v-for="(item,index) in unshiftmsg" :key="index" :id="'msg'+ index">
+             <view class="chat-time" v-if="item.createTime != ''">{{changeTime(item.createTime)}}</view>
+             <view class="msg-m msg-left" v-if="item.sendName ==  friendName">
+                 <image class="user-img" src="../../../static/logo.png"></image>
+                 <view class="message" v-if="item.TextType == 0">
+                     <!-- 文字 -->
+                     <view class="msg-text">{{item.sendText}}</view>
+                 </view>
+                 <view class="message" v-if="item.TextType == 1" @tap="previewImg(item.sendText)">
+                     <!-- 图像 -->
+                     <image :src="item.sendText" class="msg-img" mode="widthFix"></image>
+                 </view>
+                 <view class="message" v-if="item.TextType == 2" @tap="playVoice(item.sendText.voice)">
+                     <!-- 音频 -->
+                     <view class="msg-text voice" :style="{width:item.sendText.time*4+'rpx'}">
+                         <image src="../../../static/icon/Hotline.png" class="voice-img"></image>
+                         {{item.sendText.time}}″
+                     </view>
+                 </view>
+                 <view class="message" v-if="item.TextType == 3" @tap="openLocation(item.sendText)">
+                     <!-- 位置 -->
+                     <view class="msg-map">
+                         <view class="map-name">{{item.sendText.name}}</view>
+                         <view class="map-address">{{item.sendText.address}}</view>
+                         <!-- 如果map不起作用，就可以直接用一张图片去替代 -->
+                         <map class="map" :longitude="item.sendText.longitude" :latitude="item.sendText.latitude"
+                             :markers="covers(item.sendText)"></map>
+                     </view>
+                 </view>
+             </view>
+             <view class="msg-m msg-right" v-if="item.sendName != friendName">
+                 <image class="user-img" src="../../../static/logo.png"></image>
+                 <view class="message" v-if="item.TextType == 0">
+                     <view class="msg-text">{{item.sendText}}</view>
+                 </view>
+                 <view class="message" v-if="item.TextType == 1" @tap="previewImg(item.sendText)">
+                     <image :src="item.sendText" class="msg-img" mode="widthFix"></image>
+                 </view>
+                 <view class="message" v-if="item.TextType == 2" @tap="playVoice(item.sendText.voice)">
+                     <!-- 音频 -->
+                     <view class="msg-text voice" :style="{width:item.sendText.time*4+'rpx'}">
+                         {{item.sendText.time}}″
+                         <image src="../../../static/icon/Hotline.png" class="voice-img"></image>
+                     </view>
+                 </view>
+                 <view class="message" v-if="item.TextType == 3" @tap="openLocation(item.sendText)">
+                     <!-- 位置 -->
+                     <view class="msg-map">
+                         <view class="map-name">{{item.sendText.name}}</view>
+                         <view class="map-address">{{item.sendText.address}}</view>
+                         <map class="map" :longitude="item.sendText.longitude" :latitude="item.sendText.latitude"
+                             :markers="covers(item.sendText)"></map>
+                     </view>
+                 </view>
+             </view>
+         </view>
+     </view>
+ </scroll-view>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+</script>
