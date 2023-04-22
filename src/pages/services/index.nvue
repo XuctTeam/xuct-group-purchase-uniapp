@@ -2,20 +2,61 @@
  * @Author: Derek Xu
  * @Date: 2023-04-21 11:10:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-21 11:21:44
+ * @LastEditTime: 2023-04-22 18:14:24
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\services\index.nvue
  * @Description: 
  * 
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
 -->
 <template>
-    <tm-app>
-      <tm-navbar title="客服服务" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-       
-    </tm-app>
-  </template>
-  <script lang="ts" setup>
-  import tmApp from '@/tmui/components/tm-app/tm-app.vue'
-  import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
-  </script>
-  
+  <tm-app>
+    <tm-navbar title="客服服务" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <tm-sheet :margin="[10, 20]" :shadow="4" :round="2">
+      <tm-cell :margin="[0, 0]" bottomBorder>
+        <template v-slot:label>
+          <tm-button :margin="[0]" :shadow="0" class="inner-contact-class" :width="600" :height="40" color="#fff" label="官方客服" open-type="contact" @contact="contact"> </tm-button>
+        </template>
+      </tm-cell>
+      <tm-cell :margin="[0, 0]" :titleFontSize="28" bottomBorder title="拨打电话" @click="makeCall"> </tm-cell>
+      <tm-cell :margin="[0, 0]" :titleFontSize="28" title="在线留言" url="/pages/services/chatroom"> </tm-cell>
+    </tm-sheet>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { getConfig } from '@/api/config'
+
+const phoneValue = ref<string>('')
+
+const contact = (e: any) => {}
+
+onLoad(() => {
+  getConfig(3).then((res) => {
+    const { content } = res.data
+    phoneValue.value = content
+  })
+})
+
+const makeCall = () => {
+  uni.makePhoneCall({
+    // 手机号
+    phoneNumber: phoneValue.value,
+    // 成功回调
+    success: (res) => {},
+    // 失败回调
+    fail: (res) => {}
+  })
+}
+</script>
+
+<style scoped>
+.inner-contact-class >>> .flex-row-center-center {
+  justify-content: flex-start !important;
+}
+</style>

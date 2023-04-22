@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 10:11:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-03 20:20:49
+ * @LastEditTime: 2023-04-22 22:28:06
  * @FilePath: \xuct-group-purchase-uniapp\src\api\user.ts
  * @Description:
  *
@@ -81,4 +81,20 @@ export const deleteUserAddress = (id: string) => {
  */
 export const getDefaultAddress = () => {
   return request.get<User.Address>('/api/v1/address/default')
+}
+
+/**
+ * 获取留言列表
+ */
+export const commentList = () => {
+  return request.get<User.Comment[]>('/api/v1/user/comment/list')
+}
+
+/**
+ * 添加留言
+ *
+ * @param comment
+ */
+export const addComment = (comment: User.Comment) => {
+  return request.post('/api/v1/user/comment', { ...comment })
 }

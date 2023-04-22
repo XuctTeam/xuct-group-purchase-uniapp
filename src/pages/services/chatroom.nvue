@@ -1,73 +1,177 @@
 <template>
   <tm-app>
     <tm-navbar title="我的留言" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <!-- 聊天界面展示https://www.bilibili.com/video/BV1hT4y1P75N?p=22  搭建1和2 -->
-    <view class="content">
- 
- <!-- 聊天内容 -->
- <scroll-view class="chat" scroll-y="true" scroll-with-animation="true" :scroll-into-view="scrollToView">
-     <view class="chat-main" :style="{paddingBottom:inputh+'px'}">
-         <view class="chat-ls" v-for="(item,index) in unshiftmsg" :key="index" :id="'msg'+ index">
-             <view class="chat-time" v-if="item.createTime != ''">{{changeTime(item.createTime)}}</view>
-             <view class="msg-m msg-left" v-if="item.sendName ==  friendName">
-                 <image class="user-img" src="../../../static/logo.png"></image>
-                 <view class="message" v-if="item.TextType == 0">
-                     <!-- 文字 -->
-                     <view class="msg-text">{{item.sendText}}</view>
-                 </view>
-                 <view class="message" v-if="item.TextType == 1" @tap="previewImg(item.sendText)">
-                     <!-- 图像 -->
-                     <image :src="item.sendText" class="msg-img" mode="widthFix"></image>
-                 </view>
-                 <view class="message" v-if="item.TextType == 2" @tap="playVoice(item.sendText.voice)">
-                     <!-- 音频 -->
-                     <view class="msg-text voice" :style="{width:item.sendText.time*4+'rpx'}">
-                         <image src="../../../static/icon/Hotline.png" class="voice-img"></image>
-                         {{item.sendText.time}}″
-                     </view>
-                 </view>
-                 <view class="message" v-if="item.TextType == 3" @tap="openLocation(item.sendText)">
-                     <!-- 位置 -->
-                     <view class="msg-map">
-                         <view class="map-name">{{item.sendText.name}}</view>
-                         <view class="map-address">{{item.sendText.address}}</view>
-                         <!-- 如果map不起作用，就可以直接用一张图片去替代 -->
-                         <map class="map" :longitude="item.sendText.longitude" :latitude="item.sendText.latitude"
-                             :markers="covers(item.sendText)"></map>
-                     </view>
-                 </view>
-             </view>
-             <view class="msg-m msg-right" v-if="item.sendName != friendName">
-                 <image class="user-img" src="../../../static/logo.png"></image>
-                 <view class="message" v-if="item.TextType == 0">
-                     <view class="msg-text">{{item.sendText}}</view>
-                 </view>
-                 <view class="message" v-if="item.TextType == 1" @tap="previewImg(item.sendText)">
-                     <image :src="item.sendText" class="msg-img" mode="widthFix"></image>
-                 </view>
-                 <view class="message" v-if="item.TextType == 2" @tap="playVoice(item.sendText.voice)">
-                     <!-- 音频 -->
-                     <view class="msg-text voice" :style="{width:item.sendText.time*4+'rpx'}">
-                         {{item.sendText.time}}″
-                         <image src="../../../static/icon/Hotline.png" class="voice-img"></image>
-                     </view>
-                 </view>
-                 <view class="message" v-if="item.TextType == 3" @tap="openLocation(item.sendText)">
-                     <!-- 位置 -->
-                     <view class="msg-map">
-                         <view class="map-name">{{item.sendText.name}}</view>
-                         <view class="map-address">{{item.sendText.address}}</view>
-                         <map class="map" :longitude="item.sendText.longitude" :latitude="item.sendText.latitude"
-                             :markers="covers(item.sendText)"></map>
-                     </view>
-                 </view>
-             </view>
-         </view>
-     </view>
- </scroll-view>
+    <scroll-view scroll-y="true" :scroll-into-view="toViewValue" :scroll-with-animation="true" :style="{ height: _windowHeight + 'rpx' }" class="chat">
+      <uv-chat v-for="(item, i) in messageList" :key="i" :id="`item-${i}`" :me="item.user === userInfo.id" :avatar="item.avatar ?? '/static/images/me.png'" :nick="item.nickName ?? '用户'">
+        <template v-slot:content>
+          <uv-chat-text :text="item.content"></uv-chat-text>
+        </template>
+      </uv-chat>
+    </scroll-view>
+
+    <view :style="{ height: _totalBarHeight + 'rpx' }"></view>
+    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
+      <view class="relative flex flex-row flex-1 flex-around flex-row-center-center pa-10">
+        <tm-sheet :width="600" :padding="[0]" :margin="[10, 0]">
+          <tm-input :inputPadding="[12]" color="green" v-model="chatMsgValue" placeholder="输入您的留言" confirm-hold showCharNumber :maxlength="50" :border="1" type="textarea"></tm-input>
+        </tm-sheet>
+        <tm-button label="发送" size="small" :margin="[0]" color="green" :round="4" :loading="load" :height="60" @click="sendClick"></tm-button>
+      </view>
+    </view>
   </tm-app>
 </template>
 <script lang="ts" setup>
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import uvChat from '@/components/uv-chat/uv-chat.vue'
+import uvChatText from '@/components/uv-chat-text/uv-chat-text.vue'
+import tmInput from '@/tmui/components/tm-input/tm-input.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+
+import { computed, ref, reactive } from 'vue'
+import { useAppHook, useUserHook } from '@/store'
+import { onLoad, onUnload } from '@dcloudio/uni-app'
+import { commentList, addComment } from '@/api/user'
+import { message } from '@/utils/dialog'
+
+const appStore = useAppHook()
+const userStore = useUserHook()
+
+const messageList = reactive<User.Comment[]>([])
+const chatMsgValue = ref<string>('')
+const userInfo = userStore.getUserInfo
+const load = ref<boolean>(false)
+const timerId = ref<any>()
+const toViewValue = ref<string>('')
+
+const _totalBarHeight = computed(() => {
+  const safeBottom = appStore.getSafeBottom()
+  return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
+})
+
+const _windowHeight = computed(() => {
+  const safeBottom = appStore.getSafeBottom()
+  return uni.$tm.u.torpx(appStore.getWindowHeight() - (safeBottom > 0 ? 80 : 60 + safeBottom))
+})
+
+//发送消息
+const sendClick = () => {
+  //如果消息不为空或者不为空白字符（包括换行符、空格等）
+  if (!chatMsgValue.value || /^\s+$/.test(chatMsgValue.value)) {
+    message({
+      title: '不能发送空消息',
+      icon: 'error'
+    })
+    return
+  }
+
+  let msg = {
+    user: userInfo.id,
+    avatar: userInfo.avatar,
+    content: chatMsgValue.value,
+    nickName: userInfo.nickname
+  }
+  load.value = true
+  addComment(msg)
+    .then(() => {
+      chatMsgValue.value = ''
+      messageList.push(msg)
+      scrollToBottom()
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+    .finally(() => {
+      timerId.value = setTimeout(() => {
+        load.value = false
+      }, 1000)
+    })
+}
+
+const scrollToBottom = () => {
+  toViewValue.value = `item-${messageList.length - 1}`
+}
+
+onLoad(() => {
+  commentList()
+    .then((res) => {
+      messageList.push(...res.data)
+      scrollToBottom()
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+})
+
+onUnload(() => {
+  if (timerId.value > 0) {
+    clearTimeout(timerId.value)
+  }
+})
 </script>
+
+<style scoped>
+input,
+textarea {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.chat {
+  display: flex;
+  flex-direction: column;
+  padding: 0 35rpx 30rpx 35rpx;
+  box-sizing: border-box;
+  background-color: #f4f5f7;
+}
+
+/* 底部聊天发送栏 */
+.chat-bottom {
+  width: 100%;
+  height: 60rpx;
+}
+
+.chat-bottom .send-msg {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  padding: 16rpx 30rpx;
+  width: 100%;
+  min-height: 60rpx;
+  position: fixed;
+  bottom: 0;
+  background: #ededed;
+}
+
+.chat-bottom .uni-textarea {
+  padding-bottom: 70rpx;
+}
+
+.chat-bottom .uni-textarea textarea {
+  width: 537rpx;
+  height: 75rpx;
+  background: #ffffff;
+  border-radius: 8rpx;
+  font-size: 32rpx;
+  font-family: PingFang SC;
+  color: #333333;
+  line-height: 43rpx;
+  padding: 0rpx 8rpx;
+}
+.chat-bottom .send-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 70rpx;
+  margin-left: 25rpx;
+  width: 128rpx;
+  height: 75rpx;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  font-family: PingFang SC;
+  font-weight: 500;
+  color: #ffffff;
+  line-height: 28rpx;
+}
+</style>
