@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-14 14:17:36
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-21 10:49:54
+ * @LastEditTime: 2023-04-23 15:21:29
  * @FilePath: \xuct-group-purchase-uniapp\src\types\order.d.ts
  * @Description:
  *
@@ -26,6 +26,10 @@ declare namespace Order {
   }
 
   type OrderItemResult = {
+    id: string
+    orderId: string
+    createTime: Date
+    goodId: string
     goodName: string
     goodFirstDrawing: string
     goodUnit: string

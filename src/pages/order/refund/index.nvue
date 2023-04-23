@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-17 22:37:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-19 11:56:23
+ * @LastEditTime: 2023-04-23 17:36:59
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -66,12 +66,11 @@
       <tm-divider></tm-divider>
       <tm-input v-model="refundReasonValue" :inputPadding="[12]" placeholder="填写原因" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
     </tm-sheet>
-    <view :style="{ height: _totalBarHeight + 'rpx' }"></view>
-    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
-      <view class="relative flex flex-1 pa-10 bottom">
+    <uv-bottom-bar>
+      <view class="flex-1">
         <tm-button label="提交" :round="10" color="green" block @click="onRefundClick"></tm-button>
       </view>
-    </view>
+    </uv-bottom-bar>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -86,12 +85,13 @@ import tmRadioGroup from '@/tmui/components/tm-radio-group/tm-radio-group.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import tmUpload from '@/tmui/components/tm-upload/tm-upload.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
 
 import { onLoad } from '@dcloudio/uni-app'
-import { computed, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { hideLoading, loading } from '@/utils/dialog'
 import { getOrderDetail, refundOrder } from '@/api/order'
-import { useAppHook, useUserHook } from '@/store'
+import { useUserHook } from '@/store'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import ENV_CONFIG from '@/config/env'
 const DayJs = dayjs.default
@@ -104,6 +104,7 @@ const orderInfo = reactive<Order.OrderResult>({
   status: 1,
   integral: 0,
   rush: 0,
+  refundStatus: 0,
   address: {
     provinceName: '',
     cityName: '',
@@ -113,13 +114,8 @@ const orderInfo = reactive<Order.OrderResult>({
     detailInfo: ''
   }
 })
-const appStore = useAppHook()
 const userStore = useUserHook()
 const { BASE_API_URL } = ENV_CONFIG
-const _totalBarHeight = computed(() => {
-  const safeBottom = appStore.getSafeBottom()
-  return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
-})
 
 const up = ref<InstanceType<typeof tmUpload> | null>(null)
 const orderIdValue = ref<string>('')
@@ -169,9 +165,7 @@ const formatData = (date: Date) => {
   return DayJs(date).format('YYYY-MM-DD HH:mm:ss')
 }
 
-const onUploadFail = () => {
-  debugger
-}
+const onUploadFail = () => {}
 
 const onRefundClick = () => {
   loading()
@@ -189,7 +183,8 @@ const onRefundClick = () => {
     })
     .catch((err) => {
       console.log(err)
-    }).finally(() => {
+    })
+    .finally(() => {
       hideLoading()
     })
 }

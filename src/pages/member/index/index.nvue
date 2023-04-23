@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-15 22:02:25
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-22 18:20:36
+ * @LastEditTime: 2023-04-23 14:19:37
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -230,6 +230,9 @@ const orderItemClick = (index: any) => {
     case '2':
     case '3':
       uni.$tm.u.routerTo('/pages/order/list/index?key=' + index, 'navigate')
+      break
+    case '4':
+      uni.$tm.u.routerTo('/pages/order/evaluate/list', 'navigate')
       break
     default:
   }

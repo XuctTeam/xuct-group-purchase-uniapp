@@ -12,9 +12,9 @@
     </scroll-view>
 
     <uv-bottom-bar>
-      <view class="flex flex-row flex-row-center-center flex-1 pl-10 pr-10">
+      <view class="flex flex-row flex-row-center-center flex-1">
         <view class="flex flex-1 mr-10">
-          <tm-input :inputPadding="[12]" color="green" v-model="chatMsgValue" placeholder="输入您的留言" confirm-hold showCharNumber :maxlength="50" :border="1" type="textarea"></tm-input>
+          <tm-input placeholder="输入您的留言" v-model="chatMsgValue" :maxlength="100" :border="1" color="green"></tm-input>
         </view>
         <tm-button label="发送" size="small" :margin="[0]" color="green" :round="4" :loading="load" :height="60" @click="sendClick"></tm-button>
       </view>

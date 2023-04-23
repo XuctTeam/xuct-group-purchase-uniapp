@@ -10,7 +10,6 @@
  */
 import request from '@/services/request'
 
-
 export const sumCount = () => {
   return request.get<Order.OrderSumResult>('/api/v1/order/sum')
 }
@@ -107,9 +106,17 @@ export const receiverOrder = (orderId: string) => {
 
 /**
  * 删除订单
- * 
- * @param orderId 
+ *
+ * @param orderId
  */
 export const cancelOrder = (orderId: string) => {
   return request.delete('/api/v1/order', { orderId })
+}
+
+/**
+ * 待评价商品列表
+ *
+ */
+export const evaluateList = () => {
+  return request.get<Order.OrderItemResult[]>('/api/v1/order/evaluate/list')
 }
