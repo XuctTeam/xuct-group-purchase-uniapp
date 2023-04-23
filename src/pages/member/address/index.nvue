@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 16:24:00
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-20 14:47:02
+ * @LastEditTime: 2023-04-23 13:38:12
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\index.nvue
  * @Description: 
  * 
@@ -32,16 +32,17 @@
       </tm-form-item>
     </tm-form>
     <tm-city-picker v-model="address.city" v-model:model-str="address.cityStr" v-model:show="showCity" selectedModel="name" :default-value="address.city" color="green"></tm-city-picker>
-    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
-      <view class="relative flex flex-row flex-around flex-row-center-between bottom pa-10">
-        <view class="flex flex-1 ma-10">
-          <tm-button block color="red" :padding="[0, 10]" :round="25" label="删除" :disabled="!address.id" @click="onDelete"></tm-button>
+    <uv-bottom-bar>
+      <view class="flex flex-row flex-1 flex-row-center-between">
+        <view class="flex flex-1">
+          <tm-button block color="white" :padding="[0, 10]" :round="25" label="删除" :disabled="!address.id" @click="onDelete"></tm-button>
         </view>
-        <view class="flex flex-1 ma-10">
+        <view class="w-10"></view>
+        <view class="flex flex-1">
           <tm-button block color="green" :padding="[0, 10]" :round="25" label="保存" @click="onSave"></tm-button>
         </view>
       </view>
-    </view>
+    </uv-bottom-bar>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -55,11 +56,12 @@ import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmSwitch from '@/tmui/components/tm-switch/tm-switch.vue'
+import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
+
 import { saveUserAddress, getUserAddress, deleteUserAddress } from '@/api/user'
-import { computed, ref, reactive } from 'vue'
+import { ref, reactive } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { confirm, loading, hideLoading, message } from '@/utils/dialog'
-import { useAppHook } from '@/store'
 
 const form = ref<InstanceType<typeof tmForm> | null>(null)
 const showCity = ref(false)
@@ -71,12 +73,6 @@ const address = reactive<User.Address>({
   city: [],
   cityStr: '',
   telNumber: ''
-})
-const appStore = useAppHook()
-
-const _totalBarHeight = computed(() => {
-  const safeBottom = appStore.getSafeBottom()
-  return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
 })
 
 onLoad((opt: any) => {

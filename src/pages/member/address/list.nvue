@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-25 21:54:59
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-19 14:35:39
+ * @LastEditTime: 2023-04-23 13:37:32
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\list.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -42,16 +42,17 @@
       </tm-sheet>
     </view>
 
-    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
-      <view class="relative flex flex-row flex-around flex-row-center-between bottom pa-10">
-        <view class="flex flex-1 ma-10">
+    <uv-bottom-bar>
+      <view class="flex flex-row flex-1 flex-row-center-between">
+        <view class="flex flex-1">
           <tm-button block text @click="chooseaddress" :round="25" :padding="[0, 10]" label="微信导入"></tm-button>
         </view>
-        <view class="flex flex-1 ma-10">
+        <view class="w-10"></view>
+        <view class="flex flex-1">
           <tm-button block color="green" :padding="[0, 10]" :round="25" label="新增" @click="toAdd"></tm-button>
         </view>
       </view>
-    </view>
+    </uv-bottom-bar>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -64,24 +65,17 @@ import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmTag from '@/tmui/components/tm-tag/tm-tag.vue'
+import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
+
 import { onLoad } from '@dcloudio/uni-app'
-import { computed, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { userAddressList, saveUserAddress } from '@/api/user'
 import { loading, hideLoading } from '@/utils/dialog'
-
-import { useAppHook } from '@/store'
 
 const load = ref(true)
 const addressList = reactive<User.Address[]>([])
 const searchValue = ref('')
 const inType = ref('')
-
-const appStore = useAppHook()
-
-const _totalBarHeight = computed(() => {
-  const safeBottom = appStore.getSafeBottom()
-  return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
-})
 
 onLoad((ops: any) => {
   const { type } = ops

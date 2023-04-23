@@ -1,58 +1,56 @@
 <template>
   <tm-app>
     <tm-navbar title="我的留言" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <scroll-view scroll-y="true" :scroll-into-view="toViewValue" :scroll-with-animation="true" :style="{ height: _windowHeight + 'rpx' }" class="chat">
-      <uv-chat v-for="(item, i) in messageList" :key="i" :id="`item-${i}`" :me="item.user === userInfo.id" :avatar="item.avatar ?? '/static/images/me.png'" :nick="item.nickName ?? '用户'">
-        <template v-slot:content>
-          <uv-chat-text :text="item.content"></uv-chat-text>
-        </template>
-      </uv-chat>
+    <scroll-view id="chatContainer" scroll-y="true" :scroll-top="scrollTop" :scroll-with-animation="true" :style="{ height: _windowHeight + 'px' }" class="chat">
+      <view id="chatContent">
+        <uv-chat v-for="(item, i) in messageList" :key="i" :id="`item-${i}`" :me="item.user === userInfo.id" :avatar="item.avatar ?? '/static/images/me.png'" :nick="item.nickName ?? '用户'">
+          <template v-slot:content>
+            <uv-chat-text :text="item.content"></uv-chat-text>
+          </template>
+        </uv-chat>
+      </view>
     </scroll-view>
 
-    <view :style="{ height: _totalBarHeight + 'rpx' }"></view>
-    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
-      <view class="relative flex flex-row flex-1 flex-around flex-row-center-center pa-10">
-        <tm-sheet :width="600" :padding="[0]" :margin="[10, 0]">
+    <uv-bottom-bar>
+      <view class="flex flex-row flex-row-center-center flex-1 pl-10 pr-10">
+        <view class="flex flex-1 mr-10">
           <tm-input :inputPadding="[12]" color="green" v-model="chatMsgValue" placeholder="输入您的留言" confirm-hold showCharNumber :maxlength="50" :border="1" type="textarea"></tm-input>
-        </tm-sheet>
+        </view>
         <tm-button label="发送" size="small" :margin="[0]" color="green" :round="4" :loading="load" :height="60" @click="sendClick"></tm-button>
       </view>
-    </view>
+    </uv-bottom-bar>
   </tm-app>
 </template>
 <script lang="ts" setup>
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
-import uvChat from '@/components/uv-chat/uv-chat.vue'
-import uvChatText from '@/components/uv-chat-text/uv-chat-text.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
-import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
+import uvChat from '@/components/uv-chat/uv-chat.vue'
+import uvChatText from '@/components/uv-chat-text/uv-chat-text.vue'
 
-import { computed, ref, reactive } from 'vue'
-import { useAppHook, useUserHook } from '@/store'
+import { ref, reactive, nextTick, getCurrentInstance } from 'vue'
+import { useUserHook, useAppHook } from '@/store'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
 import { commentList, addComment } from '@/api/user'
 import { message } from '@/utils/dialog'
+import { computed } from 'vue'
 
-const appStore = useAppHook()
 const userStore = useUserHook()
+const appStore = useAppHook()
+const instance = getCurrentInstance() // 获取组件实例
 
 const messageList = reactive<User.Comment[]>([])
 const chatMsgValue = ref<string>('')
 const userInfo = userStore.getUserInfo
 const load = ref<boolean>(false)
 const timerId = ref<any>()
-const toViewValue = ref<string>('')
-
-const _totalBarHeight = computed(() => {
-  const safeBottom = appStore.getSafeBottom()
-  return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
-})
+const scrollTop = ref<number>(0)
 
 const _windowHeight = computed(() => {
-  const safeBottom = appStore.getSafeBottom()
-  return uni.$tm.u.torpx(appStore.getWindowHeight() - (safeBottom > 0 ? 80 : 60 + safeBottom))
+  const saveBottom = appStore.getSafeBottom()
+  return appStore.getWindowHeight() - (saveBottom > 0 ? 80 : 65) - 45
 })
 
 //发送消息
@@ -77,7 +75,9 @@ const sendClick = () => {
     .then(() => {
       chatMsgValue.value = ''
       messageList.push(msg)
-      scrollToBottom()
+      nextTick(() => {
+        scrollToBottom()
+      })
     })
     .catch((err: any) => {
       console.log(err)
@@ -90,14 +90,25 @@ const sendClick = () => {
 }
 
 const scrollToBottom = () => {
-  toViewValue.value = `item-${messageList.length - 1}`
+  let query = uni.createSelectorQuery().in(instance)
+  query.select('#chatContainer').boundingClientRect()
+  query.select('#chatContent').boundingClientRect()
+  query.exec((res) => {
+    //如果子元素高度大于父元素高度(显示高度)
+    if (res[1].height > res[0].height) {
+      //计算出二者差值就是需要滚动的距离
+      scrollTop.value = res[1].height - res[0].height
+    }
+  })
 }
 
 onLoad(() => {
   commentList()
     .then((res) => {
       messageList.push(...res.data)
-      scrollToBottom()
+      nextTick(() => {
+        scrollToBottom()
+      })
     })
     .catch((err: any) => {
       console.log(err)
@@ -121,57 +132,8 @@ textarea {
 .chat {
   display: flex;
   flex-direction: column;
-  padding: 0 35rpx 30rpx 35rpx;
+  padding: 20rpx;
   box-sizing: border-box;
   background-color: #f4f5f7;
-}
-
-/* 底部聊天发送栏 */
-.chat-bottom {
-  width: 100%;
-  height: 60rpx;
-}
-
-.chat-bottom .send-msg {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  padding: 16rpx 30rpx;
-  width: 100%;
-  min-height: 60rpx;
-  position: fixed;
-  bottom: 0;
-  background: #ededed;
-}
-
-.chat-bottom .uni-textarea {
-  padding-bottom: 70rpx;
-}
-
-.chat-bottom .uni-textarea textarea {
-  width: 537rpx;
-  height: 75rpx;
-  background: #ffffff;
-  border-radius: 8rpx;
-  font-size: 32rpx;
-  font-family: PingFang SC;
-  color: #333333;
-  line-height: 43rpx;
-  padding: 0rpx 8rpx;
-}
-.chat-bottom .send-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 70rpx;
-  margin-left: 25rpx;
-  width: 128rpx;
-  height: 75rpx;
-  border-radius: 8rpx;
-  font-size: 28rpx;
-  font-family: PingFang SC;
-  font-weight: 500;
-  color: #ffffff;
-  line-height: 28rpx;
 }
 </style>

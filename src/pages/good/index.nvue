@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-20 13:59:11
+ * @LastEditTime: 2023-04-23 13:30:39
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\index.nvue
  * @Description: 
  * 
@@ -35,38 +35,38 @@
         </view>
       </view>
     </tm-sheet>
-    <view class="pl-10 pr-10 pt-10">
+    <view class="pa-10">
       <tm-html :content="detail" />
     </view>
-    <view :style="{ height: _totalBarHeight + 'rpx' }"></view>
-    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }" v-if="!!logged">
-      <view class="relative flex flex-row flex-around">
-        <view class="flex flex-row flex-3 ma-10 flex-row-center-between">
-          <view @click="toHome">
+
+    <uv-bottom-bar v-if="!!logged">
+      <view class="flex flex-row flex-1 flex-row-center-between">
+        <tm-row :column="3" :width="300">
+          <tm-col @click="toServices" :height="100">
             <tm-icon name=" tmicon-aliwangwang" :fontSize="36" />
             <tm-text color="grey" :font-size="24" label="客服" />
-          </view>
-          <view @click="toCart">
+          </tm-col>
+          <tm-col @click="toCart" :height="100">
             <tm-icon name="tmicon-shoppingcart" :fontSize="36" />
             <tm-text color="grey" :font-size="24" label="购物车" />
-          </view>
-          <view>
+          </tm-col>
+          <tm-col :height="100">
             <tm-icon name="tmicon-md-heart-empty" :fontSize="36" @click="onCllect" v-if="!userCollect" />
             <tm-icon name="tmicon-md-heart" color="red" :fontSize="36" @click="onCllect" v-else />
             <tm-text color="grey" :font-size="24" label="收藏" />
-          </view>
-        </view>
-        <view class="flex flex-row flex-1 ma-10 flex-row-center-end">
+          </tm-col>
+        </tm-row>
+        <view class="flex flex-row flex-1 flex-row-center-end">
           <tm-button color="orange" _class="round-l-24 round-r-0" :round="5" label="加入购物车" :loading="addLoading" @click="onAddCart"></tm-button>
           <tm-button color="green" _class="round-r-24 round-l-0" label="立即下单" @click="onFastConfirm"></tm-button>
         </view>
       </view>
-    </view>
+    </uv-bottom-bar>
   </tm-app>
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref, nextTick } from 'vue'
+import { reactive, ref, nextTick } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCarousel from '@/tmui/components/tm-carousel/tm-carousel.vue'
@@ -75,8 +75,11 @@ import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
+import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
+import tmRow from '@/tmui/components/tm-row/tm-row.vue'
+import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { useUserHook, useAppHook } from '@/store'
+import { useUserHook } from '@/store'
 
 import { getGood, collect, addCart, browseGood } from '@/api/good'
 import { loading, hideLoading } from '@/utils/dialog'
@@ -90,16 +93,7 @@ const userCollect = ref<boolean>(false)
 const addLoading = ref<boolean>(false)
 
 const store = useUserHook()
-const appStore = useAppHook()
 const logged = store.logged
-
-const _totalBarHeight = computed(() => {
-  if (!logged) {
-    return appStore.getSafeBottom()
-  }
-  const safeBottom = appStore.getSafeBottom()
-  return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
-})
 
 onLoad((opts: any) => {
   const { id, scene } = opts
@@ -167,8 +161,8 @@ const onFastConfirm = () => {
   uni.$tm.u.routerTo('/pages/order/confirm/index?scene=good&gids=' + JSON.stringify(gids), 'navigate')
 }
 
-const toHome = () => {
-  uni.$tm.u.routerTo('/pages/index/index', 'reLaunch')
+const toServices = () => {
+  uni.$tm.u.routerTo('/pages/services/index', 'navigate')
 }
 
 const toCart = () => {

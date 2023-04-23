@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-20 10:23:56
+ * @LastEditTime: 2023-04-23 13:25:45
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -23,7 +23,7 @@
           <tm-text :font-size="24" _class="font-weight-b" label="购物车"></tm-text>
           <tm-button transprent text :shadow="0" size="normal" color="green" :label="!editStatus ? '管理' : '完成'" :width="60" @click="changeState" />
         </view>
-        <view class="mt-n20" :style="{ paddingBottom: _totalBarHeight + 'rpx' }">
+        <view class="mt-n20">
           <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" :height="200" v-for="(item, index) in cartGoods" :key="index">
             <view class="flex flex-row flex-1 flex-row-center-start">
               <view class="checkbox">
@@ -44,20 +44,20 @@
         </view>
       </view>
     </view>
-    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }" v-if="!!logged">
-      <view class="relative flex flex-row flex-around flex-row-center-between pa-10 bottom">
-        <view class="ml-20">
+    <uv-bottom-bar v-if="logged">
+      <view class="flex flex-1 flex-row flex-row-center-between">
+        <template>
           <view v-if="!editStatus" class="flex flex-row">
             <tm-text _class="font-weight-b" :label="`已选择${selectedNum}件商品`"></tm-text>
           </view>
           <tm-checkbox v-else :round="10" color="red" label="全选" @change="chooseAllChangeState" :modelValue="allCheckStatus"></tm-checkbox>
-        </view>
-        <view class="flex flex-row flex-1 flex-row-center-end">
-          <tm-button v-if="!editStatus" label="结算" :round="10" color="green" @click="toConfirmOrder"></tm-button>
-          <tm-button v-else label="删除" color="red" :round="10" @click="deleteGood"></tm-button>
+        </template>
+        <view class="flex flex-row flex-1 flex-row-center-end mr-10">
+          <tm-button v-if="!editStatus" size="small" label="结算" :round="10" color="green" @click="toConfirmOrder"></tm-button>
+          <tm-button v-else size="small" label="删除" color="red" :round="10" @click="deleteGood"></tm-button>
         </view>
       </view>
-    </view>
+    </uv-bottom-bar>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -72,8 +72,9 @@ import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmStepper from '@/tmui/components/tm-stepper/tm-stepper.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
 
-import { useUserHook, useAppHook } from '@/store'
+import { useUserHook } from '@/store'
 import { loading, hideLoading, confirm, message } from '@/utils/dialog'
 import { cartList, cleanCart, modifyCartNum, deleteCartGood } from '@/api/good'
 import { storeToRefs } from 'pinia'
@@ -83,16 +84,7 @@ const load = ref<boolean>(true)
 const editStatus = ref<boolean>(false)
 const allCheckStatus = ref<boolean>(false)
 const userStore = useUserHook()
-const appStore = useAppHook()
 const { logged } = storeToRefs(userStore)
-
-const _totalBarHeight = computed(() => {
-  if (!logged) {
-    return appStore.getSafeBottom()
-  }
-  const safeBottom = appStore.getSafeBottom()
-  return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
-})
 
 const selectedNum = computed(() => {
   return cartGoods.filter((item) => item.checked).length
