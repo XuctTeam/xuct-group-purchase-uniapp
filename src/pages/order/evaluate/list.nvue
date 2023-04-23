@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-23 13:46:26
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-23 15:23:21
+ * @LastEditTime: 2023-04-23 23:31:13
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\evaluate\list.nvue
  * @Description: 
  * 
@@ -51,6 +51,10 @@ const load = ref<boolean>(true)
 const orderItems = reactive<Order.OrderItemResult[]>([])
 
 onLoad(() => {
+  initData()
+})
+
+const initData = () => {
   loading()
   evaluateList()
     .then((res) => {
@@ -63,7 +67,7 @@ onLoad(() => {
       load.value = false
       hideLoading()
     })
-})
+}
 
 const detailClick = (goodId: string) => {
   uni.$tm.u.routerTo('/pages/good/index?scene=evaluate&id=' + goodId, 'navigate')
@@ -75,9 +79,12 @@ const formatData = (date: Date) => {
 
 const onEvaluateClick = (id: string) => {
   uni.navigateTo({
-    url: '/pages/order/evaluate/detail?id' + id,
+    url: '/pages/order/evaluate/detail?id=' + id,
     success: () => {
-      uni.$once('order::evaluate::success', () => {})
+      uni.$once('order::evaluate::success', () => {
+        orderItems.length = 0
+        initData()
+      })
     },
     fail: () => {}
   })

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-19 14:07:00
+ * @LastEditTime: 2023-04-23 20:29:42
  * @FilePath: \xuct-group-purchase-uniapp\src\api\order.ts
  * @Description:
  *
@@ -119,4 +119,13 @@ export const cancelOrder = (orderId: string) => {
  */
 export const evaluateList = () => {
   return request.get<Order.OrderItemResult[]>('/api/v1/order/evaluate/list')
+}
+
+/**
+ * 评价商品
+ * @param data
+ * @returns
+ */
+export const evaluate = (data: Order.EvaluateResult) => {
+  return request.post('/api/v1/order/evaluate', { ...data })
 }

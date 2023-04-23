@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-23 13:46:26
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-23 17:35:19
+ * @LastEditTime: 2023-04-23 23:31:35
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\evaluate\detail.nvue
  * @Description: 
  * 
@@ -16,7 +16,7 @@
         <tm-text _class="font-weight-b" :fontSize="28" label="评价打分"></tm-text>
       </view>
       <tm-divider></tm-divider>
-      <tm-rate :defaultValue="1" icon="tmicon-smile-fill" :color="['red', 'orange', 'primary', 'pink', 'green']" showLabel></tm-rate>
+      <tm-rate :default-value="5" v-model="rateValue" icon="tmicon-smile-fill" :color="['red', 'orange', 'primary', 'pink', 'green']" showLabel></tm-rate>
     </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
       <tm-text _class="font-weight-b" :fontSize="28" label="图片补充"></tm-text>
@@ -28,7 +28,7 @@
         <tm-text _class="font-weight-b" :fontSize="28" label="更多描述"></tm-text>
       </view>
       <tm-divider></tm-divider>
-      <tm-input :inputPadding="[12]" placeholder="更多描述" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
+      <tm-input v-model="remarksValue" :inputPadding="[12]" placeholder="更多描述" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
     </tm-sheet>
 
     <uv-bottom-bar>
@@ -54,13 +54,17 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import { useUserHook } from '@/store'
 import ENV_CONFIG from '@/config/env'
 import { onLoad } from '@dcloudio/uni-app'
+import { evaluate } from '@/api/order'
+import { loading, hideLoading } from '@/utils/dialog'
 
 const { BASE_API_URL } = ENV_CONFIG
 const userStore = useUserHook()
+const rateValue = ref<number>(5)
 const imageList = ref([])
 const idValue = ref<string>('')
+const remarksValue = ref<string>('')
 
-const uploadUrlValue = ref<string>(BASE_API_URL + '/api/v1/order/refund/upload')
+const uploadUrlValue = ref<string>(BASE_API_URL + '/api/v1/order/evaluate/upload')
 const uploadHeader = {
   satoken: 'Bearer ' + userStore.getToken
 }
@@ -69,7 +73,33 @@ const onStart = (item: any) => {
   return true
 }
 const onUploadFail = () => {}
-const onConfirmClick = () => {}
+
+const onConfirmClick = () => {
+  loading()
+  const _images = imageList.value
+    .filter((x: any) => {
+      return JSON.parse(x.response).code === 200
+    })
+    .map((x: any) => {
+      return JSON.parse(x.response).data
+    })
+  evaluate({
+    rate: rateValue.value,
+    evaluateImages: _images.join(','),
+    remarks: remarksValue.value,
+    orderItemId: idValue.value
+  })
+    .then(() => {
+      uni.$emit('order::evaluate::success')
+      uni.$tm.u.routerTo('', 'navigateBack')
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+    .finally(() => {
+      hideLoading()
+    })
+}
 
 onLoad((opts: any) => {
   const { id } = opts
