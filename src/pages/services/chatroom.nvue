@@ -50,7 +50,7 @@ const scrollTop = ref<number>(0)
 
 const _windowHeight = computed(() => {
   const saveBottom = appStore.getSafeBottom()
-  return appStore.getWindowHeight() - (saveBottom > 0 ? 80 : 65) - 45
+  return appStore.getWindowHeight() - (saveBottom > 0 ? 90 : 75) - 45
 })
 
 //发送消息

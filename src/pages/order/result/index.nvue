@@ -2,8 +2,8 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 10:54:52
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-11 18:13:48
- * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\result\result.nvue
+ * @LastEditTime: 2023-04-24 13:09:53
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\result\index.nvue
  * @Description: 
  * 
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
@@ -32,6 +32,6 @@ onLoad((opts: any) => {
 })
 
 const detailClick = () => {
-  uni.$tm.u.routerTo('/pages/order/detail/index', 'navigate')
+  uni.$tm.u.routerTo('/pages/order/detail/index?orderId=' + orderValue.value, 'redirect')
 }
 </script>

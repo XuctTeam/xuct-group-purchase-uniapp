@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:29:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-20 15:52:44
+ * @LastEditTime: 2023-04-24 17:29:11
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\list\index.nvue
  * @Description: 
  * 
@@ -77,13 +77,12 @@ import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
 
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad, onShow } from '@dcloudio/uni-app'
 import { computed, ref } from 'vue'
-import { useAppHook } from '@/store'
+import { useAppHook, useCountHook } from '@/store'
 import { cancelOrder, pageOrderList } from '@/api/order'
 import { confirm } from '@/utils/dialog'
 import { rushOrder, receiverOrder } from '@/api/order'
-
 const tabsTitle = ref([
   { key: '0', title: '全部' },
   { key: '1', title: '待付款' },
@@ -91,6 +90,7 @@ const tabsTitle = ref([
   { key: '3', title: '待收货' },
   { key: '4', title: '已完成' }
 ])
+const countStore = useCountHook()
 const appStore = useAppHook()
 const _width = computed(() => {
   return uni.$tm.u.torpx(appStore.getWindowWidth())
@@ -98,6 +98,7 @@ const _width = computed(() => {
 const paging = ref<any>(null)
 const tabActiveRef = ref<string>('0')
 let orderList = ref<Order.OrderResult[]>([])
+const reloadValue = ref<boolean>(false) // 页面是否刷新?重载
 
 const queryList = (pageNo: number, pageSize: number) => {
   pageOrderList(pageNo, pageSize, tabActiveRef.value || '0')
@@ -114,7 +115,7 @@ const queryList = (pageNo: number, pageSize: number) => {
 }
 
 const tabschange = (key: string | number) => {
-  paging.value.reload()
+  reloadData()
 }
 
 const formateStatus = (status: number) => {
@@ -138,13 +139,21 @@ onLoad((opts: any) => {
   tabActiveRef.value = key
 })
 
+onShow(() => {
+  if (reloadValue.value) {
+    reloadData()
+  }
+})
+
 const onDetailClick = (orderId: string) => {
   uni.navigateTo({
     url: '/pages/order/detail/index?orderId=' + orderId,
-    success: () => {
-      uni.$once('order::refresh::success', () => {
-        paging.value.reload()
-      })
+    events: {
+      acceptDataFromDetail(data: any) {
+        const { refresh } = data
+        reloadValue.value = refresh
+        refreshCount()
+      }
     }
   })
 }
@@ -162,7 +171,7 @@ const onCancelOrder = (orderId: string) => {
 const onRushOrderOrder = (orderId: string) => {
   rushOrder(orderId)
     .then(() => {
-      paging.value.reload()
+      reloadData
     })
     .catch((err: any) => {
       console.log(err)
@@ -182,10 +191,15 @@ const onReciverOrder = (orderId: string) => {
 const onRefundOrder = (orderId: string) => {
   uni.navigateTo({
     url: '/pages/order/refund/index?orderId=' + orderId,
-    success: () => {
-      uni.$once('order::refund::success', () => {
-        paging.value.reload()
-      })
+    events: {
+      acceptDataFromDetail(data: any) {
+        const { refund } = data
+        if (!refund) {
+          return
+        }
+        reloadValue.value = true
+        refreshCount()
+      }
     }
   })
 }
@@ -193,7 +207,7 @@ const onRefundOrder = (orderId: string) => {
 const _cancelOrder = (orderId: string) => {
   cancelOrder(orderId)
     .then(() => {
-      paging.value.reload()
+      reloadAndRefreshCount()
     })
     .catch((err: any) => {
       console.log(err)
@@ -203,11 +217,28 @@ const _cancelOrder = (orderId: string) => {
 const _receiverOrder = (orderId: string) => {
   receiverOrder(orderId)
     .then(() => {
-      paging.value.reload()
+      reloadAndRefreshCount()
     })
     .catch((err: any) => {
       console.log(err)
     })
+}
+
+const reloadAndRefreshCount = () => {
+  refreshCount()
+  reloadData()
+}
+
+const reloadData = () => {
+  paging.value.reload()
+  if (reloadValue.value) {
+    reloadValue.value = false
+  }
+}
+
+const refreshCount = () => {
+  //刷新首页
+  countStore.setRefresh(true)
 }
 </script>
 <style>

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-23 13:46:26
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-23 23:31:35
+ * @LastEditTime: 2023-04-24 16:05:25
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\evaluate\detail.nvue
  * @Description: 
  * 
@@ -39,7 +39,7 @@
   </tm-app>
 </template>
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { ref, getCurrentInstance } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
@@ -51,18 +51,19 @@ import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 
-import { useUserHook } from '@/store'
+import { useUserHook, useCountHook } from '@/store'
 import ENV_CONFIG from '@/config/env'
 import { onLoad } from '@dcloudio/uni-app'
 import { evaluate } from '@/api/order'
 import { loading, hideLoading } from '@/utils/dialog'
-
+const $instance = ref<any>(getCurrentInstance()?.proxy)
 const { BASE_API_URL } = ENV_CONFIG
 const userStore = useUserHook()
 const rateValue = ref<number>(5)
 const imageList = ref([])
 const idValue = ref<string>('')
 const remarksValue = ref<string>('')
+const countStore = useCountHook()
 
 const uploadUrlValue = ref<string>(BASE_API_URL + '/api/v1/order/evaluate/upload')
 const uploadHeader = {
@@ -90,8 +91,8 @@ const onConfirmClick = () => {
     orderItemId: idValue.value
   })
     .then(() => {
-      uni.$emit('order::evaluate::success')
-      uni.$tm.u.routerTo('', 'navigateBack')
+      setPageRefresh()
+      refreshCount()
     })
     .catch((err: any) => {
       console.log(err)
@@ -108,4 +109,21 @@ onLoad((opts: any) => {
   }
   idValue.value = id
 })
+
+const setPageRefresh = () => {
+  let pages = getCurrentPages() // 当前页
+  let beforePage = pages[pages.length - 2] // 上个页面
+  const channel = $instance.value?.getOpenerEventChannel()
+  if (beforePage !== undefined && beforePage.route === 'pages/order/evaluate/list') {
+    channel.emit('acceptDataFromDetail', {
+      refresh: true
+    })
+  }
+  uni.$tm.u.routerTo('', 'navigateBack')
+}
+
+const refreshCount = () => {
+  //刷新首页
+  countStore.setRefresh(true)
+}
 </script>

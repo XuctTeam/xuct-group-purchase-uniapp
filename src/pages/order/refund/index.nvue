@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-17 22:37:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-23 17:36:59
+ * @LastEditTime: 2023-04-24 11:53:16
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -88,13 +88,14 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
 
 import { onLoad } from '@dcloudio/uni-app'
-import { reactive, ref } from 'vue'
+import { reactive, ref, getCurrentInstance } from 'vue'
 import { hideLoading, loading } from '@/utils/dialog'
 import { getOrderDetail, refundOrder } from '@/api/order'
 import { useUserHook } from '@/store'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import ENV_CONFIG from '@/config/env'
 const DayJs = dayjs.default
+const $instance = ref<any>(getCurrentInstance()?.proxy)
 
 const orderInfo = reactive<Order.OrderResult>({
   id: '',
@@ -153,7 +154,7 @@ onLoad((opts: any) => {
     return
   }
   orderIdValue.value = orderId
-  _loadData(orderId)
+  initData(orderId)
 })
 
 const onStart = (item: any) => {
@@ -178,7 +179,7 @@ const onRefundClick = () => {
     })
   refundOrder(orderIdValue.value, refundTypeValue.value, refundReasonValue.value, _images)
     .then(() => {
-      uni.$emit('order::refund::success')
+      setRefreshStatus()
       uni.$tm.u.routerTo('', 'navigateBack')
     })
     .catch((err) => {
@@ -189,7 +190,7 @@ const onRefundClick = () => {
     })
 }
 
-const _loadData = (orderId: string) => {
+const initData = (orderId: string) => {
   loading()
   getOrderDetail(orderId)
     .then((res) => {
@@ -201,6 +202,18 @@ const _loadData = (orderId: string) => {
     .finally(() => {
       hideLoading()
     })
+}
+
+const setRefreshStatus = () => {
+  let pages = getCurrentPages() // 当前页
+  let beforePage = pages[pages.length - 2] // 上个页面
+  if (beforePage == null) {
+    return
+  }
+  const channel = $instance.value?.getOpenerEventChannel()
+  channel.emit('acceptDataFromDetail', {
+    refund: true
+  })
 }
 </script>
 <style>

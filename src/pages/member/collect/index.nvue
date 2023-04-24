@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-19 19:01:43
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-20 14:13:45
+ * @LastEditTime: 2023-04-24 13:24:07
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\collect\index.nvue
  * @Description: 
  * 
@@ -48,20 +48,27 @@ import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmSlideSwitch from '@/tmui/components/tm-slide-switch/tm-slide-switch.vue'
 import tmResult from '@/tmui/components/tm-result/tm-result.vue'
 
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad, onShow } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
 import { collect, collectList } from '@/api/good'
 
 const loadValue = ref<boolean>(false)
-
 const collectData = reactive<Good.GoodResult[]>([])
+const refreshValue = ref<boolean>(false)
 
 onLoad(() => {
   initData()
 })
 
+onShow(() => {
+  if (refreshValue.value) {
+    initData()
+  }
+})
+
 const initData = () => {
   loading()
+  collectData.length = 0
   loadValue.value = true
   collectList()
     .then((res) => {
@@ -72,21 +79,19 @@ const initData = () => {
     })
     .finally(() => {
       loadValue.value = false
+      refreshValue.value = false
       hideLoading()
     })
 }
 
 const itemClick = (gid: string) => {
   uni.navigateTo({
-    url: '/pages/good/index?scene=collect&id=' + gid,
-    success: () => {
-      uni.$once('good::view::refresh', (data) => {
-        const { gid, collect } = data
-        if (collect) {
-          return
-        }
-        _removeItem(gid)
-      })
+    url: '/pages/good/index?id=' + gid,
+    events: {
+      acceptDataFromDetail(data: any) {
+        const { refresh } = data
+        refreshValue.value = refresh ?? false
+      }
     }
   })
 }

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 16:24:00
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-23 13:38:12
+ * @LastEditTime: 2023-04-24 12:25:40
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\index.nvue
  * @Description: 
  * 
@@ -28,7 +28,7 @@
         <tm-input placeholder="请输入详细地址" :inputPadding="[0, 0]" v-model.lazy="address.detailInfo" :transprent="true" :showBottomBotder="false"></tm-input>
       </tm-form-item>
       <tm-form-item label="是否默认" field="switch">
-        <tm-switch v-model="address.firstChoose" color="red" :default-value="address.firstChoose" :selected="1"></tm-switch>
+        <tm-switch v-model="address.firstChoose" color="green" :default-value="address.firstChoose" :selected="1"></tm-switch>
       </tm-form-item>
     </tm-form>
     <tm-city-picker v-model="address.city" v-model:model-str="address.cityStr" v-model:show="showCity" selectedModel="name" :default-value="address.city" color="green"></tm-city-picker>
@@ -59,10 +59,11 @@ import tmSwitch from '@/tmui/components/tm-switch/tm-switch.vue'
 import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
 
 import { saveUserAddress, getUserAddress, deleteUserAddress } from '@/api/user'
-import { ref, reactive } from 'vue'
+import { ref, reactive, getCurrentInstance } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { confirm, loading, hideLoading, message } from '@/utils/dialog'
 
+const $instance = ref<any>(getCurrentInstance()?.proxy)
 const form = ref<InstanceType<typeof tmForm> | null>(null)
 const showCity = ref(false)
 const address = reactive<User.Address>({
@@ -120,8 +121,7 @@ const onDelete = () => {
     success: () => {
       deleteUserAddress(address.id ?? '')
         .then(() => {
-          uni.$emit('address:add::success')
-          uni.$tm.u.routerTo('', 'navigateBack')
+          setPageRefresh()
         })
         .catch((err: any) => {
           message({
@@ -155,8 +155,7 @@ const onConfirm = (e: any) => {
   loading()
   saveUserAddress(_address)
     .then(() => {
-      uni.$emit('address:add::success')
-      uni.$tm.u.routerTo('', 'navigateBack')
+      setPageRefresh()
     })
     .catch((err: any) => {
       console.log(err)
@@ -164,5 +163,17 @@ const onConfirm = (e: any) => {
     .finally(() => {
       hideLoading()
     })
+}
+
+const setPageRefresh = () => {
+  let pages = getCurrentPages() // 当前页
+  let beforePage = pages[pages.length - 2] // 上个页面
+  const channel = $instance.value?.getOpenerEventChannel()
+  if (beforePage !== undefined && beforePage.route === 'pages/member/address/list') {
+    channel.emit('acceptDataFromDetail', {
+      refresh: true
+    })
+  }
+  uni.$tm.u.routerTo('', 'navigateBack')
 }
 </script>

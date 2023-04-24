@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-23 14:43:25
+ * @LastEditTime: 2023-04-24 13:13:03
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -51,8 +51,8 @@
           <tm-checkbox v-else :round="10" color="red" label="全选" @change="chooseAllChangeState" :modelValue="allCheckStatus"></tm-checkbox>
         </template>
         <view class="flex flex-row flex-1 flex-row-center-end mr-10">
-          <tm-button v-if="!editStatus" size="small" label="结算" :round="10" color="green" @click="toConfirmOrder"></tm-button>
-          <tm-button v-else size="small" label="删除" color="red" :round="10" @click="deleteGood"></tm-button>
+          <tm-button v-if="!editStatus" label="结算" :round="10" color="green" @click="toConfirmOrder"></tm-button>
+          <tm-button v-else label="删除" color="white" :round="10" @click="deleteGood"></tm-button>
         </view>
       </view>
     </uv-bottom-bar>
@@ -60,7 +60,7 @@
 </template>
 <script lang="ts" setup>
 import { computed, reactive, ref, watch } from 'vue'
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad, onShow, onUnload } from '@dcloudio/uni-app'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmResult from '@/tmui/components/tm-result/tm-result.vue'
@@ -83,6 +83,7 @@ const editStatus = ref<boolean>(false)
 const allCheckStatus = ref<boolean>(false)
 const userStore = useUserHook()
 const { logged } = storeToRefs(userStore)
+const refreshValue = ref<boolean>(false)
 
 const selectedNum = computed(() => {
   return cartGoods.filter((item) => item.checked).length
@@ -92,12 +93,18 @@ onLoad(() => {
   if (!logged.value) {
     return
   }
-  _load()
+  initData()
+})
+
+onShow(() => {
+  if (refreshValue.value) {
+    initData()
+  }
 })
 
 watch(logged, (newValue, oldValue) => {
   if (!oldValue && newValue) {
-    _load()
+    initData()
   }
 })
 
@@ -183,32 +190,38 @@ const toConfirmOrder = () => {
   const _ids = cartGoods.filter((x) => x.checked).map((x) => x.goodId)
   uni.navigateTo({
     url: '/pages/order/confirm/index?scene=cart&gids=' + JSON.stringify(_ids),
-    success: () => {
-      uni.$once('cart::order::success', (data) => {})
-    },
-    fail: () => {}
+    events: {
+      acceptDataFromDetail(data: any) {
+        const { refresh } = data
+        refreshValue.value = refresh ?? false
+      }
+    }
   })
 }
 
-const _load = () => {
+const initData = () => {
   loading()
+  load.value = true
   cartList()
     .then((res) => {
-      const item = res.data
-      cartGoods.push(...item)
-      load.value = false
+      cartGoods.length = 0
+      cartGoods.push(...res.data)
     })
     .catch((err: any) => {
       console.log(err)
-      load.value = false
     })
     .finally(() => {
+      load.value = false
       hideLoading()
+      if (refreshValue.value) {
+        refreshValue.value = false
+      }
     })
 }
 
 const _cleanCart = () => {
   loading()
+  load.value = true
   cleanCart()
     .then(() => {
       cartGoods.length = 0
@@ -217,6 +230,7 @@ const _cleanCart = () => {
       console.log(err)
     })
     .finally(() => {
+      load.value = false
       hideLoading()
     })
 }
@@ -224,14 +238,17 @@ const _cleanCart = () => {
 const _deleteCart = () => {
   const _delIds = cartGoods.filter((x) => x.checked).map((x) => x.goodId)
   loading()
+  load.value = true
   deleteCartGood(_delIds)
     .then(() => {
       cartGoods.length = 0
-      load.value = true
-      _load()
+      initData()
     })
-    .catch((err: any) => {})
+    .catch((err: any) => {
+      console.log(err)
+    })
     .finally(() => {
+      load.value = false
       hideLoading()
     })
 }

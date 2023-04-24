@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:10:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-23 13:24:46
+ * @LastEditTime: 2023-04-24 17:32:31
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\detail\index.nvue
  * @Description: 
  * 
@@ -10,7 +10,7 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="订单详情" color="#32CD32" fontColor="#fff" blur :beforeBack="backClick"></tm-navbar>
+    <tm-navbar title="订单详情" color="#32CD32" fontColor="#fff" blur :beforeBack="refreshAndBack(false)"></tm-navbar>
     <tm-sheet :margin="[10, 10]" :round="3" :shadow="2" :padding="[10]">
       <tm-cell :margin="[0, 0]">
         <template v-slot:title>
@@ -27,7 +27,7 @@
     <tm-sheet :margin="[10, 10]" :round="3" :shadow="2" :padding="[10]">
       <tm-cell :margin="[0, 0]">
         <template v-slot:title>
-          <view class="flex flex-row flex-1 flex-row-center-center mb-10">
+          <view class="flex flex-row flex-1 flex-row-center-start mb-10">
             <tm-icon :font-size="26" name="tmicon-position"></tm-icon>
             <view class="flex flex-row flex-row-bottom-center ml-10">
               <view><tm-text :font-size="32" _class="font-weight-b" :label="orderInfo.address?.userName"></tm-text></view>
@@ -95,19 +95,21 @@
 
     <uv-bottom-bar>
       <view class="flex flex-1 flex-row flex-row-center-end">
-        <template v-if="orderInfo.status === 1 || orderInfo.status === 2">
-          <tm-button v-if="orderInfo.refundStatus === 0" :round="24" size="small" :margin="[24, 0]" :label="orderInfo.rush ? '已催单' : '催单'" :disabled="!!orderInfo.rush" :font-size="24" color="orange"></tm-button>
-          <tm-button :round="24" size="small" :label="orderInfo.refundStatus === 0 ? '申请退单' : '已退单'" :disabled="orderInfo.refundStatus !== 0" :font-size="24" color="green" @click="refundClick"></tm-button>
+        <template v-if="!load">
+          <template v-if="orderInfo.status === 1 || orderInfo.status === 2">
+            <tm-button v-if="orderInfo.refundStatus === 0" :round="24" :margin="[24, 0]" :label="orderInfo.rush ? '已催单' : '催单'" :disabled="!!orderInfo.rush" :font-size="24" color="orange" @click="onRushOrderOrder"></tm-button>
+            <tm-button :round="24" :label="orderInfo.refundStatus === 0 ? '申请退单' : '已退单'" :disabled="orderInfo.refundStatus !== 0" :font-size="24" color="green" @click="refundClick"></tm-button>
+          </template>
+          <tm-button v-if="orderInfo.status === 3" label="收货" color="green" :round="10" @click="receiverClick"></tm-button>
+          <tm-button v-if="orderInfo.status === 4" label="删除" color="white" :round="10" @click="deleteOrderClick"></tm-button>
         </template>
-        <tm-button v-if="orderInfo.status === 3" size="small" label="收货" color="green" :round="10" @click="receiverClick"></tm-button>
-        <tm-button v-if="orderInfo.status === 4" size="small" label="删除" color="white" :round="10" @click="deleteOrderClick"></tm-button>
       </view>
     </uv-bottom-bar>
   </tm-app>
 </template>
 <script lang="ts" setup>
+import { ref, getCurrentInstance } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { computed, ref } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
@@ -118,18 +120,16 @@ import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
 
-import { cancelOrder, getOrderDetail, receiverOrder } from '@/api/order'
 import { reactive } from 'vue'
+import { cancelOrder, getOrderDetail, receiverOrder, rushOrder } from '@/api/order'
 import { loading, hideLoading, message, confirm } from '@/utils/dialog'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
-import { useAppHook } from '@/store'
-const DayJs = dayjs.default
-const appStore = useAppHook()
 
-const _totalBarHeight = computed(() => {
-  const safeBottom = appStore.getSafeBottom()
-  return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
-})
+const DayJs = dayjs.default
+
+const load = ref<boolean>(true)
+const backRefreshValue = ref<boolean>(false)
+const $instance = ref<any>(getCurrentInstance()?.proxy)
 const orderInfo = reactive<Order.OrderResult>({
   id: '',
   createTime: new Date(),
@@ -155,11 +155,12 @@ onLoad((opts: any) => {
     return
   }
   orderInfo.id = orderId
-  _loadData(orderInfo.id)
+  initData(orderInfo.id)
 })
 
-const _loadData = (orderId: string) => {
+const initData = (orderId: string) => {
   loading()
+  load.value = true
   getOrderDetail(orderId)
     .then((res) => {
       Object.assign(orderInfo, res.data)
@@ -168,6 +169,7 @@ const _loadData = (orderId: string) => {
       console.log(err)
     })
     .finally(() => {
+      load.value = false
       hideLoading()
     })
 }
@@ -195,7 +197,8 @@ const deleteOrderClick = () => {
     success: () => {
       cancelOrder(orderInfo.id)
         .then(() => {
-          _refreshAndBack()
+          backRefreshValue.value = true
+          refreshAndBack(true)
         })
         .catch((err: any) => {
           console.log(err)
@@ -211,7 +214,8 @@ const receiverClick = () => {
     success: () => {
       receiverOrder(orderInfo.id)
         .then(() => {
-          _refreshAndBack()
+          backRefreshValue.value = true
+          refreshAndBack(true)
         })
         .catch((err: any) => {
           console.log(err)
@@ -224,25 +228,49 @@ const receiverClick = () => {
 const refundClick = () => {
   uni.navigateTo({
     url: '/pages/order/refund/index?orderId=' + orderInfo.id,
-    success: () => {
-      uni.$once('order::refund::success', () => {
+    events: {
+      acceptDataFromDetail(data: any) {
+        const { refund } = data
+        if (!refund) {
+          return
+        }
         orderInfo.refundStatus = 1
-      })
+        backRefreshValue.value = true
+      }
     }
   })
 }
 
-const backClick = () => {
-  if (orderInfo.refundStatus === 0) {
-    return true
+const onRushOrderOrder = () => {
+  rushOrder(orderInfo.id)
+    .then(() => {
+      orderInfo.rush = 1
+      backRefreshValue.value = true
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+}
+
+const refreshAndBack = (back: boolean) => {
+  if (backRefreshValue.value) {
+    setRefreshPage()
   }
-  uni.$emit('order::refresh::success')
+  if (back) {
+    uni.$tm.u.routerTo('', 'navigateBack')
+  }
   return true
 }
 
-const _refreshAndBack = () => {
-  uni.$emit('order::refresh::success')
-  uni.$tm.u.routerTo('', 'navigateBack')
+const setRefreshPage = () => {
+  let pages = getCurrentPages() // 当前页
+  let beforePage = pages[pages.length - 2] // 上个页面
+  if (beforePage !== undefined && beforePage.route === 'pages/order/list/index') {
+    const channel = $instance.value?.getOpenerEventChannel()
+    channel.emit('acceptDataFromDetail', {
+      refresh: true
+    })
+  }
 }
 </script>
 <style>

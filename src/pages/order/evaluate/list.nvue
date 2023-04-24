@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-23 13:46:26
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-23 23:31:13
+ * @LastEditTime: 2023-04-24 16:45:22
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\evaluate\list.nvue
  * @Description: 
  * 
@@ -42,22 +42,30 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmResult from '@/tmui/components/tm-result/tm-result.vue'
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad, onShow } from '@dcloudio/uni-app'
 import { evaluateList } from '@/api/order'
 import { hideLoading, loading } from '@/utils/dialog'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 const DayJs = dayjs.default
 const load = ref<boolean>(true)
 const orderItems = reactive<Order.OrderItemResult[]>([])
+const refreshValue = ref<boolean>(false)
 
 onLoad(() => {
   initData()
+})
+
+onShow(() => {
+  if (refreshValue.value) {
+    initData()
+  }
 })
 
 const initData = () => {
   loading()
   evaluateList()
     .then((res) => {
+      orderItems.length = 0
       orderItems.push(...res.data)
     })
     .catch((err: any) => {
@@ -65,12 +73,13 @@ const initData = () => {
     })
     .finally(() => {
       load.value = false
+      refreshValue.value = false
       hideLoading()
     })
 }
 
 const detailClick = (goodId: string) => {
-  uni.$tm.u.routerTo('/pages/good/index?scene=evaluate&id=' + goodId, 'navigate')
+  uni.$tm.u.routerTo('/pages/good/index?id=' + goodId, 'navigate')
 }
 
 const formatData = (date: Date) => {
@@ -80,13 +89,12 @@ const formatData = (date: Date) => {
 const onEvaluateClick = (id: string) => {
   uni.navigateTo({
     url: '/pages/order/evaluate/detail?id=' + id,
-    success: () => {
-      uni.$once('order::evaluate::success', () => {
-        orderItems.length = 0
-        initData()
-      })
-    },
-    fail: () => {}
+    events: {
+      acceptDataFromDetail(data: any) {
+        const { refresh } = data
+        refreshValue.value = refresh ?? false
+      }
+    }
   })
 }
 </script>

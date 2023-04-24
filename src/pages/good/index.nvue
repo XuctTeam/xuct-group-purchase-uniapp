@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-23 13:30:39
+ * @LastEditTime: 2023-04-24 13:21:05
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\index.nvue
  * @Description: 
  * 
@@ -10,7 +10,7 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="商品详情" color="#32CD32" fontColor="#fff" blur :beforeBack="backClick"></tm-navbar>
+    <tm-navbar title="商品详情" color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
     <tm-sheet :margin="[10, 10, 10, 10]" :height="140" :round="4" :shadow="4">
       <view class="title">{{ name }}</view>
@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, nextTick } from 'vue'
+import { reactive, ref, nextTick, getCurrentInstance } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCarousel from '@/tmui/components/tm-carousel/tm-carousel.vue'
@@ -83,8 +83,8 @@ import { useUserHook } from '@/store'
 
 import { getGood, collect, addCart, browseGood } from '@/api/good'
 import { loading, hideLoading } from '@/utils/dialog'
+const $instance = ref<any>(getCurrentInstance()?.proxy)
 const idValue = ref<string>('')
-const sceneValue = ref<string>('')
 const detail = ref<string>('')
 const name = ref<string>('')
 const browse = ref<number>(1)
@@ -96,12 +96,11 @@ const store = useUserHook()
 const logged = store.logged
 
 onLoad((opts: any) => {
-  const { id, scene } = opts
+  const { id } = opts
   if (!id) {
     return
   }
   idValue.value = id
-  sceneValue.value = scene
   _loadGood()
   nextTick(() => {
     _browseGood()
@@ -112,6 +111,7 @@ const onCllect = () => {
   collect(idValue.value)
     .then(() => {
       userCollect.value = !userCollect.value
+      setPageRefresh()
     })
     .catch((err) => {
       console.log(err)
@@ -169,14 +169,15 @@ const toCart = () => {
   uni.$tm.u.routerTo('/pages/cart/index', 'navigate')
 }
 
-const backClick = () => {
-  if (sceneValue.value === 'collect') {
-    uni.$emit('good::view::refresh', {
-      gid: idValue.value,
-      collect: userCollect.value
+const setPageRefresh = () => {
+  let pages = getCurrentPages() // 当前页
+  let beforePage = pages[pages.length - 2] // 上个页面
+  const channel = $instance.value?.getOpenerEventChannel()
+  if (beforePage !== undefined && beforePage.route === 'pages/member/collect/index') {
+    channel.emit('acceptDataFromDetail', {
+      refresh: true
     })
   }
-  return true
 }
 </script>
 <style>

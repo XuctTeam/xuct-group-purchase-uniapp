@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-06 18:28:56
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-17 11:02:44
+ * @LastEditTime: 2023-04-24 13:12:07
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
@@ -22,7 +22,7 @@
             <tm-text label="请选择配送地址"></tm-text>
           </view>
           <view v-else>
-            <view class="flex flex-row flex-row-bottom-center mt-10 mb-10">
+            <view class="flex flex-row flex-row-bottom-start mt-10 mb-10">
               <tm-text :font-size="36" _class="font-weight-b" :label="`${address.userName}`"></tm-text>
               <view class="ml-10 mr-10">
                 <tm-text :label="`${address.telNumber}`"></tm-text>
@@ -58,20 +58,14 @@
       <tm-divider></tm-divider>
       <tm-input :inputPadding="[12]" v-model="remarksValue" placeholder="备注特殊要求" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
     </tm-sheet>
-    <view :style="{ height: _totalBarHeight + 'rpx' }"></view>
 
-    <view class="button-bottom fixed l-0 b-0" :style="{ height: _totalBarHeight + 'rpx' }">
-      <view class="relative flex flex-row flex-around flex-row-center-between bottom pa-10">
-        <view class="ml-20">
-          <view class="flex flex-row">
-            <tm-text :label="`已选择${cartGoods.length}件商品`"></tm-text>
-          </view>
-        </view>
-        <view class="flex flex-row flex-1 flex-row-center-end">
-          <tm-button label="确认下单" :round="24" color="green" @click="placeOrderClick"></tm-button>
-        </view>
+    <uv-bottom-bar>
+      <view class="flex flex-row flex-1 flex-row-center-between">
+        <tm-text :label="`已选择${cartGoods.length}件商品`"></tm-text>
+        <tm-button label="确认下单" :round="24" color="green" @click="placeOrderClick"></tm-button>
       </view>
-    </view>
+    </uv-bottom-bar>
+
     <!-- 积分弹出框  --->
     <tmDrawer placement="bottom" v-model:show="showWin" @ok="integraClick">
       <tm-radio-group v-model="integralChoose">
@@ -106,9 +100,10 @@ import tmRollNotice from '@/tmui/components/tm-roll-notice/tm-roll-notice.vue'
 import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
 import tmRadio from '@/tmui/components/tm-radio/tm-radio.vue'
 import tmRadioGroup from '@/tmui/components/tm-radio-group/tm-radio-group.vue'
+import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
 
-import { useAppHook, useUserHook } from '@/store'
-import { computed, reactive, ref } from 'vue'
+import { useUserHook } from '@/store'
+import { computed, reactive, ref, getCurrentInstance } from 'vue'
 import { getDefaultAddress } from '@/api/user'
 import { getConfirmOrderDetail } from '@/api/order'
 import { placeOrder } from '@/api/order'
@@ -116,14 +111,9 @@ import { TEMPLATE_IDS } from '@/constant'
 import { onLoad } from '@dcloudio/uni-app'
 import { loading, hideLoading, confirm, message } from '@/utils/dialog'
 
-const appStore = useAppHook()
 const userStore = useUserHook()
-const safeBottom = appStore.getSafeBottom()
 
-const _totalBarHeight = computed(() => {
-  return uni.$tm.u.torpx(safeBottom > 0 ? 80 : 60 + safeBottom)
-})
-
+const $instance = ref<any>(getCurrentInstance()?.proxy)
 const userInfo: User.UserInfo = userStore.getUserInfo
 const content = ref(['点击获取订单实时消息~'])
 const goodIds = reactive<string[]>([])
@@ -175,12 +165,11 @@ const noticeClick = () => {
 const addressClick = () => {
   uni.navigateTo({
     url: '/pages/member/address/list?type=order',
-    success: () => {
-      uni.$once('address:selected::success', (data) => {
-        Object.assign(address, { ...data.address })
-      })
-    },
-    fail: () => {}
+    events: {
+      acceptDataFromDetail(data: any) {
+        Object.assign(address, { ...data })
+      }
+    }
   })
 }
 
@@ -209,6 +198,7 @@ const placeOrderClick = () => {
       placeOrder(_scene.value, address.id ?? '', integralInput.value, remarksValue.value, goodIds)
         .then((res: any) => {
           const orderId = res.data
+          setCartListRefresh()
           uni.$tm.u.routerTo('/pages/order/result/index?orderId=' + orderId, 'redirect')
         })
         .catch((err: any) => {
@@ -247,6 +237,17 @@ const _loadDetail = (scene: string, gids: string[]) => {
       console.log(err)
       hideLoading()
     })
+}
+
+const setCartListRefresh = () => {
+  let pages = getCurrentPages() // 当前页
+  let beforePage = pages[pages.length - 2] // 上个页面
+  const channel = $instance.value?.getOpenerEventChannel()
+  if (beforePage !== undefined && beforePage.route === 'pages/cart/index') {
+    channel.emit('acceptDataFromDetail', {
+      refresh: true
+    })
+  }
 }
 </script>
 <style>
