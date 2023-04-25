@@ -12,13 +12,30 @@
   },
   "pages": [
     {
-      "path": "pages/index/index",
+      "path": "pages/member/browse/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
         "titlePenetrate": "YES",
-        "transparentTitle": "always",
-        "enablePullDownRefresh": true
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/order/list/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/order/refund/list",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
       }
     },
     {
@@ -28,6 +45,16 @@
         "navigationStyle": "custom",
         "titlePenetrate": "YES",
         "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always",
+        "enablePullDownRefresh": true
       }
     },
     {
@@ -84,15 +111,7 @@
         "transparentTitle": "always"
       }
     },
-    {
-      "path": "pages/order/list/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
+
     {
       "path": "pages/order/evaluate/list",
       "style": {
@@ -122,6 +141,15 @@
     },
     {
       "path": "pages/order/refund/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/order/refund/detail",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",

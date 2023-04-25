@@ -1,9 +1,9 @@
 <!--
  * @Author: Derek Xu
- * @Date: 2023-04-11 18:29:35
+ * @Date: 2023-04-25 10:38:54
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-25 18:59:44
- * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\list\index.nvue
+ * @LastEditTime: 2023-04-25 19:56:11
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\list.nvue
  * @Description: 
  * 
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
@@ -14,15 +14,25 @@
       <!-- 之后-vue3 -->
       <template #top>
         <view>
-          <tm-navbar title="我的订单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+          <tm-navbar title="我的退单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
           <tm-sheet :margin="[0, 0]" :padding="[20, 30]">
             <tm-input prefix="tmicon-search" searchLabel="搜索" placeholderStyle="fontSize: 10rpx;" focusColor="green" placeholder="订单编号"></tm-input>
           </tm-sheet>
-          <tm-tabs :list="tabsTitle" @change="tabschange" :width="_width" showTabsLineAni :item-width="140" v-model:active-name="tabActiveRef" tabsLineAniColor="green" activeFontColor="green"></tm-tabs>
+          <tm-tabs
+            :list="tabsTitle"
+            @change="tabschange"
+            :width="_width"
+            showTabsLineAni
+            :item-width="_width / 2 - 40"
+            align="around"
+            v-model:active-name="tabActiveRef"
+            tabsLineAniColor="green"
+            activeFontColor="green"
+          ></tm-tabs>
         </view>
       </template>
       <view v-for="(item, index) in orderList" :key="index">
-        <tm-card :status="formateStatus(item.status)" :margin="[10, 10]" :title="`编号:${item.id}`" statusColor="green">
+        <tm-card :status="formateStatus(item.refundStatus)" :margin="[10, 10]" :title="`编号:${item.id}`" statusColor="green">
           <template v-slot:content>
             <view class="pa-10" @click="onDetailClick(item.id)">
               <view v-for="(i, ind) in item.items" :key="ind" class="flex flex-row pt-10 pb-10">
@@ -44,16 +54,8 @@
           </template>
           <template v-slot:action>
             <view class="flex flex-row flex-row-center-end flex-1">
-              <template v-if="item.status !== 4">
-                <template v-if="item.status === 1">
-                  <tm-button :round="24" size="small" :margin="[24, 0]" label="付款" :font-size="24" color="green"></tm-button>
-                  <tm-button :round="24" size="small" label="取消订单" :font-size="24" color="orange" @click="onCancelOrder(item.id)"></tm-button>
-                </template>
-                <template v-if="item.status === 2 || item.status === 3">
-                  <tm-button :round="24" size="small" :margin="[24, 0]" :label="item.rush ? '已催单' : '催单'" :disabled="!!item.rush" :font-size="24" color="orange" @click="onRushOrderOrder(item.id)"></tm-button>
-                  <tm-button v-if="item.status === 2" :round="24" size="small" :label="item.refundStatus !== 3 ? '申请退单' : '已撤退单'" :disabled="item.refundStatus === 3" :font-size="24" color="green" @click="onRefundOrder(item.id)"></tm-button>
-                  <tm-button v-else :round="24" size="small" :margin="[24, 0]" label="收货" :font-size="24" color="green" @click="onReciverOrder(item.id)"></tm-button>
-                </template>
+              <template v-if="item.refundStatus === 1">
+                <tm-button :round="24" size="small" label="取消退单" :font-size="24" color="orange" @click="onCancelRefundOrder(item.id)"></tm-button>
               </template>
               <template v-else>
                 <tm-button :round="24" size="small" :margin="[24, 0]" label="删除" :font-size="24" color="white" @click="onCancelOrder(item.id)"></tm-button>
@@ -66,6 +68,7 @@
   </tm-app>
 </template>
 <script lang="ts" setup>
+import { ref, computed } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmTabs from '@/tmui/components/tm-tabs/tm-tabs.vue'
@@ -77,31 +80,28 @@ import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
 
-import { onLoad, onShow } from '@dcloudio/uni-app'
-import { computed, ref } from 'vue'
 import { useAppHook, useCountHook } from '@/store'
-import { cancelOrder, pageOrderList } from '@/api/order'
+import { pageOrderList, cancelRefundOrder, cancelOrder } from '@/api/order'
+import { onShow } from '@dcloudio/uni-app'
 import { confirm } from '@/utils/dialog'
-import { rushOrder, receiverOrder } from '@/api/order'
-const tabsTitle = ref([
-  { key: '0', title: '全部' },
-  { key: '1', title: '待付款' },
-  { key: '2', title: '待发货' },
-  { key: '3', title: '待收货' },
-  { key: '4', title: '已完成' }
-])
+
 const countStore = useCountHook()
 const appStore = useAppHook()
 const _width = computed(() => {
   return uni.$tm.u.torpx(appStore.getWindowWidth())
 })
 const paging = ref<any>(null)
-const tabActiveRef = ref<string>('0')
+const tabActiveRef = ref<string>('1')
 let orderList = ref<Order.OrderResult[]>([])
-const reloadValue = ref<boolean>(false) // 页面是否刷新?重载
+const reloadValue = ref<boolean>(false)
+
+const tabsTitle = ref([
+  { key: '1', title: '退单中' },
+  { key: '2', title: '已退单' }
+])
 
 const queryList = (pageNo: number, pageSize: number) => {
-  pageOrderList(pageNo, pageSize, tabActiveRef.value || '0', '0')
+  pageOrderList(pageNo, pageSize, '0', tabActiveRef.value || '1')
     .then((res) => {
       paging.value.complete(res.data.list)
     })
@@ -114,30 +114,14 @@ const queryList = (pageNo: number, pageSize: number) => {
     })
 }
 
-const tabschange = (key: string | number) => {
-  reloadData()
-}
-
 const formateStatus = (status: number) => {
   switch (status) {
     case 1:
-      return '待付款'
+      return '退单中'
     case 2:
-      return '待发货'
-    case 3:
-      return '待收货'
-    default:
       return '已完成'
   }
 }
-
-onLoad((opts: any) => {
-  const { key } = opts
-  if (!key) {
-    return
-  }
-  tabActiveRef.value = key
-})
 
 onShow(() => {
   if (reloadValue.value) {
@@ -145,9 +129,13 @@ onShow(() => {
   }
 })
 
+const tabschange = (key: string | number) => {
+  reloadData()
+}
+
 const onDetailClick = (orderId: string) => {
   uni.navigateTo({
-    url: '/pages/order/detail/index?orderId=' + orderId,
+    url: '/pages/order/refund/detail?orderId=' + orderId,
     events: {
       acceptDataFromDetail(data: any) {
         const { refresh } = data
@@ -168,65 +156,35 @@ const onCancelOrder = (orderId: string) => {
   })
 }
 
-const onRushOrderOrder = (orderId: string) => {
-  rushOrder(orderId)
-    .then(() => {
-      reloadData
-    })
-    .catch((err: any) => {
-      console.log(err)
-    })
-}
-
-const onReciverOrder = (orderId: string) => {
+const onCancelRefundOrder = (orderId: string) => {
   confirm({
-    title: '确定收货吗？',
+    title: '确定取消申请吗？',
     success: () => {
-      _receiverOrder(orderId)
+      cancelRefundOrder(orderId)
+        .then(() => {
+          reloadData()
+          refreshCount()
+        })
+        .catch((err: any) => {
+          console.log(err)
+        })
     },
     fail: () => {}
   })
 }
 
-const onRefundOrder = (orderId: string) => {
-  uni.navigateTo({
-    url: '/pages/order/refund/index?orderId=' + orderId,
-    events: {
-      acceptDataFromDetail(data: any) {
-        const { refund } = data
-        if (!refund) {
-          return
-        }
-        reloadValue.value = true
-        refreshCount()
-      }
-    }
-  })
+const refreshCount = () => {
+  countStore.setRefresh(true)
 }
 
 const _cancelOrder = (orderId: string) => {
   cancelOrder(orderId)
     .then(() => {
-      reloadAndRefreshCount()
+      reloadData()
     })
     .catch((err: any) => {
       console.log(err)
     })
-}
-
-const _receiverOrder = (orderId: string) => {
-  receiverOrder(orderId)
-    .then(() => {
-      reloadAndRefreshCount()
-    })
-    .catch((err: any) => {
-      console.log(err)
-    })
-}
-
-const reloadAndRefreshCount = () => {
-  refreshCount()
-  reloadData()
 }
 
 const reloadData = () => {
@@ -235,14 +193,4 @@ const reloadData = () => {
     reloadValue.value = false
   }
 }
-
-const refreshCount = () => {
-  //刷新首页
-  countStore.setRefresh(true)
-}
 </script>
-<style>
-.item-image {
-  width: 120rpx;
-}
-</style>

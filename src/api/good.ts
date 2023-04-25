@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 11:35:37
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-20 09:52:16
+ * @LastEditTime: 2023-04-26 00:20:06
  * @FilePath: \xuct-group-purchase-uniapp\src\api\good.ts
  * @Description:
  *
@@ -108,4 +108,20 @@ export const cleanCart = () => {
  */
 export const collectList = () => {
   return request.get<Good.GoodResult[]>('/api/v1/good/user/collect')
+}
+
+/**
+ * 查询用户浏览商品
+ */
+export const browseList = () => {
+  return request.get<Good.GoodResult[]>('/api/v1/good/user/browse')
+}
+
+/**
+ * 删除用户浏览
+ *
+ * @param gid
+ */
+export const deleteBrowse = (gid: string) => {
+  return request.delete('/api/v1/good/user/browse?gid=' + gid)
 }

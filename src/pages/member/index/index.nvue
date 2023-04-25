@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-15 22:02:25
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-24 15:17:11
+ * @LastEditTime: 2023-04-25 23:58:20
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -25,7 +25,19 @@
                 </view>
               </view>
               <view class="mt-20" v-else>
-                <tm-button :round="10" icon="tmicon-md-phone-portrait" :fontSize="24" color="green" :width="160" :height="50" :margin="[0]" :padding="[0]" label="绑定手机" openType="getPhoneNumber" @getphonenumber="getphonenumber"></tm-button>
+                <tm-button
+                  :round="10"
+                  icon="tmicon-md-phone-portrait"
+                  :fontSize="24"
+                  color="green"
+                  :width="160"
+                  :height="50"
+                  :margin="[0]"
+                  :padding="[0]"
+                  label="绑定手机"
+                  openType="getPhoneNumber"
+                  @getphonenumber="getphonenumber"
+                ></tm-button>
               </view>
             </view>
           </template>
@@ -198,8 +210,8 @@ const serviceItems = ref([
   },
   {
     name: '浏览历史',
-    icon: '/static/images/me-good-brose.png',
-    code: 'setting'
+    icon: '/static/images/me-good-browse.png',
+    code: 'browse'
   },
   {
     name: '已删订单',
@@ -245,6 +257,7 @@ const orderItemClick = (index: any) => {
       uni.$tm.u.routerTo('/pages/order/evaluate/list', 'navigate')
       break
     default:
+      uni.$tm.u.routerTo('/pages/order/refund/list', 'navigate')
   }
 }
 
@@ -261,6 +274,9 @@ const serviceItemClick = (code: string) => {
       break
     case 'services':
       uni.$tm.u.routerTo('/pages/services/index', 'navigate')
+      break
+    case 'browse':
+      uni.$tm.u.routerTo('/pages/member/browse/index', 'navigate')
       break
   }
 }

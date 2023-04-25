@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-23 20:29:42
+ * @LastEditTime: 2023-04-25 18:32:14
  * @FilePath: \xuct-group-purchase-uniapp\src\api\order.ts
  * @Description:
  *
@@ -53,13 +53,15 @@ export const placeOrder = (scene: string, addressId: string, integral: number, r
  * @param pageSize
  * @returns
  */
-export const pageOrderList = (pageNo: number, pageSize: number, status: string) => {
+export const pageOrderList = (pageNo: number, pageSize: number, status: string, refundStatus: string) => {
   return request.get<API.PageResult<Order.OrderResult>>('/api/v1/order/list', {
     status,
     pageNo,
-    pageSize
+    pageSize,
+    refundStatus
   })
 }
+
 
 /**
  * 获取订单详情
@@ -81,6 +83,16 @@ export const refundOrder = (orderId: string, refundType: string, refundReason?: 
     refundType,
     refundReason,
     refundImages
+  })
+}
+
+/**
+ * 取消退单申请
+ * @param orderId 
+ */
+export const cancelRefundOrder = (orderId: string) => {
+  return request.post('/api/v1/order/refund/cancel', {
+    orderId
   })
 }
 

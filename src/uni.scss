@@ -45,3 +45,16 @@
 .flex-col-between-center {
   justify-content: space-between !important;
 }
+
+.flex-card-item-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  height: 160rpx;
+  padding: 10rpx;
+}
+
+.word-break {
+  word-break: break-all;
+}

@@ -1,21 +1,21 @@
 <!--
  * @Author: Derek Xu
- * @Date: 2023-04-19 19:01:43
+ * @Date: 2023-04-20 09:48:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-25 23:15:12
- * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\collect\index.nvue
+ * @LastEditTime: 2023-04-26 00:21:40
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\browse\index.nvue
  * @Description: 
  * 
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
 -->
 <template>
   <tm-app>
-    <tm-navbar title="我的收藏" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <template v-if="collectData.length === 0 && !loadValue">
-      <tm-result :showBtn="false" color="green" title="空空如也哦~" subTitle="快去收藏 T.T"></tm-result>
+    <tm-navbar title="我的浏览" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <template v-if="browseData.length === 0 && !loadValue">
+      <tm-result :showBtn="false" color="green" title="空空如也哦~" subTitle="快去购买 T.T"></tm-result>
     </template>
     <template v-else>
-      <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" v-for="(item, index) in collectData" :key="index">
+      <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" v-for="(item, index) in browseData" :key="index">
         <tm-slide-switch :width="700" :height="140">
           <view class="flex flex-row flex-1" @click="itemClick(item.id)">
             <tm-image :width="140" :round="4" :height="140" :src="item.firstDrawing"></tm-image>
@@ -29,7 +29,7 @@
           <template v-slot:right>
             <view class="flex flex-row flex-row-center-end">
               <tm-sheet :width="100" _class="flex flex-row flex-row-center-center" :height="140" color="green" no-level :margin="[0]" :padding="[0]">
-                <tm-text :userInteractionEnabled="false" label="取消" @click="onCllect(item.id)"></tm-text>
+                <tm-text :userInteractionEnabled="false" label="删除" @click="onDeleteClick(item.id)"></tm-text>
               </tm-sheet>
             </view>
           </template>
@@ -38,6 +38,7 @@
     </template>
   </tm-app>
 </template>
+
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
@@ -47,72 +48,47 @@ import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmSlideSwitch from '@/tmui/components/tm-slide-switch/tm-slide-switch.vue'
 import tmResult from '@/tmui/components/tm-result/tm-result.vue'
-
-import { onLoad, onShow } from '@dcloudio/uni-app'
+import { onLoad } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
-import { collect, collectList } from '@/api/good'
+import { browseList, deleteBrowse } from '@/api/good'
 
 const loadValue = ref<boolean>(false)
-const collectData = reactive<Good.GoodResult[]>([])
-const refreshValue = ref<boolean>(false)
+const browseData = reactive<Good.GoodResult[]>([])
 
 onLoad(() => {
   initData()
 })
 
-onShow(() => {
-  if (refreshValue.value) {
-    initData()
-  }
-})
-
 const initData = () => {
   loading()
-  collectData.length = 0
   loadValue.value = true
-  collectList()
+  browseList()
     .then((res) => {
-      collectData.push(...res.data)
+      browseData.length = 0
+      browseData.push(...res.data)
     })
     .catch((err: any) => {
       console.log(err)
     })
     .finally(() => {
       loadValue.value = false
-      refreshValue.value = false
       hideLoading()
     })
 }
 
 const itemClick = (gid: string) => {
   uni.navigateTo({
-    url: '/pages/good/index?id=' + gid,
-    events: {
-      acceptDataFromDetail(data: any) {
-        const { refresh } = data
-        refreshValue.value = refresh ?? false
-      }
-    }
+    url: '/pages/good/index?id=' + gid
   })
 }
 
-const onCllect = (gid: string) => {
-  collect(gid)
+const onDeleteClick = (gid: string) => {
+  deleteBrowse(gid)
     .then(() => {
-      _removeItem(gid)
+      initData()
     })
-    .catch((err) => {
+    .catch((err: any) => {
       console.log(err)
     })
-}
-
-const _removeItem = (gid: string) => {
-  const _values = collectData.filter((i) => {
-    return i.id !== gid
-  })
-  setTimeout(() => {
-    collectData.length = 0
-    collectData.push(..._values)
-  }, 500)
 }
 </script>
