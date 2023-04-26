@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-23 11:11:15
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-23 17:18:49
+ * @LastEditTime: 2023-04-26 21:05:54
  * @FilePath: \xuct-group-purchase-uniapp\src\components\uv-bottom-bar\uv-bottom-bar.vue
  * @Description: 
  * 

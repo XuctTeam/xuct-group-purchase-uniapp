@@ -1,0 +1,12 @@
+<template>
+  <tm-app>
+    <tm-navbar title="优惠券管理" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <tm-coupon mainColor="red"></tm-coupon>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import { reactive, ref } from 'vue'
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmCoupon from '@/tmui/components/tm-coupon/tm-coupon.vue'
+</script>

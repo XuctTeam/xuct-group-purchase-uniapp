@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 10:11:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-22 22:28:06
+ * @LastEditTime: 2023-04-26 19:52:13
  * @FilePath: \xuct-group-purchase-uniapp\src\api\user.ts
  * @Description:
  *
@@ -97,4 +97,18 @@ export const commentList = () => {
  */
 export const addComment = (comment: User.Comment) => {
   return request.post('/api/v1/user/comment', { ...comment })
+}
+
+/**
+ * 用户信息统计
+ */
+export const userSum = () => {
+  return request.get<User.SumResult>('/api/v1/user/sum')
+}
+
+/**
+ * 优惠券列表
+ */
+export const couponList = () => {
+  
 }

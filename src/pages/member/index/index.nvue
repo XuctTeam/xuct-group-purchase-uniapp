@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-15 22:02:25
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-25 23:58:20
+ * @LastEditTime: 2023-04-26 19:22:42
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -54,8 +54,8 @@
       </view>
       <view class="menu">
         <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]" :height="120">
-          <tm-row :width="720" :column="3" :gutter="5">
-            <tm-col :margin="[4, 0]" :height="120" :borderGutter="[0, 0, index === 2 ? 0 : 1, 0]" v-for="(item, index) in meSelfSumItems" :key="index">
+          <tm-row :width="720" :column="4" :gutter="5">
+            <tm-col :margin="[4, 0]" :height="120" :borderGutter="[0, 0, index === 3 ? 0 : 1, 0]" v-for="(item, index) in userSumItems" :key="index">
               <view class="flex-1 flex flex-col flex-col-center-center">
                 <tm-text :label="item.nums"></tm-text>
                 <view class="mt-14">
@@ -124,17 +124,19 @@ import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 import { useUserHook, useCountHook } from '@/store'
 import { onLoad } from '@dcloudio/uni-app'
 import { sumCount } from '@/api/order'
-import { bindPhone } from '@/api/user'
+import { bindPhone, userSum } from '@/api/user'
+import { number } from 'echarts'
+import { listItemType } from '@/tmui/components/tm-carousel/interface'
 
 const userStore = useUserHook()
 const countStore = useCountHook()
 
 // 解构的时候调用storeToRefs
 const { logged } = storeToRefs(userStore)
-const { canRefresh } = storeToRefs(countStore)
+const { canRefresh, canUserRefresh } = storeToRefs(countStore)
 const userInfo = userStore.getUserInfo
 
-const meSelfSumItems = reactive([
+const userSumItems = reactive([
   {
     key: '1',
     name: '我的积分',
@@ -149,6 +151,11 @@ const meSelfSumItems = reactive([
     key: '3',
     name: '我的收藏',
     nums: 0
+  },
+  {
+    key: '4',
+    name: '优惠券',
+    nums: 0
   }
 ])
 
@@ -157,25 +164,29 @@ const orderItems = reactive([
     key: '1',
     name: '待付款',
     icon: '/static/images/me-ic-obligation.png',
-    nums: 0
+    nums: 0,
+    url: '/pages/order/list/index?key=1'
   },
   {
     key: '2',
     name: '待发货',
     icon: '/static/images/me-ic-sendout.png',
-    nums: 0
+    nums: 0,
+    url: '/pages/order/list/index?key=2'
   },
   {
     key: '3',
     name: '待收货',
     icon: '/static/images/me-ic-receiving.png',
-    nums: 0
+    nums: 0,
+    url: '/pages/order/list/index?key=3'
   },
   {
     key: '4',
     name: '待评价',
     icon: '/static/images/me-ic-evaluate.png',
-    nums: 0
+    nums: 0,
+    url: '/pages/order/evaluate/list'
   },
   {
     key: '5',
@@ -183,7 +194,8 @@ const orderItems = reactive([
     icon: '/static/images/me-ic-service.png',
     nums: 0,
     width: 60,
-    height: 50
+    height: 50,
+    url: '/pages/order/refund/list'
   }
 ])
 
@@ -191,32 +203,43 @@ const serviceItems = ref([
   {
     name: '地址管理',
     icon: '/static/images/me-address.png',
-    code: 'address'
+    code: 'address',
+    url: '/pages/member/address/list'
+  },
+  {
+    name: '优惠券',
+    icon: '/static/images/me-coupon.png',
+    code: 'coupon',
+    url: '/pages/member/coupon/index'
   },
   {
     name: '我的收藏',
     icon: '/static/images/me-collect.png',
-    code: 'collect'
-  },
-  {
-    name: '个人设置',
-    icon: '/static/images/me-self.png',
-    code: 'setting'
+    code: 'collect',
+    url: '/pages/member/collect/index'
   },
   {
     name: '客服服务',
     icon: '/static/images/me-message.png',
-    code: 'services'
+    code: 'services',
+    url: '/pages/services/index'
   },
   {
     name: '浏览历史',
     icon: '/static/images/me-good-browse.png',
-    code: 'browse'
+    code: 'browse',
+    url: '/pages/member/browse/index'
   },
   {
     name: '已删订单',
     icon: '/static/images/me-order-delete.png',
-    code: 'setting'
+    code: 'delorder'
+  },
+  {
+    name: '个人设置',
+    icon: '/static/images/me-self.png',
+    code: 'setting',
+    url: '/pages/member/setting/index'
   }
 ])
 
@@ -224,61 +247,43 @@ onLoad(() => {
   if (!logged.value) {
     return
   }
-  _loadOrderSum()
+  initOrderSum()
+  initUserSum()
 })
 
 watch(logged, (newValue, oldValue) => {
-  if (!oldValue && newValue) {
-    _loadOrderSum()
+  //退出登录
+  if (oldValue && !newValue) {
+    orderItems.forEach((x) => (x.nums = 0))
+    userSumItems.forEach((x) => (x.nums = 0))
     return
   }
-  //退出登录
-  if (!newValue && oldValue) {
-    orderItems.forEach((x) => (x.nums = 0))
-  }
+  initOrderSum()
+  initUserSum()
 })
 
 // 监听刷新统计总数
 watch(canRefresh, (newValue, oldValue) => {
-  if (!oldValue && newValue) {
-    _loadOrderSum()
-    countStore.setRefresh(false)
+  if (oldValue && !newValue) {
+    return
   }
+  initOrderSum()
 })
 
-const orderItemClick = (index: any) => {
-  switch (index) {
-    case '1':
-    case '2':
-    case '3':
-      uni.$tm.u.routerTo('/pages/order/list/index?key=' + index, 'navigate')
-      break
-    case '4':
-      uni.$tm.u.routerTo('/pages/order/evaluate/list', 'navigate')
-      break
-    default:
-      uni.$tm.u.routerTo('/pages/order/refund/list', 'navigate')
+// 监听用户统计总数
+watch(canUserRefresh, (newValue, oldValue) => {
+  if (oldValue && !newValue) {
+    return
   }
+  initUserSum()
+})
+
+const orderItemClick = (index: string) => {
+  uni.$tm.u.routerTo(orderItems.find((item) => item.key === index)?.url ?? '', 'navigate')
 }
 
 const serviceItemClick = (code: string) => {
-  switch (code) {
-    case 'address':
-      uni.$tm.u.routerTo('/pages/member/address/list', 'navigate')
-      break
-    case 'setting':
-      uni.$tm.u.routerTo('/pages/member/setting/index', 'navigate')
-      break
-    case 'collect':
-      uni.$tm.u.routerTo('/pages/member/collect/index', 'navigate')
-      break
-    case 'services':
-      uni.$tm.u.routerTo('/pages/services/index', 'navigate')
-      break
-    case 'browse':
-      uni.$tm.u.routerTo('/pages/member/browse/index', 'navigate')
-      break
-  }
+  uni.$tm.u.routerTo(serviceItems.value.find((item) => item.code === code)?.url ?? '', 'navigate')
 }
 
 const getphonenumber = (e: any) => {
@@ -300,28 +305,27 @@ const getphonenumber = (e: any) => {
     })
 }
 
-const _loadOrderSum = () => {
+const initOrderSum = () => {
   sumCount()
     .then((res) => {
       const { toBePaidCount, toBeSendCount, toBeReceivedCount, toBeEvaluationCount, toBeService } = res.data
+      const dataArray = [toBePaidCount, toBeSendCount, toBeReceivedCount, toBeEvaluationCount, toBeService]
       orderItems.forEach((x) => {
-        switch (x.key) {
-          case '1':
-            x.nums = toBePaidCount
-            break
-          case '2':
-            x.nums = toBeSendCount
-            break
-          case '3':
-            x.nums = toBeReceivedCount
-            break
-          case '4':
-            x.nums = toBeEvaluationCount
-            break
-          case '5':
-            x.nums = toBeService
-            break
-        }
+        x.nums = dataArray[Number.parseInt(x.key) - 1]
+      })
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+}
+
+const initUserSum = () => {
+  userSum()
+    .then((res) => {
+      const { integralCount, browseCount, collectCount, couponCount } = res.data
+      const dataArray = [integralCount, browseCount, collectCount, couponCount]
+      userSumItems.forEach((x) => {
+        x.nums = dataArray[Number.parseInt(x.key) - 1]
       })
     })
     .catch((err: any) => {

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 08:58:16
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-24 18:51:12
+ * @LastEditTime: 2023-04-26 19:58:12
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -21,11 +21,10 @@
       </tm-row>
     </tm-sheet>
 
-    <tm-scrolly v-model="pull" @refresh="refresh"> </tm-scrolly>
     <view class="flex flex-col flex-col-top-center">
       <tm-waterfall ref="wall" :width="718">
-        <tm-waterfall-item :img="item.firstDrawing" :id="item.id" v-for="(item, index) in goodInfos" :key="index" @img-click="click">
-          <view class="pt-12 pb-12 px-12" @click="($event) => click">
+        <tm-waterfall-item :img="item.firstDrawing" :id="item.id" v-for="(item, index) in goodInfos" :key="index" @click="itemClick(item.id)">
+          <view class="pt-12 pb-12 px-12">
             <tm-text :label="item.name" _class="text-overflow-2"></tm-text>
             <view class="flex flex-row flex-row-center-start mt-10 mb-10">
               <tm-tag color="green" label="礼物" size="xs" :margin="[0]"></tm-tag>
@@ -39,7 +38,6 @@
         </tm-waterfall-item>
       </tm-waterfall>
     </view>
-    <tm-float-button :actions="fabActions" actionsPos="top" position="br" :btn="{ icon: 'tmicon-plus', color: 'rgba(61, 185, 99, 1)' }" @change="floatClick"></tm-float-button>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -48,7 +46,6 @@ import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmWaterfall from '@/tmui/components/tm-waterfall/tm-waterfall.vue'
-import tmFloatButton from '@/tmui/components/tm-float-button/tm-float-button.vue'
 import tmWaterfallItem from '@/tmui/components/tm-waterfall-item/tm-waterfall-item.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCarousel from '@/tmui/components/tm-carousel/tm-carousel.vue'
@@ -63,7 +60,6 @@ import { goodList } from '@/api/good'
 const wall = ref<InstanceType<typeof tmWaterfall> | null>(null)
 const goodInfos = reactive<Good.GoodResult[]>([])
 const bannerImages = reactive<API.BannerResult[]>([])
-const pull = ref(false)
 
 const fabActions = [
   { icon: 'tmicon-shopping-cart-fill', color: 'red', label: '购物车' },
@@ -119,18 +115,8 @@ onPullDownRefresh(() => {
   }, 300)
 })
 
-function click(e: any) {
-  const { id } = e?.currentTarget
-  if (!id) {
-    return
-  }
+function itemClick(id: string) {
   uni.$tm.u.routerTo('/pages/good/index?id=' + id, 'navigate')
-}
-
-function floatClick(e: any) {
-  uni.navigateTo({
-    url: e === 0 ? '/pages/cart/index' : '/pages/member/index/index'
-  })
 }
 </script>
 <style>

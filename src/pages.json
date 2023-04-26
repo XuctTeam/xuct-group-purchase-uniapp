@@ -1,16 +1,19 @@
 {
-  // "easycom": {
-  // 	"autoscan": true,
-  // 	"custom": {
-  // 		"^tm-(.*)": "@/tmui/components/tm-$1/tm-$1.vue"
-  // 	}
-  // },
   "easycom": {
     "custom": {
       "^(?!z-paging-refresh|z-paging-load-more)z-paging(.*)": "z-paging/components/z-paging$1/z-paging$1.vue"
     }
   },
   "pages": [
+    {
+      "path": "pages/member/index/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
     {
       "path": "pages/member/browse/index",
       "style": {
@@ -31,15 +34,6 @@
     },
     {
       "path": "pages/order/refund/list",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-    {
-      "path": "pages/member/index/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -111,7 +105,24 @@
         "transparentTitle": "always"
       }
     },
-
+    {
+      "path": "pages/member/coupon/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/member/collect/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
     {
       "path": "pages/order/evaluate/list",
       "style": {
@@ -123,15 +134,6 @@
     },
     {
       "path": "pages/order/evaluate/detail",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-    {
-      "path": "pages/member/collect/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -218,25 +220,32 @@
     "navigationBarBackgroundColor": "#FFFFFF",
     "backgroundColor": "#FFFFFF"
   },
-  // "tabBar": {
-  // 	"backgroundColor": "#FFFFFF",
-  // 	"color": "#333333",
-  // 	"selectedColor": "#0088FF",
-  // 	"list": [
-  // 		{
-  // 			"iconPath": "",
-  // 			"selectedIconPath": "",
-  // 			"text": "换电",
-  // 			"pagePath": "pages/index/index"
-  // 		},
-  // 		{
-  // 			"iconPath": "",
-  // 			"selectedIconPath": "",
-  // 			"text": "换电",
-  // 			"pagePath": "pages/wxaccount/user"
-  // 		}
-  // 	]
-  // },
+  "tabBar": {
+    "backgroundColor": "#fafafa",
+    "borderStyle": "white",
+    "selectedColor": "#69C261",
+    "color": "rgba(204, 214, 203, 1)",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/images/ic_menu_choice_nor.png",
+        "selectedIconPath": "static/images/ic_menu_choice_pressed.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/cart/index",
+        "iconPath": "static/images/ic_menu_shoping_nor.png",
+        "selectedIconPath": "static/images/ic_menu_shoping_pressed.png",
+        "text": "购物车"
+      },
+      {
+        "pagePath": "pages/member/index/index",
+        "iconPath": "static/images/ic_menu_me_nor.png",
+        "selectedIconPath": "static/images/ic_menu_me_pressed.png",
+        "text": "我的"
+      }
+    ]
+  },
   "condition": {
     "current": 0,
     "list": [

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-23 17:24:55
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-22 22:45:11
+ * @LastEditTime: 2023-04-26 15:25:55
  * @FilePath: \xuct-group-purchase-uniapp\src\types\user.d.ts
  * @Description: 用户定义类
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved.
@@ -45,5 +45,12 @@ declare namespace User {
     avatar?: string
     userId?: string
     content: string
+  }
+
+  type SumResult = {
+    integralCount: number
+    browseCount: number
+    collectCount: number
+    couponCount: number
   }
 }
