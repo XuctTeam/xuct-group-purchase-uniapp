@@ -1,7 +1,22 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-04-27 09:30:05
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-04-27 11:38:04
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\coupon\index.nvue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
 <template>
   <tm-app>
     <tm-navbar title="优惠券管理" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <tm-coupon mainColor="red"></tm-coupon>
+    <tm-coupon mainColor="green" extra :margin="[10]" v-for="(item, i) in coupons" @click="onClick" :disable="formateDisable(item)" :priceDetail="formatePrice(item)" :rightDetail="formatRight(item)" :key="i">
+      <template v-slot:extra>
+        <tm-text :font-size="22" _class="opacity-7" label="1.优惠券只能在规定时间使用。"></tm-text>
+        <tm-text :font-size="22" _class="opacity-7" label="2.不限制金额优惠券可在购买任何商品时使用。"></tm-text>
+      </template>
+    </tm-coupon>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -9,4 +24,65 @@ import { reactive, ref } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCoupon from '@/tmui/components/tm-coupon/tm-coupon.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import { couponList } from '@/api/user'
+import { onLoad } from '@dcloudio/uni-app'
+import { loading, hideLoading } from '@/utils/dialog'
+import * as dayjs from '@/tmui/tool/dayjs/esm/index'
+
+const DayJs = dayjs.default
+const coupons = reactive<User.Coupon[]>([])
+const loadValue = ref<boolean>(false)
+
+onLoad(() => {
+  initData()
+})
+
+const initData = () => {
+  loading()
+  loadValue.value = true
+  couponList()
+    .then((res) => {
+      coupons.length = 0
+      coupons.push(...res.data)
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+    .finally(() => {
+      loadValue.value = false
+      hideLoading()
+    })
+}
+
+const formatePrice = (item: User.Coupon) => {
+  return {
+    price: item.couponPrice / 1000,
+    suffix: '元',
+    prefix: '',
+    subtext: '满减券'
+  }
+}
+
+const formatRight = (item: User.Coupon) => {
+  return {
+    title: item.couponName,
+    subtitle: item.couponFullPrice > 0 ? '满' + item.couponFullPrice / 1000 + '元可用' : '不限制金额',
+    time: '有效期：' + DayJs(item.beginTime).format('YYYY-MM-DD') + '至' + DayJs(item.endTime).format('YYYY-MM-DD')
+  }
+}
+
+const formateDisable = (item: User.Coupon) => {
+  if (item.used) {
+    return true
+  }
+  if (DayJs(item.endTime).isBefore(DayJs(new Date()))) {
+    return true
+  }
+  return false
+}
+
+const onClick = () => {
+  uni.$tm.u.routerTo('/pages/index/index' , 'switchTab')
+}
 </script>

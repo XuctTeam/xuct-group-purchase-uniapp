@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-26 21:10:18
+ * @LastEditTime: 2023-04-27 13:02:19
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -10,11 +10,11 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="购物车" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <tm-navbar title="购物车" color="#32CD32" fontColor="#fff" blur hideHome></tm-navbar>
     <view v-if="!logged">
       <tm-result color="green" title="购物车空空如也~" subTitle="登录后查看" btnText="点我登录" @click="goLoginClick"></tm-result>
     </view>
-    <view v-else>
+    <view v-else class="content-top">
       <tm-result v-if="cartGoods.length === 0 && !load" color="green" icon="tmicon-shopping-cart-fill" title="空空如也哦~" subTitle="购物车快饿瘪了 T.T" btnText="去购物" @click="toHome"></tm-result>
       <view v-else>
         <view class="top">
@@ -46,9 +46,9 @@
       <view class="flex flex-1 flex-row flex-row-center-between pl-20 pr-20">
         <template>
           <view v-if="!editStatus" class="flex flex-row">
-            <tm-text _class="font-weight-b" :label="`已选择${selectedNum}件商品`"></tm-text>
+            <tm-text _class="font-weight-b" :font-size="24" :label="`已选择${selectedNum}件商品`"></tm-text>
           </view>
-          <tm-checkbox v-else :round="10" :size="36" color="red" label="全选" @change="chooseAllChangeState" :modelValue="allCheckStatus"></tm-checkbox>
+          <tm-checkbox v-else :round="10" :size="34" :font-size="24" color="green" label="全选" @change="chooseAllChangeState" v-model="allCheckStatus"></tm-checkbox>
         </template>
         <view class="flex flex-row flex-1 flex-row-center-end mr-10">
           <tm-button v-if="!editStatus" size="small" label="结算" :round="10" color="green" @click="toConfirmOrder"></tm-button>
@@ -82,23 +82,21 @@ const editStatus = ref<boolean>(false)
 const allCheckStatus = ref<boolean>(false)
 const userStore = useUserHook()
 const { logged } = storeToRefs(userStore)
-const refreshValue = ref<boolean>(false)
+const refreshValue = ref<boolean>(true)
 
 const selectedNum = computed(() => {
   return cartGoods.filter((item) => item.checked).length
 })
 
-onLoad(() => {
+onShow(() => {
   if (!logged.value) {
     return
   }
-  initData()
-})
-
-onShow(() => {
-  if (refreshValue.value) {
-    initData()
+  if (!refreshValue.value) {
+    refreshValue.value = true
+    return
   }
+  initData()
 })
 
 watch(logged, (newValue, oldValue) => {
@@ -112,7 +110,7 @@ const changeState = () => {
 }
 
 const toHome = () => {
-  uni.$tm.u.routerTo('/pages/index/index', 'redirect')
+  uni.$tm.u.routerTo('/pages/index/index', 'switchTab')
 }
 
 const goLoginClick = () => {
@@ -192,7 +190,7 @@ const toConfirmOrder = () => {
     events: {
       acceptDataFromDetail(data: any) {
         const { refresh } = data
-        refreshValue.value = refresh ?? false
+        refreshValue.value = refresh ?? true
       }
     }
   })
@@ -203,6 +201,7 @@ const initData = () => {
   load.value = true
   cartList()
     .then((res) => {
+      allCheckStatus.value = false
       cartGoods.length = 0
       cartGoods.push(...res.data)
     })
@@ -212,9 +211,6 @@ const initData = () => {
     .finally(() => {
       load.value = false
       hideLoading()
-      if (refreshValue.value) {
-        refreshValue.value = false
-      }
     })
 }
 

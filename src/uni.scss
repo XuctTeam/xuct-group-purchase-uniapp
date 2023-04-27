@@ -26,20 +26,21 @@
 .w-10 {
   width: 10rpx;
 }
-.w-140 {
-  width: 140rpx;
-}
 
-.w-120 {
-  width: 120rpx;
+.w-60 {
+  width: 60rpx;
 }
 
 .w-80 {
   width: 80rpx;
 }
 
-.w-60 {
-  width: 60rpx;
+.w-120 {
+  width: 120rpx;
+}
+
+.w-140 {
+  width: 140rpx;
 }
 
 .flex-col-between-center {
@@ -57,4 +58,8 @@
 
 .word-break {
   word-break: break-all;
+}
+
+.content-top {
+  margin-bottom: 120upx;
 }

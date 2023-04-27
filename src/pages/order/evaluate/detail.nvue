@@ -21,7 +21,8 @@
     <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
       <tm-text _class="font-weight-b" :fontSize="28" label="图片补充"></tm-text>
       <tm-divider></tm-divider>
-      <tm-upload showSort :onStart="onStart" color="green" v-model="imageList" :header="uploadHeader" ref="up" :width="636" :rows="3" :maxFile="3" :url="uploadUrlValue" @fail="onUploadFail"> </tm-upload>
+      <tm-upload showSort :onStart="onStart" color="green" v-model="imageList" :header="uploadHeader" ref="up" :width="636" :rows="3" :maxFile="3" :url="uploadUrlValue" @fail="onUploadFail">
+      </tm-upload>
     </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
       <view class="pa-10 flex flex-row flex-row-center-between">
@@ -51,7 +52,7 @@ import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 
-import { useUserHook, useCountHook } from '@/store'
+import { useUserHook } from '@/store'
 import ENV_CONFIG from '@/config/env'
 import { onLoad } from '@dcloudio/uni-app'
 import { evaluate } from '@/api/order'
@@ -63,7 +64,6 @@ const rateValue = ref<number>(5)
 const imageList = ref([])
 const idValue = ref<string>('')
 const remarksValue = ref<string>('')
-const countStore = useCountHook()
 
 const uploadUrlValue = ref<string>(BASE_API_URL + '/api/v1/order/evaluate/upload')
 const uploadHeader = {
@@ -92,7 +92,6 @@ const onConfirmClick = () => {
   })
     .then(() => {
       setPageRefresh()
-      refreshCount()
     })
     .catch((err: any) => {
       console.log(err)
@@ -120,10 +119,5 @@ const setPageRefresh = () => {
     })
   }
   uni.$tm.u.routerTo('', 'navigateBack')
-}
-
-const refreshCount = () => {
-  //刷新首页
-  countStore.setRefresh(true)
 }
 </script>

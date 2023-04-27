@@ -6,16 +6,7 @@
   },
   "pages": [
     {
-      "path": "pages/member/index/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-    {
-      "path": "pages/member/browse/index",
+      "path": "pages/cart/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -52,7 +43,7 @@
       }
     },
     {
-      "path": "pages/cart/index",
+      "path": "pages/good/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -61,7 +52,16 @@
       }
     },
     {
-      "path": "pages/good/index",
+      "path": "pages/member/index/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/member/browse/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 12:22:42
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-20 14:19:57
+ * @LastEditTime: 2023-04-27 11:04:53
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\setting\index.nvue
  * @Description: 
  * 
@@ -41,7 +41,7 @@
 
     <tm-button block label="退出登录" color="green" :margin="[10, 20]" @click="onQuitClick"></tm-button>
 
-    <tm-drawer placement="bottom" v-model:show="showWin" okText="保存" okColor="green" @ok="onSave">
+    <tm-drawer placement="bottom" v-model:show="showWin" okText="保存" okColor="green" :before-ok="beforeSave" @ok="onSave">
       <tm-cell showAvatar :avatar="userInfo.avatar ?? '/static/images/me.png'" :avatarSize="80" :titleFontSize="30" bottomBorder>
         <template v-slot:right>
           <tm-button color="green" size="small" text label="更新" @chooseavatar="chooseavatar" open-type="chooseAvatar"></tm-button>
@@ -125,13 +125,20 @@ const phoneChage = (e: any) => {
   phoneRef.value = e.detail?.value
 }
 
-const onSave = () => {
+const beforeSave = () => {
+  if (!nickNameRef.value) {
+    message({
+      title: '昵称不能为空',
+      icon: 'error'
+    })
+    return false
+  }
   if (!phoneRef.value) {
     message({
       title: '电话不能为空',
       icon: 'error'
     })
-    throw new Event('')
+    return false
   }
 
   if (!uni.$tm.u.isPhone(phoneRef.value)) {
@@ -139,16 +146,12 @@ const onSave = () => {
       title: '手机格式错误',
       icon: 'error'
     })
-    return Promise.reject('')
+    return false
   }
+  return true
+}
 
-  if (!nickNameRef.value) {
-    message({
-      title: '昵称不能为空',
-      icon: 'error'
-    })
-    return
-  }
+const onSave = () => {
   loading()
   saveUserInfo(phoneRef.value, nickNameRef.value)
     .then(() => {

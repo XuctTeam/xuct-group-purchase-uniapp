@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 16:49:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-20 09:33:09
+ * @LastEditTime: 2023-04-27 17:57:48
  * @FilePath: \xuct-group-purchase-uniapp\src\services\request.ts
  * @Description:
  *
@@ -14,6 +14,7 @@ import { useUserHook } from '@/store'
 import codeMessage from './codeMessage'
 import ENV_CONFIG from '@/config/env'
 import { API_NOT_TOKEN } from '@/constant/white'
+import { message as toast } from '@/utils/dialog'
 
 interface RequestTaskQuery<T = any> {
   resolve: any
@@ -98,7 +99,10 @@ instance.interceptors.response.use(
   (response) => {
     const { code, message } = response.data
     if (code !== 200) {
-      uni.$tm.u.toast(message || '请求异常', true, 'error')
+      toast({
+        title: message || '请求异常',
+        icon: 'error'
+      })
       return Promise.reject({
         error: code,
         message
@@ -113,7 +117,10 @@ instance.interceptors.response.use(
       return checkTokenHandler(() => instance(error.config))
     }
     const _tips = codeKeys[statusCode] || '请求异常！'
-    uni.$tm.u.toast(_tips, true, 'error')
+    toast({
+      title: _tips,
+      icon: 'error'
+    })
     return Promise.reject(error)
   }
 )

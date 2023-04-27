@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-24 13:21:05
+ * @LastEditTime: 2023-04-27 10:01:17
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\index.nvue
  * @Description: 
  * 
@@ -166,7 +166,7 @@ const toServices = () => {
 }
 
 const toCart = () => {
-  uni.$tm.u.routerTo('/pages/cart/index', 'navigate')
+  uni.$tm.u.routerTo('/pages/cart/index', 'switchTab')
 }
 
 const setPageRefresh = () => {

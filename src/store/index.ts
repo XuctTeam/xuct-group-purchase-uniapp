@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:34:26
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-24 13:50:43
+ * @LastEditTime: 2023-04-27 09:55:53
  * @FilePath: \xuct-group-purchase-uniapp\src\store\index.ts
  * @Description:
  *
@@ -10,7 +10,6 @@
  */
 import { userStore } from './user'
 import { appStore } from './app'
-import { countStore } from './count'
 
 function useUserHook() {
   return userStore()
@@ -20,8 +19,4 @@ function useAppHook() {
   return appStore()
 }
 
-function useCountHook() {
-  return countStore()
-}
-
-export { useUserHook, useAppHook, useCountHook }
+export { useUserHook, useAppHook }

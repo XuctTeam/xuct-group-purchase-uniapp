@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-19 19:01:43
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-26 17:48:02
+ * @LastEditTime: 2023-04-27 09:56:14
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\collect\index.nvue
  * @Description: 
  * 
@@ -51,12 +51,10 @@ import tmResult from '@/tmui/components/tm-result/tm-result.vue'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
 import { collect, collectList } from '@/api/good'
-import { useCountHook } from '@/store'
 
 const loadValue = ref<boolean>(false)
 const collectData = reactive<Good.GoodResult[]>([])
 const refreshValue = ref<boolean>(false)
-const countStore = useCountHook()
 
 onLoad(() => {
   initData()
@@ -93,8 +91,6 @@ const itemClick = (gid: string) => {
       acceptDataFromDetail(data: any) {
         const { refresh } = data
         refreshValue.value = refresh ?? false
-        //刷新统计
-        setRefreshCollectCount()
       }
     }
   })
@@ -117,12 +113,6 @@ const _removeItem = (gid: string) => {
   setTimeout(() => {
     collectData.length = 0
     collectData.push(..._values)
-    //刷新统计
-    setRefreshCollectCount()
   }, 500)
-}
-
-const setRefreshCollectCount = () => {
-  countStore.setUserRefresh(true)
 }
 </script>

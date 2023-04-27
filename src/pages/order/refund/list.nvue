@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-25 10:38:54
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-25 19:56:11
+ * @LastEditTime: 2023-04-27 09:58:54
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\list.nvue
  * @Description: 
  * 
@@ -80,12 +80,11 @@ import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
 
-import { useAppHook, useCountHook } from '@/store'
+import { useAppHook } from '@/store'
 import { pageOrderList, cancelRefundOrder, cancelOrder } from '@/api/order'
 import { onShow } from '@dcloudio/uni-app'
 import { confirm } from '@/utils/dialog'
 
-const countStore = useCountHook()
 const appStore = useAppHook()
 const _width = computed(() => {
   return uni.$tm.u.torpx(appStore.getWindowWidth())
@@ -140,7 +139,6 @@ const onDetailClick = (orderId: string) => {
       acceptDataFromDetail(data: any) {
         const { refresh } = data
         reloadValue.value = refresh
-        refreshCount()
       }
     }
   })
@@ -163,7 +161,6 @@ const onCancelRefundOrder = (orderId: string) => {
       cancelRefundOrder(orderId)
         .then(() => {
           reloadData()
-          refreshCount()
         })
         .catch((err: any) => {
           console.log(err)
@@ -171,10 +168,6 @@ const onCancelRefundOrder = (orderId: string) => {
     },
     fail: () => {}
   })
-}
-
-const refreshCount = () => {
-  countStore.setRefresh(true)
 }
 
 const _cancelOrder = (orderId: string) => {

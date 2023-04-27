@@ -2,15 +2,16 @@
  * @Author: Derek Xu
  * @Date: 2023-04-06 18:28:56
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-24 13:12:07
+ * @LastEditTime: 2023-04-27 17:52:30
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
 -->
 <template>
+  <page-meta :page-style="'overflow:' + (couponWin || showWin ? 'hidden' : 'visible')"></page-meta>
   <tm-app>
-    <tm-navbar title="确认订单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <tm-navbar title="确认订单" color="#32CD32" fontColor="#fff" blur :before-back="beforeBack"></tm-navbar>
     <tm-roll-notice :shadow="2" :round="2" color="#32CD32" :margin="[10, 10]" :text="false" fontColor="#fff" :list="content" @click="noticeClick" />
     <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
       <tm-cell :margin="[0, 0]" :titleFontSize="30" showAvatar @click="addressClick">
@@ -36,7 +37,7 @@
     <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
       <view v-for="(item, index) in cartGoods" :key="index" class="flex flex-row pa-10">
         <tm-image :width="160" :height="160" :round="4" :src="item.firstDrawing" />
-        <view class="right">
+        <view class="flex-card-item-right">
           <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
           <view class="flex flex-row flex-row-center-between pr-10">
             <tm-text color="orange" :label="`单位：${item.unit}`"></tm-text>
@@ -51,7 +52,21 @@
       </view>
     </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
-      <tm-cell :margin="[0, 0]" :titleFontSize="30" title="使用积分" rightColor="red" :rightText="integralValue" @click="() => (showWin = !showWin)" />
+      <tm-cell
+        :margin="[0, 0]"
+        :titleFontSize="26"
+        title="优惠券"
+        rightColor="green"
+        :rightText="couponValue.id ? couponValue.couponPrice / 1000 + '元' : '暂未使用'"
+        @click="
+          () => {
+            couponWin = !couponWin
+          }
+        "
+      />
+    </tm-sheet>
+    <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
+      <tm-cell :margin="[0, 0]" :titleFontSize="26" title="使用积分" rightColor="green" :rightText="integralValue" @click="() => (showWin = !showWin)" />
     </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 20]">
       <tm-text :font-size="26" label="备注信息"></tm-text>
@@ -67,7 +82,7 @@
     </uv-bottom-bar>
 
     <!-- 积分弹出框  --->
-    <tmDrawer placement="bottom" v-model:show="showWin" @ok="integraClick">
+    <tmDrawer placement="bottom" v-model:show="showWin" okColor="green" @ok="integraClick" title="积分">
       <tm-radio-group v-model="integralChoose">
         <view class="felx flex-col flex-1">
           <view class="pa-10"><tm-radio color="green" value="none" label="暂不使用"></tm-radio></view>
@@ -83,9 +98,21 @@
         <tm-input placeholder="请输入积分" suffixLabel="分" v-model="integralInput" />
       </view>
     </tmDrawer>
+
+    <tm-drawer placement="bottom" v-model:show="couponWin" okColor="green" :height="800" :footHeight="100" title="优惠券" color="rgba(245, 245, 245, 1)" @ok="onCouponeChoose">
+      <tm-coupon mainColor="green" v-for="(item, i) in userCoupons" :key="i" :disable="item.used" :priceDetail="formatePrice(item)" :rightDetail="formatRight(item)">
+        <template v-slot:btn>
+          <tm-checkbox color="green" :round="24" :disabled="item.used" :value="!!!item.checked" @change="(e) => onConponCheckChage(e, item.id)"></tm-checkbox>
+        </template>
+      </tm-coupon>
+      <template v-slot:foot>
+        <tm-button :margin="[10]" block color="green" :round="5" label="暂不使用" @click="onConponNoUsed"></tm-button>
+      </template>
+    </tm-drawer>
   </tm-app>
 </template>
 <script lang="ts" setup>
+import { computed, reactive, ref, getCurrentInstance } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
@@ -101,24 +128,27 @@ import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
 import tmRadio from '@/tmui/components/tm-radio/tm-radio.vue'
 import tmRadioGroup from '@/tmui/components/tm-radio-group/tm-radio-group.vue'
 import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
-
+import tmCoupon from '@/tmui/components/tm-coupon/tm-coupon.vue'
+import tmCheckbox from '@/tmui/components/tm-checkbox/tm-checkbox.vue'
+import { onLoad } from '@dcloudio/uni-app'
 import { useUserHook } from '@/store'
-import { computed, reactive, ref, getCurrentInstance } from 'vue'
-import { getDefaultAddress } from '@/api/user'
+import { TEMPLATE_IDS } from '@/constant'
+import * as dayjs from '@/tmui/tool/dayjs/esm/index'
+
+import { loading, hideLoading, confirm, message } from '@/utils/dialog'
+import { getDefaultAddress, canUsedCouponList } from '@/api/user'
 import { getConfirmOrderDetail } from '@/api/order'
 import { placeOrder } from '@/api/order'
-import { TEMPLATE_IDS } from '@/constant'
-import { onLoad } from '@dcloudio/uni-app'
-import { loading, hideLoading, confirm, message } from '@/utils/dialog'
 
+const DayJs = dayjs.default
 const userStore = useUserHook()
-
 const $instance = ref<any>(getCurrentInstance()?.proxy)
 const userInfo: User.UserInfo = userStore.getUserInfo
 const content = ref(['点击获取订单实时消息~'])
 const goodIds = reactive<string[]>([])
 const showWin = ref(false)
-const address = reactive<User.Address>({
+const couponWin = ref(false)
+const address = ref<User.Address>({
   id: undefined
 })
 const _scene = ref<string>('')
@@ -126,8 +156,10 @@ const integralChoose = ref('none')
 const integralInput = ref<number>(0)
 const integralValue = ref<string>('暂不使用')
 const remarksValue = ref<string>('')
+const couponValue = ref<User.Coupon>({ id: '', couponName: '', couponFullPrice: 0, couponPrice: 0, beginTime: new Date(), endTime: new Date(), used: false })
 
 const cartGoods = reactive<Good.CartResult[]>([])
+const userCoupons = reactive<User.Coupon[]>([])
 
 onLoad((ops: any) => {
   let { gids, scene } = ops
@@ -139,10 +171,14 @@ onLoad((ops: any) => {
     return
   }
   _scene.value = scene
+  /** 加载地址 */
   _loadAddress()
   const jsonGids = JSON.parse(gids)
+  /** 加载详情 */
   _loadDetail(scene, jsonGids)
   goodIds.push(...jsonGids)
+  /**  加载优惠券 */
+  _loadCounpons()
 })
 
 const sumNum = computed(() => {
@@ -167,7 +203,7 @@ const addressClick = () => {
     url: '/pages/member/address/list?type=order',
     events: {
       acceptDataFromDetail(data: any) {
-        Object.assign(address, { ...data })
+        address.value = { ...data }
       }
     }
   })
@@ -191,14 +227,24 @@ const integraClick = () => {
 }
 
 const placeOrderClick = () => {
+  let integral: number
+  switch (integralChoose.value) {
+    case 'all':
+      integral = -999
+      break
+    case 'part':
+      integral = integralInput.value
+      break
+    default:
+      integral = 0
+  }
   confirm({
     title: '确认订单内容无误？',
     success: () => {
       loading()
-      placeOrder(_scene.value, address.id ?? '', integralInput.value, remarksValue.value, goodIds)
+      placeOrder(_scene.value, address.value.id ?? '', couponValue.value.id ?? '', integral, remarksValue.value, goodIds)
         .then((res: any) => {
           const orderId = res.data
-          setCartListRefresh()
           uni.$tm.u.routerTo('/pages/order/result/index?orderId=' + orderId, 'redirect')
         })
         .catch((err: any) => {
@@ -212,6 +258,59 @@ const placeOrderClick = () => {
   })
 }
 
+const beforeBack = () => {
+  setCartListRefresh()
+  return true
+}
+
+const formatePrice = (item: User.Coupon) => {
+  return {
+    price: item.couponPrice / 1000,
+    suffix: '元',
+    prefix: '',
+    subtext: '满减券'
+  }
+}
+
+const formatRight = (item: User.Coupon) => {
+  return {
+    title: item.couponName,
+    subtitle: item.couponFullPrice > 0 ? '满' + item.couponFullPrice / 1000 + '元可用' : '不限制金额',
+    time: '有效期：' + DayJs(item.beginTime).format('YYYY-MM-DD') + '至' + DayJs(item.endTime).format('YYYY-MM-DD')
+  }
+}
+
+const setCartListRefresh = () => {
+  let pages = getCurrentPages() // 当前页
+  let beforePage = pages[pages.length - 2] // 上个页面
+  const channel = $instance.value?.getOpenerEventChannel()
+  if (beforePage !== undefined && beforePage.route === 'pages/cart/index') {
+    channel.emit('acceptDataFromDetail', {
+      refresh: false
+    })
+  }
+}
+
+const onConponCheckChage = (value: any, id: string) => {
+  userCoupons.forEach((item) => {
+    item.checked = item.id === id ? value : false
+  })
+}
+
+const onCouponeChoose = () => {
+  const _data = userCoupons.find((item) => item.checked)
+  if (!_data) {
+    return
+  }
+  Object.assign(couponValue.value, { ..._data })
+}
+
+const onConponNoUsed = () => {
+  userCoupons.forEach((item) => (item.checked = false))
+  Object.assign(couponValue.value, { id: '', couponName: '', couponFullPrice: 0, couponPrice: 0, beginTime: new Date(), endTime: new Date(), used: false })
+  couponWin.value = false
+}
+
 const _loadAddress = () => {
   getDefaultAddress()
     .then((res) => {
@@ -219,7 +318,7 @@ const _loadAddress = () => {
       if (!data) {
         return
       }
-      Object.assign(address, { ...data })
+      address.value = { ...data }
     })
     .catch((err: any) => {
       console.log(err)
@@ -239,24 +338,15 @@ const _loadDetail = (scene: string, gids: string[]) => {
     })
 }
 
-const setCartListRefresh = () => {
-  let pages = getCurrentPages() // 当前页
-  let beforePage = pages[pages.length - 2] // 上个页面
-  const channel = $instance.value?.getOpenerEventChannel()
-  if (beforePage !== undefined && beforePage.route === 'pages/cart/index') {
-    channel.emit('acceptDataFromDetail', {
-      refresh: true
+const _loadCounpons = () => {
+  canUsedCouponList()
+    .then((res) => {
+      const data = res.data.sort((a, b) => (a.used ? 1 : 0) - (b.used ? 1 : 0))
+      userCoupons.push(...data)
     })
-  }
+    .catch((err: any) => {
+      console.log(err)
+    })
 }
 </script>
-<style>
-.right {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 160rpx;
-  flex: 1;
-  padding: 10rpx;
-}
-</style>
+<style></style>
