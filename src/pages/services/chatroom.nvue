@@ -10,7 +10,6 @@
         </uv-chat>
       </view>
     </scroll-view>
-
     <uv-bottom-bar>
       <view class="flex flex-row flex-row-center-center flex-1">
         <view class="flex flex-1 mr-10">
@@ -50,7 +49,7 @@ const scrollTop = ref<number>(0)
 
 const _windowHeight = computed(() => {
   const saveBottom = appStore.getSafeBottom()
-  return appStore.getWindowHeight() - (saveBottom + 30)
+  return appStore.getWindowHeight() - (saveBottom > 0 ? 90 : 75) - 12
 })
 
 //发送消息

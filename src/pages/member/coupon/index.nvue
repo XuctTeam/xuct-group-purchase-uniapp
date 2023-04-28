@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-27 09:30:05
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-27 11:38:04
+ * @LastEditTime: 2023-04-28 15:39:31
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\coupon\index.nvue
  * @Description: 
  * 
@@ -11,39 +11,89 @@
 <template>
   <tm-app>
     <tm-navbar title="优惠券管理" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <tm-coupon mainColor="green" extra :margin="[10]" v-for="(item, i) in coupons" @click="onClick" :disable="formateDisable(item)" :priceDetail="formatePrice(item)" :rightDetail="formatRight(item)" :key="i">
-      <template v-slot:extra>
-        <tm-text :font-size="22" _class="opacity-7" label="1.优惠券只能在规定时间使用。"></tm-text>
-        <tm-text :font-size="22" _class="opacity-7" label="2.不限制金额优惠券可在购买任何商品时使用。"></tm-text>
-      </template>
-    </tm-coupon>
+    <tm-tabs
+      :list="tabsTitle"
+      :item-width="_width / 3 - 40"
+      showTabsLineAni
+      align="around"
+      v-model:active-name="tabActiveRef"
+      tabsLineAniColor="green"
+      activeFontColor="green"
+      :width="_width"
+      default-name="1"
+      @change="tabsChage"
+    >
+    </tm-tabs>
+
+    <template v-if="!loadValue && coupons.length === 0">
+      <tm-result :showBtn="false" color="green" title="空空如也哦~" subTitle="还未领取任何优惠券 T.T"></tm-result>
+    </template>
+    <view class="mt-10" v-else>
+      <tm-coupon
+        mainColor="green"
+        extra
+        :margin="[10, 20]"
+        v-for="(item, i) in coupons"
+        @click="onClick"
+        :btn-label="formateDisable(item) ? '暂不可用' : '立即使用'"
+        :disable="formateDisable(item)"
+        :priceDetail="formatePrice(item)"
+        :rightDetail="formatRight(item)"
+        :key="i"
+      >
+        <template v-slot:extra>
+          <tm-text :font-size="22" _class="opacity-7" label="1.优惠券只能在规定时间使用。"></tm-text>
+          <tm-text :font-size="22" _class="opacity-7" label="2.不限制商品可在购买任何商品时使用。"></tm-text>
+          <tm-text :font-size="22" _class="opacity-7" label="3.不限制金额可在任何金额时使用。"></tm-text>
+        </template>
+      </tm-coupon>
+    </view>
   </tm-app>
 </template>
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCoupon from '@/tmui/components/tm-coupon/tm-coupon.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import tmTabs from '@/tmui/components/tm-tabs/tm-tabs.vue'
+import tmResult from '@/tmui/components/tm-result/tm-result.vue'
+
+import * as dayjs from '@/tmui/tool/dayjs/esm/index'
+import { useAppHook } from '@/store'
 import { couponList } from '@/api/user'
 import { onLoad } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
-import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 
 const DayJs = dayjs.default
+const tabActiveRef = ref<string>('1')
 const coupons = reactive<User.Coupon[]>([])
-const loadValue = ref<boolean>(false)
+const loadValue = ref<boolean>(true)
+const tabsTitle = ref([
+  { key: '1', title: '未使用' },
+  { key: '2', title: '已使用' },
+  { key: '3', title: '已过期' }
+])
+
+const appStore = useAppHook()
+const _width = computed(() => {
+  return uni.$tm.u.torpx(appStore.getWindowWidth())
+})
 
 onLoad(() => {
   initData()
 })
 
+const tabsChage = () => {
+  initData()
+}
+
 const initData = () => {
   loading()
   loadValue.value = true
-  couponList()
+  coupons.length = 0
+  couponList(tabActiveRef.value ?? '0')
     .then((res) => {
-      coupons.length = 0
       coupons.push(...res.data)
     })
     .catch((err: any) => {
@@ -83,6 +133,6 @@ const formateDisable = (item: User.Coupon) => {
 }
 
 const onClick = () => {
-  uni.$tm.u.routerTo('/pages/index/index' , 'switchTab')
+  uni.$tm.u.routerTo('/pages/index/index', 'switchTab')
 }
 </script>

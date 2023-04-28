@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:10:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-25 19:45:14
+ * @LastEditTime: 2023-04-28 15:43:48
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\detail\index.nvue
  * @Description: 
  * 
@@ -25,35 +25,26 @@
     <tm-sheet :margin="[10, 10]" :round="3" :shadow="2" :padding="[10]">
       <tm-cell :margin="[0, 0]">
         <template v-slot:title>
-          <view class="flex flex-row flex-row-center-center mb-10">
+          <view class="flex flex-row flex-row-center-start mb-10">
             <tm-icon :font-size="26" name="tmicon-tag"></tm-icon>
             <view class="ml-10">
               <tm-text :font-size="28" _class="font-weight-b" :label="statusLabel"></tm-text>
             </view>
           </view>
-          <tm-text :font-size="22" color="grey" label="您的订单已签收"></tm-text>
+          <tm-text :font-size="22" color="grey" :label="statusRemarkLable"></tm-text>
         </template>
       </tm-cell>
     </tm-sheet>
 
-    <tm-sheet :margin="[10, 10]" :round="3" :shadow="2" :padding="[10]">
-      <tm-cell :margin="[0, 0]">
-        <template v-slot:title>
-          <view class="flex flex-row flex-1 flex-row-center-start mb-10">
-            <tm-icon :font-size="26" name="tmicon-position"></tm-icon>
-            <view class="flex flex-row flex-row-bottom-center ml-10">
-              <view><tm-text :font-size="28" _class="font-weight-b" :label="orderInfo.address?.userName"></tm-text></view>
-              <view class="ml-20"><tm-text :font-size="24" :label="orderInfo.address?.telNumber"></tm-text></view>
-            </view>
-          </view>
-          <tm-text
-            :font-size="22"
-            color="grey"
-            :label="`地址：${orderInfo.address?.provinceName}${orderInfo.address?.cityName}${orderInfo.address?.countyName}${orderInfo.address?.detailInfo}`"
-          ></tm-text>
-        </template>
-        <template v-slot:right></template>
-      </tm-cell>
+    <tm-sheet :margin="[10, 10]" :round="3" :shadow="2" :padding="[20, 30]">
+      <view class="flex flex-row flex-1 flex-row-center-start mb-10">
+        <tm-icon :font-size="26" name="tmicon-position"></tm-icon>
+        <view class="flex flex-row flex-row-bottom-center ml-10">
+          <view><tm-text :font-size="28" _class="font-weight-b" :label="orderInfo.address?.userName"></tm-text></view>
+          <view class="ml-20"><tm-text :font-size="24" :label="orderInfo.address?.telNumber"></tm-text></view>
+        </view>
+      </view>
+      <tm-text :font-size="22" color="grey" :label="`地址：${orderInfo.address?.provinceName}${orderInfo.address?.cityName}${orderInfo.address?.countyName}${orderInfo.address?.detailInfo}`"></tm-text>
     </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
       <view v-for="(item, index) in orderInfo.items" :key="index" class="flex flex-row pa-10">
@@ -98,6 +89,10 @@
       <view class="flex flex-row flex-row-center-between pa-20">
         <view class="w-140"><tm-text color="grey" :font-size="26" label="积分使用："></tm-text></view>
         <tm-text :font-size="26" :label="`${orderInfo.integral ?? 0}分`"></tm-text>
+      </view>
+      <view class="flex flex-row flex-row-center-between pa-20">
+        <view class="w-140"><tm-text color="grey" :font-size="26" label="优惠券："></tm-text></view>
+        <tm-text :font-size="26" :label="couponLabel"></tm-text>
       </view>
       <view class="flex flex-row flex-row-center-between pa-20">
         <view class="w-140"><tm-text color="grey" :font-size="26" label="商品小计："></tm-text></view>
@@ -217,7 +212,29 @@ const statusLabel = computed(() => {
     case 2:
       return '待发货'
     case 3:
-      return '送货中'
+      return '待收货'
+    case 4:
+      return '已完成'  
+  }
+})
+
+const couponLabel = computed(() => {
+  if (!orderInfo.coupon) {
+    return '未使用'
+  }
+  return orderInfo.coupon.couponPrice / 1000 + '元'
+})
+
+const statusRemarkLable = computed(() => {
+  switch (orderInfo.status) {
+    case 1:
+      return '您的订单未付款！'
+    case 2:
+      return '请您耐心等待，我们会尽快给您配送货物！'
+    case 3:
+      return '您确认收到物品后，请您及时确认收货！'
+    case 4:
+      return '欢迎您继续支持我们的商品！'
   }
 })
 

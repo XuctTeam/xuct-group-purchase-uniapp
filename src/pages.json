@@ -6,6 +6,24 @@
   },
   "pages": [
     {
+      "path": "pages/member/setting/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/member/index/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
       "path": "pages/cart/index",
       "style": {
         "navigationBarTitleText": "",
@@ -52,7 +70,25 @@
       }
     },
     {
-      "path": "pages/member/index/index",
+      "path": "pages/member/opinion/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/member/coupon/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/member/collect/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -62,15 +98,6 @@
     },
     {
       "path": "pages/member/browse/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-    {
-      "path": "pages/member/setting/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -105,24 +132,7 @@
         "transparentTitle": "always"
       }
     },
-    {
-      "path": "pages/member/coupon/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-    {
-      "path": "pages/member/collect/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
+
     {
       "path": "pages/order/evaluate/list",
       "style": {
@@ -187,7 +197,7 @@
       }
     },
     {
-      "path": "pages/public/userprotocol",
+      "path": "pages/services/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -196,7 +206,7 @@
       }
     },
     {
-      "path": "pages/services/index",
+      "path": "pages/public/userprotocol",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -236,7 +246,7 @@
         "pagePath": "pages/cart/index",
         "iconPath": "static/images/ic_menu_shoping_nor.png",
         "selectedIconPath": "static/images/ic_menu_shoping_pressed.png",
-        "text": "购物车"
+        "text": "购物篮"
       },
       {
         "pagePath": "pages/member/index/index",

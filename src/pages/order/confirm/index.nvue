@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-06 18:28:56
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-27 17:52:30
+ * @LastEditTime: 2023-04-28 15:41:19
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
@@ -99,7 +99,7 @@
       </view>
     </tmDrawer>
 
-    <tm-drawer placement="bottom" v-model:show="couponWin" okColor="green" :height="800" :footHeight="100" title="优惠券" color="rgba(245, 245, 245, 1)" @ok="onCouponeChoose">
+    <tm-drawer placement="bottom" v-model:show="couponWin" okColor="green" :height="800" :footHeight="140" title="优惠券" color="rgba(245, 245, 245, 1)" @ok="onCouponeChoose">
       <tm-coupon mainColor="green" v-for="(item, i) in userCoupons" :key="i" :disable="item.used" :priceDetail="formatePrice(item)" :rightDetail="formatRight(item)">
         <template v-slot:btn>
           <tm-checkbox color="green" :round="24" :disabled="item.used" :value="!!!item.checked" @change="(e) => onConponCheckChage(e, item.id)"></tm-checkbox>
@@ -158,7 +158,7 @@ const integralValue = ref<string>('暂不使用')
 const remarksValue = ref<string>('')
 const couponValue = ref<User.Coupon>({ id: '', couponName: '', couponFullPrice: 0, couponPrice: 0, beginTime: new Date(), endTime: new Date(), used: false })
 
-const cartGoods = reactive<Good.CartResult[]>([])
+const cartGoods = reactive<Good.Cart[]>([])
 const userCoupons = reactive<User.Coupon[]>([])
 
 onLoad((ops: any) => {

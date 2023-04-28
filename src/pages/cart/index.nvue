@@ -76,7 +76,7 @@ import { loading, hideLoading, confirm, message } from '@/utils/dialog'
 import { cartList, cleanCart, modifyCartNum, deleteCartGood } from '@/api/good'
 import { storeToRefs } from 'pinia'
 
-const cartGoods = reactive<Good.CartResult[]>([])
+const cartGoods = reactive<Good.Cart[]>([])
 const load = ref<boolean>(true)
 const editStatus = ref<boolean>(false)
 const allCheckStatus = ref<boolean>(false)

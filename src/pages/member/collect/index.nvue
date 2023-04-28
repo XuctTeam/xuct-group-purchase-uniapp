@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-19 19:01:43
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-27 09:56:14
+ * @LastEditTime: 2023-04-28 13:53:28
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\collect\index.nvue
  * @Description: 
  * 
@@ -15,8 +15,14 @@
       <tm-result :showBtn="false" color="green" title="空空如也哦~" subTitle="快去收藏 T.T"></tm-result>
     </template>
     <template v-else>
-      <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" v-for="(item, index) in collectData" :key="index">
-        <tm-slide-switch :width="700" :height="140">
+      <tm-card v-for="(item, index) in collectData" :key="index" :margin="[10]">
+        <template v-slot:title>
+          <tm-text _class="text-overflow-2" label="收藏日期"></tm-text>
+        </template>
+        <template v-slot:status>
+          <tm-text _class="text-overflow-2" :label="formatData(item.createTime)"></tm-text>
+        </template>
+        <template v-slot:content>
           <view class="flex flex-row flex-1" @click="itemClick(item.id)">
             <tm-image :width="140" :round="4" :height="140" :src="item.firstDrawing"></tm-image>
             <view class="flex flex-1 flex-col flex-col-between-center pa-10 w-0">
@@ -26,15 +32,13 @@
               </view>
             </view>
           </view>
-          <template v-slot:right>
-            <view class="flex flex-row flex-row-center-end">
-              <tm-sheet :width="100" _class="flex flex-row flex-row-center-center" :height="140" color="green" no-level :margin="[0]" :padding="[0]">
-                <tm-text :userInteractionEnabled="false" label="取消" @click="onCllect(item.id)"></tm-text>
-              </tm-sheet>
-            </view>
-          </template>
-        </tm-slide-switch>
-      </tm-sheet>
+        </template>
+        <template v-slot:action>
+          <view class="flex flex-row flex-row-center-end flex-1">
+            <tm-button :round="24" color="white" label="取消" :font-size="24" :width="120" :height="64" @click="onCllect(item.id)"></tm-button>
+          </view>
+        </template>
+      </tm-card>
     </template>
   </tm-app>
 </template>
@@ -42,18 +46,19 @@
 import { reactive, ref } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
-import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
-import tmSlideSwitch from '@/tmui/components/tm-slide-switch/tm-slide-switch.vue'
+import tmCard from '@/tmui/components/tm-card/tm-card.vue'
 import tmResult from '@/tmui/components/tm-result/tm-result.vue'
-
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
 import { collect, collectList } from '@/api/good'
 
+const DayJs = dayjs.default
 const loadValue = ref<boolean>(false)
-const collectData = reactive<Good.GoodResult[]>([])
+const collectData = reactive<User.Collect[]>([])
 const refreshValue = ref<boolean>(false)
 
 onLoad(() => {
@@ -94,6 +99,10 @@ const itemClick = (gid: string) => {
       }
     }
   })
+}
+
+const formatData = (date: Date) => {
+  return DayJs(date).format('YYYY-MM-DD HH:mm:ss')
 }
 
 const onCllect = (gid: string) => {

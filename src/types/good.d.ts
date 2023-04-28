@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-21 18:33:48
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-03 21:45:40
+ * @LastEditTime: 2023-04-28 13:47:53
  * @FilePath: \xuct-group-purchase-uniapp\src\types\good.d.ts
  * @Description:
  *
@@ -23,7 +23,7 @@ declare namespace Good {
     unit?: string
   }
 
-  type CartResult = {
+  type Cart = {
     goodId: string
     name: string
     firstDrawing: string

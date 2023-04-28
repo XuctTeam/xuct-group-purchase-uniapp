@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-14 14:17:36
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-25 15:29:28
+ * @LastEditTime: 2023-04-28 09:55:49
  * @FilePath: \xuct-group-purchase-uniapp\src\types\order.d.ts
  * @Description:
  *
@@ -27,6 +27,7 @@ declare namespace Order {
     refundImages?: string
     items?: OrderItemResult[]
     address?: User.Address
+    coupon?: User.Coupon
   }
 
   type OrderItemResult = {

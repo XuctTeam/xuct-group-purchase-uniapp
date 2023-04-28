@@ -1,0 +1,10 @@
+<template>
+  <tm-app>
+    <tm-navbar title="我的反馈" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import { reactive, ref } from 'vue'
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+</script>

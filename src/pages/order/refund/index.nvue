@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-17 22:37:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-24 11:53:16
+ * @LastEditTime: 2023-04-28 18:19:09
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -55,9 +55,10 @@
       </tm-radio-group>
     </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
-      <tm-text _class="font-weight-b" :fontSize="28" label="图片补充"></tm-text>
+      <tm-text _class="font-weight-b" :fontSize="28" label="凭证（支持3张照片）"></tm-text>
       <tm-divider></tm-divider>
-      <tm-upload showSort :onStart="onStart" color="green" v-model="imageList" :header="uploadHeader" ref="up" :width="636" :rows="3" :maxFile="3" :url="uploadUrlValue" @fail="onUploadFail"> </tm-upload>
+      <tm-upload showSort :onStart="onStart" color="green" v-model="imageList" :header="uploadHeader" ref="up" :width="636" :rows="3" :maxFile="3" :url="uploadUrlValue" @fail="onUploadFail">
+      </tm-upload>
     </tm-sheet>
     <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
       <view class="pa-10 flex flex-row flex-row-center-between">
@@ -68,7 +69,7 @@
     </tm-sheet>
     <uv-bottom-bar>
       <view class="flex-1">
-        <tm-button label="提交" :round="10" color="green" block @click="onRefundClick"></tm-button>
+        <tm-button label="提交" :round="4" color="green" block @click="onRefundClick"></tm-button>
       </view>
     </uv-bottom-bar>
   </tm-app>

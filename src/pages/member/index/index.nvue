@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-15 22:02:25
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-27 11:39:24
+ * @LastEditTime: 2023-04-28 16:20:08
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -13,43 +13,48 @@
     <!-- 用户头像header -->
     <view class="box">
       <view class="head_top">
-        <view class="avatar flex flex-row flex-row-center-start">
-          <template v-if="logged">
-            <tm-avatar :size="120" :img="userInfo.avatar ?? '/static/images/me.png'" :round="25" />
-            <view class="flex flex-col flex-col-bottom-start ml-20">
-              <tm-text :font-size="34" color="white" :label="userInfo.nickname" />
-              <view class="flex flex-row flex-row-center-start mt-26" v-if="userInfo.phone">
-                <tm-icon :font-size="26" name="tmicon-gem" color="white"></tm-icon>
-                <view class="ml-4">
-                  <tm-text :font-size="28" color="white" :label="userInfo.phone" />
+        <view class="avatar flex flex-row flex-row-center-between">
+          <view class="flex-1 flex flex-row flex-row-center-start">
+            <template v-if="logged">
+              <tm-avatar :size="120" :img="userInfo.avatar ?? '/static/images/me.png'" :round="25" />
+              <view class="flex flex-col flex-col-bottom-start ml-20">
+                <tm-text :font-size="34" color="white" :label="userInfo.nickname" />
+                <view class="flex flex-row flex-row-center-start mt-26" v-if="userInfo.phone">
+                  <tm-icon :font-size="26" name="tmicon-gem" color="white"></tm-icon>
+                  <view class="ml-4">
+                    <tm-text :font-size="28" color="white" :label="userInfo.phone" />
+                  </view>
+                </view>
+                <view class="mt-20" v-else>
+                  <tm-button
+                    :round="10"
+                    icon="tmicon-md-phone-portrait"
+                    :fontSize="24"
+                    color="green"
+                    :width="160"
+                    :height="50"
+                    :margin="[0]"
+                    :padding="[0]"
+                    label="绑定手机"
+                    openType="getPhoneNumber"
+                    @getphonenumber="getphonenumber"
+                  ></tm-button>
                 </view>
               </view>
-              <view class="mt-20" v-else>
-                <tm-button
-                  :round="10"
-                  icon="tmicon-md-phone-portrait"
-                  :fontSize="24"
-                  color="green"
-                  :width="160"
-                  :height="50"
-                  :margin="[0]"
-                  :padding="[0]"
-                  label="绑定手机"
-                  openType="getPhoneNumber"
-                  @getphonenumber="getphonenumber"
-                ></tm-button>
+            </template>
+            <view class="flex flex-row flex-row-center-start" v-else>
+              <view class="user-head-img">
+                <open-data type="userAvatarUrl"></open-data>
+              </view>
+              <view class="ml-20">
+                <tm-text :font-size="28" _class="font-weight-b" color="white" label="未登录"></tm-text>
+                <tm-button color="green" borderStyle="dashed" :round="5" size="small" url="/pages/member/login/index" label="点我登录" :margin="[0, 10]"></tm-button>
               </view>
             </view>
-          </template>
-          <view class="flex flex-row flex-row-center-start" v-else>
-            <view class="user-head-img">
-              <open-data type="userAvatarUrl"></open-data>
-            </view>
-            <view class="ml-20">
-              <tm-text :font-size="28" _class="font-weight-b" color="white" label="未登录"></tm-text>
-              <tm-button color="green" borderStyle="dashed" :round="5" size="small" url="/pages/member/login/index" label="点我登录" :margin="[0, 10]"></tm-button>
-            </view>
           </view>
+          <template v-if="logged">
+            <tm-image :width="110" :height="70" src="/static/images/me-member-code.png" @click="() => (showWin = !showWin)"></tm-image>
+          </template>
         </view>
       </view>
       <view class="menu">
@@ -102,6 +107,13 @@
         </tm-sheet>
       </view>
     </view>
+    <tm-overlay v-model:show="showWin" contentAnimation>
+      <view @click.stop="">
+        <tm-sheet :width="500" :height="500" :round="10">
+          <tm-text label="更多属性动画时长这些请前文档"></tm-text>
+        </tm-sheet>
+      </view>
+    </tm-overlay>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -119,10 +131,12 @@ import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmRow from '@/tmui/components/tm-row/tm-row.vue'
 import tmCol from '@/tmui/components/tm-col/tm-col.vue'
+import tmImage from '@/tmui/components/tm-image/tm-image.vue'
+import tmOverlay from '@/tmui/components/tm-overlay/tm-overlay.vue'
 
 // 导入storeToRefs
 import { useUserHook } from '@/store'
-import { onShow } from '@dcloudio/uni-app'
+import { onHide, onShow } from '@dcloudio/uni-app'
 import { sumCount } from '@/api/order'
 import { bindPhone, userSum } from '@/api/user'
 
@@ -238,6 +252,7 @@ const serviceItems = ref([
     url: '/pages/member/setting/index'
   }
 ])
+const showWin = ref<boolean>(false)
 
 watch(logged, (newValue, oldValue) => {
   //退出登录
@@ -254,6 +269,10 @@ onShow(() => {
   }
   initOrderSum()
   initUserSum()
+})
+
+onHide(() => {
+  showWin.value = false
 })
 
 const orderItemClick = (index: string) => {
@@ -339,7 +358,7 @@ const initUserSum = () => {
 .avatar {
   height: 180rpx;
   width: 100%;
-  padding: 10rpx 30rpx;
+  padding: 10rpx 0 10rpx 30rpx;
 }
 
 .menu {

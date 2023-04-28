@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:25:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-23 12:35:31
+ * @LastEditTime: 2023-04-28 16:49:39
  * @FilePath: \xuct-group-purchase-uniapp\src\store\app.ts
  * @Description:
  *
@@ -35,7 +35,7 @@ export const appStore = defineStore('appStore', () => {
   }
 
   const getWindowHeight = () => {
-    return windowHeight.value - statusHeight.value 
+    return windowHeight.value
   }
 
   return { initApp, getSafeBottom, getWindowWidth, getWindowHeight }

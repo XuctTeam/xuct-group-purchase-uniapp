@@ -69,7 +69,7 @@ export const addCart = (gid: string) => {
  * @returns
  */
 export const cartList = () => {
-  return request.get<Good.CartResult[]>('/api/v1/good/cart/list')
+  return request.get<Good.Cart[]>('/api/v1/good/cart/list')
 }
 
 /**
@@ -107,7 +107,7 @@ export const cleanCart = () => {
  * 查询用户收藏商品
  */
 export const collectList = () => {
-  return request.get<Good.GoodResult[]>('/api/v1/good/user/collect')
+  return request.get<User.Collect[]>('/api/v1/good/user/collect')
 }
 
 /**

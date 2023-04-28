@@ -20,7 +20,7 @@ export const sumCount = () => {
  * @param gids  商品IDS
  */
 export const getConfirmOrderDetail = (scene: string, gids: string[]) => {
-  return request.post<Good.CartResult[]>('/api/v1/order/confirm/detail', {
+  return request.post<Good.Cart[]>('/api/v1/order/confirm/detail', {
     scene,
     gids
   })

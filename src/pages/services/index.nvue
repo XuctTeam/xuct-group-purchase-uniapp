@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-21 11:10:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-22 18:14:24
+ * @LastEditTime: 2023-04-28 10:43:12
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\services\index.nvue
  * @Description: 
  * 
@@ -14,7 +14,7 @@
     <tm-sheet :margin="[10, 20]" :shadow="4" :round="2">
       <tm-cell :margin="[0, 0]" bottomBorder>
         <template v-slot:label>
-          <tm-button :margin="[0]" :shadow="0" class="inner-contact-class" :width="600" :height="40" color="#fff" label="官方客服" open-type="contact" @contact="contact"> </tm-button>
+          <tm-button :margin="[0]" transprent :shadow="0" class="inner-contact-class" :width="600" :height="40" color="#fff" label="官方客服" open-type="contact" @contact="contact"> </tm-button>
         </template>
       </tm-cell>
       <tm-cell :margin="[0, 0]" :titleFontSize="28" bottomBorder title="拨打电话" @click="makeCall"> </tm-cell>

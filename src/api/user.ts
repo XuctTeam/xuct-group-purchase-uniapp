@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 10:11:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-27 10:17:35
+ * @LastEditTime: 2023-04-28 15:03:47
  * @FilePath: \xuct-group-purchase-uniapp\src\api\user.ts
  * @Description:
  *
@@ -109,8 +109,8 @@ export const userSum = () => {
 /**
  * 优惠券列表
  */
-export const couponList = () => {
-  return request.get<User.Coupon[]>('/api/v1/coupon/list')
+export const couponList = (status: string) => {
+  return request.get<User.Coupon[]>('/api/v1/coupon/list?status=' + status)
 }
 
 /**

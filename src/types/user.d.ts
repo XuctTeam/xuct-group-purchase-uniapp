@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-23 17:24:55
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-27 16:28:07
+ * @LastEditTime: 2023-04-28 13:48:50
  * @FilePath: \xuct-group-purchase-uniapp\src\types\user.d.ts
  * @Description: 用户定义类
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved.
@@ -55,7 +55,7 @@ declare namespace User {
   }
 
   type Coupon = {
-    id: string,
+    id: string
     couponName: string
     couponFullPrice: number
     couponPrice: number
@@ -63,5 +63,9 @@ declare namespace User {
     endTime: Date
     used: boolean
     checked?: boolean
+  }
+
+  interface Collect extends Good.GoodResult {
+    createTime: Date
   }
 }
