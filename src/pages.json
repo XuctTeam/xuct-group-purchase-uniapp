@@ -70,7 +70,25 @@
       }
     },
     {
+      "path": "pages/member/opinion/list",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
       "path": "pages/member/opinion/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/member/opinion/detail",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",

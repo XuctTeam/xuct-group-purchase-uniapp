@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 10:11:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-28 15:03:47
+ * @LastEditTime: 2023-05-04 09:14:05
  * @FilePath: \xuct-group-purchase-uniapp\src\api\user.ts
  * @Description:
  *
@@ -118,4 +118,19 @@ export const couponList = (status: string) => {
  */
 export const canUsedCouponList = () => {
   return request.get<User.Coupon[]>('/api/v1/coupon/can/used')
+}
+
+/**
+ * 反馈列表
+ */
+export const opinionList = () => {
+  return request.get<User.Opinion[]>('/api/v1/opinion/list')
+}
+
+/**
+ * 添加反馈
+ * @param opion
+ */
+export const saveOpinion = (opion: User.Opinion) => {
+  return request.post('/api/v1/opinion', { ...opion })
 }

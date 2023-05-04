@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-23 17:24:55
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-28 13:48:50
+ * @LastEditTime: 2023-05-04 14:17:15
  * @FilePath: \xuct-group-purchase-uniapp\src\types\user.d.ts
  * @Description: 用户定义类
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved.
@@ -67,5 +67,16 @@ declare namespace User {
 
   interface Collect extends Good.GoodResult {
     createTime: Date
+  }
+
+  type Opinion = {
+    id?: string
+    createTime: Date
+    type: string
+    images?: string
+    remarks?: string
+    status: number
+    feedbackTime?: Date
+    feedback?: string
   }
 }

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-06 18:28:56
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-28 15:41:19
+ * @LastEditTime: 2023-05-04 14:43:56
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
@@ -12,74 +12,75 @@
   <page-meta :page-style="'overflow:' + (couponWin || showWin ? 'hidden' : 'visible')"></page-meta>
   <tm-app>
     <tm-navbar title="确认订单" color="#32CD32" fontColor="#fff" blur :before-back="beforeBack"></tm-navbar>
-    <tm-roll-notice :shadow="2" :round="2" color="#32CD32" :margin="[10, 10]" :text="false" fontColor="#fff" :list="content" @click="noticeClick" />
-    <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
-      <tm-cell :margin="[0, 0]" :titleFontSize="30" showAvatar @click="addressClick">
-        <template v-slot:avatar>
-          <tm-icon :font-size="44" name="tmicon-position" color="red"></tm-icon>
-        </template>
-        <template v-slot:label>
-          <view v-if="!address.id">
-            <tm-text label="请选择配送地址"></tm-text>
-          </view>
-          <view v-else>
-            <view class="flex flex-row flex-row-bottom-start mt-10 mb-10">
-              <tm-text :font-size="36" _class="font-weight-b" :label="`${address.userName}`"></tm-text>
-              <view class="ml-10 mr-10">
-                <tm-text :label="`${address.telNumber}`"></tm-text>
-              </view>
+    <uv-bottom-bar-page>
+      <tm-roll-notice :shadow="2" :round="2" color="#32CD32" :margin="[10, 10]" :text="false" fontColor="#fff" :list="content" @click="noticeClick" />
+      <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
+        <tm-cell :margin="[0, 0]" :titleFontSize="30" showAvatar @click="addressClick">
+          <template v-slot:avatar>
+            <tm-icon :font-size="44" name="tmicon-position" color="red"></tm-icon>
+          </template>
+          <template v-slot:label>
+            <view v-if="!address.id">
+              <tm-text label="请选择配送地址"></tm-text>
             </view>
-            <tm-text :label="`${address.provinceName}${address.cityName}${address.countyName}${address.detailInfo}`"></tm-text>
-          </view>
-        </template>
-      </tm-cell>
-    </tm-sheet>
-    <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
-      <view v-for="(item, index) in cartGoods" :key="index" class="flex flex-row pa-10">
-        <tm-image :width="160" :height="160" :round="4" :src="item.firstDrawing" />
-        <view class="flex-card-item-right">
-          <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
-          <view class="flex flex-row flex-row-center-between pr-10">
-            <tm-text color="orange" :label="`单位：${item.unit}`"></tm-text>
-            <tm-text color="grey" :label="`×${item.num}`"></tm-text>
+            <view v-else>
+              <view class="flex flex-row flex-row-bottom-start mt-10 mb-10">
+                <tm-text :font-size="36" _class="font-weight-b" :label="`${address.userName}`"></tm-text>
+                <view class="ml-10 mr-10">
+                  <tm-text :label="`${address.telNumber}`"></tm-text>
+                </view>
+              </view>
+              <tm-text :label="`${address.provinceName}${address.cityName}${address.countyName}${address.detailInfo}`"></tm-text>
+            </view>
+          </template>
+        </tm-cell>
+      </tm-sheet>
+      <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
+        <view v-for="(item, index) in cartGoods" :key="index" class="flex flex-row pa-10">
+          <tm-image :width="160" :height="160" :round="4" :src="item.firstDrawing" />
+          <view class="flex-card-item-right">
+            <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
+            <view class="flex flex-row flex-row-center-between pr-10">
+              <tm-text color="orange" :label="`单位：${item.unit}`"></tm-text>
+              <tm-text color="grey" :label="`×${item.num}`"></tm-text>
+            </view>
           </view>
         </view>
-      </view>
-      <tm-divider />
-      <view class="flex flex-row flex-row-center-between pa-20">
-        <tm-text :font-size="26" label="商品共计"></tm-text>
-        <tm-text :font-size="26" :label="`×${sumNum}`"></tm-text>
-      </view>
-    </tm-sheet>
-    <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
-      <tm-cell
-        :margin="[0, 0]"
-        :titleFontSize="26"
-        title="优惠券"
-        rightColor="green"
-        :rightText="couponValue.id ? couponValue.couponPrice / 1000 + '元' : '暂未使用'"
-        @click="
-          () => {
-            couponWin = !couponWin
-          }
-        "
-      />
-    </tm-sheet>
-    <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
-      <tm-cell :margin="[0, 0]" :titleFontSize="26" title="使用积分" rightColor="green" :rightText="integralValue" @click="() => (showWin = !showWin)" />
-    </tm-sheet>
-    <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 20]">
-      <tm-text :font-size="26" label="备注信息"></tm-text>
-      <tm-divider></tm-divider>
-      <tm-input :inputPadding="[12]" v-model="remarksValue" placeholder="备注特殊要求" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
-    </tm-sheet>
-
-    <uv-bottom-bar>
-      <view class="flex flex-row flex-1 flex-row-center-between">
-        <tm-text :label="`已选择${cartGoods.length}件商品`"></tm-text>
-        <tm-button label="确认下单" :round="24" color="green" @click="placeOrderClick"></tm-button>
-      </view>
-    </uv-bottom-bar>
+        <tm-divider />
+        <view class="flex flex-row flex-row-center-between pa-20">
+          <tm-text :font-size="26" label="商品共计"></tm-text>
+          <tm-text :font-size="26" :label="`×${sumNum}`"></tm-text>
+        </view>
+      </tm-sheet>
+      <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
+        <tm-cell
+          :margin="[0, 0]"
+          :titleFontSize="26"
+          title="优惠券"
+          rightColor="green"
+          :rightText="couponValue.id ? couponValue.couponPrice / 1000 + '元' : '暂未使用'"
+          @click="
+            () => {
+              couponWin = !couponWin
+            }
+          "
+        />
+      </tm-sheet>
+      <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
+        <tm-cell :margin="[0, 0]" :titleFontSize="26" title="使用积分" rightColor="green" :rightText="integralValue" @click="() => (showWin = !showWin)" />
+      </tm-sheet>
+      <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 20]">
+        <tm-text :font-size="26" label="备注信息"></tm-text>
+        <tm-divider></tm-divider>
+        <tm-input :inputPadding="[12]" v-model="remarksValue" placeholder="备注特殊要求" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
+      </tm-sheet>
+      <template v-slot:footer>
+        <view class="flex flex-row flex-1 flex-row-center-between">
+          <tm-text :label="`已选择${cartGoods.length}件商品`"></tm-text>
+          <tm-button label="确认下单" :round="24" color="green" @click="placeOrderClick"></tm-button>
+        </view>
+      </template>
+    </uv-bottom-bar-page>
 
     <!-- 积分弹出框  --->
     <tmDrawer placement="bottom" v-model:show="showWin" okColor="green" @ok="integraClick" title="积分">
@@ -127,7 +128,7 @@ import tmRollNotice from '@/tmui/components/tm-roll-notice/tm-roll-notice.vue'
 import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
 import tmRadio from '@/tmui/components/tm-radio/tm-radio.vue'
 import tmRadioGroup from '@/tmui/components/tm-radio-group/tm-radio-group.vue'
-import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
+import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
 import tmCoupon from '@/tmui/components/tm-coupon/tm-coupon.vue'
 import tmCheckbox from '@/tmui/components/tm-checkbox/tm-checkbox.vue'
 import { onLoad } from '@dcloudio/uni-app'

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-27 13:02:19
+ * @LastEditTime: 2023-05-04 09:48:41
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -42,6 +42,7 @@
         </view>
       </view>
     </view>
+    
     <view class="button-bottom actions fixed l-0 b-0" v-if="logged">
       <view class="flex flex-1 flex-row flex-row-center-between pl-20 pr-20">
         <template>
@@ -203,7 +204,7 @@ const initData = () => {
     .then((res) => {
       allCheckStatus.value = false
       cartGoods.length = 0
-      cartGoods.push(...res.data)
+      cartGoods.push(...res.data, ...res.data,...res.data,...res.data,...res.data,...res.data,...res.data)
     })
     .catch((err: any) => {
       console.log(err)

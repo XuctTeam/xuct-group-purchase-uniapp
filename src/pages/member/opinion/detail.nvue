@@ -1,0 +1,92 @@
+<template>
+  <tm-app>
+    <tm-navbar title="我的反馈" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <uv-bottom-bar-page>
+      <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
+        <view class="flex flex-row pa-20">
+          <view class="w-140"><tm-text color="grey" :font-size="26" label="反馈时间："></tm-text></view>
+          <tm-text :font-size="26" :label="formatData(opinion.createTime)"></tm-text>
+        </view>
+        <view class="flex flex-row pa-20">
+          <view class="w-140"><tm-text color="grey" :font-size="26" label="反馈类型："></tm-text></view>
+          <tm-text :font-size="26" :label="formatType"></tm-text>
+        </view>
+        <view class="flex flex-row flex-1 pa-20">
+          <view class="w-140">
+            <tm-text color="grey" :font-size="26" label="反馈描述："></tm-text>
+          </view>
+          <tm-text :font-size="26" _class="text-overflow-10 word-break" :label="opinion.remarks"></tm-text>
+        </view>
+        <view class="flex flex-row flex-1 pa-20">
+          <view class="w-140">
+            <tm-text color="grey" :font-size="26" label="上传图片："></tm-text>
+          </view>
+          <tm-image-group>
+            <tm-image :padding="[2, 2]" preview :width="160" :height="150" :src="item" v-for="item in opinion.images?.split(',')" :key="item"></tm-image>
+          </tm-image-group>
+        </view>
+      </tm-sheet>
+    </uv-bottom-bar-page>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmImage from '@/tmui/components/tm-image/tm-image.vue'
+import tmImageGroup from '@/tmui/components/tm-image-group/tm-image-group.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
+import * as dayjs from '@/tmui/tool/dayjs/esm/index'
+import { reactive } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
+const DayJs = dayjs.default
+
+const opinion = reactive<User.Opinion>({
+  id: '',
+  status: 1,
+  createTime: new Date(),
+  type: '1'
+})
+
+const radioItemds = [
+  {
+    key: '1',
+    label: '质量问题'
+  },
+  {
+    key: '2',
+    label: '送货问题'
+  },
+  {
+    key: '3',
+    label: '售后问题'
+  },
+  {
+    key: '4',
+    label: '账号问题'
+  },
+  {
+    key: '5',
+    label: '系统问题'
+  },
+  {
+    key: '6',
+    label: '意见反馈'
+  }
+]
+
+onLoad((opts: any) => {
+  const { id } = opts
+  if (!id) {
+    return
+  }
+})
+
+const formatType = (val: string) => {
+  return radioItemds.find((item) => item.key === val)?.label
+}
+
+const formatData = (date: Date) => {
+  return DayJs(date).format('YYYY-MM-DD HH:mm:ss')
+}
+</script>

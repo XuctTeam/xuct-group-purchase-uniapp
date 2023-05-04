@@ -2,57 +2,48 @@
  * @Author: Derek Xu
  * @Date: 2023-03-25 21:54:59
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-28 18:22:37
+ * @LastEditTime: 2023-05-04 13:49:46
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\list.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
 -->
-<!--
- * @Author: Derek Xu
- * @Date: 2023-03-22 21:40:01
- * @LastEditors: Derek Xu
- * @LastEditTime: 2023-03-25 22:33:27
- * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\list.nvue
- * @Description: 
- * 
- * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
--->
 <template>
   <tm-app class="flex flex-col">
     <tm-navbar title="收货地址" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <tm-sheet :margin="[0, 0]" :padding="[20, 30]">
-      <tm-input v-model="searchValue" prefix="tmicon-search" searchLabel="搜索" focusColor="green" placeholder="按名字或电话搜索" @search="onSearch"></tm-input>
-    </tm-sheet>
-    <view class="flex flex-row flex-row-center-center" v-if="addressList.length === 0 && !load">
-      <tm-result :showBtn="false" status="empty" color="green" subTitle="请稍后重试" title="暂无数据" />
-    </view>
-    <view class="list" v-else>
-      <tm-sheet v-for="(item, index) in addressList" :key="index" :round="3" :shadow="2" :margin="[10]" @click="onSelect(item.id ?? '')">
-        <view class="flex flex-row flex-row-center-between pa-10">
-          <view>
-            <view class="flex flex-row flex-row-center-between mb-10">
-              <tm-tag color="green" size="s" label="默认" v-if="item.firstChoose === 1" :margin="[0, 0, 10, 0]"></tm-tag>
-              <tm-text :font-size="30" :label="`${item.provinceName}${item.cityName}${item.countyName}`"></tm-text>
-            </view>
-            <tm-text :font-size="28" :label="item.detailInfo"></tm-text>
-            <tm-text :font-size="28" :label="`${item.telNumber}${item.userName}`" class="mt-10"></tm-text>
-          </view>
-          <tm-icon name="tmicon-edit" @click="onEdit(item.id ?? '')"></tm-icon>
-        </view>
+    <uv-bottom-bar-page>
+      <tm-sheet :margin="[0, 0]" :padding="[20, 30]">
+        <tm-input v-model="searchValue" prefix="tmicon-search" searchLabel="搜索" focusColor="green" placeholder="按名字或电话搜索" @search="onSearch"></tm-input>
       </tm-sheet>
-    </view>
-
-    <uv-bottom-bar>
-      <view class="flex flex-row flex-1 flex-row-center-between">
-        <view class="flex flex-1">
-          <tm-button block color="white" @click="chooseaddress" :round="4" :padding="[0, 10]" label="微信导入"></tm-button>
-        </view>
-        <view class="w-10"></view>
-        <view class="flex flex-1">
-          <tm-button block color="green" :padding="[0, 10]" :round="4" label="新增" @click="toAdd"></tm-button>
-        </view>
+      <view class="flex flex-row flex-row-center-center" v-if="addressList.length === 0 && !load">
+        <tm-result :showBtn="false" status="empty" color="green" subTitle="请稍后重试" title="暂无数据" />
       </view>
-    </uv-bottom-bar>
+      <view v-else>
+        <tm-sheet v-for="(item, index) in addressList" :key="index" :round="3" :shadow="2" :margin="[10]" @click="onSelect(item.id ?? '')">
+          <view class="flex flex-row flex-row-center-between pa-10">
+            <view>
+              <view class="flex flex-row flex-row-center-between mb-10">
+                <tm-tag color="green" size="s" label="默认" v-if="item.firstChoose === 1" :margin="[0, 0, 10, 0]"></tm-tag>
+                <tm-text :font-size="30" :label="`${item.provinceName}${item.cityName}${item.countyName}`"></tm-text>
+              </view>
+              <tm-text :font-size="28" :label="item.detailInfo"></tm-text>
+              <tm-text :font-size="28" :label="`${item.telNumber}${item.userName}`" class="mt-10"></tm-text>
+            </view>
+            <tm-icon name="tmicon-edit" @click="onEdit(item.id ?? '')"></tm-icon>
+          </view>
+        </tm-sheet>
+      </view>
+      <template v-slot:footer>
+        <view class="flex flex-row flex-1 flex-row-center-between">
+          <view class="flex flex-1">
+            <tm-button block color="white" @click="chooseaddress" :round="4" :padding="[0, 10]" label="微信导入"></tm-button>
+          </view>
+          <view class="w-10"></view>
+          <view class="flex flex-1">
+            <tm-button block color="green" :padding="[0, 10]" :round="4" label="新增" @click="toAdd"></tm-button>
+          </view>
+        </view>
+      </template>
+    </uv-bottom-bar-page>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -65,7 +56,7 @@ import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmTag from '@/tmui/components/tm-tag/tm-tag.vue'
-import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
+import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
 
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { reactive, ref, getCurrentInstance } from 'vue'
@@ -175,9 +166,4 @@ const onSelect = (addressId: string) => {
   uni.$tm.u.routerTo('', 'navigateBack')
 }
 </script>
-<style>
-.list {
-  flex: 1;
-  padding-bottom: 90px;
-}
-</style>
+<style></style>

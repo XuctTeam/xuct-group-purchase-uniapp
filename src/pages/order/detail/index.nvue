@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:10:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-28 15:43:48
+ * @LastEditTime: 2023-05-04 11:19:27
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\detail\index.nvue
  * @Description: 
  * 
@@ -22,116 +22,124 @@
         }
       "
     ></tm-navbar>
-    <tm-sheet :margin="[10, 10]" :round="3" :shadow="2" :padding="[10]">
-      <tm-cell :margin="[0, 0]">
-        <template v-slot:title>
-          <view class="flex flex-row flex-row-center-start mb-10">
-            <tm-icon :font-size="26" name="tmicon-tag"></tm-icon>
-            <view class="ml-10">
-              <tm-text :font-size="28" _class="font-weight-b" :label="statusLabel"></tm-text>
+
+    <uv-bottom-bar-page>
+      <template v-slot:content>
+        <tm-sheet :margin="[10, 10]" :round="3" :shadow="2" :padding="[10]">
+          <tm-cell :margin="[0, 0]">
+            <template v-slot:title>
+              <view class="flex flex-row flex-row-center-start mb-10">
+                <tm-icon :font-size="26" name="tmicon-tag"></tm-icon>
+                <view class="ml-10">
+                  <tm-text :font-size="28" _class="font-weight-b" :label="statusLabel"></tm-text>
+                </view>
+              </view>
+              <tm-text :font-size="22" color="grey" :label="statusRemarkLable"></tm-text>
+            </template>
+          </tm-cell>
+        </tm-sheet>
+
+        <tm-sheet :margin="[10, 10]" :round="3" :shadow="2" :padding="[20, 30]">
+          <view class="flex flex-row flex-1 flex-row-center-start mb-10">
+            <tm-icon :font-size="26" name="tmicon-position"></tm-icon>
+            <view class="flex flex-row flex-row-bottom-center ml-10">
+              <view><tm-text :font-size="28" _class="font-weight-b" :label="orderInfo.address?.userName"></tm-text></view>
+              <view class="ml-20"><tm-text :font-size="24" :label="orderInfo.address?.telNumber"></tm-text></view>
             </view>
           </view>
-          <tm-text :font-size="22" color="grey" :label="statusRemarkLable"></tm-text>
-        </template>
-      </tm-cell>
-    </tm-sheet>
-
-    <tm-sheet :margin="[10, 10]" :round="3" :shadow="2" :padding="[20, 30]">
-      <view class="flex flex-row flex-1 flex-row-center-start mb-10">
-        <tm-icon :font-size="26" name="tmicon-position"></tm-icon>
-        <view class="flex flex-row flex-row-bottom-center ml-10">
-          <view><tm-text :font-size="28" _class="font-weight-b" :label="orderInfo.address?.userName"></tm-text></view>
-          <view class="ml-20"><tm-text :font-size="24" :label="orderInfo.address?.telNumber"></tm-text></view>
-        </view>
-      </view>
-      <tm-text :font-size="22" color="grey" :label="`地址：${orderInfo.address?.provinceName}${orderInfo.address?.cityName}${orderInfo.address?.countyName}${orderInfo.address?.detailInfo}`"></tm-text>
-    </tm-sheet>
-    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
-      <view v-for="(item, index) in orderInfo.items" :key="index" class="flex flex-row pa-10">
-        <tm-image :width="160" :height="160" :round="4" :src="item.goodFirstDrawing" />
-        <view class="right">
-          <tm-text _class="text-overflow-2" :label="item.goodName"></tm-text>
-          <view class="flex flex-row flex-row-center-between pr-10">
-            <tm-text color="orange" :label="`单位：${item.goodUnit}`"></tm-text>
-            <tm-text color="grey" :label="`×${item.num}`"></tm-text>
+          <tm-text
+            :font-size="22"
+            color="grey"
+            :label="`地址：${orderInfo.address?.provinceName}${orderInfo.address?.cityName}${orderInfo.address?.countyName}${orderInfo.address?.detailInfo}`"
+          ></tm-text>
+        </tm-sheet>
+        <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
+          <view v-for="(item, index) in orderInfo.items" :key="index" class="flex flex-row pa-10">
+            <tm-image :width="160" :height="160" :round="4" :src="item.goodFirstDrawing" />
+            <view class="right">
+              <tm-text _class="text-overflow-2" :label="item.goodName"></tm-text>
+              <view class="flex flex-row flex-row-center-between pr-10">
+                <tm-text color="orange" :label="`单位：${item.goodUnit}`"></tm-text>
+                <tm-text color="grey" :label="`×${item.num}`"></tm-text>
+              </view>
+            </view>
           </view>
-        </view>
-      </view>
-    </tm-sheet>
-    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
-      <view class="flex flex-row pa-20">
-        <view class="w-80"><tm-text color="grey" :font-size="26" label="备注："></tm-text></view>
-        <tm-text :font-size="26" :label="orderInfo.remarks ?? '暂无'"></tm-text>
-      </view>
-    </tm-sheet>
-    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
-      <view class="flex flex-row flex-row-center-between pa-20">
-        <view class="flex flex-row">
-          <view class="w-140"><tm-text color="grey" :font-size="26" label="订单编号："></tm-text></view>
-          <tm-text :font-size="26" :label="orderInfo.id"></tm-text>
-        </view>
-        <tm-button :shadow="0" size="small" :margin="[0]" :padding="[0]" label="复制" color="green" text @click="copyClick" />
-      </view>
-      <view class="flex flex-row pa-20">
-        <view class="w-140"><tm-text color="grey" :font-size="26" label="下单时间："></tm-text></view>
-        <tm-text :font-size="26" :label="formatData(orderInfo.createTime)"></tm-text>
-      </view>
-      <view class="flex flex-row pa-20">
-        <view class="w-140"><tm-text color="grey" :font-size="26" label="送货时间："></tm-text></view>
-        <tm-text :font-size="26" :label="orderInfo.deliverTime ? formatData(orderInfo.deliverTime) : ''"></tm-text>
-      </view>
-      <view class="flex flex-row pa-20">
-        <view class="w-140"><tm-text color="grey" :font-size="26" label="送达时间："></tm-text></view>
-        <tm-text :font-size="26" :label="orderInfo.serveTime ? formatData(orderInfo.serveTime) : ''"></tm-text>
-      </view>
-    </tm-sheet>
-    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
-      <view class="flex flex-row flex-row-center-between pa-20">
-        <view class="w-140"><tm-text color="grey" :font-size="26" label="积分使用："></tm-text></view>
-        <tm-text :font-size="26" :label="`${orderInfo.integral ?? 0}分`"></tm-text>
-      </view>
-      <view class="flex flex-row flex-row-center-between pa-20">
-        <view class="w-140"><tm-text color="grey" :font-size="26" label="优惠券："></tm-text></view>
-        <tm-text :font-size="26" :label="couponLabel"></tm-text>
-      </view>
-      <view class="flex flex-row flex-row-center-between pa-20">
-        <view class="w-140"><tm-text color="grey" :font-size="26" label="商品小计："></tm-text></view>
-        <tm-text :font-size="26" :label="orderInfo.goodNum"></tm-text>
-      </view>
-      <view class="flex flex-row flex-row-center-between pa-20">
-        <view class="w-140"><tm-text color="grey" :font-size="26" label="总计金额："></tm-text></view>
-        <tm-text :font-size="26" :label="orderInfo.totalPrice ?? 0"></tm-text>
-      </view>
-    </tm-sheet>
-
-    <uv-bottom-bar>
-      <view class="flex flex-1 flex-row flex-row-center-end">
-        <template v-if="!load">
-          <template v-if="orderInfo.status === 1 || orderInfo.status === 2">
-            <tm-button
-              v-if="orderInfo.refundStatus !== 1"
-              :round="24"
-              :margin="[24, 0]"
-              :label="orderInfo.rush ? '已催单' : '催单'"
-              :disabled="!!orderInfo.rush"
-              :font-size="24"
-              color="orange"
-              @click="onRushOrderOrder"
-            ></tm-button>
-            <tm-button
-              :round="24"
-              :label="orderInfo.refundStatus === 0 ? '申请退单' : orderInfo.refundStatus === 3 ? '已撤退单' : '已退单'"
-              :disabled="orderInfo.refundStatus !== 0"
-              :font-size="24"
-              color="green"
-              @click="refundClick"
-            ></tm-button>
+        </tm-sheet>
+        <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
+          <view class="flex flex-row pa-20">
+            <view class="w-80"><tm-text color="grey" :font-size="26" label="备注："></tm-text></view>
+            <tm-text :font-size="26" :label="orderInfo.remarks ?? '暂无'"></tm-text>
+          </view>
+        </tm-sheet>
+        <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
+          <view class="flex flex-row flex-row-center-between pa-20">
+            <view class="flex flex-row">
+              <view class="w-140"><tm-text color="grey" :font-size="26" label="订单编号："></tm-text></view>
+              <tm-text :font-size="26" :label="orderInfo.id"></tm-text>
+            </view>
+            <tm-button :shadow="0" size="small" :margin="[0]" :padding="[0]" label="复制" color="green" text @click="copyClick" />
+          </view>
+          <view class="flex flex-row pa-20">
+            <view class="w-140"><tm-text color="grey" :font-size="26" label="下单时间："></tm-text></view>
+            <tm-text :font-size="26" :label="formatData(orderInfo.createTime)"></tm-text>
+          </view>
+          <view class="flex flex-row pa-20">
+            <view class="w-140"><tm-text color="grey" :font-size="26" label="送货时间："></tm-text></view>
+            <tm-text :font-size="26" :label="orderInfo.deliverTime ? formatData(orderInfo.deliverTime) : ''"></tm-text>
+          </view>
+          <view class="flex flex-row pa-20">
+            <view class="w-140"><tm-text color="grey" :font-size="26" label="送达时间："></tm-text></view>
+            <tm-text :font-size="26" :label="orderInfo.serveTime ? formatData(orderInfo.serveTime) : ''"></tm-text>
+          </view>
+        </tm-sheet>
+        <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
+          <view class="flex flex-row flex-row-center-between pa-20">
+            <view class="w-140"><tm-text color="grey" :font-size="26" label="积分使用："></tm-text></view>
+            <tm-text :font-size="26" :label="`${orderInfo.integral ?? 0}分`"></tm-text>
+          </view>
+          <view class="flex flex-row flex-row-center-between pa-20">
+            <view class="w-140"><tm-text color="grey" :font-size="26" label="优惠券："></tm-text></view>
+            <tm-text :font-size="26" :label="couponLabel"></tm-text>
+          </view>
+          <view class="flex flex-row flex-row-center-between pa-20">
+            <view class="w-140"><tm-text color="grey" :font-size="26" label="商品小计："></tm-text></view>
+            <tm-text :font-size="26" :label="orderInfo.goodNum"></tm-text>
+          </view>
+          <view class="flex flex-row flex-row-center-between pa-20">
+            <view class="w-140"><tm-text color="grey" :font-size="26" label="总计金额："></tm-text></view>
+            <tm-text :font-size="26" :label="orderInfo.totalPrice ?? 0"></tm-text>
+          </view>
+        </tm-sheet>
+      </template>
+      <template v-slot:footer>
+        <view class="flex flex-1 flex-row flex-row-center-end">
+          <template v-if="!load">
+            <template v-if="orderInfo.status === 1 || orderInfo.status === 2">
+              <tm-button
+                v-if="orderInfo.refundStatus !== 1"
+                :round="24"
+                :margin="[24, 0]"
+                :label="orderInfo.rush ? '已催单' : '催单'"
+                :disabled="!!orderInfo.rush"
+                :font-size="24"
+                color="orange"
+                @click="onRushOrderOrder"
+              ></tm-button>
+              <tm-button
+                :round="24"
+                :label="orderInfo.refundStatus === 0 ? '申请退单' : orderInfo.refundStatus === 3 ? '已撤退单' : '已退单'"
+                :disabled="orderInfo.refundStatus !== 0"
+                :font-size="24"
+                color="green"
+                @click="refundClick"
+              ></tm-button>
+            </template>
+            <tm-button v-if="orderInfo.status === 3" label="收货" color="green" :round="10" @click="receiverClick"></tm-button>
+            <tm-button v-if="orderInfo.status === 4" label="删除" color="white" :round="10" @click="deleteOrderClick"></tm-button>
           </template>
-          <tm-button v-if="orderInfo.status === 3" label="收货" color="green" :round="10" @click="receiverClick"></tm-button>
-          <tm-button v-if="orderInfo.status === 4" label="删除" color="white" :round="10" @click="deleteOrderClick"></tm-button>
-        </template>
-      </view>
-    </uv-bottom-bar>
+        </view>
+      </template>
+    </uv-bottom-bar-page>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -145,7 +153,7 @@ import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
-import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
+import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
 
 import { reactive, computed } from 'vue'
 import { cancelOrder, getOrderDetail, receiverOrder, rushOrder } from '@/api/order'
@@ -214,7 +222,7 @@ const statusLabel = computed(() => {
     case 3:
       return '待收货'
     case 4:
-      return '已完成'  
+      return '已完成'
   }
 })
 

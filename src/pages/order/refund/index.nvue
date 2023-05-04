@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-17 22:37:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-28 18:19:09
+ * @LastEditTime: 2023-05-04 14:44:35
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -10,68 +10,71 @@
 <template>
   <tm-app>
     <tm-navbar title="申请退单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
-      <view class="pa-10 flex flex-row flex-row-center-between">
-        <tm-text _class="font-weight-b" :fontSize="28" label="订单编号"></tm-text>
-        <tm-text :fontSize="28" :label="orderIdValue"></tm-text>
-      </view>
-      <tm-divider></tm-divider>
-      <view v-for="(item, index) in orderInfo.items" :key="index" class="flex flex-row pa-10">
-        <tm-image :width="160" :height="160" :round="4" :src="item.goodFirstDrawing" />
-        <view class="right">
-          <tm-text _class="text-overflow-2" :label="item.goodName"></tm-text>
-          <view class="flex flex-row flex-row-center-between pr-10">
-            <tm-text color="orange" :label="`单位：${item.goodUnit}`"></tm-text>
-            <tm-text color="grey" :label="`×${item.num}`"></tm-text>
+
+    <uv-bottom-bar-page>
+      <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
+        <view class="pa-10 flex flex-row flex-row-center-between">
+          <tm-text _class="font-weight-b" :fontSize="28" label="订单编号"></tm-text>
+          <tm-text :fontSize="28" :label="orderIdValue"></tm-text>
+        </view>
+        <tm-divider></tm-divider>
+        <view v-for="(item, index) in orderInfo.items" :key="index" class="flex flex-row pa-10">
+          <tm-image :width="160" :height="160" :round="4" :src="item.goodFirstDrawing" />
+          <view class="right">
+            <tm-text _class="text-overflow-2" :label="item.goodName"></tm-text>
+            <view class="flex flex-row flex-row-center-between pr-10">
+              <tm-text color="orange" :label="`单位：${item.goodUnit}`"></tm-text>
+              <tm-text color="grey" :label="`×${item.num}`"></tm-text>
+            </view>
           </view>
         </view>
-      </view>
-    </tm-sheet>
-    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
-      <view class="pa-10">
-        <tm-text _class="font-weight-b" :fontSize="28" label="订单详情"></tm-text>
-      </view>
-      <tm-divider></tm-divider>
-      <view class="flex flex-row pa-20">
-        <view class="w-140"><tm-text color="grey" :font-size="26" label="下单时间："></tm-text></view>
-        <tm-text :font-size="26" :label="formatData(orderInfo.createTime)"></tm-text>
-      </view>
-      <view class="flex flex-row pa-20">
-        <view class="w-140"><tm-text color="grey" :font-size="26" label="送货时间："></tm-text></view>
-        <tm-text :font-size="26" :label="orderInfo.deliverTime ? formatData(orderInfo.deliverTime) : ''"></tm-text>
-      </view>
-      <view class="flex flex-row pa-20">
-        <view class="w-140"><tm-text color="grey" :font-size="26" label="送达时间："></tm-text></view>
-        <tm-text :font-size="26" :label="orderInfo.serveTime ? formatData(orderInfo.serveTime) : ''"></tm-text>
-      </view>
-    </tm-sheet>
-    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
-      <view class="pa-10">
-        <tm-text _class="font-weight-b" :fontSize="28" label="退单原因"></tm-text>
-      </view>
-      <tm-divider></tm-divider>
-      <tm-radio-group v-model="refundTypeValue" direction="col" :style="{ display: 'flex' }">
-        <tm-radio color="green" v-for="(item, index) in radioItemds" :value="item.key" :label="item.label" :key="index" />
-      </tm-radio-group>
-    </tm-sheet>
-    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
-      <tm-text _class="font-weight-b" :fontSize="28" label="凭证（支持3张照片）"></tm-text>
-      <tm-divider></tm-divider>
-      <tm-upload showSort :onStart="onStart" color="green" v-model="imageList" :header="uploadHeader" ref="up" :width="636" :rows="3" :maxFile="3" :url="uploadUrlValue" @fail="onUploadFail">
-      </tm-upload>
-    </tm-sheet>
-    <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
-      <view class="pa-10 flex flex-row flex-row-center-between">
-        <tm-text _class="font-weight-b" :fontSize="28" label="原因描述"></tm-text>
-      </view>
-      <tm-divider></tm-divider>
-      <tm-input v-model="refundReasonValue" :inputPadding="[12]" placeholder="填写原因" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
-    </tm-sheet>
-    <uv-bottom-bar>
-      <view class="flex-1">
-        <tm-button label="提交" :round="4" color="green" block @click="onRefundClick"></tm-button>
-      </view>
-    </uv-bottom-bar>
+      </tm-sheet>
+      <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
+        <view class="pa-10">
+          <tm-text _class="font-weight-b" :fontSize="28" label="订单详情"></tm-text>
+        </view>
+        <tm-divider></tm-divider>
+        <view class="flex flex-row pa-20">
+          <view class="w-140"><tm-text color="grey" :font-size="26" label="下单时间："></tm-text></view>
+          <tm-text :font-size="26" :label="formatData(orderInfo.createTime)"></tm-text>
+        </view>
+        <view class="flex flex-row pa-20">
+          <view class="w-140"><tm-text color="grey" :font-size="26" label="送货时间："></tm-text></view>
+          <tm-text :font-size="26" :label="orderInfo.deliverTime ? formatData(orderInfo.deliverTime) : ''"></tm-text>
+        </view>
+        <view class="flex flex-row pa-20">
+          <view class="w-140"><tm-text color="grey" :font-size="26" label="送达时间："></tm-text></view>
+          <tm-text :font-size="26" :label="orderInfo.serveTime ? formatData(orderInfo.serveTime) : ''"></tm-text>
+        </view>
+      </tm-sheet>
+      <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
+        <view class="pa-10">
+          <tm-text _class="font-weight-b" :fontSize="28" label="退单原因"></tm-text>
+        </view>
+        <tm-divider></tm-divider>
+        <tm-radio-group v-model="refundTypeValue" direction="col" :style="{ display: 'flex' }">
+          <tm-radio color="green" v-for="(item, index) in radioItemds" :value="item.key" :label="item.label" :key="index" />
+        </tm-radio-group>
+      </tm-sheet>
+      <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
+        <tm-text _class="font-weight-b" :fontSize="28" label="凭证（支持3张照片）"></tm-text>
+        <tm-divider></tm-divider>
+        <tm-upload showSort :onStart="onStart" color="green" v-model="imageList" :header="uploadHeader" ref="up" :width="636" :rows="3" :maxFile="3" :url="uploadUrlValue" @fail="onUploadFail">
+        </tm-upload>
+      </tm-sheet>
+      <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
+        <view class="pa-10 flex flex-row flex-row-center-between">
+          <tm-text _class="font-weight-b" :fontSize="28" label="原因描述"></tm-text>
+        </view>
+        <tm-divider></tm-divider>
+        <tm-input v-model="refundReasonValue" :inputPadding="[12]" placeholder="填写原因" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
+      </tm-sheet>
+      <template v-slot:footer>
+        <view class="flex-1">
+          <tm-button label="提交" :round="4" color="green" block @click="onRefundClick"></tm-button>
+        </view>
+      </template>
+    </uv-bottom-bar-page>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -86,7 +89,7 @@ import tmRadioGroup from '@/tmui/components/tm-radio-group/tm-radio-group.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import tmUpload from '@/tmui/components/tm-upload/tm-upload.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
-import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
+import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
 
 import { onLoad } from '@dcloudio/uni-app'
 import { reactive, ref, getCurrentInstance } from 'vue'

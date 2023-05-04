@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-27 10:01:17
+ * @LastEditTime: 2023-05-04 10:58:37
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\index.nvue
  * @Description: 
  * 
@@ -11,57 +11,58 @@
 <template>
   <tm-app>
     <tm-navbar title="商品详情" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
-    <tm-sheet :margin="[10, 10, 10, 10]" :height="140" :round="4" :shadow="4">
-      <view class="title">{{ name }}</view>
-      <view class="flex flex-row flex-row-center-between mt-20">
-        <view class="flex flex-row">
-          <tm-text color="grey" :font-size="26" label="库存" />
-          <view class="ml-8">
-            <tm-text color="orange" :font-size="26" label="30" />
+    <uv-bottom-bar-page :show-footer="!!logged">
+      <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
+      <tm-sheet :margin="[10, 10, 10, 10]" :height="140" :round="4" :shadow="4">
+        <view class="title">{{ name }}</view>
+        <view class="flex flex-row flex-row-center-between mt-20">
+          <view class="flex flex-row">
+            <tm-text color="grey" :font-size="26" label="库存" />
+            <view class="ml-8">
+              <tm-text color="orange" :font-size="26" label="30" />
+            </view>
+          </view>
+          <view class="flex flex-row">
+            <tm-text color="grey" :font-size="26" label="热度"></tm-text>
+            <view class="ml-8">
+              <tm-text color="orange" :font-size="26" :label="browse" />
+            </view>
+          </view>
+          <view class="flex flex-row">
+            <tm-text color="grey" :font-size="26" label="销量"></tm-text>
+            <view class="ml-8">
+              <tm-text color="orange" :font-size="26" label="30" />
+            </view>
           </view>
         </view>
-        <view class="flex flex-row">
-          <tm-text color="grey" :font-size="26" label="热度"></tm-text>
-          <view class="ml-8">
-            <tm-text color="orange" :font-size="26" :label="browse" />
-          </view>
-        </view>
-        <view class="flex flex-row">
-          <tm-text color="grey" :font-size="26" label="销量"></tm-text>
-          <view class="ml-8">
-            <tm-text color="orange" :font-size="26" label="30" />
-          </view>
-        </view>
+      </tm-sheet>
+      <view class="pa-10">
+        <tm-html :content="detail" />
       </view>
-    </tm-sheet>
-    <view class="pa-10">
-      <tm-html :content="detail" />
-    </view>
-
-    <uv-bottom-bar v-if="!!logged">
-      <view class="flex flex-row flex-1 flex-row-center-between">
-        <tm-row :column="3" :width="300">
-          <tm-col @click="toServices" :height="100">
-            <tm-icon name=" tmicon-aliwangwang" :fontSize="36" />
-            <tm-text color="grey" :font-size="24" label="客服" />
-          </tm-col>
-          <tm-col @click="toCart" :height="100">
-            <tm-icon name="tmicon-shoppingcart" :fontSize="36" />
-            <tm-text color="grey" :font-size="24" label="购物车" />
-          </tm-col>
-          <tm-col :height="100">
-            <tm-icon name="tmicon-md-heart-empty" :fontSize="36" @click="onCllect" v-if="!userCollect" />
-            <tm-icon name="tmicon-md-heart" color="red" :fontSize="36" @click="onCllect" v-else />
-            <tm-text color="grey" :font-size="24" label="收藏" />
-          </tm-col>
-        </tm-row>
-        <view class="flex flex-row flex-1 flex-row-center-end">
-          <tm-button color="orange" _class="round-l-24 round-r-0" :round="5" label="加入购物车" :loading="addLoading" @click="onAddCart"></tm-button>
-          <tm-button color="green" _class="round-r-24 round-l-0" label="立即下单" @click="onFastConfirm"></tm-button>
+      <template v-slot:footer>
+        <view class="flex flex-row flex-1 flex-row-center-between">
+          <tm-row :column="3" :width="300">
+            <tm-col @click="toServices" :height="100">
+              <tm-icon name=" tmicon-aliwangwang" :fontSize="36" />
+              <tm-text color="grey" :font-size="24" label="客服" />
+            </tm-col>
+            <tm-col @click="toCart" :height="100">
+              <tm-icon name="tmicon-shoppingcart" :fontSize="36" />
+              <tm-text color="grey" :font-size="24" label="购物车" />
+            </tm-col>
+            <tm-col :height="100">
+              <tm-icon name="tmicon-md-heart-empty" :fontSize="36" @click="onCllect" v-if="!userCollect" />
+              <tm-icon name="tmicon-md-heart" color="red" :fontSize="36" @click="onCllect" v-else />
+              <tm-text color="grey" :font-size="24" label="收藏" />
+            </tm-col>
+          </tm-row>
+          <view class="flex flex-row flex-1 flex-row-center-end">
+            <tm-button color="orange" _class="round-l-24 round-r-0" :round="5" label="加入购物车" :loading="addLoading" @click="onAddCart"></tm-button>
+            <tm-button color="green" _class="round-r-24 round-l-0" label="立即下单" @click="onFastConfirm"></tm-button>
+          </view>
         </view>
-      </view>
-    </uv-bottom-bar>
+      </template>
+    </uv-bottom-bar-page>
   </tm-app>
 </template>
 
@@ -75,7 +76,7 @@ import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
-import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
+import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
 import tmRow from '@/tmui/components/tm-row/tm-row.vue'
 import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 import { onLoad } from '@dcloudio/uni-app'

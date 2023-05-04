@@ -1,10 +1,137 @@
 <template>
   <tm-app>
-    <tm-navbar title="我的反馈" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <tm-navbar title="意见反馈" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <uv-bottom-bar-page>
+      <template v-if="!load">
+        <template v-if="opinions.length === 0">
+          <tm-result :showBtn="false" color="green" subTitle="您还未反馈任何内容 T.T"></tm-result>
+        </template>
+        <template v-else>
+          <tm-card v-for="(item, i) in opinions" :status="item.status === 1 ? '已反馈' : '未反馈'" :margin="[10]" :title="formatData(item.createTime)" status-color="green">
+            <template v-slot:content>
+              <tm-text _class="text-overflow-2" :label="item.remarks ?? formatType(item.type)"></tm-text>
+            </template>
+            <template v-slot:action>
+              <view class="flex flex-row flex-row-center-end flex-1">
+                <tm-button :round="10" :margin="[24, 0]" label="详情" :font-size="24" :width="120" :height="64" color="orange" @click="onDetailClick(item.id ?? '')"></tm-button>
+                <tm-button :round="10" color="white" label="删除" :font-size="24" :width="120" :height="64" :disabled="item.status !== 1"></tm-button>
+              </view>
+            </template>
+          </tm-card>
+        </template>
+      </template>
+      <template v-slot:footer>
+        <view class="flex-1">
+          <tm-button label="反馈" :round="4" color="green" block @click="onClick"></tm-button>
+        </view>
+      </template>
+    </uv-bottom-bar-page>
   </tm-app>
 </template>
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmCard from '@/tmui/components/tm-card/tm-card.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import tmResult from '@/tmui/components/tm-result/tm-result.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
+
+import { onLoad, onShow } from '@dcloudio/uni-app'
+import { opinionList } from '@/api/user'
+import * as dayjs from '@/tmui/tool/dayjs/esm/index'
+import { loading, hideLoading } from '@/utils/dialog'
+
+const opinions = reactive<User.Opinion[]>([])
+const load = ref<boolean>(false)
+const refreshValue = ref<boolean>(false)
+const DayJs = dayjs.default
+
+const radioItemds = [
+  {
+    key: '1',
+    label: '质量问题'
+  },
+  {
+    key: '2',
+    label: '送货问题'
+  },
+  {
+    key: '3',
+    label: '售后问题'
+  },
+  {
+    key: '4',
+    label: '账号问题'
+  },
+  {
+    key: '5',
+    label: '系统问题'
+  },
+  {
+    key: '6',
+    label: '意见反馈'
+  }
+]
+
+onLoad(() => {
+  initData()
+})
+
+onShow(() => {
+  if (refreshValue.value) {
+    initData()
+  }
+})
+
+const initData = () => {
+  load.value = true
+  loading()
+  opinionList()
+    .then((res) => {
+      opinions.length = 0
+      opinions.push(...res.data)
+      refreshValue.value = false
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+    .finally(() => {
+      load.value = false
+      hideLoading()
+    })
+}
+
+const formatData = (date: Date) => {
+  return DayJs(date).format('YYYY-MM-DD')
+}
+
+const formatType = (val: string) => {
+  return radioItemds.find((item) => item.key === val)?.label
+}
+
+const onClick = () => {
+  uni.navigateTo({
+    url: './index',
+    events: {
+      acceptDataFromDetail(data: any) {
+        const { refresh } = data
+        refreshValue.value = refresh ?? false
+      }
+    }
+  })
+}
+
+const onDetailClick = (id: string) => {
+  uni.navigateTo({
+    url: './detail?id=' + id,
+    events: {
+      acceptDataFromDetail(data: any) {
+        const { refresh } = data
+        refreshValue.value = refresh ?? false
+      }
+    }
+  })
+}
 </script>

@@ -1,23 +1,25 @@
 <template>
   <tm-app>
     <tm-navbar title="我的留言" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <scroll-view id="chatContainer" scroll-y="true" :scroll-top="scrollTop" :scroll-with-animation="true" :style="{ height: _windowHeight + 'px' }" class="chat">
-      <view id="chatContent">
-        <uv-chat v-for="(item, i) in messageList" :key="i" :id="`item-${i}`" :me="item.user === userInfo.id" :avatar="item.avatar ?? '/static/images/me.png'" :nick="item.nickName ?? '用户'">
-          <template v-slot:content>
-            <uv-chat-text :text="item.content"></uv-chat-text>
-          </template>
-        </uv-chat>
-      </view>
-    </scroll-view>
-    <uv-bottom-bar>
-      <view class="flex flex-row flex-row-center-center flex-1">
-        <view class="flex flex-1 mr-10">
-          <tm-input placeholder="输入您的留言" v-model="chatMsgValue" :maxlength="100" :border="1" color="green"></tm-input>
+    <uv-bottom-bar-page>
+      <scroll-view id="chatContainer" scroll-y="true" :scroll-top="scrollTop" :scroll-with-animation="true" :style="{ height: _windowHeight + 'px' }" class="chat">
+        <view id="chatContent">
+          <uv-chat v-for="(item, i) in messageList" :key="i" :id="`item-${i}`" :me="item.user === userInfo.id" :avatar="item.avatar ?? '/static/images/me.png'" :nick="item.nickName ?? '用户'">
+            <template v-slot:content>
+              <uv-chat-text :text="item.content"></uv-chat-text>
+            </template>
+          </uv-chat>
         </view>
-        <tm-button label="发送" size="small" :margin="[0]" color="green" :round="4" :loading="load" :height="60" @click="sendClick"></tm-button>
-      </view>
-    </uv-bottom-bar>
+      </scroll-view>
+      <template v-slot:footer>
+        <view class="flex flex-row flex-row-center-center flex-1">
+          <view class="flex flex-1 mr-10">
+            <tm-input placeholder="输入您的留言" v-model="chatMsgValue" :maxlength="100" :border="1" color="green"></tm-input>
+          </view>
+          <tm-button label="发送" size="small" :margin="[0]" color="green" :round="4" :loading="load" :height="60" @click="sendClick"></tm-button>
+        </view>
+      </template>
+    </uv-bottom-bar-page>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -25,7 +27,7 @@ import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
-import uvBottomBar from '@/components/uv-bottom-bar/uv-bottom-bar.vue'
+import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
 import uvChat from '@/components/uv-chat/uv-chat.vue'
 import uvChatText from '@/components/uv-chat-text/uv-chat-text.vue'
 
@@ -49,7 +51,7 @@ const scrollTop = ref<number>(0)
 
 const _windowHeight = computed(() => {
   const saveBottom = appStore.getSafeBottom()
-  return appStore.getWindowHeight() - (saveBottom > 0 ? 90 : 75) - 12
+  return appStore.getWindowHeight() - (saveBottom > 0 ? 80 : 65) - 30
 })
 
 //发送消息
