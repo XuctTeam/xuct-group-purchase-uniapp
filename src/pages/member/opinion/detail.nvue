@@ -1,31 +1,60 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-05-04 14:38:57
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-05-04 18:29:25
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\opinion\detail.nvue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
 <template>
   <tm-app>
     <tm-navbar title="我的反馈" color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <uv-bottom-bar-page>
-      <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
-        <view class="flex flex-row pa-20">
-          <view class="w-140"><tm-text color="grey" :font-size="26" label="反馈时间："></tm-text></view>
-          <tm-text :font-size="26" :label="formatData(opinion.createTime)"></tm-text>
-        </view>
-        <view class="flex flex-row pa-20">
-          <view class="w-140"><tm-text color="grey" :font-size="26" label="反馈类型："></tm-text></view>
-          <tm-text :font-size="26" :label="formatType"></tm-text>
-        </view>
-        <view class="flex flex-row flex-1 pa-20">
-          <view class="w-140">
-            <tm-text color="grey" :font-size="26" label="反馈描述："></tm-text>
+      <template v-if="!load">
+        <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
+          <view class="flex flex-row pa-20">
+            <view class="w-140"><tm-text color="grey" :font-size="26" label="反馈时间："></tm-text></view>
+            <tm-text :font-size="26" :label="formatData(opinion.createTime)"></tm-text>
           </view>
-          <tm-text :font-size="26" _class="text-overflow-10 word-break" :label="opinion.remarks"></tm-text>
-        </view>
-        <view class="flex flex-row flex-1 pa-20">
-          <view class="w-140">
-            <tm-text color="grey" :font-size="26" label="上传图片："></tm-text>
+          <view class="flex flex-row pa-20">
+            <view class="w-140"><tm-text color="grey" :font-size="26" label="反馈类型："></tm-text></view>
+            <tm-text :font-size="26" :label="formatType"></tm-text>
           </view>
-          <tm-image-group>
-            <tm-image :padding="[2, 2]" preview :width="160" :height="150" :src="item" v-for="item in opinion.images?.split(',')" :key="item"></tm-image>
-          </tm-image-group>
+          <view class="flex flex-row flex-1 pa-20">
+            <view class="w-140">
+              <tm-text color="grey" :font-size="26" label="反馈描述："></tm-text>
+            </view>
+            <tm-text :font-size="26" _class="text-overflow-10 word-break" :label="opinion.remarks"></tm-text>
+          </view>
+          <view class="flex flex-row flex-1 pa-20">
+            <view class="w-140">
+              <tm-text color="grey" :font-size="26" label="上传图片："></tm-text>
+            </view>
+            <tm-image-group v-if="!!opinion.images">
+              <tm-image :padding="[2, 2]" preview :width="160" :height="150" :src="item" v-for="item in opinion.images?.split(',')" :key="item"></tm-image>
+            </tm-image-group>
+          </view>
+        </tm-sheet>
+        <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
+          <view class="flex flex-row pa-20">
+            <view class="w-140"><tm-text color="grey" :font-size="26" label="回复时间："></tm-text></view>
+            <tm-text v-if="opinion.status === 1" :font-size="26" :label="formatData(opinion.feedbackTime ?? new Date())"></tm-text>
+          </view>
+          <view class="flex flex-row flex-1 pa-20">
+            <view class="w-140">
+              <tm-text color="grey" :font-size="26" label="回复描述："></tm-text>
+            </view>
+            <tm-text v-if="opinion.status === 1" :font-size="26" _class="text-overflow-10 word-break" :label="opinion.feedback"></tm-text>
+          </view>
+        </tm-sheet>
+      </template>
+      <template v-slot:footer>
+        <view class="flex-1">
+          <tm-button block color="green" :padding="[0, 10]" :round="4" label="撤销" :disabled="opinion.status !== 0"></tm-button>
         </view>
-      </tm-sheet>
+      </template>
     </uv-bottom-bar-page>
   </tm-app>
 </template>
@@ -34,13 +63,21 @@ import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmImageGroup from '@/tmui/components/tm-image-group/tm-image-group.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
-import { reactive } from 'vue'
+
+import { reactive, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
+import { computed } from 'vue'
+import { loading, hideLoading } from '@/utils/dialog'
+import { getOpinion } from '@/api/user'
+
 const DayJs = dayjs.default
 
+const load = ref<boolean>(true)
 const opinion = reactive<User.Opinion>({
   id: '',
   status: 1,
@@ -80,11 +117,29 @@ onLoad((opts: any) => {
   if (!id) {
     return
   }
+  opinion.id = id
+  initData()
 })
 
-const formatType = (val: string) => {
-  return radioItemds.find((item) => item.key === val)?.label
+const initData = () => {
+  loading()
+  load.value = true
+  getOpinion(opinion.id ?? '')
+    .then((res) => {
+      Object.assign(opinion, { ...res.data })
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+    .finally(() => {
+      hideLoading()
+      load.value = false
+    })
 }
+
+const formatType = computed(() => {
+  return radioItemds.find((item) => item.key === opinion.type)?.label
+})
 
 const formatData = (date: Date) => {
   return DayJs(date).format('YYYY-MM-DD HH:mm:ss')

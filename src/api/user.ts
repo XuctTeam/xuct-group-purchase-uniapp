@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 10:11:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-04 09:14:05
+ * @LastEditTime: 2023-05-04 18:17:06
  * @FilePath: \xuct-group-purchase-uniapp\src\api\user.ts
  * @Description:
  *
@@ -133,4 +133,13 @@ export const opinionList = () => {
  */
 export const saveOpinion = (opion: User.Opinion) => {
   return request.post('/api/v1/opinion', { ...opion })
+}
+
+/**
+ * 获取反馈详情
+ * @param id
+ * @returns
+ */
+export const getOpinion = (id: string) => {
+  return request.get<User.Opinion>('/api/v1/opinion', { id })
 }

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:10:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-04 11:19:27
+ * @LastEditTime: 2023-05-04 18:33:49
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\detail\index.nvue
  * @Description: 
  * 
@@ -24,7 +24,7 @@
     ></tm-navbar>
 
     <uv-bottom-bar-page>
-      <template v-slot:content>
+      <template v-if="!load">
         <tm-sheet :margin="[10, 10]" :round="3" :shadow="2" :padding="[10]">
           <tm-cell :margin="[0, 0]">
             <template v-slot:title>
@@ -117,7 +117,7 @@
             <template v-if="orderInfo.status === 1 || orderInfo.status === 2">
               <tm-button
                 v-if="orderInfo.refundStatus !== 1"
-                :round="24"
+                :round="4"
                 :margin="[24, 0]"
                 :label="orderInfo.rush ? '已催单' : '催单'"
                 :disabled="!!orderInfo.rush"
@@ -126,7 +126,7 @@
                 @click="onRushOrderOrder"
               ></tm-button>
               <tm-button
-                :round="24"
+                :round="4"
                 :label="orderInfo.refundStatus === 0 ? '申请退单' : orderInfo.refundStatus === 3 ? '已撤退单' : '已退单'"
                 :disabled="orderInfo.refundStatus !== 0"
                 :font-size="24"
@@ -134,8 +134,8 @@
                 @click="refundClick"
               ></tm-button>
             </template>
-            <tm-button v-if="orderInfo.status === 3" label="收货" color="green" :round="10" @click="receiverClick"></tm-button>
-            <tm-button v-if="orderInfo.status === 4" label="删除" color="white" :round="10" @click="deleteOrderClick"></tm-button>
+            <tm-button v-if="orderInfo.status === 3" label="收货" color="green" :round="4" @click="receiverClick"></tm-button>
+            <tm-button v-if="orderInfo.status === 4" label="删除" color="white" :round="4" @click="deleteOrderClick"></tm-button>
           </template>
         </view>
       </template>

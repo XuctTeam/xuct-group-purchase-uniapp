@@ -7,17 +7,23 @@
           <tm-result :showBtn="false" color="green" subTitle="您还未反馈任何内容 T.T"></tm-result>
         </template>
         <template v-else>
-          <tm-card v-for="(item, i) in opinions" :status="item.status === 1 ? '已反馈' : '未反馈'" :margin="[10]" :title="formatData(item.createTime)" status-color="green">
-            <template v-slot:content>
-              <tm-text _class="text-overflow-2" :label="item.remarks ?? formatType(item.type)"></tm-text>
-            </template>
-            <template v-slot:action>
-              <view class="flex flex-row flex-row-center-end flex-1">
-                <tm-button :round="10" :margin="[24, 0]" label="详情" :font-size="24" :width="120" :height="64" color="orange" @click="onDetailClick(item.id ?? '')"></tm-button>
-                <tm-button :round="10" color="white" label="删除" :font-size="24" :width="120" :height="64" :disabled="item.status !== 1"></tm-button>
+          <tm-sheet :round="4" :margin="[10]" v-for="(item, i) in opinions" @click="onDetailClick(item.id ?? '')">
+            <view class="flex flex-row flex-row-center-between">
+              <tm-text :font-size="24" _class="font-weight-b" :label="formatType(item.type)"></tm-text>
+              <tm-text :font-size="24" color="green" :label="item.status === 1 ? '已反馈' : '未反馈'"></tm-text>
+            </view>
+            <tm-divider></tm-divider>
+            <view class="flex flex-row mb-20">
+              <view class="w-140"><tm-text color="grey" :font-size="26" label="反馈时间："></tm-text></view>
+              <tm-text :font-size="26" :label="formatData(item.createTime)"></tm-text>
+            </view>
+            <view class="flex flex-row flex-1">
+              <view class="w-140">
+                <tm-text color="grey" :font-size="26" label="反馈描述："></tm-text>
               </view>
-            </template>
-          </tm-card>
+              <tm-text :font-size="26" _class="text-overflow-2 word-break" :label="item.remarks"></tm-text>
+            </view>
+          </tm-sheet>
         </template>
       </template>
       <template v-slot:footer>
@@ -35,7 +41,10 @@ import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCard from '@/tmui/components/tm-card/tm-card.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmResult from '@/tmui/components/tm-result/tm-result.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
+
 import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
 
 import { onLoad, onShow } from '@dcloudio/uni-app'
