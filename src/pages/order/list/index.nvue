@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:29:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-27 09:58:17
+ * @LastEditTime: 2023-05-05 13:21:01
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\list\index.nvue
  * @Description: 
  * 
@@ -16,7 +16,7 @@
         <view>
           <tm-navbar title="我的订单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
           <tm-sheet :margin="[0, 0]" :padding="[20, 30]">
-            <tm-input prefix="tmicon-search" searchLabel="搜索" placeholderStyle="fontSize: 10rpx;" focusColor="green" placeholder="订单编号"></tm-input>
+            <tm-input prefix="tmicon-search" searchLabel="搜索" placeholderStyle="fontSize: 10rpx;" v-model="searchValue" focusColor="green" placeholder="订单编号" @search="onSearch"></tm-input>
           </tm-sheet>
           <tm-tabs
             :list="tabsTitle"
@@ -108,7 +108,7 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { computed, ref } from 'vue'
 import { useAppHook } from '@/store'
 import { cancelOrder, pageOrderList } from '@/api/order'
-import { confirm } from '@/utils/dialog'
+import { confirm, message } from '@/utils/dialog'
 import { rushOrder, receiverOrder } from '@/api/order'
 const tabsTitle = ref([
   { key: '0', title: '全部' },
@@ -117,6 +117,9 @@ const tabsTitle = ref([
   { key: '3', title: '待收货' },
   { key: '4', title: '已完成' }
 ])
+
+const statusArray = ['待付款', '待发货', '待收货', '已完成']
+
 const appStore = useAppHook()
 const _width = computed(() => {
   return uni.$tm.u.torpx(appStore.getWindowWidth())
@@ -125,6 +128,7 @@ const paging = ref<any>(null)
 const tabActiveRef = ref<string>('0')
 let orderList = ref<Order.OrderResult[]>([])
 const reloadValue = ref<boolean>(false) // 页面是否刷新?重载
+const searchValue = ref<string>('')
 
 const queryList = (pageNo: number, pageSize: number) => {
   pageOrderList(pageNo, pageSize, tabActiveRef.value || '0', '0')
@@ -145,16 +149,7 @@ const tabschange = (key: string | number) => {
 }
 
 const formateStatus = (status: number) => {
-  switch (status) {
-    case 1:
-      return '待付款'
-    case 2:
-      return '待发货'
-    case 3:
-      return '待收货'
-    default:
-      return '已完成'
-  }
+  return statusArray[status - 1]
 }
 
 onLoad((opts: any) => {
@@ -178,7 +173,6 @@ const onDetailClick = (orderId: string) => {
       acceptDataFromDetail(data: any) {
         const { refresh } = data
         reloadValue.value = refresh
-        refreshCount()
       }
     }
   })
@@ -224,6 +218,26 @@ const onRefundOrder = (orderId: string) => {
           return
         }
         reloadValue.value = true
+      }
+    }
+  })
+}
+
+const onSearch = () => {
+  if (!searchValue.value) {
+    message({
+      title: '搜索为空',
+      icon: 'error'
+    })
+    return
+  }
+
+  uni.navigateTo({
+    url: '/pages/order/search/index?sence=0&val=' + searchValue.value,
+    events: {
+      acceptDataFromDetail(data: any) {
+        const { refresh } = data
+        reloadValue.value = refresh
       }
     }
   })

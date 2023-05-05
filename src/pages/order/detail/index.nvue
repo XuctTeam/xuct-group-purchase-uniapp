@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:10:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-04 18:33:49
+ * @LastEditTime: 2023-05-05 13:10:17
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\detail\index.nvue
  * @Description: 
  * 
@@ -332,7 +332,7 @@ const refreshAndBack = (back: boolean) => {
 const setRefreshPage = () => {
   let pages = getCurrentPages() // 当前页
   let beforePage = pages[pages.length - 2] // 上个页面
-  if (beforePage !== undefined && beforePage.route === 'pages/order/list/index') {
+  if (beforePage !== undefined && (beforePage.route === 'pages/order/list/index' || beforePage.route === 'pages/order/search/index')) {
     const channel = $instance.value?.getOpenerEventChannel()
     channel.emit('acceptDataFromDetail', {
       refresh: true

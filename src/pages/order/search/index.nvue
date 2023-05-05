@@ -1,0 +1,189 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-05-05 10:28:18
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-05-05 13:19:03
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\search\index.nvue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
+<template>
+  <tm-app>
+    <z-paging
+      ref="paging"
+      v-model="orderList"
+      @query="queryList"
+      :auto="false"
+      autoShowBackToTop
+      loadingFullFixed
+      autoShowSystemLoading
+      safeAreaInsetBottom
+      autoScrollToTopWhenReload
+      autoCleanListWhenReload
+    >
+      <template #top>
+        <view>
+          <tm-navbar title="我的订单" color="#32CD32" fontColor="#fff" blur :before-back="onBeforeBack"></tm-navbar>
+          <tm-sheet :margin="[0, 0]" :padding="[20, 30]">
+            <tm-input prefix="tmicon-search" searchLabel="搜索" placeholderStyle="fontSize: 10rpx;" v-model="searchValue" focusColor="green" placeholder="订单编号" @search="onSearch"></tm-input>
+          </tm-sheet>
+        </view>
+      </template>
+      <view v-for="(item, index) in orderList" :key="index">
+        <tm-card :status="formateStatus(item.status)" :margin="[10, 10]" :title="`编号:${item.id}`" statusColor="green">
+          <template v-slot:content>
+            <view class="pa-10" @click="onDetailClick(item.id)">
+              <view v-for="(i, ind) in item.items" :key="ind" class="flex flex-row pt-10 pb-10">
+                <tm-image :width="160" :height="160" :round="4" :src="i.goodFirstDrawing"></tm-image>
+                <view class="flex-card-item-right">
+                  <tm-text _class="text-overflow-2" :label="i.goodName" />
+                  <view class="flex flex-row flex-row-center-between">
+                    <tm-text color="orange" :label="`单位：${i.goodUnit}`" />
+                    <tm-text color="grey" :label="`×${i.num}`" />
+                  </view>
+                </view>
+              </view>
+              <tm-divider />
+              <view class="flex flex-row flex-row-center-between pa-10">
+                <tm-text :font-size="26" color="grey" label="共计商品"></tm-text>
+                <tm-text :font-size="26" color="grey" :label="`×${item.goodNum}`"></tm-text>
+              </view>
+            </view>
+          </template>
+          <template v-slot:action>
+            <view class="flex flex-row flex-row-center-end flex-1">
+              <template v-if="item.status !== 4">
+                <template v-if="item.status === 1">
+                  <tm-button :round="24" size="small" :margin="[24, 0]" label="付款" :font-size="24" color="green"></tm-button>
+                  <tm-button :round="24" size="small" label="取消订单" :font-size="24" color="orange"></tm-button>
+                </template>
+                <template v-if="item.status === 2 || item.status === 3">
+                  <tm-button :round="24" size="small" :margin="[24, 0]" :label="item.rush ? '已催单' : '催单'" :disabled="!!item.rush" :font-size="24" color="orange"></tm-button>
+                  <tm-button
+                    v-if="item.status === 2"
+                    :round="24"
+                    size="small"
+                    :label="item.refundStatus !== 3 ? '申请退单' : '已撤退单'"
+                    :disabled="item.refundStatus === 3"
+                    :font-size="24"
+                    color="green"
+                  ></tm-button>
+                  <tm-button v-else :round="24" size="small" :margin="[24, 0]" label="收货" :font-size="24" color="green"></tm-button>
+                </template>
+              </template>
+              <template v-else>
+                <tm-button :round="24" size="small" :margin="[24, 0]" label="删除" :font-size="24" color="white"></tm-button>
+              </template>
+            </view>
+          </template>
+        </tm-card>
+      </view>
+    </z-paging>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import { ref, getCurrentInstance } from 'vue'
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmInput from '@/tmui/components/tm-input/tm-input.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmCard from '@/tmui/components/tm-card/tm-card.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import tmImage from '@/tmui/components/tm-image/tm-image.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
+
+import { onLoad, onShow } from '@dcloudio/uni-app'
+import { searchList } from '@/api/order'
+import { nextTick } from 'process'
+const searchValue = ref<string>('')
+const senceValue = ref<number>(0)
+
+const $instance = ref<any>(getCurrentInstance()?.proxy)
+const paging = ref<any>(null)
+let orderList = ref<Order.OrderResult[]>([])
+const reloadValue = ref<boolean>(false)
+const parentReloadValue = ref<boolean>(false)
+
+const queryList = (pageNo: number, pageSize: number) => {
+  searchList(pageNo, pageSize, senceValue.value, searchValue.value)
+    .then((res) => {
+      paging.value.complete(res.data.list)
+    })
+    .catch((err: any) => {
+      console.log(err)
+      paging.value.complete(false)
+    })
+    .finally(() => {
+      reloadValue.value = false
+    })
+}
+
+onLoad((opts: any) => {
+  const { val, sence } = opts
+  senceValue.value = sence
+  searchValue.value = val
+  nextTick(() => {
+    initData()
+  })
+})
+
+onShow(() => {
+  if (reloadValue.value) {
+    initData()
+  }
+})
+
+const initData = () => {
+  paging.value.reload()
+}
+
+const onSearch = () => {
+  initData()
+}
+
+const formateStatus = (status: number) => {
+  switch (status) {
+    case 1:
+      return '待付款'
+    case 2:
+      return '待发货'
+    case 3:
+      return '待收货'
+    default:
+      return '已完成'
+  }
+}
+
+const onDetailClick = (orderId: string) => {
+  uni.navigateTo({
+    url: '/pages/order/detail/index?orderId=' + orderId,
+    events: {
+      acceptDataFromDetail(data: any) {
+        const { refresh } = data
+        reloadValue.value = refresh
+        parentReloadValue.value = refresh
+      }
+    }
+  })
+}
+
+const onBeforeBack = () => {
+  if (parentReloadValue.value) {
+    setRefreshPage()
+  }
+  return true
+}
+
+const setRefreshPage = () => {
+  let pages = getCurrentPages() // 当前页
+  let beforePage = pages[pages.length - 2] // 上个页面
+  if (beforePage !== undefined && beforePage.route === 'pages/order/list/index') {
+    const channel = $instance.value?.getOpenerEventChannel()
+    channel.emit('acceptDataFromDetail', {
+      refresh: true
+    })
+  }
+}
+</script>

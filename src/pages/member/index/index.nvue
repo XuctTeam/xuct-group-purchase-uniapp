@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-15 22:02:25
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-28 16:20:08
+ * @LastEditTime: 2023-05-05 09:05:55
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -243,7 +243,8 @@ const serviceItems = ref([
   {
     name: '已删订单',
     icon: '/static/images/me-order-delete.png',
-    code: 'delorder'
+    code: 'delorder',
+    url: '/pages/order/deleted/index'
   },
   {
     name: '个人设置',

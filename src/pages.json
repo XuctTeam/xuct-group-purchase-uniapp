@@ -6,7 +6,7 @@
   },
   "pages": [
     {
-      "path": "pages/member/setting/index",
+      "path": "pages/order/list/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -14,15 +14,7 @@
         "transparentTitle": "always"
       }
     },
-    {
-      "path": "pages/member/index/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
+
     {
       "path": "pages/cart/index",
       "style": {
@@ -32,15 +24,7 @@
         "transparentTitle": "always"
       }
     },
-    {
-      "path": "pages/order/list/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
+
     {
       "path": "pages/order/refund/list",
       "style": {
@@ -62,6 +46,24 @@
     },
     {
       "path": "pages/good/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/member/index/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/member/setting/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -150,7 +152,15 @@
         "transparentTitle": "always"
       }
     },
-
+    {
+      "path": "pages/order/search/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
     {
       "path": "pages/order/evaluate/list",
       "style": {
@@ -189,6 +199,15 @@
     },
     {
       "path": "pages/order/detail/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/order/deleted/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",

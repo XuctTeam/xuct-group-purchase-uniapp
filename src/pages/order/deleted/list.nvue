@@ -1,0 +1,157 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-04-25 10:38:54
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-05-05 09:03:32
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\deleted\list.nvue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
+<template>
+  <tm-app>
+    <z-paging ref="paging" v-model="orderList" @query="queryList" autoShowBackToTop loadingFullFixed autoShowSystemLoading safeAreaInsetBottom autoScrollToTopWhenReload autoCleanListWhenReload>
+      <!-- 之后-vue3 -->
+      <template #top>
+        <tm-navbar title="我的退单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+      </template>
+      <view v-for="(item, index) in orderList" :key="index">
+        <tm-card :status="formateStatus(item.refundStatus)" :margin="[10, 10]" :title="`编号:${item.id}`" statusColor="green">
+          <template v-slot:content>
+            <view class="pa-10" @click="onDetailClick(item.id)">
+              <view v-for="(i, ind) in item.items" :key="ind" class="flex flex-row pt-10 pb-10">
+                <tm-image :width="160" :height="160" :round="4" :src="i.goodFirstDrawing"></tm-image>
+                <view class="flex-card-item-right">
+                  <tm-text _class="text-overflow-2" :label="i.goodName" />
+                  <view class="flex flex-row flex-row-center-between">
+                    <tm-text color="orange" :label="`单位：${i.goodUnit}`" />
+                    <tm-text color="grey" :label="`×${i.num}`" />
+                  </view>
+                </view>
+              </view>
+              <tm-divider />
+              <view class="flex flex-row flex-row-center-between pa-10">
+                <tm-text :font-size="26" color="grey" label="共计商品"></tm-text>
+                <tm-text :font-size="26" color="grey" :label="`×${item.goodNum}`"></tm-text>
+              </view>
+            </view>
+          </template>
+          <template v-slot:action>
+            <view class="flex flex-row flex-row-center-end flex-1">
+              <template v-if="item.refundStatus === 1">
+                <tm-button :round="24" size="small" label="取消退单" :font-size="24" color="orange" @click="onCancelRefundOrder(item.id)"></tm-button>
+              </template>
+              <template v-else>
+                <tm-button :round="24" size="small" :margin="[24, 0]" label="删除" :font-size="24" color="white" @click="onCancelOrder(item.id)"></tm-button>
+              </template>
+            </view>
+          </template>
+        </tm-card>
+      </view>
+    </z-paging>
+  </tm-app>
+</template>
+<script lang="ts" setup>
+import { ref, computed } from 'vue'
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmCard from '@/tmui/components/tm-card/tm-card.vue'
+import tmInput from '@/tmui/components/tm-input/tm-input.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import tmImage from '@/tmui/components/tm-image/tm-image.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
+
+import { useAppHook } from '@/store'
+import { pageOrderList, cancelRefundOrder, cancelOrder } from '@/api/order'
+import { onShow } from '@dcloudio/uni-app'
+import { confirm } from '@/utils/dialog'
+
+const appStore = useAppHook()
+const _width = computed(() => {
+  return uni.$tm.u.torpx(appStore.getWindowWidth())
+})
+const paging = ref<any>(null)
+const tabActiveRef = ref<string>('1')
+let orderList = ref<Order.OrderResult[]>([])
+const reloadValue = ref<boolean>(false)
+
+const tabsTitle = ref([
+  { key: '1', title: '退单中' },
+  { key: '2', title: '已退单' }
+])
+
+const queryList = (pageNo: number, pageSize: number) => {
+  pageOrderList(pageNo, pageSize, '0', tabActiveRef.value || '1')
+    .then((res) => {
+      paging.value.complete(res.data.list)
+    })
+    .catch((err: any) => {
+      //如果请求失败写paging.value.complete(false)，会自动展示错误页面
+      //注意，每次都需要在catch中写这句话很麻烦，z-paging提供了方案可以全局统一处理
+      //在底层的网络请求抛出异常时，写uni.$emit('z-paging-error-emit');即可
+      console.log(err)
+      paging.value.complete(false)
+    })
+}
+
+onShow(() => {
+  if (reloadValue.value) {
+    reloadData()
+  }
+})
+
+const onDetailClick = (orderId: string) => {
+  uni.navigateTo({
+    url: '/pages/order/refund/detail?orderId=' + orderId,
+    events: {
+      acceptDataFromDetail(data: any) {
+        const { refresh } = data
+        reloadValue.value = refresh
+      }
+    }
+  })
+}
+
+const onCancelOrder = (orderId: string) => {
+  confirm({
+    title: '确定删除吗？',
+    success: () => {
+      _cancelOrder(orderId)
+    },
+    fail: () => {}
+  })
+}
+
+const onCancelRefundOrder = (orderId: string) => {
+  confirm({
+    title: '确定取消申请吗？',
+    success: () => {
+      cancelRefundOrder(orderId)
+        .then(() => {
+          reloadData()
+        })
+        .catch((err: any) => {
+          console.log(err)
+        })
+    },
+    fail: () => {}
+  })
+}
+
+const _cancelOrder = (orderId: string) => {
+  cancelOrder(orderId)
+    .then(() => {
+      reloadData()
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+}
+
+const reloadData = () => {
+  paging.value.reload()
+  if (reloadValue.value) {
+    reloadValue.value = false
+  }
+}
+</script>

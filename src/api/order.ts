@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-27 17:04:27
+ * @LastEditTime: 2023-05-05 10:59:30
  * @FilePath: \xuct-group-purchase-uniapp\src\api\order.ts
  * @Description:
  *
@@ -60,6 +60,23 @@ export const pageOrderList = (pageNo: number, pageSize: number, status: string, 
     pageNo,
     pageSize,
     refundStatus
+  })
+}
+
+/**
+ * 分页搜索查询
+ * @param pageNo
+ * @param pageSize
+ * @param refund
+ * @param word
+ * @returns
+ */
+export const searchList = (pageNo: number, pageSize: number, refund: number, word: string) => {
+  return request.get<API.PageResult<Order.OrderResult>>('/api/v1/order/search', {
+    pageNo,
+    pageSize,
+    refund,
+    word
   })
 }
 
