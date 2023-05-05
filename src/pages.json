@@ -6,7 +6,7 @@
   },
   "pages": [
     {
-      "path": "pages/order/list/index",
+      "path": "pages/member/index/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -14,19 +14,8 @@
         "transparentTitle": "always"
       }
     },
-
     {
       "path": "pages/cart/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-
-    {
-      "path": "pages/order/refund/list",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -46,15 +35,6 @@
     },
     {
       "path": "pages/good/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-    {
-      "path": "pages/member/index/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -153,7 +133,25 @@
       }
     },
     {
+      "path": "pages/order/list/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
       "path": "pages/order/search/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/order/refund/list",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",

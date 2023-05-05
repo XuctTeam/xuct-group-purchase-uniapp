@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:29:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-05 13:21:01
+ * @LastEditTime: 2023-05-05 13:48:43
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\list\index.nvue
  * @Description: 
  * 
@@ -16,7 +16,7 @@
         <view>
           <tm-navbar title="我的订单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
           <tm-sheet :margin="[0, 0]" :padding="[20, 30]">
-            <tm-input prefix="tmicon-search" searchLabel="搜索" placeholderStyle="fontSize: 10rpx;" v-model="searchValue" focusColor="green" placeholder="订单编号" @search="onSearch"></tm-input>
+            <tm-input prefix="tmicon-search" searchLabel="搜索" placeholderStyle="fontSize: 10rpx;" v-model="searchValue" focusColor="green" placeholder="编号或商品名称" @search="onSearch"></tm-input>
           </tm-sheet>
           <tm-tabs
             :list="tabsTitle"
@@ -142,6 +142,9 @@ const queryList = (pageNo: number, pageSize: number) => {
       console.log(err)
       paging.value.complete(false)
     })
+    .finally(() => {
+      reloadValue.value = false
+    })
 }
 
 const tabschange = (key: string | number) => {
@@ -191,7 +194,7 @@ const onCancelOrder = (orderId: string) => {
 const onRushOrderOrder = (orderId: string) => {
   rushOrder(orderId)
     .then(() => {
-      reloadData
+      reloadData()
     })
     .catch((err: any) => {
       console.log(err)
@@ -264,9 +267,6 @@ const _receiverOrder = (orderId: string) => {
 }
 const reloadData = () => {
   paging.value.reload()
-  if (reloadValue.value) {
-    reloadValue.value = false
-  }
 }
 </script>
 <style>
