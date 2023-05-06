@@ -15,7 +15,7 @@
         <tm-input v-model="searchValue" prefix="tmicon-search" searchLabel="搜索" focusColor="green" placeholder="按名字或电话搜索" @search="onSearch"></tm-input>
       </tm-sheet>
       <view class="flex flex-row flex-row-center-center" v-if="addressList.length === 0 && !load">
-        <tm-result :showBtn="false" status="empty" color="green" subTitle="请稍后重试" title="暂无数据" />
+        <uv-empty></uv-empty>
       </view>
       <view v-else>
         <tm-sheet v-for="(item, index) in addressList" :key="index" :round="3" :shadow="2" :margin="[10]" @click="onSelect(item.id ?? '')">
@@ -50,7 +50,7 @@
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
-import tmResult from '@/tmui/components/tm-result/tm-result.vue'
+import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-23 11:11:15
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-05 14:28:21
+ * @LastEditTime: 2023-05-06 16:11:54
  * @FilePath: \xuct-group-purchase-uniapp\src\components\uv-bottom-bar-page\uv-bottom-bar-page.vue
  * @Description: 
  * 
@@ -53,8 +53,8 @@ if (win_bottom > 0) {
 }
 
 const _totalBarHeight = computed(() => {
-  if (_showSafe.value) return 80
-  return 65
+  if (_showSafe.value) return 90
+  return 75
 })
 
 const _width = computed(() => appStore.getWindowWidth() || 750)

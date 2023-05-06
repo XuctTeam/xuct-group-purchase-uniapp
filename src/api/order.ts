@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-05 18:47:56
+ * @LastEditTime: 2023-05-06 13:26:04
  * @FilePath: \xuct-group-purchase-uniapp\src\api\order.ts
  * @Description:
  *
@@ -157,4 +157,11 @@ export const evaluateList = () => {
  */
 export const evaluate = (data: Order.EvaluateResult) => {
   return request.post('/api/v1/order/evaluate', { ...data })
+}
+
+/**
+ * 删除订单列表
+ */
+export const deletedList = () => {
+  return request.get<Order.OrderItemResult[]>('/api/v1/order/deleted/list')
 }

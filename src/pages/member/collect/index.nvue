@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-19 19:01:43
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-28 13:53:28
+ * @LastEditTime: 2023-05-06 15:13:42
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\collect\index.nvue
  * @Description: 
  * 
@@ -12,9 +12,9 @@
   <tm-app>
     <tm-navbar title="我的收藏" color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <template v-if="collectData.length === 0 && !loadValue">
-      <tm-result :showBtn="false" color="green" title="空空如也哦~" subTitle="快去收藏 T.T"></tm-result>
+      <uv-empty></uv-empty>
     </template>
-    <template v-else>
+    <view class="safe-area" v-else>
       <tm-card v-for="(item, index) in collectData" :key="index" :margin="[10]">
         <template v-slot:title>
           <tm-text _class="text-overflow-2" label="收藏日期"></tm-text>
@@ -39,7 +39,7 @@
           </view>
         </template>
       </tm-card>
-    </template>
+    </view>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -49,8 +49,9 @@ import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmCard from '@/tmui/components/tm-card/tm-card.vue'
-import tmResult from '@/tmui/components/tm-result/tm-result.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import uvEmpty from '@/components/uv-empty/uv-empty.vue'
+
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'

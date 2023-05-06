@@ -2,17 +2,20 @@
  * @Author: Derek Xu
  * @Date: 2023-04-25 10:38:54
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-05 18:48:01
- * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\deleted\list.nvue
+ * @LastEditTime: 2023-05-06 15:17:18
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\deleted\index.nvue
  * @Description: 
  * 
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
 -->
 <template>
   <tm-app>
-    <tm-navbar title="我的退单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <view v-for="(item, index) in orderList" :key="index">
-      <tm-card :margin="[10, 10]" :title="`编号:${item.id}`" statusColor="green">
+    <tm-navbar title="删除订单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <template v-if="!load && orderList.length === 0">
+      <uv-empty></uv-empty>
+    </template>
+    <view class="safe-area" v-else>
+      <tm-card :margin="[10, 10]" :title="`编号:${item.id}`" statusColor="green" v-for="(item, index) in orderList" :key="index">
         <template v-slot:content>
           <view class="pa-10">
             <view v-for="(i, ind) in item.items" :key="ind" class="flex flex-row pt-10 pb-10">
@@ -32,33 +35,43 @@
             </view>
           </view>
         </template>
-        <template v-slot:action>
-          <view class="flex flex-row flex-row-center-end flex-1">
-            <template v-if="item.refundStatus === 1">
-              <tm-button :round="24" size="small" label="取消退单" :font-size="24" color="orange" @click="onCancelRefundOrder(item.id)"></tm-button>
-            </template>
-            <template v-else>
-              <tm-button :round="24" size="small" :margin="[24, 0]" label="删除" :font-size="24" color="white" @click="onCancelOrder(item.id)"></tm-button>
-            </template>
-          </view>
-        </template>
       </tm-card>
     </view>
   </tm-app>
 </template>
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCard from '@/tmui/components/tm-card/tm-card.vue'
-import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
+import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 
-import { pageOrderList, cancelRefundOrder, cancelOrder } from '@/api/order'
-import { onShow } from '@dcloudio/uni-app'
-import { confirm } from '@/utils/dialog'
 import { reactive } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { loading, hideLoading } from '@/utils/dialog'
+import { deletedList } from '@/api/order'
 
+const load = ref<boolean>(true)
 const orderList = reactive<Order.OrderResult[]>([])
+
+onLoad(() => {
+  load.value = true
+  loading()
+  deletedList()
+    .then((res: any) => {
+      orderList.length = 0
+      orderList.push(...res.data)
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+    .finally(() => {
+      load.value = false
+      hideLoading()
+    })
+})
 </script>
+<style></style>

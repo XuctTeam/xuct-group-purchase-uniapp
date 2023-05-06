@@ -4,7 +4,7 @@
     <uv-bottom-bar-page>
       <template v-if="!load">
         <template v-if="opinions.length === 0">
-          <tm-result :showBtn="false" color="green" subTitle="您还未反馈任何内容 T.T"></tm-result>
+          <uv-empty></uv-empty>
         </template>
         <template v-else>
           <tm-sheet :round="4" :margin="[10]" v-for="(item, i) in opinions" @click="onDetailClick(item.id ?? '')">
@@ -40,7 +40,7 @@ import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCard from '@/tmui/components/tm-card/tm-card.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
-import tmResult from '@/tmui/components/tm-result/tm-result.vue'
+import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'

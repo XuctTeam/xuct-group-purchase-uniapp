@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-21 18:33:48
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-28 13:47:53
+ * @LastEditTime: 2023-05-06 15:57:39
  * @FilePath: \xuct-group-purchase-uniapp\src\types\good.d.ts
  * @Description:
  *
@@ -21,6 +21,7 @@ declare namespace Good {
     collect?: boolean
     browse: number
     unit?: string
+    sell?: number
   }
 
   type Cart = {

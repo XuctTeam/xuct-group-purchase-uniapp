@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-04 18:32:20
+ * @LastEditTime: 2023-05-06 15:36:17
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -15,7 +15,7 @@
       <tm-result color="green" title="购物车空空如也~" subTitle="登录后查看" btnText="点我登录" @click="goLoginClick"></tm-result>
     </view>
     <view v-else class="content-top">
-      <tm-result v-if="cartGoods.length === 0 && !load" color="green" icon="tmicon-shopping-cart-fill" title="空空如也哦~" subTitle="购物车快饿瘪了 T.T" btnText="去购物" @click="toHome"></tm-result>
+      <tm-result v-if="cartGoods.length === 0 && !load" color="green" icon="tmicon-shopping-cart-fill" title="~空空如也哦~" subTitle="购物车快饿瘪了 T.T" btnText="去购物" @click="toHome"></tm-result>
       <view v-else>
         <view class="top">
           <tm-text :font-size="24" _class="font-weight-b" label="购物车"></tm-text>
@@ -42,7 +42,7 @@
         </view>
       </view>
     </view>
-    
+
     <view class="button-bottom actions fixed l-0 b-0" v-if="logged">
       <view class="flex flex-1 flex-row flex-row-center-between pl-20 pr-20">
         <template>
@@ -204,7 +204,7 @@ const initData = () => {
     .then((res) => {
       allCheckStatus.value = false
       cartGoods.length = 0
-      cartGoods.push(...res.data, ...res.data,...res.data,...res.data,...res.data,...res.data,...res.data)
+      cartGoods.push(...res.data)
     })
     .catch((err: any) => {
       console.log(err)

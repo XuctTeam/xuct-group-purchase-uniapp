@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-20 09:48:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-26 00:21:40
+ * @LastEditTime: 2023-05-06 15:10:19
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\browse\index.nvue
  * @Description: 
  * 
@@ -10,11 +10,11 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="我的浏览" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <tm-navbar title="浏览历史" color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <template v-if="browseData.length === 0 && !loadValue">
-      <tm-result :showBtn="false" color="green" title="空空如也哦~" subTitle="快去购买 T.T"></tm-result>
+      <uv-empty></uv-empty>
     </template>
-    <template v-else>
+    <view class="safe-area" v-else>
       <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" v-for="(item, index) in browseData" :key="index">
         <tm-slide-switch :width="700" :height="140">
           <view class="flex flex-row flex-1" @click="itemClick(item.id)">
@@ -35,7 +35,7 @@
           </template>
         </tm-slide-switch>
       </tm-sheet>
-    </template>
+    </view>
   </tm-app>
 </template>
 
@@ -47,7 +47,7 @@ import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmSlideSwitch from '@/tmui/components/tm-slide-switch/tm-slide-switch.vue'
-import tmResult from '@/tmui/components/tm-result/tm-result.vue'
+import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
 import { browseList, deleteBrowse } from '@/api/good'

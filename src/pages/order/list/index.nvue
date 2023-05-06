@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:29:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-05 13:48:43
+ * @LastEditTime: 2023-05-06 14:11:00
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\list\index.nvue
  * @Description: 
  * 
@@ -10,7 +10,18 @@
 -->
 <template>
   <tm-app>
-    <z-paging ref="paging" v-model="orderList" @query="queryList" autoShowBackToTop loadingFullFixed autoShowSystemLoading safeAreaInsetBottom autoScrollToTopWhenReload autoCleanListWhenReload>
+    <z-paging
+      ref="paging"
+      v-model="orderList"
+      @query="queryList"
+      autoShowBackToTop
+      loadingFullFixed
+      autoShowSystemLoading
+      safeAreaInsetBottom
+      autoScrollToTopWhenReload
+      autoCleanListWhenReload
+      empty-view-text="~空空如也哦~"
+    >
       <!-- 之后-vue3 -->
       <template #top>
         <view>

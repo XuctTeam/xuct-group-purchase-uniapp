@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-23 13:46:26
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-04 14:44:23
+ * @LastEditTime: 2023-05-06 14:11:09
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\evaluate\list.nvue
  * @Description: 
  * 
@@ -11,7 +11,7 @@
 <template>
   <tm-app>
     <tm-navbar title="评价列表" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <tm-result v-if="orderItems.length === 0 && !load" color="green" title="空空如也哦~" subTitle="快去完成订单吧 T.T" :showBtn="false"></tm-result>
+    <tm-result v-if="orderItems.length === 0 && !load" color="green" title="~空空如也哦~" subTitle="快去完成订单吧 T.T" :showBtn="false"></tm-result>
     <tm-card v-else v-for="(item, i) in orderItems" :key="i" :status="formatData(item.createTime)" :title="item.orderId" :margin="[10]" statusColor="green">
       <view class="flex flex-row" @click="detailClick(item.goodId)">
         <tm-image :width="130" :height="130" :round="4" :src="item.goodFirstDrawing" />

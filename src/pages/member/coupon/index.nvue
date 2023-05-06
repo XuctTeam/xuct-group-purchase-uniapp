@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-27 09:30:05
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-28 15:39:31
+ * @LastEditTime: 2023-05-06 15:09:49
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\coupon\index.nvue
  * @Description: 
  * 
@@ -26,7 +26,7 @@
     </tm-tabs>
 
     <template v-if="!loadValue && coupons.length === 0">
-      <tm-result :showBtn="false" color="green" title="空空如也哦~" subTitle="还未领取任何优惠券 T.T"></tm-result>
+      <uv-empty></uv-empty>
     </template>
     <view class="mt-10" v-else>
       <tm-coupon
@@ -57,7 +57,7 @@ import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCoupon from '@/tmui/components/tm-coupon/tm-coupon.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmTabs from '@/tmui/components/tm-tabs/tm-tabs.vue'
-import tmResult from '@/tmui/components/tm-result/tm-result.vue'
+import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { useAppHook } from '@/store'

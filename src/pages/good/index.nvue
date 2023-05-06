@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-04 10:58:37
+ * @LastEditTime: 2023-05-06 15:57:55
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\index.nvue
  * @Description: 
  * 
@@ -14,12 +14,12 @@
     <uv-bottom-bar-page :show-footer="!!logged">
       <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
       <tm-sheet :margin="[10, 10, 10, 10]" :height="140" :round="4" :shadow="4">
-        <view class="title">{{ name }}</view>
+        <view class="title text-overflow-2">{{ name }}</view>
         <view class="flex flex-row flex-row-center-between mt-20">
           <view class="flex flex-row">
             <tm-text color="grey" :font-size="26" label="库存" />
             <view class="ml-8">
-              <tm-text color="orange" :font-size="26" label="30" />
+              <tm-text color="orange" :font-size="26" :label="inventoryValue" />
             </view>
           </view>
           <view class="flex flex-row">
@@ -29,9 +29,9 @@
             </view>
           </view>
           <view class="flex flex-row">
-            <tm-text color="grey" :font-size="26" label="销量"></tm-text>
+            <tm-text color="grey" :font-size="26" label="成交量"></tm-text>
             <view class="ml-8">
-              <tm-text color="orange" :font-size="26" label="30" />
+              <tm-text color="orange" :font-size="26" :label="sell" />
             </view>
           </view>
         </view>
@@ -89,7 +89,9 @@ const idValue = ref<string>('')
 const detail = ref<string>('')
 const name = ref<string>('')
 const browse = ref<number>(1)
+const sell = ref<number>(0)
 const swiperImages: string[] = reactive([])
+const inventoryValue = ref<number>(0)
 const userCollect = ref<boolean>(false)
 const addLoading = ref<boolean>(false)
 
@@ -142,6 +144,8 @@ const _loadGood = () => {
       name.value = good.name
       userCollect.value = good.collect ?? false
       browse.value = good.browse
+      inventoryValue.value = good.inventory
+      sell.value = good.sell ?? 0
     })
     .catch((err) => {
       console.log(err)
@@ -183,9 +187,10 @@ const setPageRefresh = () => {
 </script>
 <style>
 .title {
-  font-size: 30upx;
+  font-size: 30rpx;
   font-weight: bold;
   color: black;
+  height: 80rpx;
 }
 
 .between {
