@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 16:24:00
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-04 15:11:04
+ * @LastEditTime: 2023-05-08 13:55:58
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\index.nvue
  * @Description: 
  * 
@@ -44,7 +44,15 @@
         </view>
       </template>
     </uv-bottom-bar-page>
-    <tm-city-picker v-model="address.city" v-model:model-str="address.cityStr" v-model:show="showCity" selectedModel="name" :default-value="address.city" color="green"></tm-city-picker>
+    <tm-city-picker
+      v-model="address.city"
+      v-model:model-str="address.cityStr"
+      v-model:show="showCity"
+      selectedModel="name"
+      :default-value="address.city"
+      color="green"
+      :city="cityData"
+    ></tm-city-picker>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -64,6 +72,7 @@ import { saveUserAddress, getUserAddress, deleteUserAddress } from '@/api/user'
 import { ref, reactive, getCurrentInstance } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { confirm, loading, hideLoading, message } from '@/utils/dialog'
+import { cityData } from '@/constant/city'
 
 const $instance = ref<any>(getCurrentInstance()?.proxy)
 const form = ref<InstanceType<typeof tmForm> | null>(null)
@@ -143,7 +152,6 @@ const onConfirm = (e: any) => {
   if (!validate) {
     return
   }
-
   const { city, cityStr, ..._address } = data
   if (city[0]) {
     _address.provinceName = city[0]
@@ -154,6 +162,7 @@ const onConfirm = (e: any) => {
   if (city[2]) {
     _address.countyName = city[2]
   }
+
   loading()
   saveUserAddress(_address)
     .then(() => {

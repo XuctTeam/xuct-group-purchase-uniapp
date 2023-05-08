@@ -19,7 +19,7 @@ declare namespace Good {
     inventory: number
     detail?: string
     collect?: boolean
-    browse: number
+    browse?: number
     unit?: string
     sell?: number
   }

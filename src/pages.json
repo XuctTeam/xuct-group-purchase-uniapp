@@ -6,6 +6,16 @@
   },
   "pages": [
     {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
       "path": "pages/member/index/index",
       "style": {
         "navigationBarTitleText": "",
@@ -21,16 +31,6 @@
         "navigationStyle": "custom",
         "titlePenetrate": "YES",
         "transparentTitle": "always"
-      }
-    },
-    {
-      "path": "pages/index/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always",
-        "enablePullDownRefresh": true
       }
     },
     {
