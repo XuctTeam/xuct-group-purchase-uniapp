@@ -25,7 +25,16 @@
       </view>
       <template v-slot:action>
         <view class="flex flex-row flex-row-center-end flex-1">
-          <tm-button :round="24" color="green" :margin="[24, 0]" label="去评价" :font-size="24" :width="120" :height="64" @click="onEvaluateClick(item.id)"></tm-button>
+          <tm-button
+            :round="24"
+            color="green"
+            :margin="[24, 0]"
+            label="去评价"
+            :font-size="24"
+            :width="120"
+            :height="64"
+            @click="onEvaluateClick(item.id)"
+          ></tm-button>
         </view>
       </template>
     </tm-card>

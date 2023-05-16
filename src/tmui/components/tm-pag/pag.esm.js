@@ -1951,7 +1951,7 @@ const installLayerReference = (layer) => {
     if (!effect)
       return;
     if (effect.maskReferences !== void 0 && effect.maskReferences.length > 0) {
-      const maskReferences = new Array();
+      const maskReferences = [];
       effect.maskReferences.forEach((mask) => {
         const ID = mask.id;
         const result = maskMap.get(ID);

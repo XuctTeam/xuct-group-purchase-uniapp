@@ -1,6 +1,12 @@
 <template>
   <view class="waterfalls-flow">
-    <view v-for="(item, index) in data.column" :key="index" class="waterfalls-flow-column" :id="`waterfalls_flow_column_${index + 1}`" :style="{ width: w, 'margin-left': index == 0 ? 0 : m }">
+    <view
+      v-for="(item, index) in data.column"
+      :key="index"
+      class="waterfalls-flow-column"
+      :id="`waterfalls_flow_column_${index + 1}`"
+      :style="{ width: w, 'margin-left': index == 0 ? 0 : m }"
+    >
       <view class="column-value" v-for="(item2, index2) in data[`column_${index + 1}_values`]" :key="index2" @click="onClick(item2.index)">
         <view class="inner" v-if="data.seat == 1">
           <!-- #ifdef MP-WEIXIN -->
@@ -10,7 +16,16 @@
           <slot v-bind="item2"></slot>
           <!-- #endif -->
         </view>
-        <image :class="['img', { 'img-error': !item2[data.imageKey] }]" :src="item2[data.imageKey]" mode="widthFix" @load="imgLoad(item2)" @error="imgError(item2)"></image>
+        <view class="img-box">
+          <image
+            :class="['img', { 'img-error': !item2[data.imageKey] }]"
+            :src="item2[data.imageKey]"
+            mode="widthFix"
+            @load="imgLoad(item2)"
+            @error="imgError(item2)"
+          ></image>
+        </view>
+
         <view class="inner" v-if="data.seat == 2">
           <!-- #ifdef MP-WEIXIN -->
           <slot :name="`slot${item2.index}`"></slot>
@@ -109,9 +124,7 @@ async function initValue(i) {
   const minHeightRes = await getMinColumnHeight()
   data[`column_${minHeightRes.column}_values`].push({ ...data.list[i], index: i })
 }
-// onMounted(() => {
-// 	initValue(0);
-// })
+
 // 图片加载完成
 function imgLoad(item) {
   const i = item.index
@@ -122,6 +135,12 @@ function imgError(item) {
   const i = item.index
   initValue(i + 1)
   item[data.imageKey] = null
+}
+
+const reset = () => {
+  for (let i = 0; i < data.column; i++) {
+    data[`column_${i + 1}_values`].length = 0
+  }
 }
 // 监听数据的变化
 watch(
@@ -141,6 +160,10 @@ watch(
 const onClick = (e) => {
   emits('click', e)
 }
+
+defineExpose({
+  reset
+})
 </script>
 <style scoped>
 .waterfalls-flow {
@@ -154,7 +177,11 @@ const onClick = (e) => {
 .column-value {
   width: 100%;
   font-size: 0;
-  margin-top: 10px;
+}
+
+.column-value .img-box {
+  background-color: #fff;
+  padding: 10rpx;
 }
 
 .column-value .inner {
@@ -163,7 +190,6 @@ const onClick = (e) => {
 
 .column-value .img {
   width: 100%;
-  border-radius: 10px 10px 0 0;
 }
 .column-value .img .img-error {
   background: #f2f2f2

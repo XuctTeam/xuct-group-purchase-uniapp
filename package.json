@@ -31,7 +31,8 @@
     "build:mp-weixin": "uni build -p mp-weixin",
     "build:quickapp-webview": "uni build -p quickapp-webview",
     "build:quickapp-webview-huawei": "uni build -p quickapp-webview-huawei",
-    "build:quickapp-webview-union": "uni build -p quickapp-webview-union"
+    "build:quickapp-webview-union": "uni build -p quickapp-webview-union",
+    "lint": "eslint \"src/**/*.{js,jsx,vue,nvue}\" --fix"
   },
   "dependencies": {
     "@dcloudio/uni-app": "3.0.0-3070920230324001",
@@ -48,6 +49,7 @@
     "@dcloudio/uni-mp-weixin": "3.0.0-3070920230324001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-3070920230324001",
     "@vitejs/plugin-vue-jsx": "3.0.1",
+    "babel-eslint": "^10.1.0",
     "echarts": "5.4.2",
     "pinia": " 2.0.33",
     "uni-ajax": "^2.5.1",
@@ -62,7 +64,12 @@
     "@dcloudio/uni-cli-shared": "3.0.0-3070920230324001",
     "@dcloudio/vite-plugin-uni": "3.0.0-3070920230324001",
     "@types/node": "^17.0.35",
+    "@typescript-eslint/eslint-plugin": "^5.59.6",
+    "@typescript-eslint/parser": "^5.59.6",
     "autoprefixer": "10.4.14",
+    "eslint": "^8.40.0",
+    "eslint-plugin-vue": "^9.13.0",
+    "husky": "^8.0.3",
     "uni-vite-plugin-h5-prod-effect": "^1.0.1",
     "unplugin-vue-components": "0.24.1",
     "vite": "4.2.1"

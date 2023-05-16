@@ -14,7 +14,19 @@
     <tm-sheet :margin="[10, 20]" :shadow="4" :round="2">
       <tm-cell :margin="[0, 0]" bottomBorder>
         <template v-slot:label>
-          <tm-button :margin="[0]" transprent :shadow="0" class="inner-contact-class" :width="600" :height="40" color="#fff" label="官方客服" open-type="contact" @contact="contact"> </tm-button>
+          <tm-button
+            :margin="[0]"
+            transprent
+            :shadow="0"
+            class="inner-contact-class"
+            :width="600"
+            :height="40"
+            color="#fff"
+            label="官方客服"
+            open-type="contact"
+            @contact="contact"
+          >
+          </tm-button>
         </template>
       </tm-cell>
       <tm-cell :margin="[0, 0]" :titleFontSize="28" bottomBorder title="拨打电话" @click="makeCall"> </tm-cell>

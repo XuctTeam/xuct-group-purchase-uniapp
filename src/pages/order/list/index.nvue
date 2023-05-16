@@ -27,7 +27,15 @@
         <view>
           <tm-navbar title="我的订单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
           <tm-sheet :margin="[0, 0]" :padding="[20, 30]">
-            <tm-input prefix="tmicon-search" searchLabel="搜索" placeholderStyle="fontSize: 10rpx;" v-model="searchValue" focusColor="green" placeholder="编号或商品名称" @search="onSearch"></tm-input>
+            <tm-input
+              prefix="tmicon-search"
+              searchLabel="搜索"
+              placeholderStyle="fontSize: 10rpx;"
+              v-model="searchValue"
+              focusColor="green"
+              placeholder="编号或商品名称"
+              @search="onSearch"
+            ></tm-input>
           </tm-sheet>
           <tm-tabs
             :list="tabsTitle"
@@ -90,7 +98,16 @@
                     color="green"
                     @click="onRefundOrder(item.id)"
                   ></tm-button>
-                  <tm-button v-else :round="24" size="small" :margin="[24, 0]" label="收货" :font-size="24" color="green" @click="onReciverOrder(item.id)"></tm-button>
+                  <tm-button
+                    v-else
+                    :round="24"
+                    size="small"
+                    :margin="[24, 0]"
+                    label="收货"
+                    :font-size="24"
+                    color="green"
+                    @click="onReciverOrder(item.id)"
+                  ></tm-button>
                 </template>
               </template>
               <template v-else>

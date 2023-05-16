@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-06 15:57:55
+ * @LastEditTime: 2023-05-16 18:51:32
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\index.nvue
  * @Description: 
  * 
@@ -13,25 +13,26 @@
     <tm-navbar title="商品详情" color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <uv-bottom-bar-page :show-footer="!!logged">
       <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
-      <tm-sheet :margin="[10, 10, 10, 10]" :height="140" :round="4" :shadow="4">
-        <view class="title text-overflow-2">{{ name }}</view>
+      <tm-sheet :margin="[10, 10, 10, 10]" :round="4" :shadow="4">
+        <view class="title text-overflow-2 mb-20">{{ name }}</view>
+        <view class="blurb text-overflow-2 mb-20"> {{ blurbValue }}</view>
         <view class="flex flex-row flex-row-center-between mt-20">
           <view class="flex flex-row">
-            <tm-text color="grey" :font-size="26" label="库存" />
+            <tm-text color="grey" :font-size="24" label="库存:" />
             <view class="ml-8">
-              <tm-text color="orange" :font-size="26" :label="inventoryValue" />
+              <tm-text color="orange" :font-size="24" :label="inventoryValue" />
             </view>
           </view>
           <view class="flex flex-row">
-            <tm-text color="grey" :font-size="26" label="热度"></tm-text>
+            <tm-text color="grey" :font-size="24" label="热度:"></tm-text>
             <view class="ml-8">
-              <tm-text color="orange" :font-size="26" :label="browse" />
+              <tm-text color="orange" :font-size="24" :label="browse" />
             </view>
           </view>
           <view class="flex flex-row">
-            <tm-text color="grey" :font-size="26" label="成交量"></tm-text>
+            <tm-text color="grey" :font-size="24" label="成交量:"></tm-text>
             <view class="ml-8">
-              <tm-text color="orange" :font-size="26" :label="sell" />
+              <tm-text color="orange" :font-size="24" :label="sell" />
             </view>
           </view>
         </view>
@@ -94,6 +95,7 @@ const swiperImages: string[] = reactive([])
 const inventoryValue = ref<number>(0)
 const userCollect = ref<boolean>(false)
 const addLoading = ref<boolean>(false)
+const blurbValue = ref<string>('')
 
 const store = useUserHook()
 const logged = store.logged
@@ -142,8 +144,9 @@ const _loadGood = () => {
       swiperImages.push(...swipers)
       detail.value = good.detail ?? ''
       name.value = good.name
+      blurbValue.value = good.blurb
       userCollect.value = good.collect ?? false
-      browse.value = good.browse
+      browse.value = good.browse ?? 0
       inventoryValue.value = good.inventory
       sell.value = good.sell ?? 0
     })
@@ -190,11 +193,20 @@ const setPageRefresh = () => {
   font-size: 30rpx;
   font-weight: bold;
   color: black;
-  height: 80rpx;
+}
+
+.blurb {
+  font-size: 26rpx;
+  color: grey;
 }
 
 .between {
   flex-wrap: wrap;
   align-content: space-between;
+}
+
+._img {
+  display: block !important;
+  font-size: 0;
 }
 </style>

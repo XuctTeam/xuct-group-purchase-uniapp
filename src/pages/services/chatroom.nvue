@@ -1,12 +1,26 @@
 <template>
   <tm-app>
-    <z-paging ref="paging" v-model="messageList" safeAreaInsetBottom :refresher-enabled="false" :loading-more-enabled="false" use-chat-record-mode autoShowSystemLoading>
+    <z-paging
+      ref="paging"
+      v-model="messageList"
+      safeAreaInsetBottom
+      :refresher-enabled="false"
+      :loading-more-enabled="false"
+      use-chat-record-mode
+      autoShowSystemLoading
+    >
       <!-- 之后-vue3 -->
       <template #top>
         <tm-navbar title="我的留言" color="#32CD32" fontColor="#fff" blur></tm-navbar>
       </template>
       <view class="chat" :style="{ marginBottom: _totalBarHeight + 'rpx' }">
-        <uv-chat v-for="(item, i) in messageList" :key="i" :me="item.user === userInfo.id" :avatar="item.avatar ?? '/static/images/me.png'" :nick="item.nickName ?? '用户'">
+        <uv-chat
+          v-for="(item, i) in messageList"
+          :key="i"
+          :me="item.user === userInfo.id"
+          :avatar="item.avatar ?? '/static/images/me.png'"
+          :nick="item.nickName ?? '用户'"
+        >
           <template v-slot:content>
             <uv-chat-text :text="item.content"></uv-chat-text>
           </template>

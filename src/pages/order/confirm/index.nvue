@@ -72,7 +72,18 @@
       <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 20]">
         <tm-text :font-size="26" label="备注信息"></tm-text>
         <tm-divider></tm-divider>
-        <tm-input :inputPadding="[12]" v-model="remarksValue" placeholder="备注特殊要求" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
+        <tm-input
+          :inputPadding="[12]"
+          v-model="remarksValue"
+          placeholder="备注特殊要求"
+          confirm-hold
+          showCharNumber
+          :maxlength="100"
+          :border="1"
+          color="grey-5"
+          autoHeight
+          type="textarea"
+        ></tm-input>
       </tm-sheet>
       <template v-slot:footer>
         <view class="flex flex-row flex-1 flex-row-center-between">
@@ -100,8 +111,24 @@
       </view>
     </tmDrawer>
 
-    <tm-drawer placement="bottom" v-model:show="couponWin" okColor="green" :height="800" :footHeight="140" title="优惠券" color="rgba(245, 245, 245, 1)" @ok="onCouponeChoose">
-      <tm-coupon mainColor="green" v-for="(item, i) in userCoupons" :key="i" :disable="item.used" :priceDetail="formatePrice(item)" :rightDetail="formatRight(item)">
+    <tm-drawer
+      placement="bottom"
+      v-model:show="couponWin"
+      okColor="green"
+      :height="800"
+      :footHeight="140"
+      title="优惠券"
+      color="rgba(245, 245, 245, 1)"
+      @ok="onCouponeChoose"
+    >
+      <tm-coupon
+        mainColor="green"
+        v-for="(item, i) in userCoupons"
+        :key="i"
+        :disable="item.used"
+        :priceDetail="formatePrice(item)"
+        :rightDetail="formatRight(item)"
+      >
         <template v-slot:btn>
           <tm-checkbox color="green" :round="24" :disabled="item.used" :value="!!!item.checked" @change="(e) => onConponCheckChage(e, item.id)"></tm-checkbox>
         </template>

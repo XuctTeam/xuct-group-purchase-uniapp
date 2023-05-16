@@ -22,7 +22,19 @@
       <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
         <tm-text _class="font-weight-b" :fontSize="28" label="图片补充"></tm-text>
         <tm-divider></tm-divider>
-        <tm-upload showSort :onStart="onStart" color="green" v-model="imageList" :header="uploadHeader" ref="up" :width="636" :rows="3" :maxFile="3" :url="uploadUrlValue" @fail="onUploadFail">
+        <tm-upload
+          showSort
+          :onStart="onStart"
+          color="green"
+          v-model="imageList"
+          :header="uploadHeader"
+          ref="up"
+          :width="636"
+          :rows="3"
+          :maxFile="3"
+          :url="uploadUrlValue"
+          @fail="onUploadFail"
+        >
         </tm-upload>
       </tm-sheet>
       <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
@@ -30,7 +42,18 @@
           <tm-text _class="font-weight-b" :fontSize="28" label="更多描述"></tm-text>
         </view>
         <tm-divider></tm-divider>
-        <tm-input v-model="remarksValue" :inputPadding="[12]" placeholder="更多描述" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
+        <tm-input
+          v-model="remarksValue"
+          :inputPadding="[12]"
+          placeholder="更多描述"
+          confirm-hold
+          showCharNumber
+          :maxlength="100"
+          :border="1"
+          color="grey-5"
+          autoHeight
+          type="textarea"
+        ></tm-input>
       </tm-sheet>
       <template v-slot:footer>
         <view class="flex-1">

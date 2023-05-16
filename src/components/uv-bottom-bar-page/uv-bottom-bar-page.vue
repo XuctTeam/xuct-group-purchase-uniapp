@@ -12,7 +12,11 @@
   <view :style="{ marginBottom: (props.showFooter ? _totalBarHeight : 0) + 'px' }">
     <slot></slot>
   </view>
-  <view v-if="showFooter" class="button-bottom fixed l-0 b-0 flex" :style="{ height: _totalBarHeight + 'px', width: _width + 'px', transform: `translateY(${props.bottom}rpx)`, zIndex: props.zIndex }">
+  <view
+    v-if="showFooter"
+    class="button-bottom fixed l-0 b-0 flex"
+    :style="{ height: _totalBarHeight + 'px', width: _width + 'px', transform: `translateY(${props.bottom}rpx)`, zIndex: props.zIndex }"
+  >
     <view class="top"></view>
     <view class="flex flex-1 pl-10 pr-10 flex-row flex-row-top-center">
       <slot name="footer"></slot>

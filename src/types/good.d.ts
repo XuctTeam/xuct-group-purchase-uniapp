@@ -12,6 +12,7 @@ declare namespace Good {
   type GoodResult = {
     id: string
     name: string
+    blurb: string
     firstDrawing: string
     swiperImages?: string
     startTime: Date
@@ -22,6 +23,7 @@ declare namespace Good {
     browse?: number
     unit?: string
     sell?: number
+    tags?: string
   }
 
   type Cart = {

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 08:58:16
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-08 11:49:09
+ * @LastEditTime: 2023-05-16 19:51:23
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -12,7 +12,16 @@
   <tm-app>
     <tm-navbar title="团到家" hideHome color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <tm-sheet :margin="[20, 20]" :padding="[0, 0, 0, 20]" :height="520" :round="10">
-      <tm-carousel autoplay :round="10" :margin="[0, 0]" :width="700" :height="300" :list="bannerImages" :display-multiple-items="0" rangKey="image"></tm-carousel>
+      <tm-carousel
+        autoplay
+        :round="10"
+        :margin="[0, 0]"
+        :width="700"
+        :height="300"
+        :list="bannerImages"
+        :display-multiple-items="0"
+        rangKey="image"
+      ></tm-carousel>
       <tm-row :width="700" :column="4" :margin="[0, 30]">
         <tm-col transprent :height="200" v-for="(item, index) in menus" :key="index">
           <tm-image :width="140" :height="140" :src="`/static/images/menu-${item.id}.png`"></tm-image>
@@ -22,26 +31,28 @@
     </tm-sheet>
     <view class="good-list">
       <tm-spin :load="load" color="green" tip="加载中" :margin="[10]">
-        <uv-waterfall-flow :value="goodInfos.list" :column="column" :columnSpace="1" :seat="2" imageKey="firstDrawing" @click="itemClick">
-          <view class="item" v-for="(item, index) in goodInfos.list" :key="index" :slot="`slot${index}`">
-            <tm-text :label="item.name" _class="text-overflow-3"></tm-text>
-            <view class="flex flex-row flex-row-center-start mt-10 mb-10">
-              <tm-tag color="green" label="礼物" size="xs" :margin="[0]"></tm-tag>
-              <tm-tag color="orange" label="包送" size="xs"></tm-tag>
+        <uv-empty v-if="goodInfos.list.length === 0" :height="400"></uv-empty>
+        <template v-else>
+          <uv-waterfall-flow ref="waterfallRef" :value="goodInfos.list" :column="column" :columnSpace="1" :seat="2" imageKey="firstDrawing" @click="itemClick">
+            <view class="item" v-for="(item, index) in goodInfos.list" :key="index" :slot="`slot${index}`">
+              <tm-text :label="item.name" _class="text-overflow-3"></tm-text>
+              <view class="flex flex-row flex-row-center-start mt-10 mb-10">
+                <tm-tag size="xs" :color="formatTag(i)" :margin="[0, 0, 10, 0]" v-for="(tag, i) in item.tags?.split(',')" :key="i" :label="tag"></tm-tag>
+              </view>
+              <view class="flex flex-row flex-row-bottom-start mb-10 mt-10">
+                <tm-text color="grey" :font-size="24" label="库存:"></tm-text>
+                <tm-text color="grey" :font-size="24" :label="item.inventory"></tm-text>
+              </view>
             </view>
-            <view class="flex flex-row flex-row-bottom-start mb-10">
-              <tm-text color="grey" :font-size="24" label="库存:"></tm-text>
-              <tm-text color="grey" :font-size="24" :label="item.inventory"></tm-text>
-            </view>
-          </view>
-        </uv-waterfall-flow>
+          </uv-waterfall-flow>
+        </template>
       </tm-spin>
     </view>
   </tm-app>
 </template>
 <script lang="ts" setup>
 import { ref, reactive } from 'vue'
-import { onLoad, onPullDownRefresh, onReachBottom } from '@dcloudio/uni-app'
+import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import uvWaterfallFlow from '@/components/uv-waterfall-flow/uv-waterfall-flow.vue'
@@ -53,6 +64,7 @@ import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmTag from '@/tmui/components/tm-tag/tm-tag.vue'
 import tmRow from '@/tmui/components/tm-row/tm-row.vue'
 import tmCol from '@/tmui/components/tm-col/tm-col.vue'
+import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 import { bannerList } from '@/api/banner'
 import { goodList } from '@/api/good'
 
@@ -67,13 +79,15 @@ const goodInfos = reactive<GoodList>({
       name: '',
       firstDrawing: '',
       startTime: new Date(),
-      inventory: 0
+      inventory: 0,
+      blurb: ''
     }
   ]
 })
 const bannerImages = reactive<API.BannerResult[]>([])
 const column = ref(2)
 const load = ref(true)
+const waterfallRef = ref()
 
 const menus = [
   { id: '1', title: '热销榜单' },
@@ -106,8 +120,7 @@ const _loadGoods = () => {
   load.value = true
   goodList()
     .then((res) => {
-      const _l = [...res.data, ...res.data, ...res.data, ...res.data, ...res.data]
-      goodInfos.list = _l
+      goodInfos.list = res.data
     })
     .catch((err) => {
       console.log(err)
@@ -121,7 +134,19 @@ const bannerClick = (index: number) => {
   debugger
 }
 
+const formatTag = (i: number) => {
+  switch (i) {
+    case 0:
+      return 'red'
+    case 1:
+      return 'orange'
+    default:
+      return 'green'
+  }
+}
+
 onPullDownRefresh(() => {
+  waterfallRef.value?.reset()
   initData()
   setTimeout(() => {
     uni.stopPullDownRefresh()
@@ -142,7 +167,7 @@ function itemClick(index: number) {
 }
 
 .good-list .item {
-  padding: 10rpx 20rpx 20rpx;
+  padding: 10rpx 20rpx;
   background-color: #fff;
   border-radius: 0 0 10px 10px;
 }

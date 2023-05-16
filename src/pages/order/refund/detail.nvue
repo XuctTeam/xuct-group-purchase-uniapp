@@ -95,7 +95,15 @@
               <tm-text color="grey" :font-size="26" label="上传图片："></tm-text>
             </view>
             <tm-image-group>
-              <tm-image :padding="[2, 2]" preview :width="160" :height="150" :src="item" v-for="item in orderInfo.refundImages?.split(',')" :key="item"></tm-image>
+              <tm-image
+                :padding="[2, 2]"
+                preview
+                :width="160"
+                :height="150"
+                :src="item"
+                v-for="item in orderInfo.refundImages?.split(',')"
+                :key="item"
+              ></tm-image>
             </tm-image-group>
           </view>
         </tm-sheet>

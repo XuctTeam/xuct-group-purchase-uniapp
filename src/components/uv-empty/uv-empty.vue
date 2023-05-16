@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-05-06 14:38:08
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-06 16:02:00
+ * @LastEditTime: 2023-05-16 16:46:47
  * @FilePath: \xuct-group-purchase-uniapp\src\components\uv-empty\uv-empty.vue
  * @Description: 
  * 
@@ -10,7 +10,7 @@
 -->
 <template>
   <tm-translate :eventPenetrationEnabled="true" name="zoom" :delay="600">
-    <view class="uv-empty">
+    <view class="uv-empty" :style="{ height: props.height + 'rpx' }">
       <tm-image :src="img" :width="200" :height="200"></tm-image>
       <view class="uv-empty-txt">
         <tm-text color="#aaaaaa" :font-size="26" label="~空空如也哦~"></tm-text>
@@ -30,6 +30,10 @@ const props = defineProps({
   icon: {
     type: String,
     default: ''
+  },
+  height: {
+    type: Number,
+    default: 800
   }
 })
 
@@ -40,7 +44,6 @@ const img = computed(() => {
 
 <style>
 .uv-empty {
-  height: 800rpx;
   width: 100%;
   display: flex;
   align-items: center;

@@ -2,6 +2,6 @@
   "singleQuote": true,
   "semi": false,
   "jsxSingleQuote": true,
-  "printWidth": 200,
+  "printWidth": 160,
   "trailingComma": "none"
 }
