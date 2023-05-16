@@ -2,13 +2,15 @@
  * @Author: Derek Xu
  * @Date: 2023-04-14 14:17:36
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-28 09:55:49
+ * @LastEditTime: 2023-05-16 20:53:42
  * @FilePath: \xuct-group-purchase-uniapp\src\types\order.d.ts
  * @Description:
  *
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
  */
-declare namespace Order {
+import { User } from './user'
+
+export declare namespace Order {
   type OrderResult = {
     id: string
     createTime: Date

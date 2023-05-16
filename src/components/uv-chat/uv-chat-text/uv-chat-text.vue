@@ -1,3 +1,13 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-04-23 09:17:10
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-05-16 20:56:57
+ * @FilePath: \xuct-group-purchase-uniapp\src\components\uv-chat\uv-chat-text\uv-chat-text.vue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
 <template>
   <view class="content">
     <text>{{ text }}</text>
@@ -11,6 +21,8 @@ const props = defineProps({
     default: () => '这是条消息'
   }
 })
+
+console.log(props)
 </script>
 
 <style scoped>

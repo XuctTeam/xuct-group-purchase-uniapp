@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:29:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-06 14:11:00
+ * @LastEditTime: 2023-05-16 21:03:46
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\list\index.nvue
  * @Description: 
  * 
@@ -51,7 +51,7 @@
       </template>
       <view v-for="(item, index) in orderList" :key="index">
         <tm-card :status="formateStatus(item.status)" :margin="[10, 10]" :title="`编号:${item.id}`" statusColor="green">
-          <template v-slot:content>
+          <template #content>
             <view class="pa-10" @click="onDetailClick(item.id)">
               <view v-for="(i, ind) in item.items" :key="ind" class="flex flex-row pt-10 pb-10">
                 <tm-image :width="160" :height="160" :round="4" :src="i.goodFirstDrawing"></tm-image>
@@ -70,7 +70,7 @@
               </view>
             </view>
           </template>
-          <template v-slot:action>
+          <template #action>
             <view class="flex flex-row flex-row-center-end flex-1">
               <template v-if="item.status !== 4">
                 <template v-if="item.status === 1">
@@ -131,13 +131,14 @@ import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
-
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { computed, ref } from 'vue'
 import { useAppHook } from '@/store'
 import { cancelOrder, pageOrderList } from '@/api/order'
 import { confirm, message } from '@/utils/dialog'
 import { rushOrder, receiverOrder } from '@/api/order'
+import { Order } from '@/types/order'
+
 const tabsTitle = ref([
   { key: '0', title: '全部' },
   { key: '1', title: '待付款' },
@@ -176,6 +177,7 @@ const queryList = (pageNo: number, pageSize: number) => {
 }
 
 const tabschange = (key: string | number) => {
+  console.log(key)
   reloadData()
 }
 

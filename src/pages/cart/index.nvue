@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 16:44:57
+ * @LastEditTime: 2023-05-16 21:07:16
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -78,7 +78,7 @@
 </template>
 <script lang="ts" setup>
 import { computed, reactive, ref, watch } from 'vue'
-import { onLoad, onShow, onUnload } from '@dcloudio/uni-app'
+import { onShow } from '@dcloudio/uni-app'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmResult from '@/tmui/components/tm-result/tm-result.vue'
@@ -92,6 +92,7 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import { useUserHook } from '@/store'
 import { loading, hideLoading, confirm, message } from '@/utils/dialog'
 import { cartList, cleanCart, modifyCartNum, deleteCartGood } from '@/api/good'
+import { Good } from '@/types'
 import { storeToRefs } from 'pinia'
 
 const cartGoods = reactive<Good.Cart[]>([])
@@ -149,7 +150,7 @@ const simpleCheckboxChangeState = (val: boolean, goodId: string) => {
     }
     return
   }
-  const _someNoneChecked = cartGoods.some((x) => !!!x.checked)
+  const _someNoneChecked = cartGoods.some((x) => !x.checked)
   if (allCheckStatus.value && _someNoneChecked) {
     allCheckStatus.value = false
   }

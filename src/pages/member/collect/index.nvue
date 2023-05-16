@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-19 19:01:43
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-06 15:13:42
+ * @LastEditTime: 2023-05-16 21:04:11
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\collect\index.nvue
  * @Description: 
  * 
@@ -16,13 +16,13 @@
     </template>
     <view class="safe-area" v-else>
       <tm-card v-for="(item, index) in collectData" :key="index" :margin="[10]">
-        <template v-slot:title>
+        <template #title>
           <tm-text _class="text-overflow-2" label="收藏日期"></tm-text>
         </template>
-        <template v-slot:status>
+        <template #status>
           <tm-text _class="text-overflow-2" :label="formatData(item.createTime)"></tm-text>
         </template>
-        <template v-slot:content>
+        <template #content>
           <view class="flex flex-row flex-1" @click="itemClick(item.id)">
             <tm-image :width="140" :round="4" :height="140" :src="item.firstDrawing"></tm-image>
             <view class="flex flex-1 flex-col flex-col-between-center pa-10 w-0">
@@ -33,7 +33,7 @@
             </view>
           </view>
         </template>
-        <template v-slot:action>
+        <template #action>
           <view class="flex flex-row flex-row-center-end flex-1">
             <tm-button :round="24" color="white" label="取消" :font-size="24" :width="120" :height="64" @click="onCllect(item.id)"></tm-button>
           </view>
@@ -56,6 +56,7 @@ import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
 import { collect, collectList } from '@/api/good'
+import {User} from '@/types'
 
 const DayJs = dayjs.default
 const loadValue = ref<boolean>(false)

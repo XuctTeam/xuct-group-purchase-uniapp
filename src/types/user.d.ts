@@ -7,7 +7,7 @@
  * @Description: 用户定义类
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved.
  */
-declare namespace User {
+export declare namespace User {
   type LoginResult = {
     tokenName: string
     tokenValue: string

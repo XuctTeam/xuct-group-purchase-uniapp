@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-06 18:28:56
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-04 18:33:11
+ * @LastEditTime: 2023-05-16 20:52:54
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
@@ -16,10 +16,10 @@
       <tm-roll-notice :shadow="2" :round="2" color="#32CD32" :margin="[10, 10]" :text="false" fontColor="#fff" :list="content" @click="noticeClick" />
       <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
         <tm-cell :margin="[0, 0]" :titleFontSize="30" showAvatar @click="addressClick">
-          <template v-slot:avatar>
+          <template #avatar>
             <tm-icon :font-size="44" name="tmicon-position" color="red"></tm-icon>
           </template>
-          <template v-slot:label>
+          <template #label>
             <view v-if="!address.id">
               <tm-text label="请选择配送地址"></tm-text>
             </view>
@@ -85,7 +85,7 @@
           type="textarea"
         ></tm-input>
       </tm-sheet>
-      <template v-slot:footer>
+      <template #footer>
         <view class="flex flex-row flex-1 flex-row-center-between">
           <tm-text :label="`已选择${cartGoods.length}件商品`"></tm-text>
           <tm-button label="确认下单" :round="4" color="green" @click="placeOrderClick"></tm-button>
@@ -129,11 +129,11 @@
         :priceDetail="formatePrice(item)"
         :rightDetail="formatRight(item)"
       >
-        <template v-slot:btn>
+        <template #btn>
           <tm-checkbox color="green" :round="24" :disabled="item.used" :value="!!!item.checked" @change="(e) => onConponCheckChage(e, item.id)"></tm-checkbox>
         </template>
       </tm-coupon>
-      <template v-slot:foot>
+      <template #foot>
         <tm-button :margin="[10]" block color="green" :round="5" label="暂不使用" @click="onConponNoUsed"></tm-button>
       </template>
     </tm-drawer>
@@ -167,6 +167,7 @@ import { loading, hideLoading, confirm, message } from '@/utils/dialog'
 import { getDefaultAddress, canUsedCouponList } from '@/api/user'
 import { getConfirmOrderDetail } from '@/api/order'
 import { placeOrder } from '@/api/order'
+import { User, Good } from '@/types'
 
 const DayJs = dayjs.default
 const userStore = useUserHook()

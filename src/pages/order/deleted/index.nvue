@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-25 10:38:54
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-06 15:17:18
+ * @LastEditTime: 2023-05-16 21:01:45
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\deleted\index.nvue
  * @Description: 
  * 
@@ -16,7 +16,7 @@
     </template>
     <view class="safe-area" v-else>
       <tm-card :margin="[10, 10]" :title="`编号:${item.id}`" statusColor="green" v-for="(item, index) in orderList" :key="index">
-        <template v-slot:content>
+        <template #content>
           <view class="pa-10">
             <view v-for="(i, ind) in item.items" :key="ind" class="flex flex-row pt-10 pb-10">
               <tm-image :width="160" :height="160" :round="4" :src="i.goodFirstDrawing"></tm-image>
@@ -53,6 +53,7 @@ import { reactive } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
 import { deletedList } from '@/api/order'
+import { Order } from '@/types'
 
 const load = ref<boolean>(true)
 const orderList = reactive<Order.OrderResult[]>([])

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-27 09:30:05
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-08 14:11:08
+ * @LastEditTime: 2023-05-16 20:55:34
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\coupon\index.nvue
  * @Description: 
  * 
@@ -41,7 +41,7 @@
         :rightDetail="formatRight(item)"
         :key="i"
       >
-        <template v-slot:extra>
+        <template #extra>
           <tm-text :font-size="22" _class="opacity-7" label="1.优惠券只能在规定时间使用。"></tm-text>
           <tm-text :font-size="22" _class="opacity-7" label="2.不限制商品可在购买任何商品时使用。"></tm-text>
           <tm-text :font-size="22" _class="opacity-7" label="3.不限制金额可在任何金额时使用。"></tm-text>
@@ -64,6 +64,7 @@ import { useAppHook } from '@/store'
 import { couponList } from '@/api/user'
 import { onLoad } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
+import { User } from '@/types/user'
 
 const DayJs = dayjs.default
 const tabActiveRef = ref<string>('1')

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-23 13:46:26
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-06 14:11:09
+ * @LastEditTime: 2023-05-16 21:02:24
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\evaluate\list.nvue
  * @Description: 
  * 
@@ -23,7 +23,7 @@
           </view>
         </view>
       </view>
-      <template v-slot:action>
+      <template #action>
         <view class="flex flex-row flex-row-center-end flex-1">
           <tm-button
             :round="24"
@@ -53,6 +53,8 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { evaluateList } from '@/api/order'
 import { hideLoading, loading } from '@/utils/dialog'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
+import { Order} from '@/types'
+
 const DayJs = dayjs.default
 const load = ref<boolean>(true)
 const orderItems = reactive<Order.OrderItemResult[]>([])

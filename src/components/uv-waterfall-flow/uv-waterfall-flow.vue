@@ -39,7 +39,7 @@
   </view>
 </template>
 <script setup>
-import { ref, reactive, watch, computed, getCurrentInstance, onMounted } from 'vue'
+import { reactive, watch, computed, getCurrentInstance } from 'vue'
 const _this = getCurrentInstance()
 const data = reactive({})
 const emits = defineEmits(['img-click', 'click'])
@@ -90,7 +90,7 @@ for (let i = 1; i <= data.column; i++) {
 const getMin = (a, s) => {
   let m = a[0][s]
   let mo = a[0]
-  for (var i = a.length - 1; i >= 0; i--) {
+  for (let i = a.length - 1; i >= 0; i--) {
     if (a[i][s] < m) {
       m = a[i][s]
     }

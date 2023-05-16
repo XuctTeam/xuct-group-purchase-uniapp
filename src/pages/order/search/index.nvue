@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-05-05 10:28:18
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-05 14:19:17
+ * @LastEditTime: 2023-05-16 20:57:31
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\search\index.nvue
  * @Description: 
  * 
@@ -26,13 +26,21 @@
         <view>
           <tm-navbar title="我的订单" color="#32CD32" fontColor="#fff" blur :before-back="onBeforeBack"></tm-navbar>
           <tm-sheet :margin="[0, 0]" :padding="[20, 30]">
-            <tm-input prefix="tmicon-search" searchLabel="搜索" placeholderStyle="fontSize: 10rpx;" v-model="searchValue" focusColor="green" placeholder="订单编号" @search="onSearch"></tm-input>
+            <tm-input
+              prefix="tmicon-search"
+              searchLabel="搜索"
+              placeholderStyle="fontSize: 10rpx;"
+              v-model="searchValue"
+              focusColor="green"
+              placeholder="订单编号"
+              @search="onSearch"
+            ></tm-input>
           </tm-sheet>
         </view>
       </template>
       <view v-for="(item, index) in orderList" :key="index">
         <tm-card :status="formateStatus(senceValue === 0 ? item.status : item.refundStatus)" :margin="[10, 10]" :title="`编号:${item.id}`" statusColor="green">
-          <template v-slot:content>
+          <template #content>
             <view class="pa-10" @click="onDetailClick(item.id)">
               <view v-for="(i, ind) in item.items" :key="ind" class="flex flex-row pt-10 pb-10">
                 <tm-image :width="160" :height="160" :round="4" :src="i.goodFirstDrawing"></tm-image>
@@ -51,7 +59,7 @@
               </view>
             </view>
           </template>
-          <template v-slot:action>
+          <template #action>
             <view class="flex flex-row flex-row-center-end flex-1">
               <template v-if="senceValue === 0">
                 <template v-if="item.status !== 4">
@@ -80,7 +88,16 @@
                       color="green"
                       @click="onRefundOrder(item.id)"
                     ></tm-button>
-                    <tm-button v-else :round="24" size="small" :margin="[24, 0]" label="收货" :font-size="24" color="green" @click="onReciverOrder(item.id)"></tm-button>
+                    <tm-button
+                      v-else
+                      :round="24"
+                      size="small"
+                      :margin="[24, 0]"
+                      label="收货"
+                      :font-size="24"
+                      color="green"
+                      @click="onReciverOrder(item.id)"
+                    ></tm-button>
                   </template>
                 </template>
                 <template v-else>
@@ -118,6 +135,7 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { searchList, cancelOrder, rushOrder, receiverOrder, cancelRefundOrder } from '@/api/order'
 import { nextTick } from 'process'
 import { confirm } from '@/utils/dialog'
+import { Order } from '@/types/order'
 
 const searchValue = ref<string>('')
 const senceValue = ref<number>(0)

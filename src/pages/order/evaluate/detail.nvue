@@ -55,7 +55,7 @@
           type="textarea"
         ></tm-input>
       </tm-sheet>
-      <template v-slot:footer>
+      <template #footer>
         <view class="flex-1">
           <tm-button label="提交" :round="10" color="green" block @click="onConfirmClick"></tm-button>
         </view>

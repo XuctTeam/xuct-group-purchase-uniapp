@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 12:22:42
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-04 18:31:37
+ * @LastEditTime: 2023-05-16 21:05:54
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\setting\index.nvue
  * @Description: 
  * 
@@ -26,7 +26,7 @@
         <view class="font-weight-b">反馈建议</view>
       </view>
       <tm-divider></tm-divider>
-      <tm-cell :titleFontSize="28" bottomBorder title="意见反馈" :margin="[0, 0]" url="/pages/member/opinion/list"/>
+      <tm-cell :titleFontSize="28" bottomBorder title="意见反馈" :margin="[0, 0]" url="/pages/member/opinion/list" />
     </tm-sheet>
     <tm-sheet :margin="[10, 20]" :shadow="4" :round="2">
       <view class="flex flex-row flex-row-center-start">
@@ -42,18 +42,33 @@
 
     <tm-drawer placement="bottom" v-model:show="showWin" okText="保存" okColor="green" :before-ok="beforeSave" @ok="onSave">
       <tm-cell showAvatar :avatar="userInfo.avatar ?? '/static/images/me.png'" :avatarSize="80" :titleFontSize="30" bottomBorder>
-        <template v-slot:right>
+        <template #right>
           <tm-button color="green" size="small" text label="获取头像" @chooseavatar="chooseavatar" open-type="chooseAvatar"></tm-button>
         </template>
       </tm-cell>
       <tm-cell title="昵称" bottomBorder>
-        <template v-slot:right>
-          <input type="nickname" class="nickname_input" placeholder-class="nickname_placeholder" placeholder="请输入昵称" maxlength="15" :value="nickNameRef" @change="nickNameChage" />
+        <template #right>
+          <input
+            type="nickname"
+            class="nickname_input"
+            placeholder-class="nickname_placeholder"
+            placeholder="请输入昵称"
+            maxlength="15"
+            :value="nickNameRef"
+            @change="nickNameChage"
+          />
         </template>
       </tm-cell>
       <tm-cell title="手机号" bottomBorder>
-        <template v-slot:right>
-          <input class="nickname_input" placeholder-class="nickname_placeholder" placeholder="请输入手机号" maxlength="15" :value="phoneRef" @change="phoneChage" />
+        <template #right>
+          <input
+            class="nickname_input"
+            placeholder-class="nickname_placeholder"
+            placeholder="请输入手机号"
+            maxlength="15"
+            :value="phoneRef"
+            @change="phoneChage"
+          />
         </template>
       </tm-cell>
     </tm-drawer>
@@ -75,6 +90,7 @@ import { useUserHook } from '@/store'
 import { upload } from '@/services/upload'
 import { saveUserInfo } from '@/api/user'
 import { logout } from '@/api/login'
+import { API } from '@/types'
 
 const versionRef = ref<string>('')
 const showWin = ref(false)
@@ -176,7 +192,9 @@ const onQuitClick = () => {
           userStore.setLogout()
           uni.$tm.u.routerTo('', 'navigateBack')
         })
-        .catch((err: any) => {})
+        .catch((err: any) => {
+          console.log(err)
+        })
         .finally(() => {
           hideLoading()
         })

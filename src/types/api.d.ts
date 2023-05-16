@@ -2,12 +2,12 @@
  * @Author: Derek Xu
  * @Date: 2023-03-18 14:16:33
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-10 11:41:59
+ * @LastEditTime: 2023-05-16 21:00:16
  * @FilePath: \xuct-group-purchase-uniapp\src\types\api.d.ts
  * @Description:
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved.
  */
-declare namespace API {
+export declare namespace API {
   type ENV = {
     BASE_API_URL: string
   }

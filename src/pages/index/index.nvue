@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 08:58:16
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 19:51:23
+ * @LastEditTime: 2023-05-16 21:11:18
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -21,6 +21,7 @@
         :list="bannerImages"
         :display-multiple-items="0"
         rangKey="image"
+        @click="bannerClick"
       ></tm-carousel>
       <tm-row :width="700" :column="4" :margin="[0, 30]">
         <tm-col transprent :height="200" v-for="(item, index) in menus" :key="index">
@@ -67,6 +68,7 @@ import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 import { bannerList } from '@/api/banner'
 import { goodList } from '@/api/good'
+import { Good, API } from '@/types'
 
 interface GoodList {
   list: Good.GoodResult[]
@@ -131,7 +133,7 @@ const _loadGoods = () => {
 }
 
 const bannerClick = (index: number) => {
-  debugger
+  console.log(index)
 }
 
 const formatTag = (i: number) => {

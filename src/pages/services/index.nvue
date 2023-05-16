@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-21 11:10:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-28 10:43:12
+ * @LastEditTime: 2023-05-16 20:38:45
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\services\index.nvue
  * @Description: 
  * 
@@ -13,7 +13,7 @@
     <tm-navbar title="客服服务" color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <tm-sheet :margin="[10, 20]" :shadow="4" :round="2">
       <tm-cell :margin="[0, 0]" bottomBorder>
-        <template v-slot:label>
+        <template #label>
           <tm-button
             :margin="[0]"
             transprent
@@ -46,7 +46,9 @@ import { getConfig } from '@/api/config'
 
 const phoneValue = ref<string>('')
 
-const contact = (e: any) => {}
+const contact = (e: any) => {
+  console.log(e)
+}
 
 onLoad(() => {
   getConfig(3).then((res) => {
@@ -60,9 +62,13 @@ const makeCall = () => {
     // 手机号
     phoneNumber: phoneValue.value,
     // 成功回调
-    success: (res) => {},
+    success: (res) => {
+      console.log(res)
+    },
     // 失败回调
-    fail: (res) => {}
+    fail: (res) => {
+      console.log(res)
+    }
   })
 }
 </script>

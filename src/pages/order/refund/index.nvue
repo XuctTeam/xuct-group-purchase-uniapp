@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-17 22:37:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-04 14:44:35
+ * @LastEditTime: 2023-05-16 20:57:41
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -69,7 +69,7 @@
         <tm-divider></tm-divider>
         <tm-input v-model="refundReasonValue" :inputPadding="[12]" placeholder="填写原因" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
       </tm-sheet>
-      <template v-slot:footer>
+      <template #footer>
         <view class="flex-1">
           <tm-button label="提交" :round="4" color="green" block @click="onRefundClick"></tm-button>
         </view>
@@ -98,6 +98,8 @@ import { getOrderDetail, refundOrder } from '@/api/order'
 import { useUserHook } from '@/store'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import ENV_CONFIG from '@/config/env'
+import { Order } from '@/types/order'
+
 const DayJs = dayjs.default
 const $instance = ref<any>(getCurrentInstance()?.proxy)
 

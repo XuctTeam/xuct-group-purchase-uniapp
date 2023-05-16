@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-20 09:48:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-06 15:10:19
+ * @LastEditTime: 2023-05-16 20:56:15
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\browse\index.nvue
  * @Description: 
  * 
@@ -26,7 +26,7 @@
               </view>
             </view>
           </view>
-          <template v-slot:right>
+          <template #right>
             <view class="flex flex-row flex-row-center-end">
               <tm-sheet :width="100" _class="flex flex-row flex-row-center-center" :height="140" color="green" no-level :margin="[0]" :padding="[0]">
                 <tm-text :userInteractionEnabled="false" label="删除" @click="onDeleteClick(item.id)"></tm-text>
@@ -51,6 +51,7 @@ import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
 import { browseList, deleteBrowse } from '@/api/good'
+import { Good } from '@/types/good'
 
 const loadValue = ref<boolean>(false)
 const browseData = reactive<Good.GoodResult[]>([])

@@ -7,7 +7,7 @@
           <uv-empty></uv-empty>
         </template>
         <template v-else>
-          <tm-sheet :round="4" :margin="[10]" v-for="(item, i) in opinions" @click="onDetailClick(item.id ?? '')">
+          <tm-sheet :round="4" :margin="[10]" v-for="(item, index) in opinions" @click="onDetailClick(item.id ?? '')" :key="index">
             <view class="flex flex-row flex-row-center-between">
               <tm-text :font-size="24" _class="font-weight-b" :label="formatType(item.type)"></tm-text>
               <tm-text :font-size="24" color="green" :label="item.status === 1 ? '已反馈' : '未反馈'"></tm-text>
@@ -26,7 +26,7 @@
           </tm-sheet>
         </template>
       </template>
-      <template v-slot:footer>
+      <template #footer>
         <view class="flex-1">
           <tm-button label="反馈" :round="4" color="green" block @click="onClick"></tm-button>
         </view>
@@ -38,7 +38,6 @@
 import { reactive, ref } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
-import tmCard from '@/tmui/components/tm-card/tm-card.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
@@ -51,6 +50,7 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { opinionList } from '@/api/user'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { loading, hideLoading } from '@/utils/dialog'
+import { User } from '@/types/user'
 
 const opinions = reactive<User.Opinion[]>([])
 const load = ref<boolean>(false)

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-25 21:54:59
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 16:20:46
+ * @LastEditTime: 2023-05-16 21:06:15
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\list.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -39,7 +39,7 @@
           </view>
         </tm-sheet>
       </view>
-      <template v-slot:footer>
+      <template #footer>
         <view class="flex flex-row flex-1 flex-row-center-between">
           <view class="flex flex-1">
             <tm-button block color="orange" @click="chooseaddress" :round="4" :padding="[0, 10]" label="微信导入"></tm-button>
@@ -64,6 +64,7 @@ import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmTag from '@/tmui/components/tm-tag/tm-tag.vue'
 import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
+import { User } from '@/types/user'
 
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { reactive, ref, getCurrentInstance } from 'vue'
@@ -113,10 +114,12 @@ const initData = (_search: string) => {
 }
 
 const chooseaddress = (e: any) => {
+  console.log(e)
   uni.chooseAddress({
     success: (res: User.Address) => {
       if (res.errMsg == 'chooseAddress:ok') {
         const { errMsg, ...address } = res
+        console.log(errMsg)
         saveUserAddress(address)
           .then(() => {
             initData('')

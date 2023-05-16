@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-25 10:38:54
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-05 14:02:04
+ * @LastEditTime: 2023-05-16 21:08:27
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\list.nvue
  * @Description: 
  * 
@@ -10,13 +10,31 @@
 -->
 <template>
   <tm-app>
-    <z-paging ref="paging" v-model="orderList" @query="queryList" autoShowBackToTop loadingFullFixed autoShowSystemLoading safeAreaInsetBottom autoScrollToTopWhenReload autoCleanListWhenReload>
+    <z-paging
+      ref="paging"
+      v-model="orderList"
+      @query="queryList"
+      autoShowBackToTop
+      loadingFullFixed
+      autoShowSystemLoading
+      safeAreaInsetBottom
+      autoScrollToTopWhenReload
+      autoCleanListWhenReload
+    >
       <!-- 之后-vue3 -->
       <template #top>
         <view>
           <tm-navbar title="我的退单" color="#32CD32" fontColor="#fff" blur></tm-navbar>
           <tm-sheet :margin="[0, 0]" :padding="[20, 30]">
-            <tm-input prefix="tmicon-search" searchLabel="搜索" placeholderStyle="fontSize: 10rpx;" focusColor="green" placeholder="编号或商品名称" v-model="searchValue" @search="onSearch"></tm-input>
+            <tm-input
+              prefix="tmicon-search"
+              searchLabel="搜索"
+              placeholderStyle="fontSize: 10rpx;"
+              focusColor="green"
+              placeholder="编号或商品名称"
+              v-model="searchValue"
+              @search="onSearch"
+            ></tm-input>
           </tm-sheet>
           <tm-tabs
             :list="tabsTitle"
@@ -33,7 +51,7 @@
       </template>
       <view v-for="(item, index) in orderList" :key="index">
         <tm-card :status="formateStatus(item.refundStatus)" :margin="[10, 10]" :title="`编号:${item.id}`" statusColor="green">
-          <template v-slot:content>
+          <template #content>
             <view class="pa-10" @click="onDetailClick(item.id)">
               <view v-for="(i, ind) in item.items" :key="ind" class="flex flex-row pt-10 pb-10">
                 <tm-image :width="160" :height="160" :round="4" :src="i.goodFirstDrawing"></tm-image>
@@ -52,7 +70,7 @@
               </view>
             </view>
           </template>
-          <template v-slot:action>
+          <template #action>
             <view class="flex flex-row flex-row-center-end flex-1">
               <template v-if="item.refundStatus === 1">
                 <tm-button :round="24" size="small" label="取消退单" :font-size="24" color="orange" @click="onCancelRefundOrder(item.id)"></tm-button>
@@ -84,6 +102,7 @@ import { useAppHook } from '@/store'
 import { pageOrderList, cancelRefundOrder, cancelOrder } from '@/api/order'
 import { onShow } from '@dcloudio/uni-app'
 import { confirm, message } from '@/utils/dialog'
+import {Order} from '@/types'
 
 const appStore = useAppHook()
 const _width = computed(() => {
@@ -133,6 +152,7 @@ onShow(() => {
 })
 
 const tabschange = (key: string | number) => {
+  console.log(key)
   reloadData()
 }
 
@@ -170,7 +190,9 @@ const onCancelRefundOrder = (orderId: string) => {
           console.log(err)
         })
     },
-    fail: () => {}
+    fail: () => {
+      console.log('fail')
+    }
   })
 }
 

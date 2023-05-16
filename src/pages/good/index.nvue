@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 18:51:32
+ * @LastEditTime: 2023-05-16 20:56:37
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\good\index.nvue
  * @Description: 
  * 
@@ -40,7 +40,7 @@
       <view class="pa-10">
         <tm-html :content="detail" />
       </view>
-      <template v-slot:footer>
+      <template #footer>
         <view class="flex flex-row flex-1 flex-row-center-between">
           <tm-row :column="3" :width="300">
             <tm-col @click="toServices" :height="100">
@@ -82,6 +82,7 @@ import tmRow from '@/tmui/components/tm-row/tm-row.vue'
 import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { useUserHook } from '@/store'
+import { Good } from '@/types/good'
 
 import { getGood, collect, addCart, browseGood } from '@/api/good'
 import { loading, hideLoading } from '@/utils/dialog'

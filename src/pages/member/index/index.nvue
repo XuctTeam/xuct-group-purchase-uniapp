@@ -74,7 +74,7 @@
         <!-- 订单列表信息 -->
         <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
           <tm-cell :margin="[0, 0]" rightText="全部订单" url="/pages/order/list/index">
-            <template v-slot:title>
+            <template #title>
               <tm-text :font-size="30" _class="font-weight-b" label="我的订单"></tm-text>
             </template>
           </tm-cell>
@@ -93,10 +93,10 @@
         <!--我的服务-->
         <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
           <tm-cell :margin="[0, 0]">
-            <template v-slot:title>
+            <template #title>
               <tm-text :font-size="30" _class="font-weight-b" label="我的服务"></tm-text>
             </template>
-            <template v-slot:right><view></view></template>
+            <template #right><view></view></template>
           </tm-cell>
           <tm-grid :col="4" class="border-t-1" :width="720">
             <tm-grid-item :height="160" v-for="(item, index) in serviceItems" :key="index" @click="serviceItemClick(item.code)">

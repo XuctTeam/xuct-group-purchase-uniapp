@@ -37,7 +37,7 @@
           type="textarea"
         ></tm-input>
       </tm-sheet>
-      <template v-slot:footer>
+      <template #footer>
         <view class="flex-1">
           <tm-button label="提交" :round="4" color="green" block @click="onSave"></tm-button>
         </view>

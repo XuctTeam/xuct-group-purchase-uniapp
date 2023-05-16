@@ -21,7 +21,7 @@
           :avatar="item.avatar ?? '/static/images/me.png'"
           :nick="item.nickName ?? '用户'"
         >
-          <template v-slot:content>
+          <template #content>
             <uv-chat-text :text="item.content"></uv-chat-text>
           </template>
         </uv-chat>
@@ -45,12 +45,12 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import uvChat from '@/components/uv-chat/uv-chat/uv-chat.vue'
 import uvChatText from '@/components/uv-chat/uv-chat-text/uv-chat-text.vue'
 
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useUserHook, useAppHook } from '@/store'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
 import { commentList, addComment } from '@/api/user'
 import { message } from '@/utils/dialog'
-import { computed } from 'vue'
+import { User } from '@/types/user'
 
 const userStore = useUserHook()
 const appStore = useAppHook()

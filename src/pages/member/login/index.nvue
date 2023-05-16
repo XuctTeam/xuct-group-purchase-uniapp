@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 13:42:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-19 15:01:22
+ * @LastEditTime: 2023-05-16 21:03:00
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\login\index.nvue
  * @Description: 
  * 
@@ -32,7 +32,8 @@
         <!-- 如果组件没有插槽数据,变成v-slot:default -->
         <!-- 那怕你不使用数据,也要这么写.如果不写template v-slot:default="{checked}"> 将会产生兼容性,已知微信小程序会丢失插槽内容 -->
         <tm-checkbox :round="25" :size="36" color="green" @change="checkChange">
-          <template v-slot:default="{ checked }">
+          <!-- <template #default="{ checked }"> -->
+            <template>
             <view class="flex flex-row">
               <tm-text color="grey" label="我已经阅读并同意"></tm-text>
               <view>
