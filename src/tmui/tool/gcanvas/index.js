@@ -37,4 +37,4 @@ export function enable(el, { bridge, debug, disableAutoSwap, disableComboCommand
     canvas.height = el.style.height;
 
     return canvas;
-}
+};
