@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-20 09:48:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 20:56:15
+ * @LastEditTime: 2023-05-30 15:55:33
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\browse\index.nvue
  * @Description: 
  * 
@@ -50,11 +50,11 @@ import tmSlideSwitch from '@/tmui/components/tm-slide-switch/tm-slide-switch.vue
 import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
-import { browseList, deleteBrowse } from '@/api/good'
-import { Good } from '@/types/good'
+import { browseList, deleteBrowse } from '@/api/wares'
+import { Wares } from '@/types'
 
 const loadValue = ref<boolean>(false)
-const browseData = reactive<Good.GoodResult[]>([])
+const browseData = reactive<Wares.WaresResult[]>([])
 
 onLoad(() => {
   initData()
@@ -79,7 +79,7 @@ const initData = () => {
 
 const itemClick = (gid: string) => {
   uni.navigateTo({
-    url: '/pages/good/index?id=' + gid
+    url: '/pages/wares/index?id=' + gid
   })
 }
 

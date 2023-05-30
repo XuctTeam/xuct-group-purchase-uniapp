@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 08:58:16
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 21:11:18
+ * @LastEditTime: 2023-05-31 02:17:23
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -21,7 +21,6 @@
         :list="bannerImages"
         :display-multiple-items="0"
         rangKey="image"
-        @click="bannerClick"
       ></tm-carousel>
       <tm-row :width="700" :column="4" :margin="[0, 30]">
         <tm-col transprent :height="200" v-for="(item, index) in menus" :key="index">
@@ -30,24 +29,10 @@
         </tm-col>
       </tm-row>
     </tm-sheet>
-    <view class="good-list">
-      <tm-spin :load="load" color="green" tip="加载中" :margin="[10]">
-        <uv-empty v-if="goodInfos.list.length === 0" :height="400"></uv-empty>
-        <template v-else>
-          <uv-waterfall-flow ref="waterfallRef" :value="goodInfos.list" :column="column" :columnSpace="1" :seat="2" imageKey="firstDrawing" @click="itemClick">
-            <view class="item" v-for="(item, index) in goodInfos.list" :key="index" :slot="`slot${index}`">
-              <tm-text :label="item.name" _class="text-overflow-3"></tm-text>
-              <view class="flex flex-row flex-row-center-start mt-10 mb-10">
-                <tm-tag size="xs" :color="formatTag(i)" :margin="[0, 0, 10, 0]" v-for="(tag, i) in item.tags?.split(',')" :key="i" :label="tag"></tm-tag>
-              </view>
-              <view class="flex flex-row flex-row-bottom-start mb-10 mt-10">
-                <tm-text color="grey" :font-size="24" label="库存:"></tm-text>
-                <tm-text color="grey" :font-size="24" :label="item.inventory"></tm-text>
-              </view>
-            </view>
-          </uv-waterfall-flow>
-        </template>
-      </tm-spin>
+    <view class="content">
+      <!-- 全局插件引用 -->
+      <ldsy-waterfall-flow ref="ldsyWaterfallFlowRef" :productList="wares" :pathType="'index'" v-if="wares && wares.length > 0"></ldsy-waterfall-flow>
+      <!-- 全局插件引用 -->
     </view>
   </tm-app>
 </template>
@@ -56,8 +41,6 @@ import { ref, reactive } from 'vue'
 import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
-import uvWaterfallFlow from '@/components/uv-waterfall-flow/uv-waterfall-flow.vue'
-import tmSpin from '@/tmui/components/tm-spin/tm-spin.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCarousel from '@/tmui/components/tm-carousel/tm-carousel.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
@@ -65,31 +48,14 @@ import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmTag from '@/tmui/components/tm-tag/tm-tag.vue'
 import tmRow from '@/tmui/components/tm-row/tm-row.vue'
 import tmCol from '@/tmui/components/tm-col/tm-col.vue'
-import uvEmpty from '@/components/uv-empty/uv-empty.vue'
+import ldsyWaterfallFlow from '@/components/uv-waterfall-flow/ldsy-waterfall-flow/ldsy-waterfall-flow.vue'
+
 import { bannerList } from '@/api/banner'
-import { goodList } from '@/api/good'
-import { Good, API } from '@/types'
+import { waresList } from '@/api/wares'
+import { Wares, API } from '@/types'
 
-interface GoodList {
-  list: Good.GoodResult[]
-}
-
-const goodInfos = reactive<GoodList>({
-  list: [
-    {
-      id: '',
-      name: '',
-      firstDrawing: '',
-      startTime: new Date(),
-      inventory: 0,
-      blurb: ''
-    }
-  ]
-})
+const wares = ref<any[]>([])
 const bannerImages = reactive<API.BannerResult[]>([])
-const column = ref(2)
-const load = ref(true)
-const waterfallRef = ref()
 
 const menus = [
   { id: '1', title: '热销榜单' },
@@ -104,7 +70,29 @@ onLoad(() => {
 
 const initData = () => {
   _loadBanner()
-  _loadGoods()
+  // _loadGoods()
+  for (let i = 0; i < 66; i++) {
+    //TODO图片高度是存在库里的，这里模拟的，用的随机值
+    let height = 750 + Math.floor(Math.random() * 330)
+    //TODO为了效果更好，第一张保持最长的，第二张为方的
+    if (i === 0) {
+      height = 1080
+    }
+    if (i === 1) {
+      height = 750
+    }
+    //TODO模拟数据
+    wares.value.push({
+      id: i,
+      width: 750,
+      height: height,
+      defaultImage: 'https://s1.ax1x.com/2022/09/27/xeeuGt.png',
+      imgUrl: 'https://s1.ax1x.com/2022/09/27/xeeMxf.jpg',
+      name: `名称${i}`,
+      merchantName: `商家名称${i}`,
+      price: `${Math.floor(Math.random() * 330)}.09`
+    })
+  }
 }
 
 const _loadBanner = () => {
@@ -118,23 +106,43 @@ const _loadBanner = () => {
     })
 }
 
-const _loadGoods = () => {
-  load.value = true
-  goodList()
-    .then((res) => {
-      goodInfos.list = res.data
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-    .finally(() => {
-      load.value = false
-    })
-}
+// const _loadGoods = () => {
+//   loading.value = true
+//   waresList()
+//     .then((res) => {
+//       //wares.value.length = 0
+//       const list = [...res.data, ...res.data]
+//       const newData = list.map((item) => {
+//         const width = range(200, 500)
+//         const height = range(200, 500)
+//         return {
+//           img: {
+//             src: item.firstDrawing,
+//             width,
+//             height
+//           },
+//           ...item
+//         }
+//       })
+//       wares.value = newData
+//       // 加载状态结束
+//       loading.value = false
+//       // 数据全部加载完成
+//       if (wares.value.length >= 40) {
+//         finished.value = true
+//       }
+//     })
+//     .catch((err) => {
+//       console.log(err)
+//     })
+//     .finally(() => {
+//       //load.value = false
+//     })
+// }
 
-const bannerClick = (index: number) => {
-  console.log(index)
-}
+// const bannerClick = (index: number) => {
+//   console.log(index)
+// }
 
 const formatTag = (i: number) => {
   switch (i) {
@@ -148,52 +156,29 @@ const formatTag = (i: number) => {
 }
 
 onPullDownRefresh(() => {
-  waterfallRef.value?.reset()
   initData()
   setTimeout(() => {
     uni.stopPullDownRefresh()
   }, 300)
 })
 
-function itemClick(index: number) {
-  uni.$tm.u.routerTo('/pages/good/index?id=' + goodInfos.list[index].id, 'navigate')
-}
+// function itemClick(index: number) {
+//   uni.$tm.u.routerTo('/pages/wares/index?id=' + goodInfos.list[index].id, 'navigate')
+// }
 </script>
-<style>
-.good-list {
-  padding: 20rpx;
-  margin-top: 20rpx;
-  min-height: 200rpx;
-  display: flex;
-  justify-content: center;
-}
+<style lang="scss">
+.item {
+  padding: 10rpx 10rpx 20rpx;
 
-.good-list .item {
-  padding: 10rpx 20rpx;
-  background-color: #fff;
-  border-radius: 0 0 10px 10px;
-}
+  .title {
+    line-height: 48rpx;
+    font-size: 28rpx;
+    color: #222;
+  }
 
-.good-list .item .title {
-  line-height: 48rpx;
-  font-size: 28rpx;
-  color: #222;
-}
-
-.good-list .item .desc {
-  font-size: 28rpx;
-  color: #666;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-.good-list .item .money {
-  color: #f2280d;
-  font-size: 36rpx;
-  font-weight: bold;
-  padding: 10rpx 0 0;
+  .desc {
+    font-size: 24rpx;
+    color: #666;
+  }
 }
 </style>

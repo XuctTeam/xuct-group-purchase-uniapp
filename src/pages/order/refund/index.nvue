@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-17 22:37:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 20:57:41
+ * @LastEditTime: 2023-05-25 13:39:31
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -53,13 +53,25 @@
         </view>
         <tm-divider></tm-divider>
         <tm-radio-group v-model="refundTypeValue" direction="col" :style="{ display: 'flex' }">
-          <tm-radio color="green" v-for="(item, index) in radioItemds" :value="item.key" :label="item.label" :key="index" />
+          <tm-radio color="green" v-for="(item, index) in radioItems" :value="item.key" :label="item.label" :key="index" />
         </tm-radio-group>
       </tm-sheet>
       <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
         <tm-text _class="font-weight-b" :fontSize="28" label="凭证（支持3张照片）"></tm-text>
         <tm-divider></tm-divider>
-        <tm-upload showSort :onStart="onStart" color="green" v-model="imageList" :header="uploadHeader" ref="up" :width="636" :rows="3" :maxFile="3" :url="uploadUrlValue" @fail="onUploadFail">
+        <tm-upload
+          showSort
+          :onStart="onStart"
+          color="green"
+          v-model="imageList"
+          :header="uploadHeader"
+          ref="up"
+          :width="636"
+          :rows="3"
+          :maxFile="3"
+          :url="uploadUrlValue"
+          @fail="onUploadFail"
+        >
         </tm-upload>
       </tm-sheet>
       <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
@@ -67,7 +79,18 @@
           <tm-text _class="font-weight-b" :fontSize="28" label="原因描述"></tm-text>
         </view>
         <tm-divider></tm-divider>
-        <tm-input v-model="refundReasonValue" :inputPadding="[12]" placeholder="填写原因" confirm-hold showCharNumber :maxlength="100" :border="1" color="grey-5" autoHeight type="textarea"></tm-input>
+        <tm-input
+          v-model="refundReasonValue"
+          :inputPadding="[12]"
+          placeholder="填写原因"
+          confirm-hold
+          showCharNumber
+          :maxlength="100"
+          :border="1"
+          color="grey-5"
+          autoHeight
+          type="textarea"
+        ></tm-input>
       </tm-sheet>
       <template #footer>
         <view class="flex-1">
@@ -130,7 +153,7 @@ const refundTypeValue = ref('1')
 const imageList = ref([])
 const refundReasonValue = ref<string>('')
 
-const radioItemds = [
+const radioItems = [
   {
     key: '1',
     label: '商品质量问题'

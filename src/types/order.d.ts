@@ -14,7 +14,7 @@ export declare namespace Order {
   type OrderResult = {
     id: string
     createTime: Date
-    goodNum: number
+    waresNum: number
     totalPrice: number
     status: number
     remarks?: string
@@ -36,10 +36,10 @@ export declare namespace Order {
     id: string
     orderId: string
     createTime: Date
-    goodId: string
-    goodName: string
-    goodFirstDrawing: string
-    goodUnit: string
+    waresId: string
+    waresName: string
+    waresFirstDrawing: string
+    waresUnit: string
     num: number
     price: number
   }

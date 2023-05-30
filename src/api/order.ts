@@ -2,13 +2,14 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-06 13:26:04
+ * @LastEditTime: 2023-05-30 17:18:36
  * @FilePath: \xuct-group-purchase-uniapp\src\api\order.ts
  * @Description:
  *
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
  */
 import request from '@/services/request'
+import { API, Order } from '@/types'
 
 export const sumCount = () => {
   return request.get<Order.OrderSumResult>('/api/v1/order/sum')

@@ -8,14 +8,26 @@
         </view>
         <tm-divider></tm-divider>
         <tm-radio-group model="button" v-model="opinionValue">
-          <tm-radio color="green" v-for="(item, index) in radioItemds" :value="item.key" :label="item.label" :key="index" />
+          <tm-radio color="green" v-for="(item, index) in radioItems" :value="item.key" :label="item.label" :key="index" />
         </tm-radio-group>
       </tm-sheet>
 
       <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
         <tm-text _class="font-weight-b" :fontSize="28" label="凭证（支持3张照片）"></tm-text>
         <tm-divider></tm-divider>
-        <tm-upload showSort :onStart="onStart" color="green" v-model="imageList" :header="uploadHeader" ref="up" :width="636" :rows="3" :maxFile="3" :url="uploadUrlValue" @fail="onUploadFail">
+        <tm-upload
+          showSort
+          :onStart="onStart"
+          color="green"
+          v-model="imageList"
+          :header="uploadHeader"
+          ref="up"
+          :width="636"
+          :rows="3"
+          :maxFile="3"
+          :url="uploadUrlValue"
+          @fail="onUploadFail"
+        >
         </tm-upload>
       </tm-sheet>
 
@@ -72,7 +84,7 @@ const refundReasonValue = ref<string>('')
 import { hideLoading, loading } from '@/utils/dialog'
 import { saveOpinion } from '@/api/user'
 
-const radioItemds = [
+const radioItems = [
   {
     key: '1',
     label: '质量问题'

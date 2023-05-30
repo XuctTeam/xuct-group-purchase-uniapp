@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-15 22:02:25
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-05 09:05:55
+ * @LastEditTime: 2023-05-30 16:15:47
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -37,7 +37,7 @@
                     :padding="[0]"
                     label="绑定手机"
                     openType="getPhoneNumber"
-                    @getphonenumber="getphonenumber"
+                    @getphonenumber="getPhoneNumber"
                   ></tm-button>
                 </view>
               </view>
@@ -48,7 +48,15 @@
               </view>
               <view class="ml-20">
                 <tm-text :font-size="28" _class="font-weight-b" color="white" label="未登录"></tm-text>
-                <tm-button color="green" borderStyle="dashed" :round="5" size="small" url="/pages/member/login/index" label="点我登录" :margin="[0, 10]"></tm-button>
+                <tm-button
+                  color="green"
+                  borderStyle="dashed"
+                  :round="5"
+                  size="small"
+                  url="/pages/member/login/index"
+                  label="点我登录"
+                  :margin="[0, 10]"
+                ></tm-button>
               </view>
             </view>
           </view>
@@ -284,7 +292,7 @@ const serviceItemClick = (code: string) => {
   uni.$tm.u.routerTo(serviceItems.value.find((item) => item.code === code)?.url ?? '', 'navigate')
 }
 
-const getphonenumber = (e: any) => {
+const getPhoneNumber = (e: any) => {
   const { detail } = e
   if (!detail) {
     return
@@ -338,22 +346,20 @@ const initUserSum = () => {
 
 .head_top {
   width: 100%;
-  height: 300rpx;
+  height: 100%;
   position: relative;
-  overflow: hidden;
+  z-index: 0;
 }
 .head_top::after {
   content: '';
   width: 140%;
-  height: 300rpx;
+  height: 140px;
   position: absolute;
-  z-index: -1;
   left: -20%;
   top: 0;
+  z-index: -1;
   border-radius: 0 0 50% 50%;
-  background: #32cd32;
-  box-shadow: 0px 1px 3px rgba(0, 255, 0, 0.2);
-  backdrop-filter: 6px;
+  background: linear-gradient(180deg, #32cd32 0%, #32cd38 100%);
 }
 
 .avatar {
@@ -367,12 +373,11 @@ const initUserSum = () => {
   top: 170rpx;
   right: 0;
   left: 0;
-  overflow: hidden;
 }
 
 .user-head-img {
-  width: 120upx;
-  height: 120upx;
+  width: 120rpx;
+  height: 120rpx;
   border-radius: 50%;
   overflow: hidden;
   background-color: rgba(255, 255, 255, 0.7);

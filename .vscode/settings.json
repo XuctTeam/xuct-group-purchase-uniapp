@@ -1,4 +1,5 @@
 {
   "vue.features.codeActions.enable": false,
-  "vue.codeActions.enabled": false
+  "vue.codeActions.enabled": false,
+  "cSpell.words": ["dcloudio", "pinia", "satoken", "tmicon", "tmui"]
 }

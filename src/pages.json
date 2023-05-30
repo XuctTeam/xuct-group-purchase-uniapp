@@ -11,8 +11,7 @@
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
         "titlePenetrate": "YES",
-        "transparentTitle": "always",
-        "enablePullDownRefresh": true
+        "transparentTitle": "always"
       }
     },
     {
@@ -34,7 +33,7 @@
       }
     },
     {
-      "path": "pages/good/index",
+      "path": "pages/wares/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",

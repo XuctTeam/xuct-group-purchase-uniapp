@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 21:07:16
+ * @LastEditTime: 2023-05-30 15:56:51
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -91,11 +91,11 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 
 import { useUserHook } from '@/store'
 import { loading, hideLoading, confirm, message } from '@/utils/dialog'
-import { cartList, cleanCart, modifyCartNum, deleteCartGood } from '@/api/good'
-import { Good } from '@/types'
+import { cartList, cleanCart, modifyCartNum, deleteCartGood } from '@/api/wares'
+import { Wares } from '@/types'
 import { storeToRefs } from 'pinia'
 
-const cartGoods = reactive<Good.Cart[]>([])
+const cartGoods = reactive<Wares.Cart[]>([])
 const load = ref<boolean>(true)
 const editStatus = ref<boolean>(false)
 const allCheckStatus = ref<boolean>(false)

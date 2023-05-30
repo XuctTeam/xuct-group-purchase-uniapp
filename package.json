@@ -70,6 +70,7 @@
     "eslint": "^8.40.0",
     "eslint-plugin-vue": "^9.13.0",
     "husky": "^8.0.3",
+    "sass": "^1.62.1",
     "uni-vite-plugin-h5-prod-effect": "^1.0.1",
     "unplugin-vue-components": "0.24.1",
     "vite": "4.2.1"

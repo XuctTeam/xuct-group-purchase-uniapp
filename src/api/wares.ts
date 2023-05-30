@@ -2,19 +2,20 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 11:35:37
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-26 00:20:06
- * @FilePath: \xuct-group-purchase-uniapp\src\api\good.ts
+ * @LastEditTime: 2023-05-30 15:58:18
+ * @FilePath: \xuct-group-purchase-uniapp\src\api\wares.ts
  * @Description:
  *
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
  */
 import request from '@/services/request'
+import { User, Wares } from '@/types'
 
 /**
  * 获取商品列表
  */
-export const goodList = () => {
-  return request.get<Good.GoodResult[]>('/api/v1/good/list')
+export const waresList = () => {
+  return request.get<Wares.WaresResult[]>('/api/v1/wares/list')
 }
 
 /**
@@ -22,8 +23,8 @@ export const goodList = () => {
  *
  * @param id   商品ID
  */
-export const getGood = (id: string) => {
-  return request.get<Good.GoodResult>('/api/v1/good', {
+export const getWares = (id: string) => {
+  return request.get<Wares.WaresResult>('/api/v1/wares', {
     id
   })
 }
@@ -34,7 +35,7 @@ export const getGood = (id: string) => {
  * @param gid  商品ID
  */
 export const browseGood = (gid: string) => {
-  return request.post('/api/v1/good/browse', {
+  return request.post('/api/v1/wares/browse', {
     gid
   })
 }
@@ -46,7 +47,7 @@ export const browseGood = (gid: string) => {
  * @returns
  */
 export const collect = (gid: string) => {
-  return request.post('/api/v1/good/collect', {
+  return request.post('/api/v1/wares/collect', {
     gid
   })
 }
@@ -58,7 +59,7 @@ export const collect = (gid: string) => {
  * @returns
  */
 export const addCart = (gid: string) => {
-  return request.post('/api/v1/good/cart/add', {
+  return request.post('/api/v1/wares/cart/add', {
     gid
   })
 }
@@ -69,7 +70,7 @@ export const addCart = (gid: string) => {
  * @returns
  */
 export const cartList = () => {
-  return request.get<Good.Cart[]>('/api/v1/good/cart/list')
+  return request.get<Wares.Cart[]>('/api/v1/wares/cart/list')
 }
 
 /**
@@ -79,7 +80,7 @@ export const cartList = () => {
  * @param num  购买数量
  */
 export const modifyCartNum = (gid: string, num: number) => {
-  return request.post('/api/v1/good/cart/update/num', {
+  return request.post('/api/v1/wares/cart/update/num', {
     gid,
     num
   })
@@ -91,7 +92,7 @@ export const modifyCartNum = (gid: string, num: number) => {
  * @param gid  商品ID
  */
 export const deleteCartGood = (gids: string[]) => {
-  return request.post('/api/v1/good/cart/del', {
+  return request.post('/api/v1/wares/cart/del', {
     gids
   })
 }
@@ -100,21 +101,21 @@ export const deleteCartGood = (gids: string[]) => {
  * 清空购物车
  */
 export const cleanCart = () => {
-  return request.delete('/api/v1/good/cart/del/all')
+  return request.delete('/api/v1/wares/cart/del/all')
 }
 
 /**
  * 查询用户收藏商品
  */
 export const collectList = () => {
-  return request.get<User.Collect[]>('/api/v1/good/user/collect')
+  return request.get<User.Collect[]>('/api/v1/wares/user/collect')
 }
 
 /**
  * 查询用户浏览商品
  */
 export const browseList = () => {
-  return request.get<Good.GoodResult[]>('/api/v1/good/user/browse')
+  return request.get<Wares.WaresResult[]>('/api/v1/wares/user/browse')
 }
 
 /**
@@ -123,5 +124,5 @@ export const browseList = () => {
  * @param gid
  */
 export const deleteBrowse = (gid: string) => {
-  return request.delete('/api/v1/good/user/browse?gid=' + gid)
+  return request.delete('/api/v1/wares/user/browse?gid=' + gid)
 }

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 15:51:01
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-26 19:01:08
+ * @LastEditTime: 2023-05-30 15:56:43
  * @FilePath: \xuct-group-purchase-uniapp\src\constant\white.ts
  * @Description:
  *
@@ -22,7 +22,7 @@ export const PAGE_NEED = [
   'pages/order/confirm/index',
   'pages/order/list/index',
   'pages/services/index',
-  'pages/good/evaluate/list',
+  'pages/wares/evaluate/list',
   'pages/order/refund/list',
   'pages/member/browse/index',
   'pages/member/collect/index'
