@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 08:58:16
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-31 02:17:23
+ * @LastEditTime: 2023-05-31 18:34:26
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -29,6 +29,7 @@
         </tm-col>
       </tm-row>
     </tm-sheet>
+    <uv-waterfall-flow :productList="wares" :pathType="'index'"></uv-waterfall-flow>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -43,12 +44,13 @@ import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 // import tmTag from '@/tmui/components/tm-tag/tm-tag.vue'
 import tmRow from '@/tmui/components/tm-row/tm-row.vue'
 import tmCol from '@/tmui/components/tm-col/tm-col.vue'
+import uvWaterfallFlow from '@/components/uv-waterfall-flow/uv-waterfall-flow/uv-waterfall-flow.vue'
 
 import { bannerList } from '@/api/banner'
 // import { waresList } from '@/api/wares'
 import { API } from '@/types'
 
-const wares = ref<any[]>([])
+const wares = reactive<any[]>([])
 const bannerImages = reactive<API.BannerResult[]>([])
 
 const menus = [
@@ -76,7 +78,7 @@ const initData = () => {
       height = 750
     }
     //TODO模拟数据
-    wares.value.push({
+    wares.push({
       id: i,
       width: 750,
       height: height,
