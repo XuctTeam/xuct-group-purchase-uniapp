@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 08:58:16
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-31 18:34:26
+ * @LastEditTime: 2023-05-31 19:01:00
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -33,7 +33,7 @@
   </tm-app>
 </template>
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
+import { reactive } from 'vue'
 import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
