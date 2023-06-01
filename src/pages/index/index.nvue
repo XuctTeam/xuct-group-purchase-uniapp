@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 08:58:16
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-01 15:02:46
+ * @LastEditTime: 2023-06-01 18:17:47
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -29,7 +29,14 @@
         </tm-col>
       </tm-row>
     </tm-sheet>
-    <uv-waterfall-flow ref="waterfallRef" :productList="wares" :pathType="'index'" :loading="loading" :finished="finished"></uv-waterfall-flow>
+    <uv-waterfall-flow
+      ref="waterfallRef"
+      :productList="wares"
+      :pathType="'index'"
+      :loading="loading"
+      :finished="finishedValue"
+      @imageClick="waresClick"
+    ></uv-waterfall-flow>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -45,16 +52,19 @@ import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmRow from '@/tmui/components/tm-row/tm-row.vue'
 import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 import uvWaterfallFlow from '@/components/uv-waterfall-flow/uv-waterfall-flow/uv-waterfall-flow.vue'
+import { DEFAULT_WATERFALL_IMAGE } from '@/constant'
 
 import { bannerList } from '@/api/banner'
-// import { waresList } from '@/api/wares'
-import { API } from '@/types'
+import { waresList } from '@/api/wares'
+import { API, Wares } from '@/types'
 
 const wares = reactive<any[]>([])
 const bannerImages = reactive<API.BannerResult[]>([])
 const loading = ref<boolean>(false)
-const finished = ref<boolean>(true)
+const finishedValue = ref<boolean>(true)
 const waterfallRef = ref()
+const pageValue = ref<number>(1)
+const waresTotalValue = ref<number>(0)
 
 const menus = [
   { id: '1', title: '热销榜单' },
@@ -69,31 +79,7 @@ onLoad(() => {
 
 const initData = () => {
   _loadBanner()
-  //_loadGoods()
-  loading.value = true
-  for (let i = 0; i < 66; i++) {
-    //TODO图片高度是存在库里的，这里模拟的，用的随机值
-    let height = 750 + Math.floor(Math.random() * 330)
-    //TODO为了效果更好，第一张保持最长的，第二张为方的
-    if (i === 0) {
-      height = 1080
-    }
-    if (i === 1) {
-      height = 750
-    }
-    //TODO模拟数据
-    wares.push({
-      id: i,
-      width: 750,
-      height: height,
-      defaultImage: 'https://group-purchase-1308769147.cos.ap-beijing.myqcloud.com/sys/xeeuGt%20%282%29.png',
-      imgUrl: 'https://s1.ax1x.com/2022/09/27/xeeMxf.jpg',
-      name: `名称${i}`,
-      merchantName: `商家名称${i}`,
-      price: `${Math.floor(Math.random() * 330)}.09`
-    })
-  }
-  loading.value = false
+  _loadGoods()
 }
 
 const _loadBanner = () => {
@@ -107,39 +93,58 @@ const _loadBanner = () => {
     })
 }
 
-// const _loadGoods = () => {
-//   loading.value = true
-//   waresList()
-//     .then((res) => {
-//       //wares.value.length = 0
-//       const list = [...res.data, ...res.data]
-//       const newData = list.map((item) => {
-//         const width = range(200, 500)
-//         const height = range(200, 500)
-//         return {
-//           img: {
-//             src: item.firstDrawing,
-//             width,
-//             height
-//           },
-//           ...item
-//         }
-//       })
-//       wares.value = newData
-//       // 加载状态结束
-//       loading.value = false
-//       // 数据全部加载完成
-//       if (wares.value.length >= 40) {
-//         finished.value = true
-//       }
-//     })
-//     .catch((err) => {
-//       console.log(err)
-//     })
-//     .finally(() => {
-//       //load.value = false
-//     })
-// }
+const _loadGoods = () => {
+  loading.value = true
+  waresList({ pageNum: pageValue.value, pageSize: 20 })
+    .then((res) => {
+      const { list, total } = res.data
+      if (total === 0) {
+        finishedValue.value = true
+        return
+      }
+      if (waresTotalValue.value === 0) {
+        waresTotalValue.value = total
+      }
+      pageValue.value += 1
+      _pushWares(list)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
+
+const _pushWares = (list: Wares.WaresResult[]) => {
+  if (wares.length === waresTotalValue.value) {
+    finishedValue.value = true
+  }
+  for (let i = 0; i < list.length; i++) {
+    //TODO图片高度是存在库里的，这里模拟的，用的随机值
+    let height = 750 + Math.floor(Math.random() * 330)
+    let _wares = list[i]
+    //TODO为了效果更好，第一张保持最长的，第二张为方的
+    if (i === 0) {
+      height = 1080
+    }
+    if (i === 1) {
+      height = 750
+    }
+    wares.push({
+      id: _wares.id,
+      width: 750,
+      height: height,
+      defaultImage: DEFAULT_WATERFALL_IMAGE,
+      imgUrl: _wares.firstDrawing,
+      name: _wares.name,
+      tags: _wares.tags,
+      merchantName: `商家名称${i}`,
+      price: `${Math.floor(Math.random() * 330)}.09`,
+      stock: _wares.inventory
+    })
+  }
+}
 
 // const bannerClick = (index: number) => {
 //   console.log(index)
@@ -157,22 +162,32 @@ const _loadBanner = () => {
 // }
 
 onReachBottom(() => {
-  console.log(222222222222)
+  //商品加载完成不再加载
+  if (finishedValue.value) {
+    return
+  }
+  _loadGoods()
 })
 
 onPullDownRefresh(() => {
-  //initData()
-
-  waterfallRef.value.clear()
-
+  resetWares()
   setTimeout(() => {
     uni.stopPullDownRefresh()
   }, 300)
 })
 
-// function itemClick(index: number) {
-//   uni.$tm.u.routerTo('/pages/wares/index?id=' + goodInfos.list[index].id, 'navigate')
-// }
+const resetWares = () => {
+  pageValue.value = 1
+  waresTotalValue.value = 0
+  wares.length = 0
+  waterfallRef.value.clear()
+  _loadGoods()
+}
+
+const waresClick = (data: { item: any }) => {
+  const { item } = data
+  uni.$tm.u.routerTo('/pages/wares/index?id=' + item.id, 'navigate')
+}
 </script>
 <style lang="scss">
 .item {

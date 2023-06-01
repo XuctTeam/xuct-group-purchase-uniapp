@@ -1,3 +1,13 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-06-01 13:23:18
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-06-01 15:40:48
+ * @FilePath: \xuct-group-purchase-uniapp\src\components\uv-waterfall-flow\uv-waterfall-loading\uv-waterfall-loading.vue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
 <template>
   <view class="uv-waterfall-loading">
     <slot>
@@ -11,7 +21,7 @@
 </template>
 
 <script lang="ts" setup name="uv-waterfall-loading">
-import { loadingIcon } from '../common/utils'
+import { loadingIcon } from '../common/filters/index'
 import uvWaterfallDivider from '../uv-waterfall-divider/uv-waterfall-divider.vue'
 
 // const emit = defineEmits(['loading'])

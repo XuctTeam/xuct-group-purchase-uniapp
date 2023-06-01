@@ -1,3 +1,6 @@
+import loadingIconSrc from '/static/images/loading.gif'
+export const loadingIcon = loadingIconSrc
+
 /**
  * 处理数字
  */
@@ -13,4 +16,8 @@ export const mathRound = (val, point = 0) => {
  */
 export function getScreenWidth() {
   return uni.getSystemInfoSync().screenWidth
+}
+
+export function isArray(value: any) {
+  return Array.isArray(value)
 }

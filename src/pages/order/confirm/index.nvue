@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-06 18:28:56
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 20:52:54
+ * @LastEditTime: 2023-06-01 18:37:52
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
@@ -17,7 +17,7 @@
       <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
         <tm-cell :margin="[0, 0]" :titleFontSize="30" showAvatar @click="addressClick">
           <template #avatar>
-            <tm-icon :font-size="44" name="tmicon-position" color="red"></tm-icon>
+            <tm-icon :font-size="44" name="tmicon-position" color="green"></tm-icon>
           </template>
           <template #label>
             <view v-if="!address.id">

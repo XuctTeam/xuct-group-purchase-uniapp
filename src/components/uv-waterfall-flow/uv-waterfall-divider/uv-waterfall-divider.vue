@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-06-01 14:01:21
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-01 14:26:37
+ * @LastEditTime: 2023-06-01 15:42:01
  * @FilePath: \xuct-group-purchase-uniapp\src\components\uv-waterfall-flow\uv-waterfall-divider\uv-waterfall-divider.vue
  * @Description: 
  * 
@@ -24,7 +24,7 @@
  * @property {String} width 线条宽度
  */
 import { computed } from 'vue'
-import { isArray } from '../common/utils'
+import { isArray } from '../common/filters/index'
 const props = defineProps({
   backgroundColor: {
     type: String,

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 11:35:37
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-30 15:58:18
+ * @LastEditTime: 2023-06-01 18:25:46
  * @FilePath: \xuct-group-purchase-uniapp\src\api\wares.ts
  * @Description:
  *
@@ -10,33 +10,34 @@
  */
 import request from '@/services/request'
 import { User, Wares } from '@/types'
+import { API } from '@/types'
 
 /**
  * 获取商品列表
  */
-export const waresList = () => {
-  return request.get<Wares.WaresResult[]>('/api/v1/wares/list')
+export const waresList = (params: { pageNum: number; pageSize: number }) => {
+  return request.get<API.PageResult<Wares.WaresResult>>('/api/v1/wares/list', params)
 }
 
 /**
  * 获取商品详情
  *
- * @param id   商品ID
+ * @param waresId   商品ID
  */
-export const getWares = (id: string) => {
+export const getWares = (waresId: string) => {
   return request.get<Wares.WaresResult>('/api/v1/wares', {
-    id
+    waresId
   })
 }
 
 /**
  * 浏览商品次数
  *
- * @param gid  商品ID
+ * @param waresId  商品ID
  */
-export const browseGood = (gid: string) => {
+export const browseWares = (waresId: string) => {
   return request.post('/api/v1/wares/browse', {
-    gid
+    waresId
   })
 }
 
@@ -46,21 +47,21 @@ export const browseGood = (gid: string) => {
  * @param gid 商品ID
  * @returns
  */
-export const collect = (gid: string) => {
+export const collect = (waresId: string) => {
   return request.post('/api/v1/wares/collect', {
-    gid
+    waresId
   })
 }
 
 /**
  * 添加购物车
  *
- * @param gid 商品ID
+ * @param waresId 商品ID
  * @returns
  */
-export const addCart = (gid: string) => {
+export const addCart = (waresId: string) => {
   return request.post('/api/v1/wares/cart/add', {
-    gid
+    waresId
   })
 }
 
@@ -76,12 +77,12 @@ export const cartList = () => {
 /**
  * 修改购买数量
  *
- * @param gid  商品ID
+ * @param waresId  商品ID
  * @param num  购买数量
  */
-export const modifyCartNum = (gid: string, num: number) => {
+export const modifyCartNum = (waresId: string, num: number) => {
   return request.post('/api/v1/wares/cart/update/num', {
-    gid,
+    waresId,
     num
   })
 }
@@ -89,11 +90,11 @@ export const modifyCartNum = (gid: string, num: number) => {
 /**
  * 删除购物车商品
  *
- * @param gid  商品ID
+ * @param waresIdIds  商品ID
  */
-export const deleteCartGood = (gids: string[]) => {
+export const deleteCartGood = (waresIdIds: string[]) => {
   return request.post('/api/v1/wares/cart/del', {
-    gids
+    waresIdIds
   })
 }
 
@@ -121,8 +122,8 @@ export const browseList = () => {
 /**
  * 删除用户浏览
  *
- * @param gid
+ * @param waresId
  */
-export const deleteBrowse = (gid: string) => {
-  return request.delete('/api/v1/wares/user/browse?gid=' + gid)
+export const deleteBrowse = (waresId: string) => {
+  return request.delete('/api/v1/wares/user/browse?gid=' + waresId)
 }

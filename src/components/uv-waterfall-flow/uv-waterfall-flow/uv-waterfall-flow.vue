@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-05-31 17:32:27
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-01 15:03:16
+ * @LastEditTime: 2023-06-01 18:17:11
  * @FilePath: \xuct-group-purchase-uniapp\src\components\uv-waterfall-flow\uv-waterfall-flow\uv-waterfall-flow.vue
  * @Description: 
  * 
@@ -14,7 +14,12 @@
       <view class="waterfall-flow-item" v-for="item in columnLeft" :key="item.id">
         <view class="item-card">
           <uv-waterfall-flow-item :item="item" :columnType="'left'" :pathType="pathType" @imgLoad="imgLoad" @imgError="imgError" @imageClick="clickItem">
-            <uv-waterfall-flow-tag type="warning">sdfsdfsdf</uv-waterfall-flow-tag>
+            <uv-ui-text type="text" :ellipsis="2" color="grep" :value="item.name" />
+            <view class="waterfall-flow-item-tag">
+              <uv-ui-tag :type="getTagType(i)" v-for="(v, i) in item.tags?.split(',')" size="mini" :key="i" :style="{ marginLeft: i != 0 ? '4rpx' : 0 }">{{
+                v
+              }}</uv-ui-tag>
+            </view>
           </uv-waterfall-flow-item>
         </view>
       </view>
@@ -23,7 +28,12 @@
       <view class="waterfall-flow-item" v-for="item in columnRight" :key="item.id">
         <view class="item-card">
           <uv-waterfall-flow-item :item="item" :columnType="'right'" :pathType="pathType" @imgLoad="imgLoad" @imgError="imgError" @imageClick="clickItem">
-            <uv-waterfall-flow-tag type="warning">sdfsdfsdf</uv-waterfall-flow-tag>
+            <uv-ui-text type="text" :ellipsis="2" color="grep" :value="item.name" />
+            <view class="waterfall-flow-item-tag">
+              <uv-ui-tag :type="getTagType(i)" v-for="(v, i) in item.tags?.split(',')" size="mini" :key="i" :style="{ marginLeft: i != 0 ? '4rpx' : 0 }">{{
+                v
+              }}</uv-ui-tag>
+            </view>
           </uv-waterfall-flow-item>
         </view>
       </view>
@@ -35,14 +45,15 @@
 <script lang="ts" setup name="uv-waterfall-flow">
 import { ref, watch, reactive } from 'vue'
 import { mathRound, getScreenWidth } from '../common/filters'
-import { PushItem } from '../common/interface/type'
+import { WaterfallItem } from '../common/interface/type'
 import uvWaterfallFlowItem from '../uv-waterfall-flow-item/uv-waterfall-flow-item.vue'
 import uvWaterfallLoading from '../uv-waterfall-loading/uv-waterfall-loading.vue'
-import uvWaterfallFlowTag from '../uv-waterfall-flow-tag/uv-waterfall-flow-tag.vue'
+import uvUiTag from '@/components/uv-ui/uv-ui-tag/index.vue'
+import uvUiText from '@/components/uv-ui/uv-ui-text/index.vue'
 
 const props = defineProps({
   productList: {
-    type: Array<PushItem>,
+    type: Array<WaterfallItem>,
     default: () => [],
     required: true
   },
@@ -77,13 +88,13 @@ const props = defineProps({
   }
 })
 
-const columnLeft = reactive<PushItem[]>([])
-const columnRight = reactive<PushItem[]>([])
+const columnLeft = reactive<WaterfallItem[]>([])
+const columnRight = reactive<WaterfallItem[]>([])
 const leftHight = ref<number>(0)
 const rightHight = ref<number>(0)
 
 const emits = defineEmits<{
-  (event: 'imageClick', params: { item: PushItem }): void
+  (event: 'imageClick', params: { item: WaterfallItem }): void
 }>()
 
 watch(
@@ -95,6 +106,19 @@ watch(
   },
   { deep: true }
 )
+
+function getTagType(index: number) {
+  switch (index) {
+    case 0:
+      return 'success'
+    case 1:
+      return 'warning'
+    case 2:
+      return 'error'
+    default:
+      return 'info'
+  }
+}
 
 function distributeItem(newValue: any) {
   const allLength = newValue.length
@@ -111,7 +135,7 @@ function distributeItem(newValue: any) {
 }
 
 //TODO处理每一条数据，可以在这里里面做oss图片的大小样式裁剪等等，这个是和页面卡片有关，也可以放到卡片中做
-function handleItem(item: PushItem, itemLength: number, itemHeight: number) {
+function handleItem(item: WaterfallItem, itemLength: number, itemHeight: number) {
   return {
     id: item.id,
     width: item.width,
@@ -121,14 +145,15 @@ function handleItem(item: PushItem, itemLength: number, itemHeight: number) {
     showImg: false,
     showError: false,
     index: itemLength,
-    merchantName: item.merchantName,
     name: item.name,
-    price: item.price
+    price: item.price,
+    tags: item.tags,
+    stock: item.stock
   }
 }
 
 //TODO判断是左列还是右列
-function calcItem(pushItem: PushItem, calcHeight: number) {
+function calcItem(pushItem: WaterfallItem, calcHeight: number) {
   const calcVal = leftHight.value > rightHight.value
   if (calcVal) {
     rightHight.value = mathRound(rightHight.value + calcHeight, 0)
@@ -221,6 +246,12 @@ defineExpose({
         width: 100%;
       }
     }
+  }
+
+  .waterfall-flow-item-tag {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20rpx;
   }
 }
 </style>

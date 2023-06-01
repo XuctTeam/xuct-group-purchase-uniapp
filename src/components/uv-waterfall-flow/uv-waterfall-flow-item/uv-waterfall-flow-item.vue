@@ -34,7 +34,7 @@
 
 <script lang="ts" setup name="uv-waterfall-flow-item">
 import { ref } from 'vue'
-import { PushItem } from '../common/interface/type'
+import { WaterfallItem } from '../common/interface/type'
 
 const props = defineProps({
   item: {
@@ -55,9 +55,9 @@ const props = defineProps({
 })
 
 const emits = defineEmits<{
-  (event: 'imgLoad', params: { columnType: string; item: PushItem }): void
-  (event: 'imgError', params: { columnType: string; item: PushItem }): void
-  (event: 'imageClick', params: { columnType: string; item: PushItem }): void
+  (event: 'imgLoad', params: { columnType: string; item: WaterfallItem }): void
+  (event: 'imgError', params: { columnType: string; item: WaterfallItem }): void
+  (event: 'imageClick', params: { columnType: string; item: WaterfallItem }): void
 }>()
 
 const imgErrorNum = ref<number>(0)
@@ -152,7 +152,8 @@ function imageClick(item: any) {
     }
 
     .card-bottom {
-      height: 60px;
+      height: auto;
+      min-height: 50rpx;
       width: 100%;
       padding: 16rpx;
       overflow: hidden;
