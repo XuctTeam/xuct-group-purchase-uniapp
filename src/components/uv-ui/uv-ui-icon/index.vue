@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-06-01 15:25:19
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-01 15:33:41
+ * @LastEditTime: 2023-06-01 18:40:48
  * @FilePath: \xuct-group-purchase-uniapp\src\components\uv-ui\uv-ui-icon\index.vue
  * @Description: 
  * 
@@ -11,7 +11,7 @@
 <template>
   <text
     @click="click"
-    :class="['uv-ui-icon', className || `ayi-icon-${name}`, { 'is-primary': color == 'primary' }]"
+    :class="['uv-ui-icon', className || `ayi-icon-${props.name}`, { 'is-primary': color == 'primary' }]"
     :style="{ fontSize: setRpx(size), color }"
   ></text>
 </template>
