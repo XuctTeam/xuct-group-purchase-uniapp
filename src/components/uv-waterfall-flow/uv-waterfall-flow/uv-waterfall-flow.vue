@@ -2,50 +2,43 @@
  * @Author: Derek Xu
  * @Date: 2023-05-31 17:32:27
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-31 18:39:38
+ * @LastEditTime: 2023-06-01 15:03:16
  * @FilePath: \xuct-group-purchase-uniapp\src\components\uv-waterfall-flow\uv-waterfall-flow\uv-waterfall-flow.vue
  * @Description: 
  * 
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
 -->
 <template>
-  <view class="ldsy-waterfall-flow">
+  <view class="uv-waterfall-flow">
     <view class="waterfall-flow-item-left">
       <view class="waterfall-flow-item" v-for="item in columnLeft" :key="item.id">
         <view class="item-card">
-          <uv-index-good-card
-            :item="item"
-            :columnType="'left'"
-            :pathType="pathType"
-            @imgLoad="imgLoad"
-            @imgError="imgError"
-            @imageClick="clickItem"
-          ></uv-index-good-card>
+          <uv-waterfall-flow-item :item="item" :columnType="'left'" :pathType="pathType" @imgLoad="imgLoad" @imgError="imgError" @imageClick="clickItem">
+            <uv-waterfall-flow-tag type="warning">sdfsdfsdf</uv-waterfall-flow-tag>
+          </uv-waterfall-flow-item>
         </view>
       </view>
     </view>
     <view class="waterfall-flow-item-right">
       <view class="waterfall-flow-item" v-for="item in columnRight" :key="item.id">
         <view class="item-card">
-          <uv-index-good-card
-            :item="item"
-            :columnType="'right'"
-            :pathType="pathType"
-            @imgLoad="imgLoad"
-            @imgError="imgError"
-            @imageClick="clickItem"
-          ></uv-index-good-card>
+          <uv-waterfall-flow-item :item="item" :columnType="'right'" :pathType="pathType" @imgLoad="imgLoad" @imgError="imgError" @imageClick="clickItem">
+            <uv-waterfall-flow-tag type="warning">sdfsdfsdf</uv-waterfall-flow-tag>
+          </uv-waterfall-flow-item>
         </view>
       </view>
     </view>
   </view>
+  <uv-waterfall-loading :loadingText="loadingText" :loading="loading" :finished="finished" :finishedText="finishedText"></uv-waterfall-loading>
 </template>
 
 <script lang="ts" setup name="uv-waterfall-flow">
 import { ref, watch, reactive } from 'vue'
 import { mathRound, getScreenWidth } from '../common/filters'
-import { PushItem } from '../type'
-import uvIndexGoodCard from '../uv-index-good-card/uv-index-good-card.vue'
+import { PushItem } from '../common/interface/type'
+import uvWaterfallFlowItem from '../uv-waterfall-flow-item/uv-waterfall-flow-item.vue'
+import uvWaterfallLoading from '../uv-waterfall-loading/uv-waterfall-loading.vue'
+import uvWaterfallFlowTag from '../uv-waterfall-flow-tag/uv-waterfall-flow-tag.vue'
 
 const props = defineProps({
   productList: {
@@ -58,6 +51,29 @@ const props = defineProps({
     type: String,
     default: 'index',
     required: false
+  },
+
+  loading: {
+    type: Boolean,
+    default: () => false,
+    required: false
+  },
+
+  loadingText: {
+    type: String,
+    default: () => '加载中...',
+    required: false
+  },
+
+  finished: {
+    type: Boolean,
+    default: () => false
+  },
+
+  finishedText: {
+    type: String,
+    default: () => '已经到底了~',
+    required: false
   }
 })
 
@@ -65,6 +81,10 @@ const columnLeft = reactive<PushItem[]>([])
 const columnRight = reactive<PushItem[]>([])
 const leftHight = ref<number>(0)
 const rightHight = ref<number>(0)
+
+const emits = defineEmits<{
+  (event: 'imageClick', params: { item: PushItem }): void
+}>()
 
 watch(
   () => props.productList,
@@ -132,8 +152,7 @@ function calcHeight() {
 }
 //TODO点击回调事件
 function clickItem(item: any) {
-  console.log(item)
-  //this.$emit('clickItem', item)
+  emits('imageClick', item)
 }
 //TODO处理图片加载成功
 function imgLoad(data: any) {
@@ -165,10 +184,21 @@ function imgError(data: any) {
     }
   }
 }
+
+function clear() {
+  columnLeft.length = 0
+  columnRight.length = 0
+  leftHight.value = 0
+  rightHight.value = 0
+}
+
+defineExpose({
+  clear
+})
 </script>
 
 <style lang="scss" scoped>
-.ldsy-waterfall-flow {
+.uv-waterfall-flow {
   display: flex;
   justify-content: space-between;
   width: 100%;

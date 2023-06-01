@@ -11,7 +11,8 @@
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
         "titlePenetrate": "YES",
-        "transparentTitle": "always"
+        "transparentTitle": "always",
+        "enablePullDownRefresh": true
       }
     },
     {

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 08:58:16
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-31 19:01:00
+ * @LastEditTime: 2023-06-01 15:02:46
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -29,12 +29,12 @@
         </tm-col>
       </tm-row>
     </tm-sheet>
-    <uv-waterfall-flow :productList="wares" :pathType="'index'"></uv-waterfall-flow>
+    <uv-waterfall-flow ref="waterfallRef" :productList="wares" :pathType="'index'" :loading="loading" :finished="finished"></uv-waterfall-flow>
   </tm-app>
 </template>
 <script lang="ts" setup>
-import { reactive } from 'vue'
-import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app'
+import { reactive, ref } from 'vue'
+import { onLoad, onPullDownRefresh, onReachBottom } from '@dcloudio/uni-app'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
@@ -52,6 +52,9 @@ import { API } from '@/types'
 
 const wares = reactive<any[]>([])
 const bannerImages = reactive<API.BannerResult[]>([])
+const loading = ref<boolean>(false)
+const finished = ref<boolean>(true)
+const waterfallRef = ref()
 
 const menus = [
   { id: '1', title: '热销榜单' },
@@ -66,7 +69,8 @@ onLoad(() => {
 
 const initData = () => {
   _loadBanner()
-  // _loadGoods()
+  //_loadGoods()
+  loading.value = true
   for (let i = 0; i < 66; i++) {
     //TODO图片高度是存在库里的，这里模拟的，用的随机值
     let height = 750 + Math.floor(Math.random() * 330)
@@ -82,13 +86,14 @@ const initData = () => {
       id: i,
       width: 750,
       height: height,
-      defaultImage: 'https://s1.ax1x.com/2022/09/27/xeeuGt.png',
+      defaultImage: 'https://group-purchase-1308769147.cos.ap-beijing.myqcloud.com/sys/xeeuGt%20%282%29.png',
       imgUrl: 'https://s1.ax1x.com/2022/09/27/xeeMxf.jpg',
       name: `名称${i}`,
       merchantName: `商家名称${i}`,
       price: `${Math.floor(Math.random() * 330)}.09`
     })
   }
+  loading.value = false
 }
 
 const _loadBanner = () => {
@@ -151,8 +156,15 @@ const _loadBanner = () => {
 //   }
 // }
 
+onReachBottom(() => {
+  console.log(222222222222)
+})
+
 onPullDownRefresh(() => {
-  initData()
+  //initData()
+
+  waterfallRef.value.clear()
+
   setTimeout(() => {
     uni.stopPullDownRefresh()
   }, 300)

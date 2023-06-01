@@ -1,11 +1,11 @@
 <template>
   <view class="ldsy-index-good-card-area">
     <view class="card-area-background" @click.stop="imageClick(item)">
-      <view class="card-top flex-row-between bs-border-box">
+      <!-- <view class="card-top flex-row-between bs-border-box">
         <view class="card-top-logo-merchant-name flex-row-left bs-border-box">
           <view class="merchant-name">{{ item.merchantName }}</view>
         </view>
-      </view>
+      </view> -->
       <view class="card-back-img-box">
         <view class="card-back-img" :style="{ height: `${item.height}px` }" @click.stop="imageClick(item)">
           <image
@@ -22,18 +22,19 @@
         </view>
       </view>
       <view class="card-bottom flex-row-between">
-        <view class="bottom-product-describe">{{ item.name }} </view>
+        <!-- <view class="bottom-product-describe">{{ item.name }} </view>
         <view class="bottom-price">
           <view>￥{{ item.price }}</view>
-        </view>
+        </view> -->
+        <slot></slot>
       </view>
     </view>
   </view>
 </template>
 
-<script lang="ts" setup name="uv-index-good-card">
+<script lang="ts" setup name="uv-waterfall-flow-item">
 import { ref } from 'vue'
-import { PushItem } from '../type'
+import { PushItem } from '../common/interface/type'
 
 const props = defineProps({
   item: {
@@ -151,7 +152,7 @@ function imageClick(item: any) {
     }
 
     .card-bottom {
-      height: 30px;
+      height: 60px;
       width: 100%;
       padding: 16rpx;
       overflow: hidden;
