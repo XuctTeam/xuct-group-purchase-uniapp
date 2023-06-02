@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-21 11:10:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 20:38:45
+ * @LastEditTime: 2023-06-02 09:42:38
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\services\index.nvue
  * @Description: 
  * 
@@ -42,7 +42,7 @@ import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { getConfig } from '@/api/config'
+import { getConfig } from '@/api/modules/config'
 
 const phoneValue = ref<string>('')
 

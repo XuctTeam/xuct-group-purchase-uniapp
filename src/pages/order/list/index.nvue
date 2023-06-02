@@ -134,10 +134,10 @@ import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { computed, ref } from 'vue'
 import { useAppHook } from '@/store'
-import { cancelOrder, pageOrderList } from '@/api/order'
+import { cancelOrder, pageOrderList } from '@/api/modules/order'
 import { confirm, message } from '@/utils/dialog'
-import { rushOrder, receiverOrder } from '@/api/order'
-import { Order } from '@/types/order'
+import { rushOrder, receiverOrder } from '@/api/modules/order'
+import { Order } from '@/api/interface/order'
 
 const tabsTitle = ref([
   { key: '0', title: '全部' },

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:10:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 21:10:54
+ * @LastEditTime: 2023-06-02 09:39:58
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\detail\index.nvue
  * @Description: 
  * 
@@ -156,9 +156,9 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
 
 import { reactive, computed } from 'vue'
-import { cancelOrder, getOrderDetail, receiverOrder, rushOrder } from '@/api/order'
+import { cancelOrder, getOrderDetail, receiverOrder, rushOrder } from '@/api/modules/order'
 import { loading, hideLoading, message, confirm } from '@/utils/dialog'
-import { Order } from '@/types/order'
+import { Order } from '@/api/interface'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 
 const DayJs = dayjs.default

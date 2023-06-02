@@ -50,8 +50,8 @@ import tmSlideSwitch from '@/tmui/components/tm-slide-switch/tm-slide-switch.vue
 import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
-import { browseList, deleteBrowse } from '@/api/wares'
-import { Wares } from '@/types'
+import { browseList, deleteBrowse } from '@/api/modules/wares'
+import { Wares } from '@/api/interface'
 
 const loadValue = ref<boolean>(false)
 const browseData = reactive<Wares.WaresResult[]>([])

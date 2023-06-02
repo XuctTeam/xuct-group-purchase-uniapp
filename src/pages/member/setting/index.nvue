@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 12:22:42
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 21:05:54
+ * @LastEditTime: 2023-06-02 10:08:10
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\setting\index.nvue
  * @Description: 
  * 
@@ -43,7 +43,7 @@
     <tm-drawer placement="bottom" v-model:show="showWin" okText="保存" okColor="green" :before-ok="beforeSave" @ok="onSave">
       <tm-cell showAvatar :avatar="userInfo.avatar ?? '/static/images/me.png'" :avatarSize="80" :titleFontSize="30" bottomBorder>
         <template #right>
-          <tm-button color="green" size="small" text label="获取头像" @chooseavatar="chooseavatar" open-type="chooseAvatar"></tm-button>
+          <tm-button color="green" size="small" text label="获取头像" @chooseavatar="chooseAvatar" open-type="chooseAvatar"></tm-button>
         </template>
       </tm-cell>
       <tm-cell title="昵称" bottomBorder>
@@ -67,7 +67,7 @@
             placeholder="请输入手机号"
             maxlength="15"
             :value="phoneRef"
-            @change="phoneChage"
+            @change="phoneChange"
           />
         </template>
       </tm-cell>
@@ -84,13 +84,13 @@ import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
 import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { getConfig } from '@/api/config'
+import { getConfig } from '@/api/modules/config'
 import { confirm, hideLoading, loading, message } from '@/utils/dialog'
 import { useUserHook } from '@/store'
-import { upload } from '@/services/upload'
-import { saveUserInfo } from '@/api/user'
-import { logout } from '@/api/login'
-import { API } from '@/types'
+import { upload } from '@/api/config/upload'
+import { saveUserInfo } from '@/api/modules/user'
+import { logout } from '@/api/modules/login'
+import { API } from '@/api/interface'
 
 const versionRef = ref<string>('')
 const showWin = ref(false)
@@ -111,7 +111,7 @@ const personClick = () => {
   showWin.value = true
 }
 
-const chooseavatar = (avatar: any) => {
+const chooseAvatar = (avatar: any) => {
   const tempPath = avatar?.detail?.avatarUrl
   if (!tempPath) {
     message({
@@ -136,7 +136,7 @@ const nickNameChage = (e: any) => {
   nickNameRef.value = e.detail?.value
 }
 
-const phoneChage = (e: any) => {
+const phoneChange = (e: any) => {
   phoneRef.value = e.detail?.value
 }
 

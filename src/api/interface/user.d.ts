@@ -2,11 +2,13 @@
  * @Author: Derek Xu
  * @Date: 2023-03-23 17:24:55
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-04 14:17:15
+ * @LastEditTime: 2023-06-02 09:20:59
  * @FilePath: \xuct-group-purchase-uniapp\src\types\user.d.ts
  * @Description: 用户定义类
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved.
  */
+import { Wares } from './wares'
+
 export declare namespace User {
   type LoginResult = {
     tokenName: string
@@ -54,6 +56,11 @@ export declare namespace User {
     couponCount: number
   }
 
+  type CouponWaresResult = {
+    waresId: string
+    couponId: string
+  }
+
   type Coupon = {
     id: string
     couponName: string
@@ -63,9 +70,10 @@ export declare namespace User {
     endTime: Date
     used: boolean
     checked?: boolean
+    couponWaresList?: CouponWaresResult[]
   }
 
-  interface Collect extends Good.GoodResult {
+  interface Collect extends Wares.WaresResult {
     createTime: Date
   }
 

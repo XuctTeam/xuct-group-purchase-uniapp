@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-01 18:21:05
+ * @LastEditTime: 2023-06-02 10:04:19
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\wares\index.nvue
  * @Description: 
  * 
@@ -82,9 +82,9 @@ import tmRow from '@/tmui/components/tm-row/tm-row.vue'
 import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { useUserHook } from '@/store'
-import { Wares } from '@/types'
+import { Wares } from '@/api/interface'
 
-import { getWares, collect, addCart, browseWares } from '@/api/wares'
+import { getWares, collect, addCart, browseWares } from '@/api/modules/wares'
 import { loading, hideLoading } from '@/utils/dialog'
 const $instance = ref<any>(getCurrentInstance()?.proxy)
 const idValue = ref<string>('')
@@ -107,9 +107,9 @@ onLoad((opts: any) => {
     return
   }
   idValue.value = id
-  _loadGood()
+  _loadWares()
   nextTick(() => {
-    _browseGood()
+    _browseWares()
   })
 })
 
@@ -136,20 +136,20 @@ const onAddCart = () => {
     })
 }
 
-const _loadGood = () => {
+const _loadWares = () => {
   loading()
   getWares(idValue.value)
     .then((res) => {
-      const good: Wares.WaresResult = res.data
-      const swiper: string[] = good.swiperImages?.split(',') || []
+      const wares: Wares.WaresResult = res.data
+      const swiper: string[] = wares.swiperImages?.split(',') || []
       swiperImages.push(...swiper)
-      detail.value = good.detail ?? ''
-      name.value = good.name
-      blurbValue.value = good.blurb
-      userCollect.value = good.collect ?? false
-      browse.value = good.browse ?? 0
-      inventoryValue.value = good.inventory
-      sell.value = good.sell ?? 0
+      detail.value = wares.detail ?? ''
+      name.value = wares.name
+      blurbValue.value = wares.blurb
+      userCollect.value = wares.collect ?? false
+      browse.value = wares.browse ?? 0
+      inventoryValue.value = wares.inventory
+      sell.value = wares.sell ?? 0
     })
     .catch((err) => {
       console.log(err)
@@ -159,15 +159,15 @@ const _loadGood = () => {
     })
 }
 
-const _browseGood = () => {
+const _browseWares = () => {
   browseWares(idValue.value)
     .then(() => {})
     .catch(() => {})
 }
 
 const onFastConfirm = () => {
-  const gids = [idValue.value]
-  uni.$tm.u.routerTo('/pages/order/confirm/index?scene=good&gids=' + JSON.stringify(gids), 'navigate')
+  const wareIds = [idValue.value]
+  uni.$tm.u.routerTo('/pages/order/confirm/index?scene=wares&wareIds=' + JSON.stringify(wareIds), 'navigate')
 }
 
 const toServices = () => {

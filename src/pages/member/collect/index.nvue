@@ -55,8 +55,8 @@ import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
-import { collect, collectList } from '@/api/wares'
-import { User } from '@/types'
+import { collect, collectList } from '@/api/modules/wares'
+import { User } from '@/api/interface'
 
 const DayJs = dayjs.default
 const loadValue = ref<boolean>(false)

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-17 22:37:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-25 13:39:31
+ * @LastEditTime: 2023-06-02 10:05:47
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -19,11 +19,11 @@
         </view>
         <tm-divider></tm-divider>
         <view v-for="(item, index) in orderInfo.items" :key="index" class="flex flex-row pa-10">
-          <tm-image :width="160" :height="160" :round="4" :src="item.goodFirstDrawing" />
+          <tm-image :width="160" :height="160" :round="4" :src="item.waresFirstDrawing" />
           <view class="right">
-            <tm-text _class="text-overflow-2" :label="item.goodName"></tm-text>
+            <tm-text _class="text-overflow-2" :label="item.waresName"></tm-text>
             <view class="flex flex-row flex-row-center-between pr-10">
-              <tm-text color="orange" :label="`单位：${item.goodUnit}`"></tm-text>
+              <tm-text color="orange" :label="`单位：${item.waresUnit}`"></tm-text>
               <tm-text color="grey" :label="`×${item.num}`"></tm-text>
             </view>
           </view>
@@ -117,11 +117,11 @@ import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.
 import { onLoad } from '@dcloudio/uni-app'
 import { reactive, ref, getCurrentInstance } from 'vue'
 import { hideLoading, loading } from '@/utils/dialog'
-import { getOrderDetail, refundOrder } from '@/api/order'
+import { getOrderDetail, refundOrder } from '@/api/modules/order'
 import { useUserHook } from '@/store'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import ENV_CONFIG from '@/config/env'
-import { Order } from '@/types/order'
+import { Order } from '@/api/interface/order'
 
 const DayJs = dayjs.default
 const $instance = ref<any>(getCurrentInstance()?.proxy)
@@ -129,7 +129,7 @@ const $instance = ref<any>(getCurrentInstance()?.proxy)
 const orderInfo = reactive<Order.OrderResult>({
   id: '',
   createTime: new Date(),
-  goodNum: 1,
+  waresNum: 1,
   totalPrice: 0,
   status: 1,
   integral: 0,

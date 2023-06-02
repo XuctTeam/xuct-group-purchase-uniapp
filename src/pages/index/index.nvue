@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 08:58:16
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-01 18:17:47
+ * @LastEditTime: 2023-06-02 09:41:01
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -54,9 +54,9 @@ import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 import uvWaterfallFlow from '@/components/uv-waterfall-flow/uv-waterfall-flow/uv-waterfall-flow.vue'
 import { DEFAULT_WATERFALL_IMAGE } from '@/constant'
 
-import { bannerList } from '@/api/banner'
-import { waresList } from '@/api/wares'
-import { API, Wares } from '@/types'
+import { bannerList } from '@/api/modules/banner'
+import { waresList } from '@/api/modules/wares'
+import { API, Wares } from '@/api/interface'
 
 const wares = reactive<any[]>([])
 const bannerImages = reactive<API.BannerResult[]>([])
@@ -79,7 +79,7 @@ onLoad(() => {
 
 const initData = () => {
   _loadBanner()
-  _loadGoods()
+  _loadWares()
 }
 
 const _loadBanner = () => {
@@ -93,7 +93,7 @@ const _loadBanner = () => {
     })
 }
 
-const _loadGoods = () => {
+const _loadWares = () => {
   loading.value = true
   waresList({ pageNum: pageValue.value, pageSize: 20 })
     .then((res) => {
@@ -166,7 +166,7 @@ onReachBottom(() => {
   if (finishedValue.value) {
     return
   }
-  _loadGoods()
+  _loadWares()
 })
 
 onPullDownRefresh(() => {
@@ -181,7 +181,7 @@ const resetWares = () => {
   waresTotalValue.value = 0
   wares.length = 0
   waterfallRef.value.clear()
-  _loadGoods()
+  _loadWares()
 }
 
 const waresClick = (data: { item: any }) => {

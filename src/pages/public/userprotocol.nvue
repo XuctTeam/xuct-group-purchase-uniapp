@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-07 15:13:41
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-19 17:15:28
+ * @LastEditTime: 2023-06-02 09:42:27
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\public\userprotocol.nvue
  * @Description: 
  * 
@@ -23,7 +23,7 @@ import tmHtml from '@/tmui/components/tm-html/tm-html.vue'
 
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
-import { getConfig } from '@/api/config'
+import { getConfig } from '@/api/modules/config'
 import { loading, hideLoading } from '@/utils/dialog'
 
 const rx = ref<string>('')

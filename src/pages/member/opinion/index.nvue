@@ -82,7 +82,7 @@ const imageList = ref([])
 const opinionValue = ref('1')
 const refundReasonValue = ref<string>('')
 import { hideLoading, loading } from '@/utils/dialog'
-import { saveOpinion } from '@/api/user'
+import { saveOpinion } from '@/api/modules/user'
 
 const radioItems = [
   {

@@ -223,6 +223,15 @@
       }
     },
     {
+      "path": "pages/order/chooseCoupon/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
       "path": "pages/order/result/index",
       "style": {
         "navigationBarTitleText": "",

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-06 18:28:56
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-01 18:37:52
+ * @LastEditTime: 2023-06-02 10:05:40
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
@@ -36,7 +36,7 @@
         </tm-cell>
       </tm-sheet>
       <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
-        <view v-for="(item, index) in cartGoods" :key="index" class="flex flex-row pa-10">
+        <view v-for="(item, index) in cartWares" :key="index" class="flex flex-row pa-10">
           <tm-image :width="160" :height="160" :round="4" :src="item.firstDrawing" />
           <view class="flex-card-item-right">
             <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
@@ -87,14 +87,14 @@
       </tm-sheet>
       <template #footer>
         <view class="flex flex-row flex-1 flex-row-center-between">
-          <tm-text :label="`已选择${cartGoods.length}件商品`"></tm-text>
+          <tm-text :label="`已选择${cartWares.length}件商品`"></tm-text>
           <tm-button label="确认下单" :round="4" color="green" @click="placeOrderClick"></tm-button>
         </view>
       </template>
     </uv-bottom-bar-page>
 
     <!-- 积分弹出框  --->
-    <tmDrawer placement="bottom" v-model:show="showWin" okColor="green" @ok="integraClick" title="积分">
+    <tmDrawer placement="bottom" v-model:show="showWin" okColor="green" @ok="integralClick" title="积分">
       <tm-radio-group v-model="integralChoose">
         <view class="felx flex-col flex-1">
           <view class="pa-10"><tm-radio color="green" value="none" label="暂不使用"></tm-radio></view>
@@ -110,33 +110,6 @@
         <tm-input placeholder="请输入积分" suffixLabel="分" v-model="integralInput" />
       </view>
     </tmDrawer>
-
-    <tm-drawer
-      placement="bottom"
-      v-model:show="couponWin"
-      okColor="green"
-      :height="800"
-      :footHeight="140"
-      title="优惠券"
-      color="rgba(245, 245, 245, 1)"
-      @ok="onCouponeChoose"
-    >
-      <tm-coupon
-        mainColor="green"
-        v-for="(item, i) in userCoupons"
-        :key="i"
-        :disable="item.used"
-        :priceDetail="formatePrice(item)"
-        :rightDetail="formatRight(item)"
-      >
-        <template #btn>
-          <tm-checkbox color="green" :round="24" :disabled="item.used" :value="!!!item.checked" @change="(e) => onConponCheckChage(e, item.id)"></tm-checkbox>
-        </template>
-      </tm-coupon>
-      <template #foot>
-        <tm-button :margin="[10]" block color="green" :round="5" label="暂不使用" @click="onConponNoUsed"></tm-button>
-      </template>
-    </tm-drawer>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -156,25 +129,22 @@ import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
 import tmRadio from '@/tmui/components/tm-radio/tm-radio.vue'
 import tmRadioGroup from '@/tmui/components/tm-radio-group/tm-radio-group.vue'
 import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
-import tmCoupon from '@/tmui/components/tm-coupon/tm-coupon.vue'
-import tmCheckbox from '@/tmui/components/tm-checkbox/tm-checkbox.vue'
+
 import { onLoad } from '@dcloudio/uni-app'
 import { useUserHook } from '@/store'
 import { TEMPLATE_IDS } from '@/constant'
-import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 
 import { loading, hideLoading, confirm, message } from '@/utils/dialog'
-import { getDefaultAddress, canUsedCouponList } from '@/api/user'
-import { getConfirmOrderDetail } from '@/api/order'
-import { placeOrder } from '@/api/order'
-import { User, Good } from '@/types'
+import { getDefaultAddress } from '@/api/modules/user'
+import { getConfirmOrderDetail } from '@/api/modules/order'
+import { placeOrder } from '@/api/modules/order'
+import { User, Wares } from '@/api/interface'
 
-const DayJs = dayjs.default
 const userStore = useUserHook()
 const $instance = ref<any>(getCurrentInstance()?.proxy)
 const userInfo: User.UserInfo = userStore.getUserInfo
 const content = ref(['点击获取订单实时消息~'])
-const goodIds = reactive<string[]>([])
+const waresIds = reactive<string[]>([])
 const showWin = ref(false)
 const couponWin = ref(false)
 const address = ref<User.Address>({
@@ -187,12 +157,11 @@ const integralValue = ref<string>('暂不使用')
 const remarksValue = ref<string>('')
 const couponValue = ref<User.Coupon>({ id: '', couponName: '', couponFullPrice: 0, couponPrice: 0, beginTime: new Date(), endTime: new Date(), used: false })
 
-const cartGoods = reactive<Good.Cart[]>([])
-const userCoupons = reactive<User.Coupon[]>([])
+const cartWares = reactive<Wares.Cart[]>([])
 
 onLoad((ops: any) => {
-  let { gids, scene } = ops
-  if (!gids) {
+  let { wareIds, scene } = ops
+  if (!wareIds) {
     message({
       title: '获取参数失败',
       icon: 'error'
@@ -202,16 +171,14 @@ onLoad((ops: any) => {
   _scene.value = scene
   /** 加载地址 */
   _loadAddress()
-  const jsonGids = JSON.parse(gids)
+  const jsonWareIds = JSON.parse(wareIds)
   /** 加载详情 */
-  _loadDetail(scene, jsonGids)
-  goodIds.push(...jsonGids)
-  /**  加载优惠券 */
-  _loadCounpons()
+  _loadDetail(scene, jsonWareIds)
+  waresIds.push(...jsonWareIds)
 })
 
 const sumNum = computed(() => {
-  return cartGoods
+  return cartWares
     .map((item) => item.num)
     .reduce((prev, cur) => {
       return prev + cur
@@ -238,7 +205,7 @@ const addressClick = () => {
   })
 }
 
-const integraClick = () => {
+const integralClick = () => {
   integralInput.value = uni.$tm.u.isNumber(integralInput.value, 0)
   if (integralInput.value > (userInfo.integral ?? 0)) {
     integralInput.value = userInfo.integral ?? 0
@@ -271,7 +238,7 @@ const placeOrderClick = () => {
     title: '确认订单内容无误？',
     success: () => {
       loading()
-      placeOrder(_scene.value, address.value.id ?? '', couponValue.value.id ?? '', integral, remarksValue.value, goodIds)
+      placeOrder(_scene.value, address.value.id ?? '', couponValue.value.id ?? '', integral, remarksValue.value, waresIds)
         .then((res: any) => {
           const orderId = res.data
           uni.$tm.u.routerTo('/pages/order/result/index?orderId=' + orderId, 'redirect')
@@ -292,23 +259,6 @@ const beforeBack = () => {
   return true
 }
 
-const formatePrice = (item: User.Coupon) => {
-  return {
-    price: item.couponPrice / 1000,
-    suffix: '元',
-    prefix: '',
-    subtext: '满减券'
-  }
-}
-
-const formatRight = (item: User.Coupon) => {
-  return {
-    title: item.couponName,
-    subtitle: item.couponFullPrice > 0 ? '满' + item.couponFullPrice / 1000 + '元可用' : '不限制金额',
-    time: '有效期：' + DayJs(item.beginTime).format('YYYY-MM-DD') + '至' + DayJs(item.endTime).format('YYYY-MM-DD')
-  }
-}
-
 const setCartListRefresh = () => {
   let pages = getCurrentPages() // 当前页
   let beforePage = pages[pages.length - 2] // 上个页面
@@ -320,25 +270,25 @@ const setCartListRefresh = () => {
   }
 }
 
-const onConponCheckChage = (value: any, id: string) => {
-  userCoupons.forEach((item) => {
-    item.checked = item.id === id ? value : false
-  })
-}
+// const onConponCheckChage = (value: any, id: string) => {
+//   userCoupons.forEach((item) => {
+//     item.checked = item.id === id ? value : false
+//   })
+// }
 
-const onCouponeChoose = () => {
-  const _data = userCoupons.find((item) => item.checked)
-  if (!_data) {
-    return
-  }
-  Object.assign(couponValue.value, { ..._data })
-}
+// const onCouponeChoose = () => {
+//   const _data = userCoupons.find((item) => item.checked)
+//   if (!_data) {
+//     return
+//   }
+//   Object.assign(couponValue.value, { ..._data })
+// }
 
-const onConponNoUsed = () => {
-  userCoupons.forEach((item) => (item.checked = false))
-  Object.assign(couponValue.value, { id: '', couponName: '', couponFullPrice: 0, couponPrice: 0, beginTime: new Date(), endTime: new Date(), used: false })
-  couponWin.value = false
-}
+// const onConponNoUsed = () => {
+//   userCoupons.forEach((item) => (item.checked = false))
+//   Object.assign(couponValue.value, { id: '', couponName: '', couponFullPrice: 0, couponPrice: 0, beginTime: new Date(), endTime: new Date(), used: false })
+//   couponWin.value = false
+// }
 
 const _loadAddress = () => {
   getDefaultAddress()
@@ -358,23 +308,12 @@ const _loadDetail = (scene: string, gids: string[]) => {
   loading()
   getConfirmOrderDetail(scene, gids)
     .then((res) => {
-      cartGoods.push(...res.data)
+      cartWares.push(...res.data)
       hideLoading()
     })
     .catch((err: any) => {
       console.log(err)
       hideLoading()
-    })
-}
-
-const _loadCounpons = () => {
-  canUsedCouponList()
-    .then((res) => {
-      const data = res.data.sort((a, b) => (a.used ? 1 : 0) - (b.used ? 1 : 0))
-      userCoupons.push(...data)
-    })
-    .catch((err: any) => {
-      console.log(err)
     })
 }
 </script>

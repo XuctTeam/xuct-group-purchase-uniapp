@@ -2,13 +2,14 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 10:11:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-04 18:17:06
+ * @LastEditTime: 2023-06-02 09:19:51
  * @FilePath: \xuct-group-purchase-uniapp\src\api\user.ts
  * @Description:
  *
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
  */
-import request from '@/services/request'
+import request from '@/api/config/request'
+import { User } from '@/api/interface'
 
 /**
  * 修改用户信息

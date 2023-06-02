@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-30 15:56:51
+ * @LastEditTime: 2023-06-02 10:06:25
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -16,7 +16,7 @@
     </view>
     <view v-else class="content-top">
       <tm-result
-        v-if="cartGoods.length === 0 && !load"
+        v-if="cartWares.length === 0 && !load"
         color="green"
         icon="tmicon-shopping-cart-fill"
         title="~空空如也哦~"
@@ -30,10 +30,10 @@
           <tm-button transprent text :shadow="0" size="normal" color="green" :label="!editStatus ? '管理' : '完成'" :width="60" @click="changeState" />
         </view>
         <view class="mt-n20">
-          <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" :height="200" v-for="(item, index) in cartGoods" :key="index">
+          <tm-sheet :margin="[10, 10]" :padding="[10, 10]" :shadow="4" :round="2" :height="200" v-for="(item, index) in cartWares" :key="index">
             <view class="flex flex-row flex-1 flex-row-center-start">
               <view class="checkbox">
-                <tm-checkbox :round="10" color="green" @change="(e) => simpleCheckboxChangeState(e, item.goodId)" :value="!!!item.checked"></tm-checkbox>
+                <tm-checkbox :round="10" color="green" @change="(e) => simpleCheckboxChangeState(e, item.waresId)" :value="!!!item.checked"></tm-checkbox>
               </view>
               <view class="flex flex-row flex-1">
                 <tm-image :width="180" :round="4" :height="180" :src="item.firstDrawing"></tm-image>
@@ -41,7 +41,7 @@
                   <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
                   <view class="flex flex-row flex-row-center-between">
                     <tm-text color="orange" :label="`单位：${item.unit}`" />
-                    <tm-stepper :max="200" :min="1" :defaultValue="item.num" circular @change="(e) => chooseNumChange(e, item.goodId)"></tm-stepper>
+                    <tm-stepper :max="200" :min="1" :defaultValue="item.num" circular @change="(e) => chooseNumChange(e, item.waresId)"></tm-stepper>
                   </view>
                 </view>
               </view>
@@ -51,7 +51,7 @@
       </view>
     </view>
 
-    <view class="button-bottom actions fixed l-0 b-0" v-if="logged && cartGoods.length !== 0">
+    <view class="button-bottom actions fixed l-0 b-0" v-if="logged && cartWares.length !== 0">
       <view class="flex flex-1 flex-row flex-row-center-between pl-20 pr-20">
         <template>
           <view v-if="!editStatus" class="flex flex-row">
@@ -70,7 +70,7 @@
         </template>
         <view class="flex flex-row flex-1 flex-row-center-end mr-10">
           <tm-button v-if="!editStatus" size="small" label="结算" :round="4" color="green" @click="toConfirmOrder"></tm-button>
-          <tm-button v-else label="删除" size="small" color="white" :round="4" @click="deleteGood"></tm-button>
+          <tm-button v-else label="删除" size="small" color="white" :round="4" @click="deleteWares"></tm-button>
         </view>
       </view>
     </view>
@@ -91,11 +91,11 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 
 import { useUserHook } from '@/store'
 import { loading, hideLoading, confirm, message } from '@/utils/dialog'
-import { cartList, cleanCart, modifyCartNum, deleteCartGood } from '@/api/wares'
-import { Wares } from '@/types'
+import { cartList, cleanCart, modifyCartNum, deleteCartWares } from '@/api/modules/wares'
+import { Wares } from '@/api/interface'
 import { storeToRefs } from 'pinia'
 
-const cartGoods = reactive<Wares.Cart[]>([])
+const cartWares = reactive<Wares.Cart[]>([])
 const load = ref<boolean>(true)
 const editStatus = ref<boolean>(false)
 const allCheckStatus = ref<boolean>(false)
@@ -104,7 +104,7 @@ const { logged } = storeToRefs(userStore)
 const refreshValue = ref<boolean>(true)
 
 const selectedNum = computed(() => {
-  return cartGoods.filter((item) => item.checked).length
+  return cartWares.filter((item) => item.checked).length
 })
 
 onShow(() => {
@@ -136,34 +136,34 @@ const goLoginClick = () => {
   uni.$tm.u.routerTo('/pages/member/login/index', 'navigate')
 }
 
-const simpleCheckboxChangeState = (val: boolean, goodId: string) => {
-  const _cartGood = cartGoods.find((x) => x.goodId === goodId)
-  if (!_cartGood) {
+const simpleCheckboxChangeState = (val: boolean, waresId: string) => {
+  const _cartWares = cartWares.find((x) => x.waresId === waresId)
+  if (!_cartWares) {
     return
   }
-  _cartGood.checked = val
+  _cartWares.checked = val
   //判断选择列表是否满足全选
   if (val) {
-    const _allChecked = cartGoods.every((x) => x.checked)
+    const _allChecked = cartWares.every((x) => x.checked)
     if (_allChecked) {
       allCheckStatus.value = true
     }
     return
   }
-  const _someNoneChecked = cartGoods.some((x) => !x.checked)
+  const _someNoneChecked = cartWares.some((x) => !x.checked)
   if (allCheckStatus.value && _someNoneChecked) {
     allCheckStatus.value = false
   }
 }
 
 const chooseAllChangeState = (val: boolean) => {
-  cartGoods.forEach((item) => {
+  cartWares.forEach((item) => {
     item.checked = val
   })
 }
 
-const deleteGood = () => {
-  if (selectedNum.value === cartGoods.length) {
+const deleteWares = () => {
+  if (selectedNum.value === cartWares.length) {
     confirm({
       title: '是否清空购物车？',
       success: () => {
@@ -203,9 +203,9 @@ const toConfirmOrder = () => {
     })
     return
   }
-  const _ids = cartGoods.filter((x) => x.checked).map((x) => x.goodId)
+  const _ids = cartWares.filter((x) => x.checked).map((x) => x.waresId)
   uni.navigateTo({
-    url: '/pages/order/confirm/index?scene=cart&gids=' + JSON.stringify(_ids),
+    url: '/pages/order/confirm/index?scene=cart&wareIds=' + JSON.stringify(_ids),
     events: {
       acceptDataFromDetail(data: any) {
         const { refresh } = data
@@ -221,8 +221,8 @@ const initData = () => {
   cartList()
     .then((res) => {
       allCheckStatus.value = false
-      cartGoods.length = 0
-      cartGoods.push(...res.data)
+      cartWares.length = 0
+      cartWares.push(...res.data)
     })
     .catch((err: any) => {
       console.log(err)
@@ -238,7 +238,7 @@ const _cleanCart = () => {
   load.value = true
   cleanCart()
     .then(() => {
-      cartGoods.length = 0
+      cartWares.length = 0
     })
     .catch((err: any) => {
       console.log(err)
@@ -250,12 +250,12 @@ const _cleanCart = () => {
 }
 
 const _deleteCart = () => {
-  const _delIds = cartGoods.filter((x) => x.checked).map((x) => x.goodId)
+  const _delIds = cartWares.filter((x) => x.checked).map((x) => x.waresId)
   loading()
   load.value = true
-  deleteCartGood(_delIds)
+  deleteCartWares(_delIds)
     .then(() => {
-      cartGoods.length = 0
+      cartWares.length = 0
       initData()
     })
     .catch((err: any) => {

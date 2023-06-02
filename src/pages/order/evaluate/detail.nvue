@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-23 13:46:26
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-04 14:44:08
+ * @LastEditTime: 2023-06-02 09:42:24
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\evaluate\detail.nvue
  * @Description: 
  * 
@@ -79,7 +79,7 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import { useUserHook } from '@/store'
 import ENV_CONFIG from '@/config/env'
 import { onLoad } from '@dcloudio/uni-app'
-import { evaluate } from '@/api/order'
+import { evaluate } from '@/api/modules/order'
 import { loading, hideLoading } from '@/utils/dialog'
 const $instance = ref<any>(getCurrentInstance()?.proxy)
 const { BASE_API_URL } = ENV_CONFIG

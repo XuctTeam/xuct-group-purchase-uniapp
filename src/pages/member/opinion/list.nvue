@@ -47,10 +47,10 @@ import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
 
 import { onLoad, onShow } from '@dcloudio/uni-app'
-import { opinionList } from '@/api/user'
+import { opinionList } from '@/api/modules/user'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { loading, hideLoading } from '@/utils/dialog'
-import { User } from '@/types/user'
+import { User } from '@/api/interface/user'
 
 const opinions = reactive<User.Opinion[]>([])
 const load = ref<boolean>(false)

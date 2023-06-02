@@ -2,14 +2,14 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-30 17:18:36
- * @FilePath: \xuct-group-purchase-uniapp\src\api\order.ts
+ * @LastEditTime: 2023-06-02 09:58:44
+ * @FilePath: \xuct-group-purchase-uniapp\src\api\modules\order.ts
  * @Description:
  *
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
  */
-import request from '@/services/request'
-import { API, Order } from '@/types'
+import request from '@/api/config/request'
+import { API, Order, Wares } from '@/api/interface'
 
 export const sumCount = () => {
   return request.get<Order.OrderSumResult>('/api/v1/order/sum')
@@ -18,32 +18,33 @@ export const sumCount = () => {
 /**
  * 获取预下单购物车的商品
  *
- * @param gids  商品IDS
+ * @param scene
+ * @param waresIds  商品IDS
  */
-export const getConfirmOrderDetail = (scene: string, gids: string[]) => {
-  return request.post<Good.Cart[]>('/api/v1/order/confirm/detail', {
+export const getConfirmOrderDetail = (scene: string, waresIds: string[]) => {
+  return request.post<Wares.Cart[]>('/api/v1/order/confirm/detail', {
     scene,
-    gids
+    waresIds
   })
 }
 
 /**
  * 下订单
- * @param scene  cart 购物车 good 直接购买
+ * @param scene  cart 购物车 wares 直接购买
  * @param addressId
  * @param integral
  * @param remarks
- * @param goodIds
+ * @param waresIds
  * @returns
  */
-export const placeOrder = (scene: string, addressId: string, couponId: string, integral: number, remarks: string, goodIds: string[]) => {
+export const placeOrder = (scene: string, addressId: string, couponId: string, integral: number, remarks: string, waresIds: string[]) => {
   return request.post<string>('/api/v1/order', {
     scene,
     addressId,
     couponId,
     integral,
     remarks,
-    goodIds
+    waresIds
   })
 }
 

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-15 22:02:25
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-30 16:15:47
+ * @LastEditTime: 2023-06-02 09:42:44
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\index\index.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -145,8 +145,8 @@ import tmOverlay from '@/tmui/components/tm-overlay/tm-overlay.vue'
 // 导入storeToRefs
 import { useUserHook } from '@/store'
 import { onHide, onShow } from '@dcloudio/uni-app'
-import { sumCount } from '@/api/order'
-import { bindPhone, userSum } from '@/api/user'
+import { sumCount } from '@/api/modules/order'
+import { bindPhone, userSum } from '@/api/modules/user'
 
 const userStore = useUserHook()
 

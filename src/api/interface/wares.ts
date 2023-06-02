@@ -27,7 +27,7 @@ export declare namespace Wares {
   }
 
   type Cart = {
-    goodId: string
+    waresId: string
     name: string
     firstDrawing: string
     num: number

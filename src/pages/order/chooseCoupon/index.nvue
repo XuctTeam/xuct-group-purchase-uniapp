@@ -1,0 +1,63 @@
+<!--
+ * @Author: Derek Xu
+ * @Date: 2023-06-02 09:16:31
+ * @LastEditors: Derek Xu
+ * @LastEditTime: 2023-06-02 09:52:47
+ * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\chooseCoupon\index.nvue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
+-->
+<template>
+  <tm-coupon
+    mainColor="green"
+    v-for="(item, i) in canUseCoupons"
+    :key="i"
+    :disable="item.used"
+    :priceDetail="formatePrice(item)"
+    :rightDetail="formatRight(item)"
+  >
+    <template #btn>
+      <tm-checkbox color="green" :round="24" :disabled="item.used" :value="!!!item.checked" @change="(e) => onConponCheckChage(e, item.id)"></tm-checkbox>
+    </template>
+  </tm-coupon>
+</template>
+<script lang="ts" setup>
+import { reactive } from 'vue'
+import * as dayjs from '@/tmui/tool/dayjs/esm/index'
+import tmCoupon from '@/tmui/components/tm-coupon/tm-coupon.vue'
+import tmCheckbox from '@/tmui/components/tm-checkbox/tm-checkbox.vue'
+
+import { User } from '@/api/interface'
+import { canUsedCouponList } from '@/api/modules/user'
+
+const DayJs = dayjs.default
+
+const canUseCoupons = reactive<User.Coupon[]>([])
+
+const formatePrice = (item: User.Coupon) => {
+  return {
+    price: item.couponPrice / 1000,
+    suffix: '元',
+    prefix: '',
+    subtext: '满减券'
+  }
+}
+
+const formatRight = (item: User.Coupon) => {
+  return {
+    title: item.couponName,
+    subtitle: item.couponFullPrice > 0 ? '满' + item.couponFullPrice / 1000 + '元可用' : '不限制金额',
+    time: '有效期：' + DayJs(item.beginTime).format('YYYY-MM-DD') + '至' + DayJs(item.endTime).format('YYYY-MM-DD')
+  }
+}
+
+canUsedCouponList()
+  .then((res) => {
+    console.log(res)
+    debugger
+  })
+  .catch((err: any) => {
+    console.log(err)
+  })
+</script>

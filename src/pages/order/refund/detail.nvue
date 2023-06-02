@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:10:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 20:57:11
+ * @LastEditTime: 2023-06-02 10:05:00
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\detail.nvue
  * @Description: 
  * 
@@ -46,11 +46,11 @@
         </tm-sheet>
         <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
           <view v-for="(item, index) in orderInfo.items" :key="index" class="flex flex-row pa-10">
-            <tm-image :width="160" :height="160" :round="4" :src="item.goodFirstDrawing" />
+            <tm-image :width="160" :height="160" :round="4" :src="item.waresFirstDrawing" />
             <view class="right">
-              <tm-text _class="text-overflow-2" :label="item.goodName"></tm-text>
+              <tm-text _class="text-overflow-2" :label="item.waresName"></tm-text>
               <view class="flex flex-row flex-row-center-between pr-10">
-                <tm-text color="orange" :label="`单位：${item.goodUnit}`"></tm-text>
+                <tm-text color="orange" :label="`单位：${item.waresUnit}`"></tm-text>
                 <tm-text color="grey" :label="`×${item.num}`"></tm-text>
               </view>
             </view>
@@ -114,7 +114,7 @@
           </view>
           <view class="flex flex-row flex-row-center-between pa-20">
             <view class="w-140"><tm-text color="grey" :font-size="26" label="商品小计："></tm-text></view>
-            <tm-text :font-size="26" :label="orderInfo.goodNum"></tm-text>
+            <tm-text :font-size="26" :label="orderInfo.waresNum"></tm-text>
           </view>
           <view class="flex flex-row flex-row-center-between pa-20">
             <view class="w-140"><tm-text color="grey" :font-size="26" label="总计金额："></tm-text></view>
@@ -148,10 +148,10 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
 
 import { reactive, computed } from 'vue'
-import { cancelOrder, getOrderDetail, cancelRefundOrder } from '@/api/order'
+import { cancelOrder, getOrderDetail, cancelRefundOrder } from '@/api/modules/order'
 import { loading, hideLoading, message, confirm } from '@/utils/dialog'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
-import { Order } from '@/types/order'
+import { Order } from '@/api/interface/order'
 
 const DayJs = dayjs.default
 
@@ -161,7 +161,7 @@ const $instance = ref<any>(getCurrentInstance()?.proxy)
 const orderInfo = reactive<Order.OrderResult>({
   id: '',
   createTime: new Date(),
-  goodNum: 1,
+  waresNum: 1,
   totalPrice: 0,
   status: 1,
   integral: 0,

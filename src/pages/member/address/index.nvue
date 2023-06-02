@@ -79,12 +79,12 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmSwitch from '@/tmui/components/tm-switch/tm-switch.vue'
 import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
 
-import { saveUserAddress, getUserAddress, deleteUserAddress } from '@/api/user'
+import { saveUserAddress, getUserAddress, deleteUserAddress } from '@/api/modules/user'
 import { ref, reactive, getCurrentInstance } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { confirm, loading, hideLoading, message } from '@/utils/dialog'
 import { cityData } from '@/constant/city'
-import { User } from '@/types/user'
+import { User } from '@/api/interface/user'
 
 const $instance = ref<any>(getCurrentInstance()?.proxy)
 const form = ref<InstanceType<typeof tmForm> | null>(null)

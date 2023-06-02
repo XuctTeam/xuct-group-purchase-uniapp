@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-25 10:38:54
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 21:01:45
+ * @LastEditTime: 2023-06-02 09:46:31
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\deleted\index.nvue
  * @Description: 
  * 
@@ -19,11 +19,11 @@
         <template #content>
           <view class="pa-10">
             <view v-for="(i, ind) in item.items" :key="ind" class="flex flex-row pt-10 pb-10">
-              <tm-image :width="160" :height="160" :round="4" :src="i.goodFirstDrawing"></tm-image>
+              <tm-image :width="160" :height="160" :round="4" :src="i.waresFirstDrawing"></tm-image>
               <view class="flex-card-item-right">
-                <tm-text _class="text-overflow-2" :label="i.goodName" />
+                <tm-text _class="text-overflow-2" :label="i.waresName" />
                 <view class="flex flex-row flex-row-center-between">
-                  <tm-text color="orange" :label="`单位：${i.goodUnit}`" />
+                  <tm-text color="orange" :label="`单位：${i.waresUnit}`" />
                   <tm-text color="grey" :label="`×${i.num}`" />
                 </view>
               </view>
@@ -31,7 +31,7 @@
             <tm-divider />
             <view class="flex flex-row flex-row-center-between pa-10">
               <tm-text :font-size="26" color="grey" label="共计商品"></tm-text>
-              <tm-text :font-size="26" color="grey" :label="`×${item.goodNum}`"></tm-text>
+              <tm-text :font-size="26" color="grey" :label="`×${item.waresNum}`"></tm-text>
             </view>
           </view>
         </template>
@@ -52,8 +52,8 @@ import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 import { reactive } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
-import { deletedList } from '@/api/order'
-import { Order } from '@/types'
+import { deletedList } from '@/api/modules/order'
+import { Order } from '@/api/interface'
 
 const load = ref<boolean>(true)
 const orderList = reactive<Order.OrderResult[]>([])

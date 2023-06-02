@@ -2,8 +2,8 @@
  * @Author: Derek Xu
  * @Date: 2023-04-14 14:17:36
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 20:53:42
- * @FilePath: \xuct-group-purchase-uniapp\src\types\order.d.ts
+ * @LastEditTime: 2023-06-02 09:58:22
+ * @FilePath: \xuct-group-purchase-uniapp\src\api\interface\order.d.ts
  * @Description:
  *
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
@@ -57,7 +57,7 @@ export declare namespace Order {
     evaluateImages: string
     remarks: string
     orderItemId: string
-    goodId?: string
+    waresId?: string
     avatar?: string
     nickname?: string
   }

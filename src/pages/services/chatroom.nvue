@@ -48,9 +48,9 @@ import uvChatText from '@/components/uv-chat/uv-chat-text/uv-chat-text.vue'
 import { ref, computed } from 'vue'
 import { useUserHook, useAppHook } from '@/store'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
-import { commentList, addComment } from '@/api/user'
+import { commentList, addComment } from '@/api/modules/user'
 import { message } from '@/utils/dialog'
-import { User } from '@/types/user'
+import { User } from '@/api/interface/user'
 
 const userStore = useUserHook()
 const appStore = useAppHook()

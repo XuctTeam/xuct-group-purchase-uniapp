@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-05-05 10:28:18
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 20:57:31
+ * @LastEditTime: 2023-06-02 09:45:16
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\search\index.nvue
  * @Description: 
  * 
@@ -43,11 +43,11 @@
           <template #content>
             <view class="pa-10" @click="onDetailClick(item.id)">
               <view v-for="(i, ind) in item.items" :key="ind" class="flex flex-row pt-10 pb-10">
-                <tm-image :width="160" :height="160" :round="4" :src="i.goodFirstDrawing"></tm-image>
+                <tm-image :width="160" :height="160" :round="4" :src="i.waresFirstDrawing"></tm-image>
                 <view class="flex-card-item-right">
-                  <tm-text _class="text-overflow-2" :label="i.goodName" />
+                  <tm-text _class="text-overflow-2" :label="i.waresName" />
                   <view class="flex flex-row flex-row-center-between">
-                    <tm-text color="orange" :label="`单位：${i.goodUnit}`" />
+                    <tm-text color="orange" :label="`单位：${i.waresUnit}`" />
                     <tm-text color="grey" :label="`×${i.num}`" />
                   </view>
                 </view>
@@ -55,7 +55,7 @@
               <tm-divider />
               <view class="flex flex-row flex-row-center-between pa-10">
                 <tm-text :font-size="26" color="grey" label="共计商品"></tm-text>
-                <tm-text :font-size="26" color="grey" :label="`×${item.goodNum}`"></tm-text>
+                <tm-text :font-size="26" color="grey" :label="`×${item.waresNum}`"></tm-text>
               </view>
             </view>
           </template>
@@ -132,10 +132,10 @@ import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
 
 import { onLoad, onShow } from '@dcloudio/uni-app'
-import { searchList, cancelOrder, rushOrder, receiverOrder, cancelRefundOrder } from '@/api/order'
+import { searchList, cancelOrder, rushOrder, receiverOrder, cancelRefundOrder } from '@/api/modules/order'
 import { nextTick } from 'process'
 import { confirm } from '@/utils/dialog'
-import { Order } from '@/types/order'
+import { Order } from '@/api/interface/order'
 
 const searchValue = ref<string>('')
 const senceValue = ref<number>(0)

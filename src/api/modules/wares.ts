@@ -2,15 +2,14 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 11:35:37
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-01 18:25:46
- * @FilePath: \xuct-group-purchase-uniapp\src\api\wares.ts
+ * @LastEditTime: 2023-06-02 09:59:54
+ * @FilePath: \xuct-group-purchase-uniapp\src\api\modules\wares.ts
  * @Description:
  *
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
  */
-import request from '@/services/request'
-import { User, Wares } from '@/types'
-import { API } from '@/types'
+import request from '@/api/config/request'
+import { User, Wares, API } from '@/api/interface'
 
 /**
  * 获取商品列表
@@ -92,7 +91,7 @@ export const modifyCartNum = (waresId: string, num: number) => {
  *
  * @param waresIdIds  商品ID
  */
-export const deleteCartGood = (waresIdIds: string[]) => {
+export const deleteCartWares = (waresIdIds: string[]) => {
   return request.post('/api/v1/wares/cart/del', {
     waresIdIds
   })

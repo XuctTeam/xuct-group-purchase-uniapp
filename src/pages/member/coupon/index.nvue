@@ -61,10 +61,10 @@ import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { useAppHook } from '@/store'
-import { couponList } from '@/api/user'
+import { couponList } from '@/api/modules/user'
 import { onLoad } from '@dcloudio/uni-app'
 import { loading, hideLoading } from '@/utils/dialog'
-import { User } from '@/types/user'
+import { User } from '@/api/interface/user'
 
 const DayJs = dayjs.default
 const tabActiveRef = ref<string>('1')
