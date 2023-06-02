@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:10:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 10:05:00
+ * @LastEditTime: 2023-06-02 15:27:21
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\detail.nvue
  * @Description: 
  * 
@@ -23,7 +23,7 @@
       "
     ></tm-navbar>
 
-    <uv-bottom-bar-page>
+    <uv-bottom-bar-container>
       <template v-if="!load">
         <tm-sheet :margin="[10, 10]" :round="3" :shadow="2" :padding="[10]">
           <tm-cell :margin="[0, 0]">
@@ -109,10 +109,6 @@
         </tm-sheet>
         <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
           <view class="flex flex-row flex-row-center-between pa-20">
-            <view class="w-140"><tm-text color="grey" :font-size="26" label="积分使用："></tm-text></view>
-            <tm-text :font-size="26" :label="`${orderInfo.integral ?? 0}分`"></tm-text>
-          </view>
-          <view class="flex flex-row flex-row-center-between pa-20">
             <view class="w-140"><tm-text color="grey" :font-size="26" label="商品小计："></tm-text></view>
             <tm-text :font-size="26" :label="orderInfo.waresNum"></tm-text>
           </view>
@@ -130,7 +126,7 @@
           </template>
         </view>
       </template>
-    </uv-bottom-bar-page>
+    </uv-bottom-bar-container>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -145,7 +141,7 @@ import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmImageGroup from '@/tmui/components/tm-image-group/tm-image-group.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
-import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
+import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 
 import { reactive, computed } from 'vue'
 import { cancelOrder, getOrderDetail, cancelRefundOrder } from '@/api/modules/order'
@@ -164,7 +160,6 @@ const orderInfo = reactive<Order.OrderResult>({
   waresNum: 1,
   totalPrice: 0,
   status: 1,
-  integral: 0,
   rush: 0,
   refundStatus: 1,
   refundType: '1',

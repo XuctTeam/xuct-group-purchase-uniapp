@@ -11,7 +11,7 @@
 <template>
   <tm-app>
     <tm-navbar title="商品详情" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <uv-bottom-bar-page :show-footer="!!logged">
+    <uv-bottom-bar-container :show-footer="!!logged">
       <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
       <tm-sheet :margin="[10, 10, 10, 10]" :round="4" :shadow="4">
         <view class="title text-overflow-2 mb-20">{{ name }}</view>
@@ -63,7 +63,7 @@
           </view>
         </view>
       </template>
-    </uv-bottom-bar-page>
+    </uv-bottom-bar-container>
   </tm-app>
 </template>
 
@@ -77,7 +77,7 @@ import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
-import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
+import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 import tmRow from '@/tmui/components/tm-row/tm-row.vue'
 import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 import { onLoad } from '@dcloudio/uni-app'

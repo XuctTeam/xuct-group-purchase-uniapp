@@ -2,38 +2,100 @@
  * @Author: Derek Xu
  * @Date: 2023-06-02 09:16:31
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 09:52:47
+ * @LastEditTime: 2023-06-02 17:10:21
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\chooseCoupon\index.nvue
  * @Description: 
  * 
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
 -->
 <template>
-  <tm-coupon
-    mainColor="green"
-    v-for="(item, i) in canUseCoupons"
-    :key="i"
-    :disable="item.used"
-    :priceDetail="formatePrice(item)"
-    :rightDetail="formatRight(item)"
-  >
-    <template #btn>
-      <tm-checkbox color="green" :round="24" :disabled="item.used" :value="!!!item.checked" @change="(e) => onConponCheckChage(e, item.id)"></tm-checkbox>
-    </template>
-  </tm-coupon>
+  <tm-app>
+    <tm-navbar title="选择优惠券" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <uv-bottom-bar-container>
+      <uv-empty v-if="canUseCoupons.length === 0 && canNotUseCoupons.length === 0 && !loadValue"></uv-empty>
+      <template v-else>
+        <template v-if="!loadValue">
+          <view class="mt-10">
+            <tm-coupon
+              :margin="[16, 16]"
+              v-for="(item, i) in canUseCoupons"
+              mainColor="#FF7F00"
+              font-color="#fff"
+              color="green"
+              :key="i"
+              :disable="item.used"
+              :priceDetail="formatePrice(item)"
+              :rightDetail="formatRight(item)"
+            >
+              <template #btn>
+                <tm-checkbox
+                  color="#215E21"
+                  :round="24"
+                  :disabled="item.used"
+                  :value="!!!item.checked"
+                  @change="(e) => onCouponCheckChange(e, item.id)"
+                ></tm-checkbox>
+              </template>
+            </tm-coupon>
+          </view>
+
+          <tm-divider align="center" label="不可用券"></tm-divider>
+          <view class="mt-10">
+            <tm-sheet v-for="(item, i) in canNotUseCoupons" :round="4" :key="i" :margin="[16, 16]" :padding="[0, 0]">
+              <tm-coupon disable :priceDetail="formatePrice(item)" :rightDetail="formatRight(item)" disableBgColor="#fff" :margin="[0, 0]">
+                <template #btn>
+                  <tm-checkbox color="green" :round="24" disabled></tm-checkbox>
+                </template>
+              </tm-coupon>
+              <tm-divider :margin="[0, 0]"></tm-divider>
+              <view class="flex flex-row flex-row-center-start pa-20">
+                <tm-icon color="orange" :font-size="26" name=" tmicon-info-circle"></tm-icon>
+                <view class="ml-10">
+                  <tm-text color="grey" :font-size="24" :label="`原因：${item.reason}`"></tm-text>
+                </view>
+              </view>
+            </tm-sheet>
+          </view>
+        </template>
+      </template>
+      <template #footer>
+        <view class="flex flex-row flex-1 flex-row-center-between">
+          <tm-text :label="`已选择${chooseCouponPrice}元优惠券`"></tm-text>
+          <tm-button label="确定" :round="4" color="green" @click="chooseClick"></tm-button>
+        </view>
+      </template>
+    </uv-bottom-bar-container>
+  </tm-app>
 </template>
 <script lang="ts" setup>
-import { reactive } from 'vue'
+import { reactive, ref, computed, getCurrentInstance } from 'vue'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCoupon from '@/tmui/components/tm-coupon/tm-coupon.vue'
 import tmCheckbox from '@/tmui/components/tm-checkbox/tm-checkbox.vue'
+import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import uvEmpty from '@/components/uv-empty/uv-empty.vue'
+import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 
 import { User } from '@/api/interface'
 import { canUsedCouponList } from '@/api/modules/user'
+import { loading, hideLoading } from '@/utils/dialog'
+import { onLoad } from '@dcloudio/uni-app'
+const $instance = ref<any>(getCurrentInstance()?.proxy)
 
 const DayJs = dayjs.default
 
 const canUseCoupons = reactive<User.Coupon[]>([])
+const canNotUseCoupons = reactive<User.Coupon[]>([])
+const sumPriceValue = ref<number>(0)
+const wareIdsValue = ref<string[]>([])
+const loadValue = ref<boolean>(true)
+const couponIdValue = ref<string>()
 
 const formatePrice = (item: User.Coupon) => {
   return {
@@ -47,17 +109,113 @@ const formatePrice = (item: User.Coupon) => {
 const formatRight = (item: User.Coupon) => {
   return {
     title: item.couponName,
-    subtitle: item.couponFullPrice > 0 ? '满' + item.couponFullPrice / 1000 + '元可用' : '不限制金额',
+    subtitle: item.couponFullPrice > 0 ? '满' + item.couponFullPrice / 1000 + '元可用' : '无门槛',
     time: '有效期：' + DayJs(item.beginTime).format('YYYY-MM-DD') + '至' + DayJs(item.endTime).format('YYYY-MM-DD')
   }
 }
 
-canUsedCouponList()
-  .then((res) => {
-    console.log(res)
-    debugger
+onLoad((opts: any) => {
+  const { couponId, sumPrice, wareIds } = opts
+  if (couponId) {
+    couponIdValue.value = couponId
+  }
+  if (sumPrice) {
+    sumPriceValue.value = sumPrice
+  }
+  if (wareIds) {
+    wareIdsValue.value = JSON.parse(wareIds)
+  }
+  initData()
+})
+
+const initData = () => {
+  loading()
+  canUsedCouponList()
+    .then((res) => {
+      filterCoupon(res.data)
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+    .finally(() => {
+      hideLoading()
+      loadValue.value = false
+    })
+}
+
+const chooseCouponPrice = computed(() => {
+  const selected = canUseCoupons.find((item) => item.checked)
+  if (!selected) {
+    return 0
+  }
+  return selected.couponPrice / 1000
+})
+
+const onCouponCheckChange = (value: any, id: string) => {
+  canUseCoupons.forEach((item) => {
+    item.checked = item.id === id ? value : false
   })
-  .catch((err: any) => {
-    console.log(err)
+}
+
+const filterCoupon = (list: User.Coupon[]) => {
+  const _cans: any = []
+  const _not: any = []
+  list.forEach((item) => {
+    if (item.couponWaresType === 0) {
+      if (!item.used && sumPriceValue.value >= item.couponFullPrice) {
+        _cans.push(item)
+        return
+      }
+      if (item.used) {
+        item.reason = '已使用'
+      }
+      if (sumPriceValue.value >= item.couponFullPrice) {
+        item.reason = '金额未达到'
+      }
+      _not.push(item)
+      return
+    }
+    if (item.used) {
+      item.reason = '已使用'
+      _not.push(item)
+      return
+    }
+    if (sumPriceValue.value < item.couponFullPrice) {
+      item.reason = '金额未达到'
+      _not.push(item)
+      return
+    }
+    if (wareIdsValue.value.length === 0 || !item.couponWaresList || item.couponWaresList.length === 0) {
+      item.reason = '指定特定商品'
+      return
+    }
+    const intersection = item.couponWaresList.filter((e) => wareIdsValue.value.includes(e.waresId))
+    if (intersection.length > 0) {
+      _cans.push(item)
+      return
+    }
+    item.reason = '指定特定商品'
+    _not.push(item)
   })
+  if (couponIdValue.value) {
+    const _selected = _cans.find((item: any) => item.id === couponIdValue.value)
+    if (_selected) {
+      _selected.checked = true
+    }
+  }
+  canUseCoupons.push(..._cans)
+  canNotUseCoupons.push(..._not)
+}
+
+const chooseClick = () => {
+  let pages = getCurrentPages() // 当前页
+  let beforePage = pages[pages.length - 2] // 上个页面
+  if (beforePage !== undefined && beforePage.route === 'pages/order/confirm/index') {
+    const channel = $instance.value?.getOpenerEventChannel()
+    channel.emit('acceptDataFromDetail', {
+      data: { ...canUseCoupons.find((x) => x.checked) }
+    })
+  }
+  uni.$tm.u.routerTo('', 'navigateBack')
+}
 </script>

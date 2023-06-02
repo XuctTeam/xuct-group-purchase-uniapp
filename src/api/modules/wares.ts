@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 11:35:37
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 09:59:54
+ * @LastEditTime: 2023-06-02 17:57:03
  * @FilePath: \xuct-group-purchase-uniapp\src\api\modules\wares.ts
  * @Description:
  *
@@ -115,7 +115,7 @@ export const collectList = () => {
  * 查询用户浏览商品
  */
 export const browseList = () => {
-  return request.get<Wares.WaresResult[]>('/api/v1/wares/user/browse')
+  return request.get<User.BrowserWaresResult[]>('/api/v1/wares/user/browse')
 }
 
 /**
@@ -123,6 +123,6 @@ export const browseList = () => {
  *
  * @param waresId
  */
-export const deleteBrowse = (waresId: string) => {
-  return request.delete('/api/v1/wares/user/browse?gid=' + waresId)
+export const deleteBrowse = (params: { id: string }) => {
+  return request.delete(`/api/v1/wares/user/browse/${params.id}`)
 }

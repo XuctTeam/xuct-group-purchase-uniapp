@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-05-04 14:38:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 20:55:25
+ * @LastEditTime: 2023-06-02 17:07:34
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\opinion\detail.nvue
  * @Description: 
  * 
@@ -11,7 +11,7 @@
 <template>
   <tm-app>
     <tm-navbar title="我的反馈" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <uv-bottom-bar-page>
+    <uv-bottom-bar-container>
       <template v-if="!load">
         <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
           <view class="flex flex-row pa-20">
@@ -40,22 +40,22 @@
         <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[10]">
           <view class="flex flex-row pa-20">
             <view class="w-140"><tm-text color="grey" :font-size="26" label="回复时间："></tm-text></view>
-            <tm-text v-if="opinion.status === 1" :font-size="26" :label="formatData(opinion.feedbackTime ?? new Date())"></tm-text>
+            <tm-text v-if="opinion.status" :font-size="26" :label="formatData(opinion.feedbackTime ?? new Date())"></tm-text>
           </view>
           <view class="flex flex-row flex-1 pa-20">
             <view class="w-140">
               <tm-text color="grey" :font-size="26" label="回复描述："></tm-text>
             </view>
-            <tm-text v-if="opinion.status === 1" :font-size="26" _class="text-overflow-10 word-break" :label="opinion.feedback"></tm-text>
+            <tm-text v-if="opinion.status" :font-size="26" _class="text-overflow-10 word-break" :label="opinion.feedback"></tm-text>
           </view>
         </tm-sheet>
       </template>
       <template #footer>
         <view class="flex-1">
-          <tm-button block color="green" :padding="[0, 10]" :round="4" label="撤销" :disabled="opinion.status !== 0"></tm-button>
+          <tm-button block color="green" :padding="[0, 10]" :round="4" label="撤销" :disabled="!!opinion.status"></tm-button>
         </view>
       </template>
-    </uv-bottom-bar-page>
+    </uv-bottom-bar-container>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -66,7 +66,7 @@ import tmImageGroup from '@/tmui/components/tm-image-group/tm-image-group.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
-import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
+import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { User } from '@/api/interface/user'
 

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-19 19:01:43
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-30 15:58:59
+ * @LastEditTime: 2023-06-02 17:14:41
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\collect\index.nvue
  * @Description: 
  * 
@@ -35,7 +35,7 @@
         </template>
         <template #action>
           <view class="flex flex-row flex-row-center-end flex-1">
-            <tm-button :round="24" color="white" label="取消" :font-size="24" :width="120" :height="64" @click="onCllect(item.id)"></tm-button>
+            <tm-button :round="24" color="white" label="取消" :font-size="24" :width="120" :height="64" @click="onCollect(item.id)"></tm-button>
           </view>
         </template>
       </tm-card>
@@ -107,7 +107,7 @@ const formatData = (date: Date) => {
   return DayJs(date).format('YYYY-MM-DD HH:mm:ss')
 }
 
-const onCllect = (gid: string) => {
+const onCollect = (gid: string) => {
   collect(gid)
     .then(() => {
       _removeItem(gid)

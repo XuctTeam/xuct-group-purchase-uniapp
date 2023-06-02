@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-05-05 10:28:18
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 09:45:16
+ * @LastEditTime: 2023-06-02 15:34:25
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\search\index.nvue
  * @Description: 
  * 
@@ -88,16 +88,7 @@
                       color="green"
                       @click="onRefundOrder(item.id)"
                     ></tm-button>
-                    <tm-button
-                      v-else
-                      :round="24"
-                      size="small"
-                      :margin="[24, 0]"
-                      label="收货"
-                      :font-size="24"
-                      color="green"
-                      @click="onReciverOrder(item.id)"
-                    ></tm-button>
+                    <tm-button v-else :round="24" size="small" label="收货" :font-size="24" color="green" @click="onReceiverOrder(item.id)"></tm-button>
                   </template>
                 </template>
                 <template v-else>
@@ -168,7 +159,7 @@ const queryList = (pageNo: number, pageSize: number) => {
 
 onLoad((opts: any) => {
   const { val, sence } = opts
-  senceValue.value = sence
+  senceValue.value = Number.parseInt(sence)
   searchValue.value = val
   nextTick(() => {
     initData(false)
@@ -243,7 +234,7 @@ const onRefundOrder = (orderId: string) => {
   })
 }
 
-const onReciverOrder = (orderId: string) => {
+const onReceiverOrder = (orderId: string) => {
   confirm({
     title: '确定收货吗？',
     success: () => {

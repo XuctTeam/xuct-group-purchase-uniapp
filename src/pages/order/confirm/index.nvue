@@ -2,17 +2,17 @@
  * @Author: Derek Xu
  * @Date: 2023-04-06 18:28:56
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 10:05:40
+ * @LastEditTime: 2023-06-02 15:26:01
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
 -->
 <template>
-  <page-meta :page-style="'overflow:' + (couponWin || showWin ? 'hidden' : 'visible')"></page-meta>
+  <page-meta :page-style="'overflow:' + (showWin ? 'hidden' : 'visible')"></page-meta>
   <tm-app>
     <tm-navbar title="确认订单" color="#32CD32" fontColor="#fff" blur :before-back="beforeBack"></tm-navbar>
-    <uv-bottom-bar-page>
+    <uv-bottom-bar-container>
       <tm-roll-notice :shadow="2" :round="2" color="#32CD32" :margin="[10, 10]" :text="false" fontColor="#fff" :list="content" @click="noticeClick" />
       <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
         <tm-cell :margin="[0, 0]" :titleFontSize="30" showAvatar @click="addressClick">
@@ -58,16 +58,9 @@
           :titleFontSize="26"
           title="优惠券"
           rightColor="green"
-          :rightText="couponValue.id ? couponValue.couponPrice / 1000 + '元' : '暂未使用'"
-          @click="
-            () => {
-              couponWin = !couponWin
-            }
-          "
+          :rightText="couponValue?.id ? couponValue.couponPrice / 1000 + '元' : '暂未使用'"
+          @click="couponChoose"
         />
-      </tm-sheet>
-      <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
-        <tm-cell :margin="[0, 0]" :titleFontSize="26" title="使用积分" rightColor="green" :rightText="integralValue" @click="() => (showWin = !showWin)" />
       </tm-sheet>
       <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 20]">
         <tm-text :font-size="26" label="备注信息"></tm-text>
@@ -77,12 +70,12 @@
           v-model="remarksValue"
           placeholder="备注特殊要求"
           confirm-hold
-          showCharNumber
           :maxlength="100"
           :border="1"
           color="grey-5"
           autoHeight
           type="textarea"
+          focusColor="green"
         ></tm-input>
       </tm-sheet>
       <template #footer>
@@ -91,25 +84,7 @@
           <tm-button label="确认下单" :round="4" color="green" @click="placeOrderClick"></tm-button>
         </view>
       </template>
-    </uv-bottom-bar-page>
-
-    <!-- 积分弹出框  --->
-    <tmDrawer placement="bottom" v-model:show="showWin" okColor="green" @ok="integralClick" title="积分">
-      <tm-radio-group v-model="integralChoose">
-        <view class="felx flex-col flex-1">
-          <view class="pa-10"><tm-radio color="green" value="none" label="暂不使用"></tm-radio></view>
-          <view class="pa-10"><tm-radio color="green" value="all" label="全部使用"></tm-radio></view>
-          <view class="pt-10 pl-10 pr-10 flex flex-row flex-row-center-between">
-            <tm-radio color="green" value="part" label="使用部分"></tm-radio>
-            <tm-text :font-size="24" color="red" _class="font-weight-b" :label="`可用（${userInfo.integral ?? 0}）分`"></tm-text>
-          </view>
-        </view>
-      </tm-radio-group>
-      <tm-divider></tm-divider>
-      <view class="ma-20" v-if="integralChoose === 'part'">
-        <tm-input placeholder="请输入积分" suffixLabel="分" v-model="integralInput" />
-      </view>
-    </tmDrawer>
+    </uv-bottom-bar-container>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -125,13 +100,9 @@ import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import tmRollNotice from '@/tmui/components/tm-roll-notice/tm-roll-notice.vue'
-import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
-import tmRadio from '@/tmui/components/tm-radio/tm-radio.vue'
-import tmRadioGroup from '@/tmui/components/tm-radio-group/tm-radio-group.vue'
-import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
+import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 
 import { onLoad } from '@dcloudio/uni-app'
-import { useUserHook } from '@/store'
 import { TEMPLATE_IDS } from '@/constant'
 
 import { loading, hideLoading, confirm, message } from '@/utils/dialog'
@@ -140,22 +111,17 @@ import { getConfirmOrderDetail } from '@/api/modules/order'
 import { placeOrder } from '@/api/modules/order'
 import { User, Wares } from '@/api/interface'
 
-const userStore = useUserHook()
 const $instance = ref<any>(getCurrentInstance()?.proxy)
-const userInfo: User.UserInfo = userStore.getUserInfo
 const content = ref(['点击获取订单实时消息~'])
 const waresIds = reactive<string[]>([])
 const showWin = ref(false)
-const couponWin = ref(false)
 const address = ref<User.Address>({
   id: undefined
 })
 const _scene = ref<string>('')
-const integralChoose = ref('none')
-const integralInput = ref<number>(0)
-const integralValue = ref<string>('暂不使用')
+
 const remarksValue = ref<string>('')
-const couponValue = ref<User.Coupon>({ id: '', couponName: '', couponFullPrice: 0, couponPrice: 0, beginTime: new Date(), endTime: new Date(), used: false })
+const couponValue = ref<User.Coupon>()
 
 const cartWares = reactive<Wares.Cart[]>([])
 
@@ -205,40 +171,12 @@ const addressClick = () => {
   })
 }
 
-const integralClick = () => {
-  integralInput.value = uni.$tm.u.isNumber(integralInput.value, 0)
-  if (integralInput.value > (userInfo.integral ?? 0)) {
-    integralInput.value = userInfo.integral ?? 0
-  }
-  switch (integralChoose.value) {
-    case 'all':
-      integralValue.value = '全部使用'
-      break
-    case 'part':
-      integralValue.value = integralInput.value + '分'
-      break
-    default:
-      integralValue.value = '暂不使用'
-  }
-}
-
 const placeOrderClick = () => {
-  let integral: number
-  switch (integralChoose.value) {
-    case 'all':
-      integral = -999
-      break
-    case 'part':
-      integral = integralInput.value
-      break
-    default:
-      integral = 0
-  }
   confirm({
     title: '确认订单内容无误？',
     success: () => {
       loading()
-      placeOrder(_scene.value, address.value.id ?? '', couponValue.value.id ?? '', integral, remarksValue.value, waresIds)
+      placeOrder(_scene.value, address.value.id ?? '', couponValue.value?.id ?? '', remarksValue.value, waresIds)
         .then((res: any) => {
           const orderId = res.data
           uni.$tm.u.routerTo('/pages/order/result/index?orderId=' + orderId, 'redirect')
@@ -270,25 +208,21 @@ const setCartListRefresh = () => {
   }
 }
 
-// const onConponCheckChage = (value: any, id: string) => {
-//   userCoupons.forEach((item) => {
-//     item.checked = item.id === id ? value : false
-//   })
-// }
-
-// const onCouponeChoose = () => {
-//   const _data = userCoupons.find((item) => item.checked)
-//   if (!_data) {
-//     return
-//   }
-//   Object.assign(couponValue.value, { ..._data })
-// }
-
-// const onConponNoUsed = () => {
-//   userCoupons.forEach((item) => (item.checked = false))
-//   Object.assign(couponValue.value, { id: '', couponName: '', couponFullPrice: 0, couponPrice: 0, beginTime: new Date(), endTime: new Date(), used: false })
-//   couponWin.value = false
-// }
+const couponChoose = () => {
+  const sumPrice = cartWares
+    .map((item) => item.num)
+    .reduce((prev, cur) => {
+      return prev + cur
+    }, 0)
+  uni.navigateTo({
+    url: '/pages/order/chooseCoupon/index?couponId=' + couponValue.value?.id + '&sumPrice=' + sumPrice + '&wareIds=' + JSON.stringify(waresIds),
+    events: {
+      acceptDataFromDetail(params: { data: User.Coupon }) {
+        couponValue.value = { ...params.data }
+      }
+    }
+  })
+}
 
 const _loadAddress = () => {
   getDefaultAddress()

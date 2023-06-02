@@ -2,8 +2,8 @@
  * @Author: Derek Xu
  * @Date: 2023-04-23 11:11:15
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-06 16:11:54
- * @FilePath: \xuct-group-purchase-uniapp\src\components\uv-bottom-bar-page\uv-bottom-bar-page.vue
+ * @LastEditTime: 2023-06-02 11:57:04
+ * @FilePath: \xuct-group-purchase-uniapp\src\components\uv-bottom-bar-container\uv-bottom-bar-container.vue
  * @Description: 
  * 
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 

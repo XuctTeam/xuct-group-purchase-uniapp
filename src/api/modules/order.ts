@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 09:58:44
+ * @LastEditTime: 2023-06-02 15:16:15
  * @FilePath: \xuct-group-purchase-uniapp\src\api\modules\order.ts
  * @Description:
  *
@@ -32,17 +32,15 @@ export const getConfirmOrderDetail = (scene: string, waresIds: string[]) => {
  * 下订单
  * @param scene  cart 购物车 wares 直接购买
  * @param addressId
- * @param integral
  * @param remarks
  * @param waresIds
  * @returns
  */
-export const placeOrder = (scene: string, addressId: string, couponId: string, integral: number, remarks: string, waresIds: string[]) => {
+export const placeOrder = (scene: string, addressId: string, couponId: string, remarks: string, waresIds: string[]) => {
   return request.post<string>('/api/v1/order', {
     scene,
     addressId,
     couponId,
-    integral,
     remarks,
     waresIds
   })

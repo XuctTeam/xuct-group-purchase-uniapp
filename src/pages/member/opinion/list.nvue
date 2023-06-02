@@ -1,7 +1,7 @@
 <template>
   <tm-app>
     <tm-navbar title="意见反馈" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <uv-bottom-bar-page>
+    <uv-bottom-bar-container>
       <template v-if="!load">
         <template v-if="opinions.length === 0">
           <uv-empty></uv-empty>
@@ -10,7 +10,7 @@
           <tm-sheet :round="4" :margin="[10]" v-for="(item, index) in opinions" @click="onDetailClick(item.id ?? '')" :key="index">
             <view class="flex flex-row flex-row-center-between">
               <tm-text :font-size="24" _class="font-weight-b" :label="formatType(item.type)"></tm-text>
-              <tm-text :font-size="24" color="green" :label="item.status === 1 ? '已反馈' : '未反馈'"></tm-text>
+              <tm-text :font-size="24" color="green" :label="item.status ? '已反馈' : '未反馈'"></tm-text>
             </view>
             <tm-divider></tm-divider>
             <view class="flex flex-row mb-20">
@@ -31,7 +31,7 @@
           <tm-button label="反馈" :round="4" color="green" block @click="onClick"></tm-button>
         </view>
       </template>
-    </uv-bottom-bar-page>
+    </uv-bottom-bar-container>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -44,7 +44,7 @@ import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 
-import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
+import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { opinionList } from '@/api/modules/user'

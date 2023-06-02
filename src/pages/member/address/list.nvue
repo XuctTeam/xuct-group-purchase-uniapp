@@ -10,7 +10,7 @@
 <template>
   <tm-app class="flex flex-col">
     <tm-navbar title="收货地址" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <uv-bottom-bar-page>
+    <uv-bottom-bar-container>
       <tm-sheet :margin="[0, 0]" :padding="[20, 30]">
         <tm-input
           v-model="searchValue"
@@ -50,7 +50,7 @@
           </view>
         </view>
       </template>
-    </uv-bottom-bar-page>
+    </uv-bottom-bar-container>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -63,7 +63,7 @@ import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmTag from '@/tmui/components/tm-tag/tm-tag.vue'
-import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
+import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 import { User } from '@/api/interface/user'
 
 import { onLoad, onShow } from '@dcloudio/uni-app'

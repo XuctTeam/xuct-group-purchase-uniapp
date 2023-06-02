@@ -2,8 +2,8 @@
  * @Author: Derek Xu
  * @Date: 2023-03-23 17:24:55
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 09:20:59
- * @FilePath: \xuct-group-purchase-uniapp\src\types\user.d.ts
+ * @LastEditTime: 2023-06-02 17:31:33
+ * @FilePath: \xuct-group-purchase-uniapp\src\api\interface\user.d.ts
  * @Description: 用户定义类
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved.
  */
@@ -66,10 +66,12 @@ export declare namespace User {
     couponName: string
     couponFullPrice: number
     couponPrice: number
+    couponWaresType: number
     beginTime: Date
     endTime: Date
     used: boolean
     checked?: boolean
+    reason?: string
     couponWaresList?: CouponWaresResult[]
   }
 
@@ -83,8 +85,21 @@ export declare namespace User {
     type: string
     images?: string
     remarks?: string
-    status: number
+    status: boolean
     feedbackTime?: Date
     feedback?: string
   }
+
+  type BrowserWaresResult = {
+    id: string
+    waresId: string
+    waresName: string
+    waresFirstDrawing: string
+    waresUnit: string
+    waresStartTime: Date
+    waresEndTime: Date
+    waresInventory: number
+    createTime: Date
+  }
+
 }

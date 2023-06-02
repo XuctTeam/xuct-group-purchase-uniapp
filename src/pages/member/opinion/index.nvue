@@ -1,7 +1,7 @@
 <template>
   <tm-app>
     <tm-navbar title="意见反馈" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <uv-bottom-bar-page>
+    <uv-bottom-bar-container>
       <tm-sheet :round="3" :shadow="2" :margin="[10]" :padding="[20]">
         <view class="pa-10">
           <tm-text _class="font-weight-b" :fontSize="28" label="描述问题"></tm-text>
@@ -54,7 +54,7 @@
           <tm-button label="提交" :round="4" color="green" block @click="onSave"></tm-button>
         </view>
       </template>
-    </uv-bottom-bar-page>
+    </uv-bottom-bar-container>
   </tm-app>
 </template>
 <script lang="ts" setup>
@@ -69,7 +69,7 @@ import tmRadioGroup from '@/tmui/components/tm-radio-group/tm-radio-group.vue'
 import tmUpload from '@/tmui/components/tm-upload/tm-upload.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
-import uvBottomBarPage from '@/components/uv-bottom-bar-page/uv-bottom-bar-page.vue'
+import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 
 import ENV_CONFIG from '@/config/env'
 import { useUserHook } from '@/store'

@@ -20,7 +20,6 @@ export declare namespace Order {
     remarks?: string
     deliverTime?: Date
     serveTime?: Date
-    integral: number
     rush: number
     refundStatus: number
     refundType?: string

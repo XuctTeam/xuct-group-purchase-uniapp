@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-27 09:30:05
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 20:55:34
+ * @LastEditTime: 2023-06-02 17:09:34
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\coupon\index.nvue
  * @Description: 
  * 
@@ -21,7 +21,7 @@
       activeFontColor="green"
       :width="_width"
       default-name="1"
-      @change="tabsChage"
+      @change="tabsChange"
     >
     </tm-tabs>
 
@@ -30,21 +30,24 @@
     </template>
     <view class="mt-10" v-else>
       <tm-coupon
-        mainColor="green"
         extra
-        :margin="[20]"
+        :margin="[16]"
+        mainColor="#FF7F00"
+        font-color="#fff"
+        color="green"
+        disable-bg-color="#fff"
         v-for="(item, i) in coupons"
         @click="onClick"
-        :btn-label="formateDisable(item) ? '暂不可用' : '立即使用'"
-        :disable="formateDisable(item)"
+        :btn-label="formateDisable(item) === 0 ? '立即使用' : formateDisable(item) === 1 ? '已过期' : '已使用'"
+        :disable="formateDisable(item) != 0"
         :priceDetail="formatePrice(item)"
         :rightDetail="formatRight(item)"
         :key="i"
       >
         <template #extra>
-          <tm-text :font-size="22" _class="opacity-7" label="1.优惠券只能在规定时间使用。"></tm-text>
-          <tm-text :font-size="22" _class="opacity-7" label="2.不限制商品可在购买任何商品时使用。"></tm-text>
-          <tm-text :font-size="22" _class="opacity-7" label="3.不限制金额可在任何金额时使用。"></tm-text>
+          <tm-text :font-size="22" color="#fff" _class="opacity-7" label="1.优惠券只能在规定时间使用。"></tm-text>
+          <tm-text :font-size="22" color="#fff" _class="opacity-7" label="2.限商品只有在购买指定商品时使用。"></tm-text>
+          <tm-text :font-size="22" color="#fff" _class="opacity-7" label="3.无门槛可在任何金额时使用。"></tm-text>
         </template>
       </tm-coupon>
     </view>
@@ -73,7 +76,7 @@ const loadValue = ref<boolean>(true)
 const tabsTitle = ref([
   { key: '1', title: '未使用' },
   { key: '2', title: '已使用' },
-  { key: '3', title: '已过期' }
+  { key: '3', title: '已失效' }
 ])
 
 const appStore = useAppHook()
@@ -85,7 +88,7 @@ onLoad(() => {
   initData()
 })
 
-const tabsChage = () => {
+const tabsChange = () => {
   initData()
 }
 
@@ -118,19 +121,19 @@ const formatePrice = (item: User.Coupon) => {
 const formatRight = (item: User.Coupon) => {
   return {
     title: item.couponName,
-    subtitle: item.couponFullPrice > 0 ? '满' + item.couponFullPrice / 1000 + '元可用' : '不限制金额',
+    subtitle: item.couponWaresType === 0 ? '【通用】 ' : '【限商品】' + (item.couponFullPrice > 0 ? '满' + item.couponFullPrice / 1000 + '元可用' : '无门槛'),
     time: '有效期：' + DayJs(item.beginTime).format('YYYY-MM-DD') + '至' + DayJs(item.endTime).format('YYYY-MM-DD')
   }
 }
 
 const formateDisable = (item: User.Coupon) => {
   if (item.used) {
-    return true
+    return 2
   }
   if (DayJs(item.endTime).isBefore(DayJs(new Date()))) {
-    return true
+    return 1
   }
-  return false
+  return 0
 }
 
 const onClick = () => {
