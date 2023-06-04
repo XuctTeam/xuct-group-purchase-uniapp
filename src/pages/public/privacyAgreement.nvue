@@ -10,7 +10,7 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="用户协议" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <tm-navbar title="隐私协议" color="#32CD32" fontColor="#fff" blur></tm-navbar>
     <view class="pa-20 content">
       <tm-html :content="rx"></tm-html>
     </view>
@@ -34,7 +34,7 @@ onLoad(() => {
 
 const _load = () => {
   loading()
-  getConfig(1)
+  getConfig(0)
     .then((res) => {
       const { content } = res.data
       rx.value = content

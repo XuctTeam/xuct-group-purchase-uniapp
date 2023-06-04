@@ -6,7 +6,7 @@
   },
   "pages": [
     {
-      "path": "pages/member/browse/index",
+      "path": "pages/member/login/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -44,6 +44,15 @@
     },
     {
       "path": "pages/wares/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/member/browse/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -98,16 +107,6 @@
     },
     {
       "path": "pages/member/collect/index",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-
-    {
-      "path": "pages/member/login/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
@@ -251,7 +250,16 @@
       }
     },
     {
-      "path": "pages/public/userprotocol",
+      "path": "pages/public/privacyAgreement",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
+      "path": "pages/public/userProtocol",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
