@@ -67,13 +67,13 @@
               <tm-text
                 :follow-dark="true"
                 :color="_disable ? _disableColor : _fontColor"
-                :font-size="36"
+                :font-size="30"
                 _class="text-weight-b"
                 :label="_rightDetail.title"
               ></tm-text>
               <tm-text
                 :follow-dark="true"
-                _class="opacity-7"
+                _class="opacity-7 mt-8"
                 :color="_disable ? _disableColor : _fontColor"
                 :font-size="24"
                 :label="_rightDetail.subtitle"
@@ -97,17 +97,8 @@
         </view>
         <view class="flex flex-col pt-16">
           <view class="flex flex-row flex-between">
-            <tm-text
-              _class="opacity-7"
-              :color="_disable ? _disableColor : _fontColor"
-              :font-size="22"
-              :label="_rightDetail.time"
-            ></tm-text>
-            <view
-              @click="_extraActive = !_extraActive"
-              v-if="props.extra"
-              class="flex flex-row flex-row-center-center opacity-7"
-            >
+            <tm-text _class="opacity-7" :color="_disable ? _disableColor : _fontColor" :font-size="22" :label="_rightDetail.time"></tm-text>
+            <view @click="_extraActive = !_extraActive" v-if="props.extra" class="flex flex-row flex-row-center-center opacity-7">
               <tm-text
                 :userInteractionEnabled="false"
                 :color="_disable ? _disableColor : _fontColor"
@@ -119,17 +110,16 @@
                 :userInteractionEnabled="false"
                 :color="_disable ? _disableColor : _fontColor"
                 :font-size="20"
-                :name="!_extraActive?'tmicon-angle-down':'tmicon-angle-up'"
+                :name="!_extraActive ? 'tmicon-angle-down' : 'tmicon-angle-up'"
               ></tm-icon>
             </view>
           </view>
-		  <view  v-if="props.extra && _extraActive" class="flex flex-row flex-row-top-start">
-			  <view class="flex-1">
-				 <view style="height:12px"></view>
-				  <slot name="extra"></slot>
-			  </view>
-		  </view>
-            
+          <view v-if="props.extra && _extraActive" class="flex flex-row flex-row-top-start">
+            <view class="flex-1">
+              <view style="height: 12px"></view>
+              <slot name="extra"></slot>
+            </view>
+          </view>
         </view>
       </view>
     </tm-sheet>
@@ -140,146 +130,142 @@
 /**
  * 优惠卷
  */
-import tmSheet from "../tm-sheet/tm-sheet.vue";
-import tmAvatar from "../tm-avatar/tm-avatar.vue";
-import { surplice, rightSurplice } from "./interface";
-import tmIcon from "../tm-icon/tm-icon.vue";
-import tmText from "../tm-text/tm-text.vue";
-import tmButton from "../tm-button/tm-button.vue";
-import { custom_props } from "../../tool/lib/minxs";
-import { computed, PropType, ref } from "vue";
-import { useTmpiniaStore } from "../../tool/lib/tmpinia";
-const store = useTmpiniaStore();
+import tmSheet from '../tm-sheet/tm-sheet.vue'
+import tmAvatar from '../tm-avatar/tm-avatar.vue'
+import { surplice, rightSurplice } from './interface'
+import tmIcon from '../tm-icon/tm-icon.vue'
+import tmText from '../tm-text/tm-text.vue'
+import tmButton from '../tm-button/tm-button.vue'
+import { custom_props } from '../../tool/lib/minxs'
+import { computed, PropType, ref } from 'vue'
+import { useTmpiniaStore } from '../../tool/lib/tmpinia'
+const store = useTmpiniaStore()
 const emits = defineEmits<{
-  (e: "click"): void;
-}>();
+  (e: 'click'): void
+}>()
 const props = defineProps({
   ...custom_props,
   margin: {
     type: Array as PropType<Array<number>>,
-    default: () => [32, 12],
+    default: () => [32, 12]
   },
   transprent: {
     type: Boolean,
-    default: false,
+    default: false
   },
   text: {
     type: Boolean,
-    default: false,
+    default: false
   },
   color: {
     type: String,
-    default: "white",
+    default: 'white'
   },
   fontColor: {
     type: String,
-    default: "black",
+    default: 'black'
   },
   priceDetail: {
     type: Object as PropType<surplice>,
     default: () => {
       return {
         price: 100,
-        suffix: "元",
-        prefix: "",
-        subtext: "满减券",
-      };
-    },
+        suffix: '元',
+        prefix: '',
+        subtext: '满减券'
+      }
+    }
   },
   rightDetail: {
     type: Object as PropType<rightSurplice>,
     default: () => {
       return {
-        title: "券的标题",
-        subtitle: "券的小标题",
-        time: "有效期:2022-6-3-2022-7-3",
-      };
-    },
+        title: '券的标题',
+        subtitle: '券的小标题',
+        time: '有效期:2022-6-3-2022-7-3'
+      }
+    }
   },
   shadow: {
     type: Number,
-    default: 0,
+    default: 0
   },
   round: {
     type: Number,
-    default: 3,
+    default: 3
   },
   border: {
     type: Number,
-    default: 0,
+    default: 0
   },
   //优惠券左边是金额文本模式还是图片模式，默认为空，即金额文本模式。
   thumb: {
     type: String,
-    default: "",
+    default: ''
   },
   //是否显示左边金额或者头像。
   showRight: {
     type: Boolean,
-    default: true,
+    default: true
   },
   //是否显示额外的详情内容。
   extra: {
     type: Boolean,
-    default: false,
+    default: false
   },
   //额外内容初始打开状态。
   extraActive: {
     type: Boolean,
-    default: false,
+    default: false
   },
   moreText: {
     type: String,
-    default: "规则详情",
+    default: '规则详情'
   },
   //强调色，金额 和 按钮的主题色
   mainColor: {
     type: String,
-    default: "red",
+    default: 'red'
   },
   btnTextMode: {
     type: Boolean,
-    default: false,
+    default: false
   },
   btnLabel: {
     type: String,
-    default: "立即使用",
+    default: '立即使用'
   },
   //是否禁用，等于已使用。
   disable: {
     type: Boolean,
-    default: false,
+    default: false
   },
-  disableColor:{
-    type:String,
-    default:"grey-1"
+  disableColor: {
+    type: String,
+    default: 'grey-1'
   },
-  disableBgColor:{
-    type:String,
-    default:"grey-3"
+  disableBgColor: {
+    type: String,
+    default: 'grey-3'
   }
-});
+})
 
-const _priceDetail = computed(() => props.priceDetail);
-const _rightDetail = computed(() => props.rightDetail);
-const _thumb = computed(() => props.thumb);
-const _extraActive = ref(props.extraActive);
-const _moreText = computed(() => props.moreText);
-const _btnLabel = computed(() => props.btnLabel);
-const _disable = computed(() => props.disable);
-const _disableColor = computed(() => props.disableColor);
-const _disableBgColor = computed(() => props.disableBgColor);
-const _isDark = computed(() => store.tmStore.dark);
+const _priceDetail = computed(() => props.priceDetail)
+const _rightDetail = computed(() => props.rightDetail)
+const _thumb = computed(() => props.thumb)
+const _extraActive = ref(props.extraActive)
+const _moreText = computed(() => props.moreText)
+const _btnLabel = computed(() => props.btnLabel)
+const _disable = computed(() => props.disable)
+const _disableColor = computed(() => props.disableColor)
+const _disableBgColor = computed(() => props.disableBgColor)
+const _isDark = computed(() => store.tmStore.dark)
 const _fontColor = computed(() => {
-  if (
-    store.tmStore.dark &&
-    props.fontColor !== "" &&
-    (props.fontColor == "black" || props.fontColor == "white")
-  ) {
-    return "white";
+  if (store.tmStore.dark && props.fontColor !== '' && (props.fontColor == 'black' || props.fontColor == 'white')) {
+    return 'white'
   }
-  return props.fontColor;
-});
+  return props.fontColor
+})
 </script>
 
 <style></style>

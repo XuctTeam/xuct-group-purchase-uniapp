@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 12:22:42
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 10:08:10
+ * @LastEditTime: 2023-06-05 22:20:06
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\setting\index.nvue
  * @Description: 
  * 
@@ -34,7 +34,7 @@
         <view class="font-weight-b">产品介绍</view>
       </view>
       <tm-divider></tm-divider>
-      <tm-cell :titleFontSize="28" bottomBorder title="隐私协议" :margin="[0, 0]" url="/pages/public/userprotocol" />
+      <tm-cell :titleFontSize="28" bottomBorder title="隐私协议" :margin="[0, 0]" url="/pages/public/privacyAgreement" />
       <tm-cell :titleFontSize="28" bottomBorder title="版本号" :rightText="versionRef" :margin="[0, 0]" />
     </tm-sheet>
 
@@ -55,7 +55,7 @@
             placeholder="请输入昵称"
             maxlength="15"
             :value="nickNameRef"
-            @change="nickNameChage"
+            @change="nickNameChange"
           />
         </template>
       </tm-cell>
@@ -132,7 +132,7 @@ const chooseAvatar = (avatar: any) => {
   })
 }
 
-const nickNameChage = (e: any) => {
+const nickNameChange = (e: any) => {
   nickNameRef.value = e.detail?.value
 }
 

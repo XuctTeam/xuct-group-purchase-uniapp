@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-23 13:46:26
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 10:03:25
+ * @LastEditTime: 2023-06-05 22:23:47
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\evaluate\list.nvue
  * @Description: 
  * 
@@ -11,7 +11,7 @@
 <template>
   <tm-app>
     <tm-navbar title="评价列表" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <tm-result v-if="orderItems.length === 0 && !load" color="green" title="~空空如也哦~" subTitle="快去完成订单吧 T.T" :showBtn="false"></tm-result>
+    <uv-empty v-if="orderItems.length === 0 && !load"></uv-empty>
     <tm-card v-else v-for="(item, i) in orderItems" :key="i" :status="formatData(item.createTime)" :title="item.orderId" :margin="[10]" statusColor="green">
       <view class="flex flex-row" @click="detailClick(item.waresId)">
         <tm-image :width="130" :height="130" :round="4" :src="item.waresFirstDrawing" />
@@ -48,7 +48,7 @@ import tmCard from '@/tmui/components/tm-card/tm-card.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
-import tmResult from '@/tmui/components/tm-result/tm-result.vue'
+import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { evaluateList } from '@/api/modules/order'
 import { hideLoading, loading } from '@/utils/dialog'

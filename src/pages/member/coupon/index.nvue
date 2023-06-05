@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-27 09:30:05
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-05 17:01:33
+ * @LastEditTime: 2023-06-05 21:41:37
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\coupon\index.nvue
  * @Description: 
  * 
@@ -30,29 +30,24 @@
     </template>
     <view class="mt-10" v-else>
       <tm-coupon
+        :margin="[20, 20]"
         extra
-        :margin="[16]"
-        mainColor="#FF7F00"
-        font-color="#fff"
-        color="green"
-        disable-bg-color="#fff"
+        mainColor="#FF0000"
+        font-color="#333333"
+        color="#FFFFFF"
         v-for="(item, i) in coupons"
+        :key="i"
+        disable-bg-color="#fff"
         @click="onClick"
         :btn-label="formateDisable(item) === 0 ? '立即使用' : formateDisable(item) === 1 ? '已过期' : '已使用'"
         :disable="formateDisable(item) != 0"
         :priceDetail="formatePrice(item)"
         :rightDetail="formatRight(item)"
-        :key="i"
       >
         <template #extra>
-          <tm-text :font-size="22" :color="formateDisable(item) !== 0 ? 'grey' : '#fff'" _class="opacity-7" label="1.优惠券只能在规定时间使用。"></tm-text>
-          <tm-text
-            :font-size="22"
-            :color="formateDisable(item) !== 0 ? 'grey' : '#fff'"
-            _class="opacity-7"
-            label="2.限商品只有在购买指定商品时使用。"
-          ></tm-text>
-          <tm-text :font-size="22" :color="formateDisable(item) !== 0 ? 'grey' : '#fff'" _class="opacity-7" label="3.无门槛可在任何金额时使用。"></tm-text>
+          <tm-text :font-size="22" color="grey" _class="opacity-7" label="1.优惠券只能在规定时间使用。"></tm-text>
+          <tm-text :font-size="22" color="grey" _class="opacity-7" label="2.限商品只有在购买指定商品时使用。"></tm-text>
+          <tm-text :font-size="22" color="grey" _class="opacity-7" label="3.无门槛可在任何金额时使用。"></tm-text>
         </template>
       </tm-coupon>
     </view>
@@ -126,8 +121,8 @@ const formatePrice = (item: User.Coupon) => {
 const formatRight = (item: User.Coupon) => {
   return {
     title: item.couponName,
-    subtitle: item.couponWaresType === 0 ? '【通用】 ' : '【限商品】' + (item.couponFullPrice > 0 ? '满' + item.couponFullPrice / 1000 + '元可用' : '无门槛'),
-    time: '有效期：' + DayJs(item.beginTime).format('YYYY-MM-DD') + '至' + DayJs(item.endTime).format('YYYY-MM-DD')
+    subtitle: item.couponWaresType === 0 ? '【通用】' : '【限商品】' + (item.couponFullPrice > 0 ? '满' + item.couponFullPrice / 1000 + '元可用' : '无门槛'),
+    time: DayJs(item.beginTime).format('YYYY.MM.DD') + '-' + DayJs(item.endTime).format('YYYY.MM.DD')
   }
 }
 

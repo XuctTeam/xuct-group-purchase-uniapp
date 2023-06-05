@@ -2,14 +2,14 @@
  * @Author: Derek Xu
  * @Date: 2023-04-23 11:11:15
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-04 10:38:41
+ * @LastEditTime: 2023-06-05 22:03:41
  * @FilePath: \xuct-group-purchase-uniapp\src\components\uv-bottom-bar-container\uv-bottom-bar-container.vue
  * @Description: 
  * 
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved. 
 -->
 <template>
-  <view class="safe-area" :style="{ marginBottom: (props.showFooter ? _totalBarHeight : 0) + 'px' }">
+  <view :class="!props.showFooter ? 'safe-area' : ''" :style="{ marginBottom: (props.showFooter ? _totalBarHeight : 0) + 'px' }">
     <slot></slot>
   </view>
   <view

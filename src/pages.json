@@ -34,6 +34,15 @@
       }
     },
     {
+      "path": "pages/member/coupon/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom",
+        "titlePenetrate": "YES",
+        "transparentTitle": "always"
+      }
+    },
+    {
       "path": "pages/cart/index",
       "style": {
         "navigationBarTitleText": "",
@@ -98,15 +107,6 @@
     },
     {
       "path": "pages/member/opinion/detail",
-      "style": {
-        "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "titlePenetrate": "YES",
-        "transparentTitle": "always"
-      }
-    },
-    {
-      "path": "pages/member/coupon/index",
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom",
