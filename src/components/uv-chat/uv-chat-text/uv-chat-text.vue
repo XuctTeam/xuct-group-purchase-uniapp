@@ -10,7 +10,7 @@
 -->
 <template>
   <view class="content">
-    <text>{{ text }}</text>
+    <text>{{ props.text }}</text>
   </view>
 </template>
 
@@ -21,8 +21,6 @@ const props = defineProps({
     default: () => '这是条消息'
   }
 })
-
-console.log(props)
 </script>
 
 <style scoped>

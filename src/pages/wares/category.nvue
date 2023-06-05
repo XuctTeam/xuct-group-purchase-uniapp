@@ -1,0 +1,138 @@
+<template>
+  <tm-app>
+    <tm-navbar title="商品分类" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <tm-side-menu
+      v-model:active="active"
+      :itemHeight="100"
+      :list="menuValue"
+      rangKey="name"
+      menuActiveFontColor="green"
+      @load="loadMore"
+      @restore="restore"
+      @change="menuChange"
+      :height="windowHeight"
+    >
+      <uv-empty v-if="!loading && waresValue.length === 0"></uv-empty>
+      <view class="pa-20" v-else>
+        <view></view>
+        <tm-sheet :margin="[0, 10]" :round="3" :shadow="2" v-for="(item, index) in waresValue" :key="index" @click="toWares(item.id)">
+          <view class="flex flex-row">
+            <tm-image :src="item.firstDrawing" :width="130" :height="130"></tm-image>
+            <view class="flex-card-item-right height-130">
+              <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
+              <view class="flex flex-row flex-row-center-between pr-20">
+                <tm-text :font-size="24" color="grey" :label="`库存：${item.inventory}`"></tm-text>
+                <tm-text :font-size="24" color="orange" :label="`单位：${item.unit}`"></tm-text>
+              </view>
+            </view>
+          </view>
+        </tm-sheet>
+      </view>
+    </tm-side-menu>
+  </tm-app>
+</template>
+
+<script lang="ts" setup>
+import { ref, computed } from 'vue'
+import tmApp from '@/tmui/components/tm-app/tm-app.vue'
+import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
+import tmSideMenu from '@/tmui/components/tm-side-menu/tm-side-menu.vue'
+import tmText from '@/tmui/components/tm-text/tm-text.vue'
+import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
+import uvEmpty from '@/components/uv-empty/uv-empty.vue'
+import tmImage from '@/tmui/components/tm-image/tm-image.vue'
+
+import { reactive } from 'vue'
+import { Wares } from '@/api/interface'
+import { onLoad } from '@dcloudio/uni-app'
+import { categoryListApi, waresListApi } from '@/api/modules/wares'
+
+const menuValue = reactive<Wares.CategoryResult[]>([])
+const active = ref<number>(0)
+const categoryIdValue = ref<string>('')
+const waresValue = ref<Wares.WaresResult[]>([])
+const finished = ref<boolean>(false)
+const loading = ref<boolean>(true)
+const pageValue = ref<number>(1)
+const pageTotalValue = ref<number>(0)
+
+const windowHeight = computed(() => {
+  const sysInfo = uni.getSystemInfoSync()
+  const height = sysInfo.screenHeight
+  const statusBar = sysInfo.statusBarHeight ?? 0
+  const bottom = sysInfo.safeAreaInsets?.bottom ?? 0
+  return uni.$tm.u.torpx(height - statusBar - (bottom + 46))
+})
+
+onLoad((opts: any) => {
+  const { categoryId } = opts
+  if (categoryId) {
+    categoryIdValue.value = categoryId
+  }
+  _loadCategory()
+})
+
+const loadMore = (type: 'loading' | 'success' | 'pull' | 'bottom' | 'menu') => {
+  if (type === 'success') {
+    return
+  }
+  if (type === 'loading' && finished.value) {
+    console.log('到底了~')
+    return
+  }
+  _loadWares()
+}
+
+const menuChange = (index: number) => {
+  categoryIdValue.value = menuValue[index].id
+  restore()
+}
+
+const restore = () => {
+  finished.value = false
+  pageValue.value = 1
+  pageTotalValue.value = 0
+  waresValue.value.length = 0
+}
+
+const toWares = (waresId: string) => {
+  uni.$tm.u.routerTo('/pages/wares/index?id=' + waresId, 'navigate')
+}
+
+const _loadCategory = async () => {
+  const { data } = await categoryListApi()
+  menuValue.length = 0
+  menuValue.push(...data)
+  if (!categoryIdValue.value) {
+    categoryIdValue.value = menuValue[0].id
+  }
+  active.value = menuValue.findIndex((item) => item.id === categoryIdValue.value)
+  _loadWares()
+}
+
+const _loadWares = () => {
+  loading.value = true
+  waresListApi({ pageNum: pageValue.value, pageSize: 20, categoryId: categoryIdValue.value })
+    .then((res) => {
+      const { list, pageTotal } = res.data
+      if (pageTotal === 0) {
+        finished.value = true
+        return
+      }
+      if (pageTotalValue.value === 0) {
+        pageTotalValue.value = pageTotal
+      }
+      if (pageValue.value === pageTotalValue.value) {
+        finished.value = true
+      }
+      waresValue.value.push(...list)
+      pageValue.value += 1
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
+</script>

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-25 21:54:59
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-16 21:06:15
+ * @LastEditTime: 2023-06-05 09:39:48
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\list.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -42,7 +42,7 @@
       <template #footer>
         <view class="flex flex-row flex-1 flex-row-center-between">
           <view class="flex flex-1">
-            <tm-button block color="orange" @click="chooseaddress" :round="4" :padding="[0, 10]" label="微信导入"></tm-button>
+            <tm-button block color="orange" @click="chooseAddress" :round="4" :padding="[0, 10]" label="微信导入"></tm-button>
           </view>
           <view class="w-10"></view>
           <view class="flex flex-1">
@@ -69,7 +69,7 @@ import { User } from '@/api/interface/user'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { reactive, ref, getCurrentInstance } from 'vue'
 import { userAddressList, saveUserAddress } from '@/api/modules/user'
-import { loading, hideLoading } from '@/utils/dialog'
+import { loading, hideLoading, message } from '@/utils/dialog'
 
 const load = ref(true)
 const addressList = reactive<User.Address[]>([])
@@ -113,13 +113,21 @@ const initData = (_search: string) => {
     })
 }
 
-const chooseaddress = (e: any) => {
+const chooseAddress = (e: any) => {
   console.log(e)
   uni.chooseAddress({
     success: (res: User.Address) => {
       if (res.errMsg == 'chooseAddress:ok') {
         const { errMsg, ...address } = res
         console.log(errMsg)
+        const result = _checkAddress(address)
+        if (!result) {
+          message({
+            title: '仅导入滨海新区',
+            icon: 'error'
+          })
+          return
+        }
         saveUserAddress(address)
           .then(() => {
             initData('')
@@ -174,6 +182,13 @@ const onSelect = (addressId: string) => {
     channel.emit('acceptDataFromDetail', { ...addressList.find((x) => x.id === addressId) })
   }
   uni.$tm.u.routerTo('', 'navigateBack')
+}
+
+const _checkAddress = (address: User.Address) => {
+  if (address.countyName !== '滨海新区') {
+    return false
+  }
+  return true
 }
 </script>
 <style></style>

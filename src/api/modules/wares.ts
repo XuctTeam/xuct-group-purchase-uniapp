@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 11:35:37
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 17:57:03
+ * @LastEditTime: 2023-06-05 15:00:22
  * @FilePath: \xuct-group-purchase-uniapp\src\api\modules\wares.ts
  * @Description:
  *
@@ -12,9 +12,16 @@ import request from '@/api/config/request'
 import { User, Wares, API } from '@/api/interface'
 
 /**
+ * 商品分类列表
+ */
+export const categoryListApi = () => {
+  return request.get<Wares.CategoryResult[]>('/api/v1/category/list')
+}
+
+/**
  * 获取商品列表
  */
-export const waresList = (params: { pageNum: number; pageSize: number }) => {
+export const waresListApi = (params: { pageNum: number; pageSize: number , categoryId? : string}) => {
   return request.get<API.PageResult<Wares.WaresResult>>('/api/v1/wares/list', params)
 }
 

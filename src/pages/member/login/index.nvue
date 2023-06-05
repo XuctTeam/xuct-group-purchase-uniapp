@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 13:42:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-04 11:13:49
+ * @LastEditTime: 2023-06-05 09:36:52
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\login\index.nvue
  * @Description: 
  * 
@@ -85,9 +85,9 @@ const login = () => {
   }
   _login()
     .then((res: any) => {
-      const { tokenValue, ...user } = res
+      const { tokenValue, ...member } = res
       userStore.setToken(tokenValue)
-      userStore.setUserInfo(user)
+      userStore.setUserInfo(member)
       back()
     })
     .catch((err: any) => {
@@ -96,8 +96,8 @@ const login = () => {
 }
 
 const back = () => {
-  const pLenth = getCurrentPages().length
-  uni.$tm.u.routerTo(pLenth === 1 ? '/pages/index/index' : '', pLenth === 1 ? 'redirect' : 'navigateBack')
+  const pageLength = getCurrentPages().length
+  uni.$tm.u.routerTo(pageLength === 1 ? '/pages/index/index' : '', pageLength === 1 ? 'redirect' : 'navigateBack')
 }
 
 const reject = () => {
@@ -120,11 +120,11 @@ const _login = () => {
         loading('登录中...')
         try {
           const loinResult = await loginByCode(loginRes.code)
-          const { tokenValue, user } = loinResult.data
+          const { tokenValue, member } = loinResult.data
           hideLoading()
           return resolve({
             tokenValue,
-            ...user
+            ...member
           })
         } catch (err) {
           console.log(err)

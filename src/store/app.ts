@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:25:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-05 15:01:16
+ * @LastEditTime: 2023-06-05 11:10:14
  * @FilePath: \xuct-group-purchase-uniapp\src\store\app.ts
  * @Description:
  *
@@ -17,7 +17,7 @@ export const appStore = defineStore('appStore', () => {
   const windowWidth = ref(0)
 
   const initApp = () => {
-    const { sysinfo, width, height, statusBarHeight } = getWindow()
+    const { sysinfo, width } = getWindow()
     safeBottom.value = sysinfo?.safeAreaInsets?.bottom ?? 0
     windowWidth.value = width
   }

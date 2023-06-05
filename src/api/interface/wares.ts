@@ -2,13 +2,21 @@
  * @Author: Derek Xu
  * @Date: 2023-03-21 18:33:48
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-30 15:52:30
- * @FilePath: \xuct-group-purchase-uniapp\src\types\wares.ts
+ * @LastEditTime: 2023-06-05 10:02:03
+ * @FilePath: \xuct-group-purchase-uniapp\src\api\interface\wares.ts
  * @Description:
  *
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
  */
 export declare namespace Wares {
+
+  type CategoryResult = {
+    id: string,
+    name: string,
+    image: string,
+    sort: number
+  }
+
   type WaresResult = {
     id: string
     name: string

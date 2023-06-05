@@ -13,7 +13,7 @@ export declare namespace User {
   type LoginResult = {
     tokenName: string
     tokenValue: string
-    user?: UserInfo
+    member?: UserInfo
   }
 
   type UserInfo = {
@@ -101,5 +101,4 @@ export declare namespace User {
     waresInventory: number
     createTime: Date
   }
-
 }

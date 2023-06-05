@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:29:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-05-30 16:21:53
+ * @LastEditTime: 2023-06-05 11:07:09
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\list\index.nvue
  * @Description: 
  * 
@@ -39,7 +39,7 @@
           </tm-sheet>
           <tm-tabs
             :list="tabsTitle"
-            @change="tabschange"
+            @change="tabsChange"
             :width="_width"
             showTabsLineAni
             :item-width="140"
@@ -106,7 +106,7 @@
                     label="收货"
                     :font-size="24"
                     color="green"
-                    @click="onReciverOrder(item.id)"
+                    @click="onReceiverOrder(item.id)"
                   ></tm-button>
                 </template>
               </template>
@@ -176,7 +176,7 @@ const queryList = (pageNo: number, pageSize: number) => {
     })
 }
 
-const tabschange = (key: string | number) => {
+const tabsChange = (key: string | number) => {
   console.log(key)
   reloadData()
 }
@@ -231,7 +231,7 @@ const onRushOrderOrder = (orderId: string) => {
     })
 }
 
-const onReciverOrder = (orderId: string) => {
+const onReceiverOrder = (orderId: string) => {
   confirm({
     title: '确定收货吗？',
     success: () => {
