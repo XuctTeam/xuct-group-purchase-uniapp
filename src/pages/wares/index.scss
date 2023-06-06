@@ -1,0 +1,20 @@
+.title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: black;
+}
+
+.blurb {
+  font-size: 26rpx;
+  color: grey;
+}
+
+.between {
+  flex-wrap: wrap;
+  align-content: space-between;
+}
+
+._img {
+  display: block !important;
+  font-size: 0;
+}

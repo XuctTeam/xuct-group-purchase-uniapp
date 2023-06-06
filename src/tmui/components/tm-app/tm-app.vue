@@ -28,7 +28,6 @@
 	import { getWindow } from "../../tool/function/util";
 	import { custom_props, computedTheme, computedClass, computedStyle, computedDark, } from "../../tool/lib/minxs";
 	import { onShow, onLoad, onInit } from "@dcloudio/uni-app";
-
 	import tmSheet from "../tm-sheet/tm-sheet.vue";
 	// #ifdef APP-PLUS-NVUE
 	const animation = uni.requireNativePlugin("animation");

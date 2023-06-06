@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 10:04:19
+ * @LastEditTime: 2023-06-06 09:11:43
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\wares\index.nvue
  * @Description: 
  * 
@@ -189,25 +189,6 @@ const setPageRefresh = () => {
   }
 }
 </script>
-<style>
-.title {
-  font-size: 30rpx;
-  font-weight: bold;
-  color: black;
-}
-
-.blurb {
-  font-size: 26rpx;
-  color: grey;
-}
-
-.between {
-  flex-wrap: wrap;
-  align-content: space-between;
-}
-
-._img {
-  display: block !important;
-  font-size: 0;
-}
+<style scoped>
+@import './index.scss';
 </style>

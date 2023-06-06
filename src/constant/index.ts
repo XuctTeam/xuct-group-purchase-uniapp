@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 15:51:01
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-01 11:41:25
+ * @LastEditTime: 2023-06-06 09:23:12
  * @FilePath: \xuct-group-purchase-uniapp\src\constant\index.ts
  * @Description:
  *
@@ -18,7 +18,7 @@ export enum StoreEnum {
 /**
  * 消息模板ID
  */
-export const TEMPLATE_IDS = ['m3tIRN2yvI2mdFuGHV9mXS0uIHf9oz-u6U51HRHTcLQ']
+export const TEMPLATE_ORDER_IDS = ['JupbNY-ycGTPU89BmmQeGASIjPpW-CUkHozeAM7k0cM', 'kh0z7GBwVecPFFRkv6Hz7VU6hbgvYg84sIRQHrSHd6g']
 
 /**
  * 瀑布流基础图片

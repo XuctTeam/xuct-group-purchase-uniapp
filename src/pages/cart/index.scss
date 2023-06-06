@@ -1,0 +1,21 @@
+.top {
+  position: fixed;
+  z-index: 99;
+  background-color: #fff;
+  left: 0;
+  right: 0;
+  height: 80rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10rpx 30rpx;
+}
+
+.checkbox {
+  width: 80rpx;
+}
+
+.actions {
+  height: 120rpx;
+}

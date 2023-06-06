@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-21 11:10:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 09:42:38
+ * @LastEditTime: 2023-06-06 09:11:09
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\services\index.nvue
  * @Description: 
  * 
@@ -74,7 +74,5 @@ const makeCall = () => {
 </script>
 
 <style scoped>
-.inner-contact-class >>> .flex-row-center-center {
-  justify-content: flex-start !important;
-}
+@import './index.scss';
 </style>

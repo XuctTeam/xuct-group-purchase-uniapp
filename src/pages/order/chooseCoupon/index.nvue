@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-06-02 09:16:31
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 17:10:21
+ * @LastEditTime: 2023-06-06 08:53:54
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\chooseCoupon\index.nvue
  * @Description: 
  * 
@@ -15,13 +15,13 @@
       <uv-empty v-if="canUseCoupons.length === 0 && canNotUseCoupons.length === 0 && !loadValue"></uv-empty>
       <template v-else>
         <template v-if="!loadValue">
-          <view class="mt-10">
+          <view class="mt-18">
             <tm-coupon
-              :margin="[16, 16]"
+              :margin="[20, 20]"
               v-for="(item, i) in canUseCoupons"
-              mainColor="#FF7F00"
-              font-color="#fff"
-              color="green"
+              mainColor="#FF0000"
+              font-color="#333333"
+              color="#FFFFFF"
               :key="i"
               :disable="item.used"
               :priceDetail="formatePrice(item)"
@@ -29,7 +29,7 @@
             >
               <template #btn>
                 <tm-checkbox
-                  color="#215E21"
+                  color="green"
                   :round="24"
                   :disabled="item.used"
                   :value="!!!item.checked"
@@ -109,8 +109,8 @@ const formatePrice = (item: User.Coupon) => {
 const formatRight = (item: User.Coupon) => {
   return {
     title: item.couponName,
-    subtitle: item.couponFullPrice > 0 ? '满' + item.couponFullPrice / 1000 + '元可用' : '无门槛',
-    time: '有效期：' + DayJs(item.beginTime).format('YYYY-MM-DD') + '至' + DayJs(item.endTime).format('YYYY-MM-DD')
+    subtitle: item.couponWaresType === 0 ? '【通用】' : '【限商品】' + (item.couponFullPrice > 0 ? '满' + item.couponFullPrice / 1000 + '元可用' : '无门槛'),
+    time: DayJs(item.beginTime).format('YYYY.MM.DD') + '-' + DayJs(item.endTime).format('YYYY.MM.DD')
   }
 }
 

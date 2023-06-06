@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 08:58:16
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-05 10:18:53
+ * @LastEditTime: 2023-06-06 09:09:54
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -145,7 +145,6 @@ const _pushWares = (list: Wares.WaresResult[]) => {
       imgUrl: _wares.firstDrawing,
       name: _wares.name,
       tags: _wares.tags,
-      merchantName: `商家名称${i}`,
       price: `${Math.floor(Math.random() * 330)}.09`,
       stock: _wares.inventory
     })
@@ -154,17 +153,6 @@ const _pushWares = (list: Wares.WaresResult[]) => {
 
 // const bannerClick = (index: number) => {
 //   console.log(index)
-// }
-
-// const formatTag = (i: number) => {
-//   switch (i) {
-//     case 0:
-//       return 'red'
-//     case 1:
-//       return 'orange'
-//     default:
-//       return 'green'
-//   }
 // }
 
 const onMenuClick = (id: string) => {
@@ -199,19 +187,6 @@ const waresClick = (data: { item: any }) => {
   uni.$tm.u.routerTo('/pages/wares/index?id=' + item.id, 'navigate')
 }
 </script>
-<style lang="scss">
-.item {
-  padding: 10rpx 10rpx 20rpx;
-
-  .title {
-    line-height: 48rpx;
-    font-size: 28rpx;
-    color: #222;
-  }
-
-  .desc {
-    font-size: 24rpx;
-    color: #666;
-  }
-}
+<style lang="scss" scoped>
+@import './index.scss';
 </style>

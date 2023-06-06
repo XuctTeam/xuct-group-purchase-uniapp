@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:10:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 15:27:21
+ * @LastEditTime: 2023-06-06 09:14:40
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\detail.nvue
  * @Description: 
  * 
@@ -297,13 +297,6 @@ const setRefreshPage = () => {
   }
 }
 </script>
-<style>
-.right {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 160rpx;
-  flex: 1;
-  padding: 10rpx;
-}
+<style scoped>
+@import './index.scss';
 </style>

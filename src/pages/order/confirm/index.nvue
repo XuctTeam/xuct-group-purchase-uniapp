@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-06 18:28:56
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 15:26:01
+ * @LastEditTime: 2023-06-06 09:55:59
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
@@ -13,7 +13,6 @@
   <tm-app>
     <tm-navbar title="确认订单" color="#32CD32" fontColor="#fff" blur :before-back="beforeBack"></tm-navbar>
     <uv-bottom-bar-container>
-      <tm-roll-notice :shadow="2" :round="2" color="#32CD32" :margin="[10, 10]" :text="false" fontColor="#fff" :list="content" @click="noticeClick" />
       <tm-sheet :round="3" :shadow="2" :margin="[10, 10]" :padding="[10, 10]">
         <tm-cell :margin="[0, 0]" :titleFontSize="30" showAvatar @click="addressClick">
           <template #avatar>
@@ -99,11 +98,10 @@ import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmInput from '@/tmui/components/tm-input/tm-input.vue'
-import tmRollNotice from '@/tmui/components/tm-roll-notice/tm-roll-notice.vue'
 import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 
 import { onLoad } from '@dcloudio/uni-app'
-import { TEMPLATE_IDS } from '@/constant'
+import { TEMPLATE_ORDER_IDS } from '@/constant'
 
 import { loading, hideLoading, confirm, message } from '@/utils/dialog'
 import { getDefaultAddress } from '@/api/modules/user'
@@ -151,15 +149,6 @@ const sumNum = computed(() => {
     }, 0)
 })
 
-const noticeClick = () => {
-  uni.requestSubscribeMessage({
-    tmplIds: TEMPLATE_IDS,
-    complete: (res) => {
-      console.log(res)
-    }
-  })
-}
-
 const addressClick = () => {
   uni.navigateTo({
     url: '/pages/member/address/list?type=order',
@@ -175,21 +164,39 @@ const placeOrderClick = () => {
   confirm({
     title: '确认订单内容无误？',
     success: () => {
-      loading()
-      placeOrder(_scene.value, address.value.id ?? '', couponValue.value?.id ?? '', remarksValue.value, waresIds)
-        .then((res: any) => {
-          const orderId = res.data
-          uni.$tm.u.routerTo('/pages/order/result/index?orderId=' + orderId, 'redirect')
-        })
-        .catch((err: any) => {
-          console.log(err)
-        })
-        .finally(() => {
-          hideLoading()
-        })
+      subscribeMessage()
     },
     fail: () => {}
   })
+}
+
+const subscribeMessage = () => {
+  uni.requestSubscribeMessage({
+    tmplIds: [TEMPLATE_ORDER_IDS[0]],
+    success(res) {
+      console.log(res)
+      _saveOrder()
+    },
+    fail(msg) {
+      console.log(msg)
+      _saveOrder()
+    }
+  })
+}
+
+const _saveOrder = () => {
+  loading()
+  placeOrder(_scene.value, address.value.id ?? '', couponValue.value?.id ?? '', remarksValue.value, waresIds)
+    .then((res: any) => {
+      const orderId = res.data
+      uni.$tm.u.routerTo('/pages/order/result/index?orderId=' + orderId, 'redirect')
+    })
+    .catch((err: any) => {
+      console.log(err)
+    })
+    .finally(() => {
+      hideLoading()
+    })
 }
 
 const beforeBack = () => {
@@ -251,4 +258,3 @@ const _loadDetail = (scene: string, gids: string[]) => {
     })
 }
 </script>
-<style></style>
