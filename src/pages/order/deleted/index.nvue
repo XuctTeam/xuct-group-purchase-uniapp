@@ -51,7 +51,6 @@ import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 
 import { reactive } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { loading, hideLoading } from '@/utils/dialog'
 import { deletedList } from '@/api/modules/order'
 import { Order } from '@/api/interface'
 
@@ -60,7 +59,6 @@ const orderList = reactive<Order.OrderResult[]>([])
 
 onLoad(() => {
   load.value = true
-  loading()
   deletedList()
     .then((res: any) => {
       orderList.length = 0
@@ -71,7 +69,6 @@ onLoad(() => {
     })
     .finally(() => {
       load.value = false
-      hideLoading()
     })
 })
 </script>

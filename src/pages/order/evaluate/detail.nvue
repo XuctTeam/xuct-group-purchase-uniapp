@@ -80,7 +80,6 @@ import { useUserHook } from '@/store'
 import ENV_CONFIG from '@/config/env'
 import { onLoad } from '@dcloudio/uni-app'
 import { evaluate } from '@/api/modules/order'
-import { loading, hideLoading } from '@/utils/dialog'
 const $instance = ref<any>(getCurrentInstance()?.proxy)
 const { BASE_API_URL } = ENV_CONFIG
 const userStore = useUserHook()
@@ -100,7 +99,6 @@ const onStart = (item: any) => {
 const onUploadFail = () => {}
 
 const onConfirmClick = () => {
-  loading()
   const _images = imageList.value
     .filter((x: any) => {
       return JSON.parse(x.response).code === 200
@@ -119,9 +117,6 @@ const onConfirmClick = () => {
     })
     .catch((err: any) => {
       console.log(err)
-    })
-    .finally(() => {
-      hideLoading()
     })
 }
 

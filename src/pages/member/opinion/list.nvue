@@ -49,7 +49,6 @@ import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { opinionList } from '@/api/modules/user'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
-import { loading, hideLoading } from '@/utils/dialog'
 import { User } from '@/api/interface/user'
 
 const opinions = reactive<User.Opinion[]>([])
@@ -96,7 +95,6 @@ onShow(() => {
 
 const initData = () => {
   load.value = true
-  loading()
   opinionList()
     .then((res) => {
       opinions.length = 0
@@ -108,7 +106,6 @@ const initData = () => {
     })
     .finally(() => {
       load.value = false
-      hideLoading()
     })
 }
 

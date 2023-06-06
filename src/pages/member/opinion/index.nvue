@@ -81,7 +81,6 @@ const uploadUrlValue = ref<string>(BASE_API_URL + '/api/v1/opinion/upload')
 const imageList = ref([])
 const opinionValue = ref('1')
 const refundReasonValue = ref<string>('')
-import { hideLoading, loading } from '@/utils/dialog'
 import { saveOpinion } from '@/api/modules/user'
 
 const radioItems = [
@@ -123,7 +122,6 @@ const onStart = (item: any) => {
 const onUploadFail = () => {}
 
 const onSave = () => {
-  loading()
   const _images = imageList.value
     .filter((x: any) => {
       return JSON.parse(x.response).code === 200
@@ -135,7 +133,7 @@ const onSave = () => {
   saveOpinion({
     type: opinionValue.value,
     images: _images.join(','),
-    status: 1,
+    status: true,
     remarks: refundReasonValue.value,
     createTime: new Date()
   })
@@ -144,9 +142,6 @@ const onSave = () => {
     })
     .catch((err: any) => {
       console.log(err)
-    })
-    .finally(() => {
-      hideLoading()
     })
 }
 

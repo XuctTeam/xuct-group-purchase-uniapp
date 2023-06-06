@@ -73,7 +73,6 @@ import { User } from '@/api/interface/user'
 import { reactive, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { computed } from 'vue'
-import { loading, hideLoading } from '@/utils/dialog'
 import { getOpinion } from '@/api/modules/user'
 
 const DayJs = dayjs.default
@@ -81,12 +80,12 @@ const DayJs = dayjs.default
 const load = ref<boolean>(true)
 const opinion = reactive<User.Opinion>({
   id: '',
-  status: 1,
+  status: false,
   createTime: new Date(),
   type: '1'
 })
 
-const radioItemds = [
+const radioItems = [
   {
     key: '1',
     label: '质量问题'
@@ -123,7 +122,6 @@ onLoad((opts: any) => {
 })
 
 const initData = () => {
-  loading()
   load.value = true
   getOpinion(opinion.id ?? '')
     .then((res) => {
@@ -133,13 +131,12 @@ const initData = () => {
       console.log(err)
     })
     .finally(() => {
-      hideLoading()
       load.value = false
     })
 }
 
 const formatType = computed(() => {
-  return radioItemds.find((item) => item.key === opinion.type)?.label
+  return radioItems.find((item) => item.key === opinion.type)?.label
 })
 
 const formatData = (date: Date) => {

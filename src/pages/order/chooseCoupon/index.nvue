@@ -84,7 +84,6 @@ import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom
 
 import { User } from '@/api/interface'
 import { canUsedCouponList } from '@/api/modules/user'
-import { loading, hideLoading } from '@/utils/dialog'
 import { onLoad } from '@dcloudio/uni-app'
 const $instance = ref<any>(getCurrentInstance()?.proxy)
 
@@ -129,7 +128,6 @@ onLoad((opts: any) => {
 })
 
 const initData = () => {
-  loading()
   canUsedCouponList()
     .then((res) => {
       filterCoupon(res.data)
@@ -138,7 +136,6 @@ const initData = () => {
       console.log(err)
     })
     .finally(() => {
-      hideLoading()
       loadValue.value = false
     })
 }

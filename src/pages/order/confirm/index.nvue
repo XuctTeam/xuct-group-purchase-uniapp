@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-06 18:28:56
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-06 10:37:57
+ * @LastEditTime: 2023-06-06 19:09:51
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
@@ -103,7 +103,7 @@ import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom
 import { onLoad } from '@dcloudio/uni-app'
 import { TEMPLATE_ORDER_IDS } from '@/constant'
 
-import { loading, hideLoading, confirm, message } from '@/utils/dialog'
+import { confirm, message } from '@/utils/dialog'
 import { getDefaultAddress } from '@/api/modules/user'
 import { getConfirmOrderDetail } from '@/api/modules/order'
 import { placeOrder } from '@/api/modules/order'
@@ -184,7 +184,6 @@ const subscribeMessage = () => {
 }
 
 const _saveOrder = () => {
-  loading()
   placeOrder(_scene.value, address.value.id ?? '', couponValue.value?.id ?? '', remarksValue.value, waresIds)
     .then((res: any) => {
       const orderId = res.data
@@ -192,9 +191,6 @@ const _saveOrder = () => {
     })
     .catch((err: any) => {
       console.log(err)
-    })
-    .finally(() => {
-      hideLoading()
     })
 }
 
@@ -245,15 +241,12 @@ const _loadAddress = () => {
 }
 
 const _loadDetail = (scene: string, waresIds: string[]) => {
-  loading()
   getConfirmOrderDetail(scene, waresIds)
     .then((res) => {
       cartWares.push(...res.data)
-      hideLoading()
     })
     .catch((err: any) => {
       console.log(err)
-      hideLoading()
     })
 }
 </script>

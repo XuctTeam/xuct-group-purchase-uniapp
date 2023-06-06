@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-25 21:54:59
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-05 09:39:48
+ * @LastEditTime: 2023-06-06 19:06:52
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\list.nvue
  * @Description: 
  * Copyright (c) 2022 by 楚恬商行, All Rights Reserved. 
@@ -69,7 +69,7 @@ import { User } from '@/api/interface/user'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { reactive, ref, getCurrentInstance } from 'vue'
 import { userAddressList, saveUserAddress } from '@/api/modules/user'
-import { loading, hideLoading, message } from '@/utils/dialog'
+import { message } from '@/utils/dialog'
 
 const load = ref(true)
 const addressList = reactive<User.Address[]>([])
@@ -95,7 +95,6 @@ onShow(() => {
 const initData = (_search: string) => {
   addressList.length = 0
   load.value = true
-  loading()
   userAddressList(_search)
     .then((res) => {
       addressList.push(...res.data)
@@ -106,7 +105,6 @@ const initData = (_search: string) => {
       load.value = false
     })
     .finally(() => {
-      hideLoading()
       if (refreshValue.value) {
         refreshValue.value = false
       }

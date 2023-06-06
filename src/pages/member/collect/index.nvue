@@ -54,7 +54,6 @@ import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { onLoad, onShow } from '@dcloudio/uni-app'
-import { loading, hideLoading } from '@/utils/dialog'
 import { collect, collectList } from '@/api/modules/wares'
 import { User } from '@/api/interface'
 
@@ -74,7 +73,6 @@ onShow(() => {
 })
 
 const initData = () => {
-  loading()
   collectData.length = 0
   loadValue.value = true
   collectList()
@@ -87,7 +85,6 @@ const initData = () => {
     .finally(() => {
       loadValue.value = false
       refreshValue.value = false
-      hideLoading()
     })
 }
 

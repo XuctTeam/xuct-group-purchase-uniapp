@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 12:22:42
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-05 22:20:06
+ * @LastEditTime: 2023-06-06 19:08:58
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\setting\index.nvue
  * @Description: 
  * 
@@ -85,7 +85,7 @@ import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { getConfig } from '@/api/modules/config'
-import { confirm, hideLoading, loading, message } from '@/utils/dialog'
+import { confirm, message } from '@/utils/dialog'
 import { useUserHook } from '@/store'
 import { upload } from '@/api/config/upload'
 import { saveUserInfo } from '@/api/modules/user'
@@ -167,7 +167,6 @@ const beforeSave = () => {
 }
 
 const onSave = () => {
-  loading()
   saveUserInfo(phoneRef.value, nickNameRef.value)
     .then(() => {
       userStore.setUserInfo({ ...userInfo, nickname: nickNameRef.value, phone: phoneRef.value })
@@ -177,16 +176,12 @@ const onSave = () => {
       console.log(err)
       showWin.value = false
     })
-    .finally(() => {
-      hideLoading()
-    })
 }
 
 const onQuitClick = () => {
   confirm({
     title: '确定登出吗？',
     success: () => {
-      loading()
       logout()
         .then(() => {
           userStore.setLogout()
@@ -194,9 +189,6 @@ const onQuitClick = () => {
         })
         .catch((err: any) => {
           console.log(err)
-        })
-        .finally(() => {
-          hideLoading()
         })
     },
     fail: () => {}

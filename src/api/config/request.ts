@@ -2,8 +2,8 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 16:49:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-27 17:57:48
- * @FilePath: \xuct-group-purchase-uniapp\src\services\request.ts
+ * @LastEditTime: 2023-06-06 19:02:54
+ * @FilePath: \xuct-group-purchase-uniapp\src\api\config\request.ts
  * @Description:
  *
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
@@ -15,8 +15,9 @@ import codeMessage from './codeMessage'
 import ENV_CONFIG from '@/config/env'
 import { API_NOT_TOKEN } from '@/constant/white'
 import { message as toast } from '@/utils/dialog'
+import { showFullScreenLoading, tryHideFullScreenLoading } from './serviceLoading'
 
-interface RequestTaskQuery<T = any> {
+interface RequestTaskQuery {
   resolve: any
   reject: any
 }
@@ -81,10 +82,11 @@ const checkTokenHandler = (afresh: any) => {
 }
 
 instance.interceptors.request.use(
-  (config) => {
+  (config: any) => {
     const store = useUserHook()
     const token = store.getToken
     const url = config.url
+    config.noLoading || showFullScreenLoading()
     if (url && !API_NOT_TOKEN.includes(url) && token) {
       config.header['satoken'] = 'Bearer ' + token
     }
@@ -98,6 +100,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response) => {
     const { code, message } = response.data
+    tryHideFullScreenLoading()
     if (code !== 200) {
       toast({
         title: message || '请求异常',
@@ -111,6 +114,7 @@ instance.interceptors.response.use(
     return response.data
   },
   (error) => {
+    tryHideFullScreenLoading()
     const { statusCode } = error
     // 假设接口返回的 code === 401 时则需要刷新 Token
     if (statusCode === 401) {

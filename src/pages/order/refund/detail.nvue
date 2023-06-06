@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:10:51
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-06 09:14:40
+ * @LastEditTime: 2023-06-06 19:11:29
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\detail.nvue
  * @Description: 
  * 
@@ -145,7 +145,7 @@ import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom
 
 import { reactive, computed } from 'vue'
 import { cancelOrder, getOrderDetail, cancelRefundOrder } from '@/api/modules/order'
-import { loading, hideLoading, message, confirm } from '@/utils/dialog'
+import { message, confirm } from '@/utils/dialog'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { Order } from '@/api/interface/order'
 
@@ -186,7 +186,6 @@ onLoad((opts: any) => {
 })
 
 const initData = (orderId: string) => {
-  loading()
   load.value = true
   getOrderDetail(orderId)
     .then((res) => {
@@ -197,7 +196,6 @@ const initData = (orderId: string) => {
     })
     .finally(() => {
       load.value = false
-      hideLoading()
     })
 }
 
@@ -235,7 +233,6 @@ const cancelRefundClick = () => {
   confirm({
     title: '确定取消申请吗？',
     success: () => {
-      loading()
       load.value = true
       cancelRefundOrder(orderInfo.id)
         .then(() => {
@@ -247,7 +244,6 @@ const cancelRefundClick = () => {
         })
         .finally(() => {
           load.value = true
-          hideLoading()
         })
     },
     fail: () => {}
@@ -258,7 +254,6 @@ const deleteOrderClick = () => {
   confirm({
     title: '确定删除吗？',
     success: () => {
-      loading()
       load.value = true
       cancelOrder(orderInfo.id)
         .then(() => {
@@ -270,7 +265,6 @@ const deleteOrderClick = () => {
         })
         .finally(() => {
           load.value = true
-          hideLoading()
         })
     },
     fail: () => {}

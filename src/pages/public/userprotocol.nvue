@@ -24,7 +24,6 @@ import tmHtml from '@/tmui/components/tm-html/tm-html.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import { getConfig } from '@/api/modules/config'
-import { loading, hideLoading } from '@/utils/dialog'
 
 const rx = ref<string>('')
 
@@ -33,7 +32,6 @@ onLoad(() => {
 })
 
 const _load = () => {
-  loading()
   getConfig(1)
     .then((res) => {
       const { content } = res.data
@@ -41,9 +39,6 @@ const _load = () => {
     })
     .catch((err: any) => {
       console.log(err)
-    })
-    .finally(() => {
-      hideLoading()
     })
 }
 </script>

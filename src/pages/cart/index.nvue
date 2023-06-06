@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 10:06:25
+ * @LastEditTime: 2023-06-06 19:37:33
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -36,12 +36,13 @@
                 <tm-checkbox :round="10" color="green" @change="(e) => simpleCheckboxChangeState(e, item.waresId)" :value="!!!item.checked"></tm-checkbox>
               </view>
               <view class="flex flex-row flex-1">
-                <tm-image :width="180" :round="4" :height="180" :src="item.firstDrawing"></tm-image>
+                <tm-image :width="180" :round="4" :height="180" :src="item.firstDrawing" @click="toWaresDetail(item.waresId)" />
                 <view class="flex flex-1 flex-col pa-10 w-0 flex-col-between-center">
                   <tm-text _class="text-overflow-2" :label="item.name"></tm-text>
                   <view class="flex flex-row flex-row-center-between">
                     <tm-text color="orange" :label="`单位：${item.unit}`" />
-                    <tm-stepper :max="200" :min="1" :defaultValue="item.num" circular @change="(e) => chooseNumChange(e, item.waresId)"></tm-stepper>
+                    <!-- <tm-stepper :max="200" :min="1" :defaultValue="item.num" circular @change="(e) => chooseNumChange(e, item.waresId)"></tm-stepper> -->
+                    <uv-ui-input-number :max="200" :min="1" v-model="item.num" @change="(e) => chooseNumChange(e, item.waresId)"></uv-ui-input-number>
                   </view>
                 </view>
               </view>
@@ -85,12 +86,12 @@ import tmResult from '@/tmui/components/tm-result/tm-result.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmCheckbox from '@/tmui/components/tm-checkbox/tm-checkbox.vue'
 import tmImage from '@/tmui/components/tm-image/tm-image.vue'
-import tmStepper from '@/tmui/components/tm-stepper/tm-stepper.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import uvUiInputNumber from '@/components/uv-ui/uv-ui-input-number/index.vue'
 
 import { useUserHook } from '@/store'
-import { loading, hideLoading, confirm, message } from '@/utils/dialog'
+import { confirm, message } from '@/utils/dialog'
 import { cartList, cleanCart, modifyCartNum, deleteCartWares } from '@/api/modules/wares'
 import { Wares } from '@/api/interface'
 import { storeToRefs } from 'pinia'
@@ -183,16 +184,16 @@ const deleteWares = () => {
   })
 }
 
-const chooseNumChange = (num: number, gid: string) => {
-  loading()
-  modifyCartNum(gid, num)
+const chooseNumChange = (num: number, waresId: string) => {
+  modifyCartNum(waresId, num)
     .then(() => {})
     .catch((err: any) => {
       console.log(err)
     })
-    .finally(() => {
-      hideLoading()
-    })
+}
+
+const toWaresDetail = (id: string) => {
+  uni.$tm.u.routerTo('/pages/wares/index?id=' + id, 'navigate')
 }
 
 const toConfirmOrder = () => {
@@ -216,7 +217,6 @@ const toConfirmOrder = () => {
 }
 
 const initData = () => {
-  loading()
   load.value = true
   cartList()
     .then((res) => {
@@ -229,12 +229,10 @@ const initData = () => {
     })
     .finally(() => {
       load.value = false
-      hideLoading()
     })
 }
 
 const _cleanCart = () => {
-  loading()
   load.value = true
   cleanCart()
     .then(() => {
@@ -245,13 +243,11 @@ const _cleanCart = () => {
     })
     .finally(() => {
       load.value = false
-      hideLoading()
     })
 }
 
 const _deleteCart = () => {
   const _delIds = cartWares.filter((x) => x.checked).map((x) => x.waresId)
-  loading()
   load.value = true
   deleteCartWares(_delIds)
     .then(() => {
@@ -263,7 +259,6 @@ const _deleteCart = () => {
     })
     .finally(() => {
       load.value = false
-      hideLoading()
     })
 }
 </script>

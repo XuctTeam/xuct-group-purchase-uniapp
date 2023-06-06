@@ -51,7 +51,6 @@ import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { evaluateList } from '@/api/modules/order'
-import { hideLoading, loading } from '@/utils/dialog'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { Order } from '@/api/interface'
 
@@ -71,7 +70,6 @@ onShow(() => {
 })
 
 const initData = () => {
-  loading()
   evaluateList()
     .then((res) => {
       orderItems.length = 0
@@ -83,7 +81,6 @@ const initData = () => {
     .finally(() => {
       load.value = false
       refreshValue.value = false
-      hideLoading()
     })
 }
 

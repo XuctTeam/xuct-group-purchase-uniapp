@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-06 09:11:43
+ * @LastEditTime: 2023-06-06 19:13:20
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\wares\index.nvue
  * @Description: 
  * 
@@ -85,7 +85,6 @@ import { useUserHook } from '@/store'
 import { Wares } from '@/api/interface'
 
 import { getWares, collect, addCart, browseWares } from '@/api/modules/wares'
-import { loading, hideLoading } from '@/utils/dialog'
 const $instance = ref<any>(getCurrentInstance()?.proxy)
 const idValue = ref<string>('')
 const detail = ref<string>('')
@@ -137,7 +136,6 @@ const onAddCart = () => {
 }
 
 const _loadWares = () => {
-  loading()
   getWares(idValue.value)
     .then((res) => {
       const wares: Wares.WaresResult = res.data
@@ -153,9 +151,6 @@ const _loadWares = () => {
     })
     .catch((err) => {
       console.log(err)
-    })
-    .finally(() => {
-      hideLoading()
     })
 }
 

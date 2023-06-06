@@ -1,0 +1,48 @@
+@import '../common/styles/styles.scss';
+.uv-ui-input-number {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: row;
+
+  &__plus,
+  &__minus {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44rpx;
+    width: 44rpx;
+    margin: 0;
+    padding: 0;
+    border-radius: 6rpx;
+    font-size: 28rpx;
+    &::after {
+      border: 0;
+    }
+    &:active {
+      opacity: 0.8;
+    }
+  }
+  &__plus {
+    background-color: $uni-color-success;
+    color: #fff;
+  }
+  &__minus {
+    background-color: #eee;
+  }
+  &__value {
+    font-size: 26rpx;
+    margin: 0 20rpx;
+    text-align: center;
+    .input {
+      height: 40rpx;
+      line-height: 40rpx;
+      padding: 0 10rpx;
+      border-radius: 8rpx;
+      border: 1rpx solid #dcdfe6;
+      font-size: 26rpx;
+    }
+    .txt {
+      font-size: 24rpx;
+    }
+  }
+}

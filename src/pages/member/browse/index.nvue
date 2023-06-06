@@ -55,7 +55,6 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 
 import { onLoad } from '@dcloudio/uni-app'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
-import { loading, hideLoading } from '@/utils/dialog'
 import { browseList, deleteBrowse } from '@/api/modules/wares'
 import { User } from '@/api/interface'
 const DayJs = dayjs.default
@@ -72,7 +71,6 @@ onLoad(() => {
 })
 
 const initData = () => {
-  loading()
   loadValue.value = true
   browseList()
     .then((res) => {
@@ -84,7 +82,6 @@ const initData = () => {
     })
     .finally(() => {
       loadValue.value = false
-      hideLoading()
     })
 }
 

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 15:16:15
+ * @LastEditTime: 2023-06-06 19:15:02
  * @FilePath: \xuct-group-purchase-uniapp\src\api\modules\order.ts
  * @Description:
  *
@@ -12,7 +12,7 @@ import request from '@/api/config/request'
 import { API, Order, Wares } from '@/api/interface'
 
 export const sumCount = () => {
-  return request.get<Order.OrderSumResult>('/api/v1/order/sum')
+  return request.get<Order.OrderSumResult>('/api/v1/order/sum', {}, { noLoading: true })
 }
 
 /**
@@ -55,12 +55,16 @@ export const placeOrder = (scene: string, addressId: string, couponId: string, r
  * @returns
  */
 export const pageOrderList = (pageNo: number, pageSize: number, status: string, refundStatus: string) => {
-  return request.get<API.PageResult<Order.OrderResult>>('/api/v1/order/list', {
-    status,
-    pageNo,
-    pageSize,
-    refundStatus
-  })
+  return request.get<API.PageResult<Order.OrderResult>>(
+    '/api/v1/order/list',
+    {
+      status,
+      pageNo,
+      pageSize,
+      refundStatus
+    },
+    { noLoading: true }
+  )
 }
 
 /**
@@ -72,12 +76,16 @@ export const pageOrderList = (pageNo: number, pageSize: number, status: string, 
  * @returns
  */
 export const searchList = (pageNo: number, pageSize: number, refund: number, word: string) => {
-  return request.get<API.PageResult<Order.OrderResult>>('/api/v1/order/search', {
-    pageNo,
-    pageSize,
-    refund,
-    word
-  })
+  return request.get<API.PageResult<Order.OrderResult>>(
+    '/api/v1/order/search',
+    {
+      pageNo,
+      pageSize,
+      refund,
+      word
+    },
+    { noLoading: true }
+  )
 }
 
 /**

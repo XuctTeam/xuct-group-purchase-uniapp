@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-06-01 13:22:27
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-01 15:39:45
+ * @LastEditTime: 2023-06-06 19:32:00
  * @FilePath: \xuct-group-purchase-uniapp\src\components\uv-ui\common\utils\index.ts
  * @Description:
  *
@@ -30,4 +30,13 @@ export function isNumber(value: any) {
 
 export function setRpx(val: any): string {
   return isArray(val) ? val.map(setRpx).join(' ') : isNumber(val) ? `${val}rpx` : val
+}
+
+export function isString(value: any) {
+  return typeof value === 'string'
+}
+
+// 是否小数
+export function isDecimal(value: any): boolean {
+  return String(value).length - String(value).indexOf('.') + 1 > 0
 }

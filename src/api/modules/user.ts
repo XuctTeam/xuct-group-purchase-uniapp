@@ -104,7 +104,7 @@ export const addComment = (comment: User.Comment) => {
  * 用户信息统计
  */
 export const userSum = () => {
-  return request.get<User.SumResult>('/api/v1/user/sum')
+  return request.get<User.SumResult>('/api/v1/user/sum', {}, { noLoading: true })
 }
 
 /**
