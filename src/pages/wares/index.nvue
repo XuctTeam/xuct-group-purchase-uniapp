@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-06 19:13:20
+ * @LastEditTime: 2023-06-07 16:46:09
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\wares\index.nvue
  * @Description: 
  * 
@@ -37,9 +37,53 @@
           </view>
         </view>
       </tm-sheet>
-      <view class="pa-10">
-        <tm-html :content="detail" />
-      </view>
+      <tm-sticky :offset="offset">
+        <template #sticky>
+          <tm-sheet :margin="[0, 0]" :padding="[0, 0]">
+            <tm-tabs
+              :list="tabsTitle"
+              :width="_width"
+              v-model:active-name="tabActiveRef"
+              @change="switchTab"
+              showTabsLineAni
+              :item-width="_width / 3 - 40"
+              align="around"
+              tabsLineAniColor="green"
+              activeFontColor="green"
+            ></tm-tabs>
+          </tm-sheet>
+        </template>
+        <view class="wrap">
+          <tm-sheet :margin="[10]" :padding="[0]" id="1" class="item wrap-top-list1">
+            <view class="flex flex-row flex-row-center-start pt-20">
+              <tm-divider color="green" :border="10" real-color vertical :height="30"></tm-divider>
+              <view class="font-weight-b">评价</view>
+            </view>
+            <tm-divider></tm-divider>
+            <view>121111</view>
+            <view>121111</view>
+            <view>121111</view>
+            <view>121111</view>
+            <view>121111</view>
+            <view>121111</view>
+            <view>121111</view>
+            <view>121111</view>
+            <view>121111</view>
+            <view>121111</view>
+            <view>121111</view>
+            <view>121111</view>
+            <view>121111</view>
+          </tm-sheet>
+          <tm-sheet :margin="[10]" :padding="[0]" id="2" class="item wrap-top-list2">
+            <view class="flex flex-row flex-row-center-start pt-20">
+              <tm-divider color="green" :border="10" real-color vertical :height="30"></tm-divider>
+              <view class="font-weight-b">商品详情</view>
+            </view>
+            <tm-divider></tm-divider>
+            <tm-html :content="detail" />
+          </tm-sheet>
+        </view>
+      </tm-sticky>
       <template #footer>
         <view class="flex flex-row flex-1 flex-row-center-between">
           <tm-row :column="3" :width="300">
@@ -64,11 +108,20 @@
         </view>
       </template>
     </uv-bottom-bar-container>
+    <tm-float-button
+      position="br"
+      v-if="scrollTop > 400"
+      :btn="{ icon: 'tmicon-angle-up', linear: '', color: 'green', label: '置顶' }"
+      :offset="[40, 200]"
+      @click="goToTop"
+      :width="110"
+      :height="110"
+    ></tm-float-button>
   </tm-app>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, nextTick, getCurrentInstance } from 'vue'
+import { reactive, ref, nextTick, getCurrentInstance, computed } from 'vue'
 import tmApp from '@/tmui/components/tm-app/tm-app.vue'
 import tmNavbar from '@/tmui/components/tm-navbar/tm-navbar.vue'
 import tmCarousel from '@/tmui/components/tm-carousel/tm-carousel.vue'
@@ -76,28 +129,46 @@ import tmHtml from '@/tmui/components/tm-html/tm-html.vue'
 import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
+import tmTabs from '@/tmui/components/tm-tabs/tm-tabs.vue'
 import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
+import tmSticky from '@/tmui/components/tm-sticky/tm-sticky.vue'
+import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
+import tmFloatButton from '@/tmui/components/tm-float-button/tm-float-button.vue'
 import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 import tmRow from '@/tmui/components/tm-row/tm-row.vue'
 import tmCol from '@/tmui/components/tm-col/tm-col.vue'
-import { onLoad } from '@dcloudio/uni-app'
-import { useUserHook } from '@/store'
+import { onLoad, onPageScroll } from '@dcloudio/uni-app'
+import { useUserHook, useAppHook } from '@/store'
 import { Wares } from '@/api/interface'
 
 import { getWares, collect, addCart, browseWares } from '@/api/modules/wares'
+const store = useUserHook()
+const appStore = useAppHook()
 const $instance = ref<any>(getCurrentInstance()?.proxy)
 const idValue = ref<string>('')
 const detail = ref<string>('')
 const name = ref<string>('')
 const browse = ref<number>(1)
 const sell = ref<number>(0)
+const offset = ref(uni.$tm.u.torpx(appStore.getCustomBarHeight()))
 const swiperImages: string[] = reactive([])
 const inventoryValue = ref<number>(0)
 const userCollect = ref<boolean>(false)
 const addLoading = ref<boolean>(false)
 const blurbValue = ref<string>('')
+const tabActiveRef = ref<string>('1')
+const isScrollByTab = ref<boolean>(false)
+const scrollTop = ref<number>(0)
 
-const store = useUserHook()
+const tabsTitle = ref([
+  { key: '0', title: '商品' },
+  { key: '1', title: '评价' },
+  { key: '2', title: '详情' }
+])
+const _width = computed(() => {
+  return uni.$tm.u.torpx(appStore.getWindowWidth())
+})
+
 const logged = store.logged
 
 onLoad((opts: any) => {
@@ -111,6 +182,80 @@ onLoad((opts: any) => {
     _browseWares()
   })
 })
+
+onPageScroll((res: any) => {
+  scrollTop.value = res.scrollTop
+  if (isScrollByTab.value) {
+    return
+  }
+  if (scrollTop.value < 200) {
+    tabActiveRef.value = '0'
+    return
+  }
+  uni
+    .createSelectorQuery()
+    .selectAll('.item')
+    .boundingClientRect((rects: any) => {
+      for (let i = rects.length - 1; i >= 0; i--) {
+        const rect: any = rects[i]
+        //实时获取多个模块距离的距离，使用findLastIndex找到当前的tab
+        if (rect.top < offset.value - 10) {
+          const activeRect: any = rects[i]
+          if (tabActiveRef.value === activeRect.id) {
+            return
+          }
+          tabActiveRef.value = activeRect.id
+          return
+        }
+      }
+    })
+    .exec()
+})
+const switchTab = (key: string | number) => {
+  const strKey = key + ''
+  isScrollByTab.value = true
+  if (strKey === '0') {
+    goToTop()
+    return
+  }
+  gotoView('.wrap-top-list' + key)
+}
+
+const goToTop = () => {
+  tabActiveRef.value = '0'
+  nextTick(() => {
+    uni.pageScrollTo({
+      //页面需要滚动的距离为相对于视口的距离加上当前页面的滚动距离
+      scrollTop: 0,
+      duration: 300
+    })
+    //这里在滚动完成之后将isScrollByTab重置为false，故意在大于300ms之后
+    const timer = setTimeout(() => {
+      isScrollByTab.value = false
+      clearTimeout(timer)
+    }, 500)
+  })
+}
+
+// 跳转锚点
+const gotoView = async (name: string) => {
+  const rect: any = await _getRect(name)
+  //目标位置的节点：类class或者id
+  nextTick(async () => {
+    const wrapDomRes: any = await _getRect('.wrap')
+    //最外层盒子的节点：类class或者id
+    uni.pageScrollTo({
+      duration: 100, //过渡时间
+      //scrollTop: data.top + 460 - res.top //到达距离顶部的top值
+      scrollTop: rect.top + 500 - wrapDomRes.top //如果置顶
+    })
+    //这里在滚动完成之后将isScrollByTab重置为false，故意在大于300ms之后
+    const timer = setTimeout(() => {
+      isScrollByTab.value = false
+      clearTimeout(timer)
+    }, 500)
+  })
+}
 
 const onCollects = () => {
   collect(idValue.value)
@@ -158,6 +303,18 @@ const _browseWares = () => {
   browseWares(idValue.value)
     .then(() => {})
     .catch(() => {})
+}
+
+const _getRect = (name: string) => {
+  return new Promise((resolve) => {
+    uni
+      .createSelectorQuery()
+      .select(name)
+      .boundingClientRect((data: any) => {
+        resolve(data)
+      })
+      .exec()
+  })
 }
 
 const onFastConfirm = () => {

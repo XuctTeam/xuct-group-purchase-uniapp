@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:25:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-05 11:10:14
+ * @LastEditTime: 2023-06-07 16:01:36
  * @FilePath: \xuct-group-purchase-uniapp\src\store\app.ts
  * @Description:
  *
@@ -15,11 +15,14 @@ import { getWindow } from '@/tmui/tool/function/util'
 export const appStore = defineStore('appStore', () => {
   const safeBottom = ref(0)
   const windowWidth = ref(0)
+  const customBarHeight = ref(0)
 
   const initApp = () => {
     const { sysinfo, width } = getWindow()
-    safeBottom.value = sysinfo?.safeAreaInsets?.bottom ?? 0
     windowWidth.value = width
+    safeBottom.value = sysinfo?.safeAreaInsets?.bottom ?? 0
+    const custom = uni.getMenuButtonBoundingClientRect()
+    customBarHeight.value = custom.bottom + custom.top - (sysinfo?.statusBarHeight ?? 0)
   }
 
   const getSafeBottom = () => {
@@ -30,5 +33,9 @@ export const appStore = defineStore('appStore', () => {
     return windowWidth.value
   }
 
-  return { initApp, getSafeBottom, getWindowWidth }
+  const getCustomBarHeight = () => {
+    return customBarHeight.value
+  }
+
+  return { initApp, getSafeBottom, getWindowWidth, getCustomBarHeight }
 })

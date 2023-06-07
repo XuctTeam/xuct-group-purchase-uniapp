@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 08:58:16
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-06 09:09:54
+ * @LastEditTime: 2023-06-07 09:02:18
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\index\index.nvue
  * @Description: 
  * 
@@ -11,7 +11,7 @@
 <template>
   <tm-app>
     <tm-navbar title="团到家" hideHome color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <tm-sheet :margin="[20, 20]" :padding="[0, 0, 0, 20]" :height="520" :round="10">
+    <tm-sheet :margin="[20, 20]" :padding="[0, 0, 0, 20]" :round="10">
       <tm-carousel
         autoplay
         :round="10"
@@ -23,7 +23,7 @@
         rangKey="image"
       ></tm-carousel>
       <tm-row :width="700" :column="4" :margin="[0, 30]">
-        <tm-col transprent :height="200" v-for="(item, index) in menuValue" :key="index" @click="onMenuClick(item.id)">
+        <tm-col transprent :height="160" v-for="(item, index) in menuValue" :key="index" @click="onMenuClick(item.id)">
           <tm-image :width="124" :height="124" :src="item.image"></tm-image>
           <tm-text _class="text-overflow-1" color="rgba(153, 153, 153, 1)" :font-size="24" :label="item.name"></tm-text>
         </tm-col>
@@ -169,6 +169,7 @@ onReachBottom(() => {
 
 onPullDownRefresh(() => {
   resetWares()
+  initData()
   setTimeout(() => {
     uni.stopPullDownRefresh()
   }, 300)
@@ -179,7 +180,7 @@ const resetWares = () => {
   waresTotalValue.value = 0
   wares.length = 0
   waterfallRef.value.clear()
-  _loadWares()
+  //_loadWares()
 }
 
 const waresClick = (data: { item: any }) => {
