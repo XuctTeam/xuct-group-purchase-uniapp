@@ -145,7 +145,7 @@ import tmOverlay from '@/tmui/components/tm-overlay/tm-overlay.vue'
 // 导入storeToRefs
 import { useUserHook } from '@/store'
 import { onHide, onShow } from '@dcloudio/uni-app'
-import { sumCount } from '@/api/modules/order'
+import { sumCountApi } from '@/api/modules/order'
 import { bindPhone, userSum } from '@/api/modules/user'
 
 const userStore = useUserHook()
@@ -312,7 +312,7 @@ const getPhoneNumber = (e: any) => {
 }
 
 const initOrderSum = () => {
-  sumCount()
+  sumCountApi()
     .then((res) => {
       const { toBePaidCount, toBeSendCount, toBeReceivedCount, toBeEvaluationCount, toBeService } = res.data
       const dataArray = [toBePaidCount, toBeSendCount, toBeReceivedCount, toBeEvaluationCount, toBeService]

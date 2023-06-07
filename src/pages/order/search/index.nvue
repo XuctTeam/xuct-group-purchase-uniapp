@@ -123,7 +123,7 @@ import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
 
 import { onLoad, onShow } from '@dcloudio/uni-app'
-import { searchList, cancelOrder, rushOrder, receiverOrder, cancelRefundOrder } from '@/api/modules/order'
+import { searchListApi, cancelOrder, rushOrder, receiverOrder, cancelRefundOrder } from '@/api/modules/order'
 import { nextTick } from 'process'
 import { confirm } from '@/utils/dialog'
 import { Order } from '@/api/interface/order'
@@ -140,7 +140,7 @@ const statusArray = ['待付款', '待发货', '待收货', '已完成']
 const refundStatusArray = ['退单中', '已完成']
 
 const queryList = (pageNo: number, pageSize: number) => {
-  searchList(pageNo, pageSize, senceValue.value, searchValue.value)
+  searchListApi(pageNo, pageSize, senceValue.value, searchValue.value)
     .then((res) => {
       paging.value.complete(res.data.list)
     })

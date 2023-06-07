@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-06 19:15:02
+ * @LastEditTime: 2023-06-07 18:09:57
  * @FilePath: \xuct-group-purchase-uniapp\src\api\modules\order.ts
  * @Description:
  *
@@ -11,7 +11,7 @@
 import request from '@/api/config/request'
 import { API, Order, Wares } from '@/api/interface'
 
-export const sumCount = () => {
+export const sumCountApi = () => {
   return request.get<Order.OrderSumResult>('/api/v1/order/sum', {}, { noLoading: true })
 }
 
@@ -75,7 +75,7 @@ export const pageOrderList = (pageNo: number, pageSize: number, status: string, 
  * @param word
  * @returns
  */
-export const searchList = (pageNo: number, pageSize: number, refund: number, word: string) => {
+export const searchListApi = (pageNo: number, pageSize: number, refund: number, word: string) => {
   return request.get<API.PageResult<Order.OrderResult>>(
     '/api/v1/order/search',
     {
@@ -142,7 +142,7 @@ export const receiverOrder = (orderId: string) => {
 }
 
 /**
- * 删除订单
+ * 取消订单
  *
  * @param orderId
  */
@@ -151,11 +151,18 @@ export const cancelOrder = (orderId: string) => {
 }
 
 /**
+ * 删除订单列表
+ */
+export const deletedListApi = () => {
+  return request.get<Order.OrderItemResult[]>('/api/v1/order/deleted/list')
+}
+
+/**
  * 待评价商品列表
  *
  */
-export const evaluateList = () => {
-  return request.get<Order.OrderItemResult[]>('/api/v1/order/evaluate/list')
+export const evaluateListApi = () => {
+  return request.get<Order.OrderItemResult[]>('/api/v1/evaluate/list')
 }
 
 /**
@@ -163,13 +170,6 @@ export const evaluateList = () => {
  * @param data
  * @returns
  */
-export const evaluate = (data: Order.EvaluateResult) => {
-  return request.post('/api/v1/order/evaluate', { ...data })
-}
-
-/**
- * 删除订单列表
- */
-export const deletedList = () => {
-  return request.get<Order.OrderItemResult[]>('/api/v1/order/deleted/list')
+export const evaluateApi = (data: Order.EvaluateResult) => {
+  return request.post('/api/v1/evaluate', { ...data })
 }

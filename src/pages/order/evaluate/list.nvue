@@ -50,7 +50,7 @@ import tmImage from '@/tmui/components/tm-image/tm-image.vue'
 import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 import { onLoad, onShow } from '@dcloudio/uni-app'
-import { evaluateList } from '@/api/modules/order'
+import { evaluateListApi } from '@/api/modules/order'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { Order } from '@/api/interface'
 
@@ -70,7 +70,7 @@ onShow(() => {
 })
 
 const initData = () => {
-  evaluateList()
+  evaluateListApi()
     .then((res) => {
       orderItems.length = 0
       orderItems.push(...res.data)

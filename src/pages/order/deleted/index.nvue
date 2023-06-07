@@ -51,7 +51,7 @@ import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 
 import { reactive } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { deletedList } from '@/api/modules/order'
+import { deletedListApi } from '@/api/modules/order'
 import { Order } from '@/api/interface'
 
 const load = ref<boolean>(true)
@@ -59,7 +59,7 @@ const orderList = reactive<Order.OrderResult[]>([])
 
 onLoad(() => {
   load.value = true
-  deletedList()
+  deletedListApi()
     .then((res: any) => {
       orderList.length = 0
       orderList.push(...res.data)
