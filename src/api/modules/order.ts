@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 09:45:32
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-07 18:09:57
+ * @LastEditTime: 2023-06-08 14:11:19
  * @FilePath: \xuct-group-purchase-uniapp\src\api\modules\order.ts
  * @Description:
  *
@@ -21,7 +21,7 @@ export const sumCountApi = () => {
  * @param scene
  * @param waresIds  商品IDS
  */
-export const getConfirmOrderDetail = (scene: string, waresIds: string[]) => {
+export const getConfirmOrderDetailApi = (scene: string, waresIds: string[]) => {
   return request.post<Wares.Cart[]>('/api/v1/order/confirm/detail', {
     scene,
     waresIds
@@ -170,6 +170,14 @@ export const evaluateListApi = () => {
  * @param data
  * @returns
  */
-export const evaluateApi = (data: Order.EvaluateResult) => {
+export const evaluateApi = (data: Order.EvaluateParams) => {
   return request.post('/api/v1/evaluate', { ...data })
+}
+
+/**
+ * 商品评价列表
+ * @param params
+ */
+export const waresEvaluateListApi = (params: { waresId: string; top: number }) => {
+  return request.get<Order.EvaluateResult[]>('/api/v1/evaluate/wares/list', params)
 }

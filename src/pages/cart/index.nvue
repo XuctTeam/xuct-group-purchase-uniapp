@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-06 19:37:33
+ * @LastEditTime: 2023-06-08 09:08:59
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -92,7 +92,7 @@ import uvUiInputNumber from '@/components/uv-ui/uv-ui-input-number/index.vue'
 
 import { useUserHook } from '@/store'
 import { confirm, message } from '@/utils/dialog'
-import { cartList, cleanCart, modifyCartNum, deleteCartWares } from '@/api/modules/wares'
+import { cartListApi, cleanCartApi, modifyCartNumApi, deleteCartWaresApi } from '@/api/modules/wares'
 import { Wares } from '@/api/interface'
 import { storeToRefs } from 'pinia'
 
@@ -168,7 +168,7 @@ const deleteWares = () => {
     confirm({
       title: '是否清空购物车？',
       success: () => {
-        _cleanCart()
+        _cleanCartApi()
       },
       fail: () => {}
     })
@@ -185,7 +185,7 @@ const deleteWares = () => {
 }
 
 const chooseNumChange = (num: number, waresId: string) => {
-  modifyCartNum(waresId, num)
+  modifyCartNumApi(waresId, num)
     .then(() => {})
     .catch((err: any) => {
       console.log(err)
@@ -218,7 +218,7 @@ const toConfirmOrder = () => {
 
 const initData = () => {
   load.value = true
-  cartList()
+  cartListApi()
     .then((res) => {
       allCheckStatus.value = false
       cartWares.length = 0
@@ -232,9 +232,9 @@ const initData = () => {
     })
 }
 
-const _cleanCart = () => {
+const _cleanCartApi = () => {
   load.value = true
-  cleanCart()
+  cleanCartApi()
     .then(() => {
       cartWares.length = 0
     })
@@ -249,7 +249,7 @@ const _cleanCart = () => {
 const _deleteCart = () => {
   const _delIds = cartWares.filter((x) => x.checked).map((x) => x.waresId)
   load.value = true
-  deleteCartWares(_delIds)
+  deleteCartWaresApi(_delIds)
     .then(() => {
       cartWares.length = 0
       initData()

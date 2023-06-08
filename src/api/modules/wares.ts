@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 11:35:37
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-05 15:00:22
+ * @LastEditTime: 2023-06-08 18:15:15
  * @FilePath: \xuct-group-purchase-uniapp\src\api\modules\wares.ts
  * @Description:
  *
@@ -15,14 +15,14 @@ import { User, Wares, API } from '@/api/interface'
  * 商品分类列表
  */
 export const categoryListApi = () => {
-  return request.get<Wares.CategoryResult[]>('/api/v1/category/list')
+  return request.get<Wares.CategoryResult[]>('/api/v1/category/list', {}, { noLoading: true })
 }
 
 /**
  * 获取商品列表
  */
-export const waresListApi = (params: { pageNum: number; pageSize: number , categoryId? : string}) => {
-  return request.get<API.PageResult<Wares.WaresResult>>('/api/v1/wares/list', params)
+export const waresListApi = (params: { pageNum: number; pageSize: number; categoryId?: string }) => {
+  return request.get<API.PageResult<Wares.WaresResult>>('/api/v1/wares/list', params, { noLoading: true })
 }
 
 /**
@@ -30,7 +30,7 @@ export const waresListApi = (params: { pageNum: number; pageSize: number , categ
  *
  * @param waresId   商品ID
  */
-export const getWares = (waresId: string) => {
+export const getWaresApi = (waresId: string) => {
   return request.get<Wares.WaresResult>('/api/v1/wares', {
     waresId
   })
@@ -41,7 +41,7 @@ export const getWares = (waresId: string) => {
  *
  * @param waresId  商品ID
  */
-export const browseWares = (waresId: string) => {
+export const browseWaresApi = (waresId: string) => {
   return request.post('/api/v1/wares/browse', {
     waresId
   })
@@ -53,7 +53,7 @@ export const browseWares = (waresId: string) => {
  * @param gid 商品ID
  * @returns
  */
-export const collect = (waresId: string) => {
+export const collectApi = (waresId: string) => {
   return request.post('/api/v1/wares/collect', {
     waresId
   })
@@ -65,7 +65,7 @@ export const collect = (waresId: string) => {
  * @param waresId 商品ID
  * @returns
  */
-export const addCart = (waresId: string) => {
+export const addCartApi = (waresId: string) => {
   return request.post('/api/v1/wares/cart/add', {
     waresId
   })
@@ -76,7 +76,7 @@ export const addCart = (waresId: string) => {
  *
  * @returns
  */
-export const cartList = () => {
+export const cartListApi = () => {
   return request.get<Wares.Cart[]>('/api/v1/wares/cart/list')
 }
 
@@ -86,7 +86,7 @@ export const cartList = () => {
  * @param waresId  商品ID
  * @param num  购买数量
  */
-export const modifyCartNum = (waresId: string, num: number) => {
+export const modifyCartNumApi = (waresId: string, num: number) => {
   return request.post('/api/v1/wares/cart/update/num', {
     waresId,
     num
@@ -98,7 +98,7 @@ export const modifyCartNum = (waresId: string, num: number) => {
  *
  * @param waresIdIds  商品ID
  */
-export const deleteCartWares = (waresIdIds: string[]) => {
+export const deleteCartWaresApi = (waresIdIds: string[]) => {
   return request.post('/api/v1/wares/cart/del', {
     waresIdIds
   })
@@ -107,21 +107,21 @@ export const deleteCartWares = (waresIdIds: string[]) => {
 /**
  * 清空购物车
  */
-export const cleanCart = () => {
+export const cleanCartApi = () => {
   return request.delete('/api/v1/wares/cart/del/all')
 }
 
 /**
  * 查询用户收藏商品
  */
-export const collectList = () => {
+export const collectListApi = () => {
   return request.get<User.Collect[]>('/api/v1/wares/user/collect')
 }
 
 /**
  * 查询用户浏览商品
  */
-export const browseList = () => {
+export const browseListApi = () => {
   return request.get<User.BrowserWaresResult[]>('/api/v1/wares/user/browse')
 }
 
@@ -130,6 +130,6 @@ export const browseList = () => {
  *
  * @param waresId
  */
-export const deleteBrowse = (params: { id: string }) => {
+export const deleteBrowseApi = (params: { id: string }) => {
   return request.delete(`/api/v1/wares/user/browse/${params.id}`)
 }

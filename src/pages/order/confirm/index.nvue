@@ -105,7 +105,7 @@ import { TEMPLATE_ORDER_IDS } from '@/constant'
 
 import { confirm, message } from '@/utils/dialog'
 import { getDefaultAddress } from '@/api/modules/user'
-import { getConfirmOrderDetail } from '@/api/modules/order'
+import { getConfirmOrderDetailApi } from '@/api/modules/order'
 import { placeOrder } from '@/api/modules/order'
 import { User, Wares } from '@/api/interface'
 
@@ -241,7 +241,7 @@ const _loadAddress = () => {
 }
 
 const _loadDetail = (scene: string, waresIds: string[]) => {
-  getConfirmOrderDetail(scene, waresIds)
+  getConfirmOrderDetailApi(scene, waresIds)
     .then((res) => {
       cartWares.push(...res.data)
     })

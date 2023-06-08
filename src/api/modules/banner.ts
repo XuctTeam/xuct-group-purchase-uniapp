@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 15:58:09
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-05 10:00:33
+ * @LastEditTime: 2023-06-08 18:14:34
  * @FilePath: \xuct-group-purchase-uniapp\src\api\modules\banner.ts
  * @Description:
  *
@@ -16,5 +16,5 @@ import { API } from '../interface'
  * @returns
  */
 export const bannerListApi = () => {
-  return request.get<API.BannerResult[]>('/api/v1/banner/list')
+  return request.get<API.BannerResult[]>('/api/v1/banner/list', {}, { noLoading: true })
 }

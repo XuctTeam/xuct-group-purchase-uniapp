@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-07 17:52:46
+ * @LastEditTime: 2023-06-08 19:14:56
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\wares\index.nvue
  * @Description: 
  * 
@@ -11,79 +11,102 @@
 <template>
   <tm-app>
     <tm-navbar title="商品详情" color="#32CD32" fontColor="#fff" blur></tm-navbar>
+    <view class="fixed" id="wares-tabs" :style="{ top: offsetValue + 'px', zIndex: 1, display: opacityValue > 0.3 ? 'block' : 'none', opacity: opacityValue }">
+      <tm-tabs
+        :list="tabsTitle"
+        v-model:active-name="tabActiveRef"
+        @change="switchTab"
+        showTabsLineAni
+        :width="_width"
+        :item-width="_itemWidth"
+        :item-height="88"
+        align="around"
+        tabsLineAniColor="green"
+        activeFontColor="green"
+      ></tm-tabs>
+    </view>
     <uv-bottom-bar-container :show-footer="!!logged">
-      <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
-      <tm-sheet :margin="[10, 10, 10, 10]" :round="4" :shadow="4">
-        <view class="title text-overflow-2 mb-20">{{ name }}</view>
-        <view class="blurb text-overflow-2 mb-20"> {{ blurbValue }}</view>
-        <view class="flex flex-row flex-row-center-between mt-20">
-          <view class="flex flex-row">
-            <tm-text color="grey" :font-size="24" label="库存:" />
-            <view class="ml-8">
-              <tm-text color="orange" :font-size="24" :label="inventoryValue" />
-            </view>
+      <view class="wrapper">
+        <view class="section">
+          <view class="top" id="product">
+            <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
+            <tm-sheet :margin="[10]" :round="4" :shadow="4">
+              <view class="title text-overflow-2 mb-20">{{ name }}</view>
+              <view class="blurb text-overflow-2 mb-20"> {{ blurbValue }}</view>
+              <view class="flex flex-row flex-row-center-between mt-20">
+                <view class="flex flex-row">
+                  <tm-text color="grey" :font-size="24" label="库存:" />
+                  <view class="ml-8">
+                    <tm-text color="orange" :font-size="24" :label="inventoryValue" />
+                  </view>
+                </view>
+                <view class="flex flex-row">
+                  <tm-text color="grey" :font-size="24" label="热度:"></tm-text>
+                  <view class="ml-8">
+                    <tm-text color="orange" :font-size="24" :label="browse" />
+                  </view>
+                </view>
+                <view class="flex flex-row">
+                  <tm-text color="grey" :font-size="24" label="成交量:"></tm-text>
+                  <view class="ml-8">
+                    <tm-text color="orange" :font-size="24" :label="sell" />
+                  </view>
+                </view>
+              </view>
+            </tm-sheet>
           </view>
-          <view class="flex flex-row">
-            <tm-text color="grey" :font-size="24" label="热度:"></tm-text>
-            <view class="ml-8">
-              <tm-text color="orange" :font-size="24" :label="browse" />
+        </view>
+
+        <view class="section">
+          <view class="section">
+            <view class="top" id="evaluation">
+              <view class="title">评价信息</view>
             </view>
-          </view>
-          <view class="flex flex-row">
-            <tm-text color="grey" :font-size="24" label="成交量:"></tm-text>
-            <view class="ml-8">
-              <tm-text color="orange" :font-size="24" :label="sell" />
+            <view class="content content_progress">
+              <view class="flex flex-row flex-row-start-center pa-20 mb-10" v-if="waresEvaluateList.length === 0">
+                <tm-text color="grey" :font-size="26" label="暂无友友给予评价~"></tm-text>
+              </view>
+              <template v-else>
+                <view class="mb-10 pa-10" v-for="(i, idx) in waresEvaluateList" :key="idx">
+                  <view class="flex flex-row flex-row-start-center">
+                    <tm-image :src="i.memberAvatar ?? '/static/images/me.png'" :round="25" :width="54" :height="54"></tm-image>
+                    <view class="ml-10">
+                      <view class="mb-8">
+                        <tm-text color="grey" :font-size="24" :label="i.memberName" />
+                      </view>
+                      <tm-rate color="green" readonly :default-value="Number.parseInt(i.rate)" :size="24"></tm-rate>
+                    </view>
+                  </view>
+                  <view class="blurb text-overflow-2 mt-10 mb-10"> {{ i.remarks }}</view>
+                  <tm-image-group v-if="i.evaluateImages">
+                    <tm-image
+                      v-for="(im, imx) in i.evaluateImages.split(',')"
+                      :padding="[2, 2]"
+                      preview
+                      :width="155"
+                      :height="156"
+                      :src="im"
+                      :key="imx"
+                    ></tm-image>
+                  </tm-image-group>
+                </view>
+              </template>
             </view>
           </view>
         </view>
-      </tm-sheet>
-      <tm-sticky :offset="offset">
-        <template #sticky>
-          <tm-sheet :margin="[0, 0]" :padding="[0, 0]">
-            <tm-tabs
-              :list="tabsTitle"
-              :width="_width"
-              v-model:active-name="tabActiveRef"
-              @change="switchTab"
-              showTabsLineAni
-              :item-width="_width / 3 - 40"
-              align="around"
-              tabsLineAniColor="green"
-              activeFontColor="green"
-            ></tm-tabs>
-          </tm-sheet>
-        </template>
-        <view class="wrap">
-          <tm-sheet :margin="[10]" :padding="[0]" id="1" class="item wrap-top-list1">
-            <view class="flex flex-row flex-row-center-start pt-20">
-              <tm-divider color="green" :border="10" real-color vertical :height="30"></tm-divider>
-              <view class="font-weight-b">评价</view>
+
+        <view class="section">
+          <view class="section">
+            <view class="top" id="detail">
+              <view class="title">商品详情</view>
             </view>
-            <tm-divider></tm-divider>
-            <view>121111</view>
-            <view>121111</view>
-            <view>121111</view>
-            <view>121111</view>
-            <view>121111</view>
-            <view>121111</view>
-            <view>121111</view>
-            <view>121111</view>
-            <view>121111</view>
-            <view>121111</view>
-            <view>121111</view>
-            <view>121111</view>
-            <view>121111</view>
-          </tm-sheet>
-          <tm-sheet :margin="[10]" :padding="[0]" id="2" class="item wrap-top-list2">
-            <view class="flex flex-row flex-row-center-start pt-20">
-              <tm-divider color="green" :border="10" real-color vertical :height="30"></tm-divider>
-              <view class="font-weight-b">商品详情</view>
+            <view class="content content_progress">
+              <tm-html :content="detail" />
             </view>
-            <tm-divider></tm-divider>
-            <tm-html :content="detail" />
-          </tm-sheet>
+          </view>
         </view>
-      </tm-sticky>
+      </view>
+
       <template #footer>
         <view class="flex flex-row flex-1 flex-row-center-between">
           <tm-row :column="3" :width="300">
@@ -108,13 +131,6 @@
         </view>
       </template>
     </uv-bottom-bar-container>
-    <tm-float-button
-      position="br"
-      v-if="scrollTop > 400"
-      :btn="{ icon: 'tmicon-angle-up', linear: '', color: 'green', label: '置顶' }"
-      :offset="[40, 200]"
-      @click="goToTop"
-    ></tm-float-button>
   </tm-app>
 </template>
 
@@ -129,17 +145,18 @@ import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmTabs from '@/tmui/components/tm-tabs/tm-tabs.vue'
 import tmIcon from '@/tmui/components/tm-icon/tm-icon.vue'
-import tmSticky from '@/tmui/components/tm-sticky/tm-sticky.vue'
-import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
-import tmFloatButton from '@/tmui/components/tm-float-button/tm-float-button.vue'
+import tmImageGroup from '@/tmui/components/tm-image-group/tm-image-group.vue'
+import tmImage from '@/tmui/components/tm-image/tm-image.vue'
+import tmRate from '@/tmui/components/tm-rate/tm-rate.vue'
 import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 import tmRow from '@/tmui/components/tm-row/tm-row.vue'
 import tmCol from '@/tmui/components/tm-col/tm-col.vue'
 import { onLoad, onPageScroll } from '@dcloudio/uni-app'
 import { useUserHook, useAppHook } from '@/store'
-import { Wares } from '@/api/interface'
+import { Wares, Order } from '@/api/interface'
 
-import { getWares, collect, addCart, browseWares } from '@/api/modules/wares'
+import { getWaresApi, collectApi, addCartApi, browseWaresApi } from '@/api/modules/wares'
+import { waresEvaluateListApi } from '@/api/modules/order'
 const store = useUserHook()
 const appStore = useAppHook()
 const $instance = ref<any>(getCurrentInstance()?.proxy)
@@ -148,21 +165,27 @@ const detail = ref<string>('')
 const name = ref<string>('')
 const browse = ref<number>(1)
 const sell = ref<number>(0)
-const offset = ref(uni.$tm.u.torpx(appStore.getCustomBarHeight()))
+const offsetValue = ref<number>(appStore.getCustomBarHeight())
 const swiperImages: string[] = reactive([])
 const inventoryValue = ref<number>(0)
 const userCollect = ref<boolean>(false)
 const addLoading = ref<boolean>(false)
 const blurbValue = ref<string>('')
-const tabActiveRef = ref<string>('1')
-const isScrollByTab = ref<boolean>(false)
-const scrollTop = ref<number>(0)
+const tabActiveRef = ref<number>(0)
+const isTabChange = ref<boolean>(false)
+const waresEvaluateList = reactive<Order.EvaluateResult[]>([])
+const opacityValue = ref<number>(0)
+const distanceArr = reactive<number[]>([])
 
 const tabsTitle = ref([
-  { key: '0', title: '商品' },
-  { key: '1', title: '评价' },
-  { key: '2', title: '详情' }
+  { key: 0, title: '商品', id: 'product' },
+  { key: 1, title: '评价', id: 'evaluation' },
+  { key: 2, title: '详情', id: 'detail' }
 ])
+const _itemWidth = computed(() => {
+  return uni.$tm.u.torpx(appStore.getWindowWidth() / 3 - 22)
+})
+
 const _width = computed(() => {
   return uni.$tm.u.torpx(appStore.getWindowWidth())
 })
@@ -175,88 +198,96 @@ onLoad((opts: any) => {
     return
   }
   idValue.value = id
-  _loadWares()
-  nextTick(() => {
-    _browseWares()
-  })
+  initData()
 })
 
 onPageScroll((res: any) => {
-  scrollTop.value = res.scrollTop
-  if (isScrollByTab.value) {
+  const { scrollTop } = res
+  let value = scrollTop / 100
+  value > 1 && (value = 1)
+  opacityValue.value = value
+  if (isTabChange.value) {
     return
   }
-  if (scrollTop.value < 200) {
-    tabActiveRef.value = '0'
+  if (scrollTop < offsetValue.value) {
     return
   }
-  uni
-    .createSelectorQuery()
-    .selectAll('.item')
-    .boundingClientRect((rects: any) => {
-      for (let i = rects.length - 1; i >= 0; i--) {
-        const rect: any = rects[i]
-        //实时获取多个模块距离的距离，使用findLastIndex找到当前的tab
-        if (rect.top < offset.value - 10) {
-          const activeRect: any = rects[i]
-          if (tabActiveRef.value === activeRect.id) {
-            return
-          }
-          tabActiveRef.value = activeRect.id
-          return
-        }
-      }
-    })
-    .exec()
+  nextTick(() => {
+    const length = distanceArr.length
+    const index = distanceArr.findIndex((el) => el - offsetValue.value - scrollTop > 0)
+    // 当index  == -1 的时候，实际当前滚动的距离超出了最大值，也就是在最后一个tab显示的内容
+    // 当index > 0 的时候，说明能在当前的scrollTop值找到，即index的前一位
+    tabActiveRef.value = index > 0 ? index - 1 : length - 1
+  })
 })
-const switchTab = (key: string | number) => {
-  const strKey = key + ''
-  isScrollByTab.value = true
-  if (strKey === '0') {
+const switchTab = (key: number) => {
+  const strKey = key
+  isTabChange.value = true
+  tabActiveRef.value = key
+  if (strKey === 0) {
     goToTop()
     return
   }
-  gotoView('.wrap-top-list' + key)
+  gotoView(tabsTitle.value.find((item) => item.key === key)?.id ?? '')
 }
 
 const goToTop = () => {
-  tabActiveRef.value = '0'
-  nextTick(() => {
-    uni.pageScrollTo({
-      //页面需要滚动的距离为相对于视口的距离加上当前页面的滚动距离
-      scrollTop: 0,
-      duration: 300
-    })
-    //这里在滚动完成之后将isScrollByTab重置为false，故意在大于300ms之后
-    const timer = setTimeout(() => {
-      isScrollByTab.value = false
-      clearTimeout(timer)
-    }, 500)
+  uni.pageScrollTo({
+    //页面需要滚动的距离为相对于视口的距离加上当前页面的滚动距离
+    scrollTop: 0,
+    duration: 300
   })
+  //这里在滚动完成之后将isScrollByTab重置为false，故意在大于300ms之后
+  const timer = setTimeout(() => {
+    isTabChange.value = false
+    clearTimeout(timer)
+  }, 500)
 }
 
 // 跳转锚点
-const gotoView = async (name: string) => {
-  const rect: any = await _getRect(name)
-  //目标位置的节点：类class或者id
-  nextTick(async () => {
-    const wrapDomRes: any = await _getRect('.wrap')
-    //最外层盒子的节点：类class或者id
-    uni.pageScrollTo({
-      duration: 100, //过渡时间
-      //scrollTop: data.top + 460 - res.top //到达距离顶部的top值
-      scrollTop: rect.top + 500 - wrapDomRes.top //如果置顶
+const gotoView = (id: string) => {
+  uni
+    .createSelectorQuery()
+    .select('#' + id)
+    .boundingClientRect((data: any) => {
+      uni
+        .createSelectorQuery()
+        .select('.wrapper')
+        .boundingClientRect((res: any) => {
+          const scrollTop = data.top - res.top // 获取差值
+          // 页面开始进行滚动到目标位置
+          uni.pageScrollTo({
+            scrollTop: scrollTop > 0 ? scrollTop - offsetValue.value + 22 : scrollTop + offsetValue.value - 44,
+            duration: 300,
+            complete: function () {
+              const timer = setTimeout(() => {
+                isTabChange.value = false // 关闭
+                clearTimeout(timer)
+              }, 500) // 解决ios和安卓、鸿蒙系统兼容性问题
+            }
+          })
+        })
+        .exec()
     })
-    //这里在滚动完成之后将isScrollByTab重置为false，故意在大于300ms之后
-    const timer = setTimeout(() => {
-      isScrollByTab.value = false
-      clearTimeout(timer)
-    }, 500)
+    .exec()
+}
+
+// 获取所有元素在当前页面所处的位置信息
+const getDistanceArr = () => {
+  tabsTitle.value.map((el) => {
+    uni
+      .createSelectorQuery()
+      .select('#' + el.id)
+      .boundingClientRect((data: any) => {
+        // 获取当前ID距离顶部的top值
+        distanceArr.push(data.top)
+      })
+      .exec()
   })
 }
 
 const onCollects = () => {
-  collect(idValue.value)
+  collectApi(idValue.value)
     .then(() => {
       userCollect.value = !userCollect.value
       setPageRefresh()
@@ -268,7 +299,7 @@ const onCollects = () => {
 
 const onAddCart = () => {
   addLoading.value = true
-  addCart(idValue.value)
+  addCartApi(idValue.value)
     .then(() => {
       addLoading.value = false
     })
@@ -278,41 +309,43 @@ const onAddCart = () => {
     })
 }
 
-const _loadWares = () => {
-  getWares(idValue.value)
-    .then((res) => {
-      const wares: Wares.WaresResult = res.data
-      const swiper: string[] = wares.swiperImages?.split(',') || []
-      swiperImages.push(...swiper)
-      detail.value = wares.detail ?? ''
-      name.value = wares.name
-      blurbValue.value = wares.blurb
-      userCollect.value = wares.collect ?? false
-      browse.value = wares.browse ?? 0
-      inventoryValue.value = wares.inventory
-      sell.value = wares.sell ?? 0
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+const initData = async () => {
+  const result = await Promise.all([getWaresApi(idValue.value), waresEvaluateListApi({ waresId: idValue.value, top: 2 })]).catch((err: any) => {
+    console.log(err)
+  })
+  if (!(result && result.length === 2)) {
+    console.log('get wares error')
+    return
+  }
+  _loadWares(result[0].data)
+  _loadEvaluate(result[1].data)
+  nextTick(() => {
+    getDistanceArr()
+    _browseWaresApi()
+  })
 }
 
-const _browseWares = () => {
-  browseWares(idValue.value)
+const _browseWaresApi = () => {
+  browseWaresApi(idValue.value)
     .then(() => {})
     .catch(() => {})
 }
 
-const _getRect = (name: string) => {
-  return new Promise((resolve) => {
-    uni
-      .createSelectorQuery()
-      .select(name)
-      .boundingClientRect((data: any) => {
-        resolve(data)
-      })
-      .exec()
-  })
+const _loadWares = (wares: Wares.WaresResult) => {
+  const swiper: string[] = wares.swiperImages?.split(',') || []
+  swiperImages.push(...swiper)
+  detail.value = wares.detail ?? ''
+  name.value = wares.name
+  blurbValue.value = wares.blurb
+  userCollect.value = wares.collect ?? false
+  browse.value = wares.browse ?? 0
+  inventoryValue.value = wares.inventory
+  sell.value = wares.sell ?? 0
+}
+
+const _loadEvaluate = (list: Order.EvaluateResult[]) => {
+  waresEvaluateList.length = 0
+  waresEvaluateList.push(...list)
 }
 
 const onFastConfirm = () => {
@@ -339,6 +372,6 @@ const setPageRefresh = () => {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 @import './index.scss';
 </style>

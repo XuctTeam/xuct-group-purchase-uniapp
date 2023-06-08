@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:25:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-07 16:01:36
+ * @LastEditTime: 2023-06-08 18:32:03
  * @FilePath: \xuct-group-purchase-uniapp\src\store\app.ts
  * @Description:
  *
@@ -21,8 +21,7 @@ export const appStore = defineStore('appStore', () => {
     const { sysinfo, width } = getWindow()
     windowWidth.value = width
     safeBottom.value = sysinfo?.safeAreaInsets?.bottom ?? 0
-    const custom = uni.getMenuButtonBoundingClientRect()
-    customBarHeight.value = custom.bottom + custom.top - (sysinfo?.statusBarHeight ?? 0)
+    customBarHeight.value = 44 + (sysinfo?.statusBarHeight ?? 0)
   }
 
   const getSafeBottom = () => {
