@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-08 19:14:56
+ * @LastEditTime: 2023-06-08 23:00:39
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\wares\index.nvue
  * @Description: 
  * 
@@ -10,127 +10,139 @@
 -->
 <template>
   <tm-app>
-    <tm-navbar title="商品详情" color="#32CD32" fontColor="#fff" blur></tm-navbar>
-    <view class="fixed" id="wares-tabs" :style="{ top: offsetValue + 'px', zIndex: 1, display: opacityValue > 0.3 ? 'block' : 'none', opacity: opacityValue }">
-      <tm-tabs
-        :list="tabsTitle"
-        v-model:active-name="tabActiveRef"
-        @change="switchTab"
-        showTabsLineAni
-        :width="_width"
-        :item-width="_itemWidth"
-        :item-height="88"
-        align="around"
-        tabsLineAniColor="green"
-        activeFontColor="green"
-      ></tm-tabs>
-    </view>
-    <uv-bottom-bar-container :show-footer="!!logged">
-      <view class="wrapper">
-        <view class="section">
-          <view class="top" id="product">
-            <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
-            <tm-sheet :margin="[10]" :round="4" :shadow="4">
-              <view class="title text-overflow-2 mb-20">{{ name }}</view>
-              <view class="blurb text-overflow-2 mb-20"> {{ blurbValue }}</view>
-              <view class="flex flex-row flex-row-center-between mt-20">
-                <view class="flex flex-row">
-                  <tm-text color="grey" :font-size="24" label="库存:" />
-                  <view class="ml-8">
-                    <tm-text color="orange" :font-size="24" :label="inventoryValue" />
-                  </view>
-                </view>
-                <view class="flex flex-row">
-                  <tm-text color="grey" :font-size="24" label="热度:"></tm-text>
-                  <view class="ml-8">
-                    <tm-text color="orange" :font-size="24" :label="browse" />
-                  </view>
-                </view>
-                <view class="flex flex-row">
-                  <tm-text color="grey" :font-size="24" label="成交量:"></tm-text>
-                  <view class="ml-8">
-                    <tm-text color="orange" :font-size="24" :label="sell" />
-                  </view>
-                </view>
-              </view>
-            </tm-sheet>
-          </view>
-        </view>
-
-        <view class="section">
-          <view class="section">
-            <view class="top" id="evaluation">
-              <view class="title">评价信息</view>
-            </view>
-            <view class="content content_progress">
-              <view class="flex flex-row flex-row-start-center pa-20 mb-10" v-if="waresEvaluateList.length === 0">
-                <tm-text color="grey" :font-size="26" label="暂无友友给予评价~"></tm-text>
-              </view>
-              <template v-else>
-                <view class="mb-10 pa-10" v-for="(i, idx) in waresEvaluateList" :key="idx">
-                  <view class="flex flex-row flex-row-start-center">
-                    <tm-image :src="i.memberAvatar ?? '/static/images/me.png'" :round="25" :width="54" :height="54"></tm-image>
-                    <view class="ml-10">
-                      <view class="mb-8">
-                        <tm-text color="grey" :font-size="24" :label="i.memberName" />
-                      </view>
-                      <tm-rate color="green" readonly :default-value="Number.parseInt(i.rate)" :size="24"></tm-rate>
-                    </view>
-                  </view>
-                  <view class="blurb text-overflow-2 mt-10 mb-10"> {{ i.remarks }}</view>
-                  <tm-image-group v-if="i.evaluateImages">
-                    <tm-image
-                      v-for="(im, imx) in i.evaluateImages.split(',')"
-                      :padding="[2, 2]"
-                      preview
-                      :width="155"
-                      :height="156"
-                      :src="im"
-                      :key="imx"
-                    ></tm-image>
-                  </tm-image-group>
-                </view>
-              </template>
-            </view>
-          </view>
-        </view>
-
-        <view class="section">
-          <view class="section">
-            <view class="top" id="detail">
-              <view class="title">商品详情</view>
-            </view>
-            <view class="content content_progress">
-              <tm-html :content="detail" />
-            </view>
-          </view>
-        </view>
-      </view>
-
-      <template #footer>
-        <view class="flex flex-row flex-1 flex-row-center-between">
-          <tm-row :column="3" :width="300">
-            <tm-col @click="toServices" :height="100">
-              <tm-icon name=" tmicon-aliwangwang" :fontSize="36" />
-              <tm-text color="grey" :font-size="24" label="客服" />
-            </tm-col>
-            <tm-col @click="toCart" :height="100">
-              <tm-icon name="tmicon-shoppingcart" :fontSize="36" />
-              <tm-text color="grey" :font-size="24" label="购物车" />
-            </tm-col>
-            <tm-col :height="100">
-              <tm-icon name="tmicon-md-heart-empty" :fontSize="36" @click="onCollects" v-if="!userCollect" />
-              <tm-icon name="tmicon-md-heart" color="red" :fontSize="36" @click="onCollects" v-else />
-              <tm-text color="grey" :font-size="24" label="收藏" />
-            </tm-col>
-          </tm-row>
-          <view class="flex flex-row flex-1 flex-row-center-end">
-            <tm-button color="orange" _class="round-l-24 round-r-0" :round="5" label="加入购物车" :loading="addLoading" @click="onAddCart"></tm-button>
-            <tm-button color="green" _class="round-r-24 round-l-0" label="立即下单" @click="onFastConfirm"></tm-button>
-          </view>
+    <z-paging ref="paging" enable-flex @scroll="scrollTo">
+      <!-- 之后-vue3 -->
+      <template #top>
+        <view>
+          <tm-navbar title="商品详情" color="#32CD32" fontColor="#fff" blur></tm-navbar>
         </view>
       </template>
-    </uv-bottom-bar-container>
+
+      <uv-bottom-bar-container :show-footer="!!logged">
+        <view
+          class="fixed"
+          :style="{ display: opacityValue > 0.3 ? 'block' : 'none', opacity: opacityValue, zIndex: 100, position: 'sticky', top: offsetValue }"
+        >
+          <tm-tabs
+            :list="tabsTitle"
+            v-model:active-name="tabActiveRef"
+            showTabsLineAni
+            :width="_width"
+            @change="switchTab"
+            :item-width="_itemWidth"
+            :item-height="88"
+            align="around"
+            tabsLineAniColor="green"
+            activeFontColor="green"
+          ></tm-tabs>
+        </view>
+
+        <view class="wrapper">
+          <view class="section">
+            <view class="top" id="product">
+              <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
+              <tm-sheet :margin="[10]" :round="4" :shadow="4">
+                <view class="title text-overflow-2 mb-20">{{ name }}</view>
+                <view class="blurb text-overflow-2 mb-20"> {{ blurbValue }}</view>
+                <view class="flex flex-row flex-row-center-between mt-20">
+                  <view class="flex flex-row">
+                    <tm-text color="grey" :font-size="24" label="库存:" />
+                    <view class="ml-8">
+                      <tm-text color="orange" :font-size="24" :label="inventoryValue" />
+                    </view>
+                  </view>
+                  <view class="flex flex-row">
+                    <tm-text color="grey" :font-size="24" label="热度:"></tm-text>
+                    <view class="ml-8">
+                      <tm-text color="orange" :font-size="24" :label="browse" />
+                    </view>
+                  </view>
+                  <view class="flex flex-row">
+                    <tm-text color="grey" :font-size="24" label="成交量:"></tm-text>
+                    <view class="ml-8">
+                      <tm-text color="orange" :font-size="24" :label="sell" />
+                    </view>
+                  </view>
+                </view>
+              </tm-sheet>
+            </view>
+          </view>
+
+          <view class="section">
+            <view class="section">
+              <view class="top" id="evaluation">
+                <view class="title">评价信息</view>
+              </view>
+              <view class="content content_progress">
+                <view class="flex flex-row flex-row-start-center pa-20 mb-10" v-if="waresEvaluateList.length === 0">
+                  <tm-text color="grey" :font-size="26" label="暂无友友给予评价~"></tm-text>
+                </view>
+                <template v-else>
+                  <view class="mb-10 pa-10" v-for="(i, idx) in waresEvaluateList" :key="idx">
+                    <view class="flex flex-row flex-row-start-center">
+                      <tm-image :src="i.memberAvatar ?? '/static/images/me.png'" :round="25" :width="54" :height="54"></tm-image>
+                      <view class="ml-10">
+                        <view class="mb-8">
+                          <tm-text color="grey" :font-size="24" :label="i.memberName" />
+                        </view>
+                        <tm-rate color="green" readonly :default-value="Number.parseInt(i.rate)" :size="24"></tm-rate>
+                      </view>
+                    </view>
+                    <view class="blurb text-overflow-2 mt-10 mb-10"> {{ i.remarks }}</view>
+                    <tm-image-group v-if="i.evaluateImages">
+                      <tm-image
+                        v-for="(im, imx) in i.evaluateImages.split(',')"
+                        :padding="[2, 2]"
+                        preview
+                        :width="155"
+                        :height="156"
+                        :src="im"
+                        :key="imx"
+                      ></tm-image>
+                    </tm-image-group>
+                  </view>
+                </template>
+              </view>
+            </view>
+          </view>
+
+          <view class="section">
+            <view class="section">
+              <view class="top" id="detail">
+                <view class="title">商品详情</view>
+              </view>
+              <view class="content content_progress">
+                <tm-html :content="detail" />
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <template #footer>
+          <view class="flex flex-row flex-1 flex-row-center-between">
+            <tm-row :column="3" :width="300">
+              <tm-col @click="toServices" :height="100">
+                <tm-icon name=" tmicon-aliwangwang" :fontSize="36" />
+                <tm-text color="grey" :font-size="24" label="客服" />
+              </tm-col>
+              <tm-col @click="toCart" :height="100">
+                <tm-icon name="tmicon-shoppingcart" :fontSize="36" />
+                <tm-text color="grey" :font-size="24" label="购物车" />
+              </tm-col>
+              <tm-col :height="100">
+                <tm-icon name="tmicon-md-heart-empty" :fontSize="36" @click="onCollects" v-if="!userCollect" />
+                <tm-icon name="tmicon-md-heart" color="red" :fontSize="36" @click="onCollects" v-else />
+                <tm-text color="grey" :font-size="24" label="收藏" />
+              </tm-col>
+            </tm-row>
+            <view class="flex flex-row flex-1 flex-row-center-end">
+              <tm-button color="orange" _class="round-l-24 round-r-0" :round="5" label="加入购物车" :loading="addLoading" @click="onAddCart"></tm-button>
+              <tm-button color="green" _class="round-r-24 round-l-0" label="立即下单" @click="onFastConfirm"></tm-button>
+            </view>
+          </view>
+        </template>
+      </uv-bottom-bar-container>
+    </z-paging>
   </tm-app>
 </template>
 
@@ -151,9 +163,10 @@ import tmRate from '@/tmui/components/tm-rate/tm-rate.vue'
 import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 import tmRow from '@/tmui/components/tm-row/tm-row.vue'
 import tmCol from '@/tmui/components/tm-col/tm-col.vue'
-import { onLoad, onPageScroll } from '@dcloudio/uni-app'
+import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useUserHook, useAppHook } from '@/store'
 import { Wares, Order } from '@/api/interface'
+const paging = ref<any>(null)
 
 import { getWaresApi, collectApi, addCartApi, browseWaresApi } from '@/api/modules/wares'
 import { waresEvaluateListApi } from '@/api/modules/order'
@@ -201,8 +214,26 @@ onLoad((opts: any) => {
   initData()
 })
 
-onPageScroll((res: any) => {
-  const { scrollTop } = res
+const switchTab = (key: number) => {
+  isTabChange.value = true
+  tabActiveRef.value = key
+  uni
+    .createSelectorQuery()
+    .select('#' + tabsTitle.value.find((item) => item.key === key)?.id ?? '')
+    .boundingClientRect((res: any) => {
+      nextTick(() => {
+        paging.value?.scrollIntoViewByNodeTop(res.top, offsetValue.value + 60)
+        const timer = setTimeout(() => {
+          isTabChange.value = false
+          clearTimeout(timer)
+        }, 500)
+      })
+    })
+    .exec()
+}
+
+const scrollTo = (res: any) => {
+  const { scrollTop } = res.detail
   let value = scrollTop / 100
   value > 1 && (value = 1)
   opacityValue.value = value
@@ -212,78 +243,27 @@ onPageScroll((res: any) => {
   if (scrollTop < offsetValue.value) {
     return
   }
-  nextTick(() => {
-    const length = distanceArr.length
-    const index = distanceArr.findIndex((el) => el - offsetValue.value - scrollTop > 0)
-    // 当index  == -1 的时候，实际当前滚动的距离超出了最大值，也就是在最后一个tab显示的内容
-    // 当index > 0 的时候，说明能在当前的scrollTop值找到，即index的前一位
-    tabActiveRef.value = index > 0 ? index - 1 : length - 1
-  })
-})
-const switchTab = (key: number) => {
-  const strKey = key
-  isTabChange.value = true
-  tabActiveRef.value = key
-  if (strKey === 0) {
-    goToTop()
-    return
-  }
-  gotoView(tabsTitle.value.find((item) => item.key === key)?.id ?? '')
-}
-
-const goToTop = () => {
-  uni.pageScrollTo({
-    //页面需要滚动的距离为相对于视口的距离加上当前页面的滚动距离
-    scrollTop: 0,
-    duration: 300
-  })
-  //这里在滚动完成之后将isScrollByTab重置为false，故意在大于300ms之后
-  const timer = setTimeout(() => {
-    isTabChange.value = false
-    clearTimeout(timer)
-  }, 500)
-}
-
-// 跳转锚点
-const gotoView = (id: string) => {
   uni
     .createSelectorQuery()
-    .select('#' + id)
-    .boundingClientRect((data: any) => {
-      uni
-        .createSelectorQuery()
-        .select('.wrapper')
-        .boundingClientRect((res: any) => {
-          const scrollTop = data.top - res.top // 获取差值
-          // 页面开始进行滚动到目标位置
-          uni.pageScrollTo({
-            scrollTop: scrollTop > 0 ? scrollTop - offsetValue.value + 22 : scrollTop + offsetValue.value - 44,
-            duration: 300,
-            complete: function () {
-              const timer = setTimeout(() => {
-                isTabChange.value = false // 关闭
-                clearTimeout(timer)
-              }, 500) // 解决ios和安卓、鸿蒙系统兼容性问题
-            }
-          })
-        })
-        .exec()
+    .selectAll('.top')
+    .boundingClientRect((rects: any) => {
+      for (let i = rects.length - 1; i >= 0; i--) {
+        const rect: any = rects[i]
+        if (rect.top < offsetValue.value + 60) {
+          tabActiveRef.value = tabsTitle.value.find((item) => item.id === rect.id)?.key ?? 0
+          return
+        }
+      }
     })
     .exec()
-}
 
-// 获取所有元素在当前页面所处的位置信息
-const getDistanceArr = () => {
-  tabsTitle.value.map((el) => {
-    uni
-      .createSelectorQuery()
-      .select('#' + el.id)
-      .boundingClientRect((data: any) => {
-        // 获取当前ID距离顶部的top值
-        distanceArr.push(data.top)
-      })
-      .exec()
-  })
+  // nextTick(() => {
+  //   const length = distanceArr.length
+  //   const index = distanceArr.findIndex((el) => el - ( + 44) - scrollTop > 0)
+  //   // 当index  == -1 的时候，实际当前滚动的距离超出了最大值，也就是在最后一个tab显示的内容
+  //   // 当index > 0 的时候，说明能在当前的scrollTop值找到，即index的前一位
+  //   tabActiveRef.value = index > 0 ? index - 1 : length - 1
+  // })
 }
 
 const onCollects = () => {
@@ -320,7 +300,6 @@ const initData = async () => {
   _loadWares(result[0].data)
   _loadEvaluate(result[1].data)
   nextTick(() => {
-    getDistanceArr()
     _browseWaresApi()
   })
 }
