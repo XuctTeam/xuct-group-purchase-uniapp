@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-31 09:09:57
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-08 09:08:59
+ * @LastEditTime: 2023-06-09 09:25:59
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\cart\index.nvue
  * @Description: 
  * 
@@ -91,7 +91,7 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import uvUiInputNumber from '@/components/uv-ui/uv-ui-input-number/index.vue'
 
 import { useUserHook } from '@/store'
-import { confirm, message } from '@/utils/dialog'
+import { confirm } from '@/utils/dialog'
 import { cartListApi, cleanCartApi, modifyCartNumApi, deleteCartWaresApi } from '@/api/modules/wares'
 import { Wares } from '@/api/interface'
 import { storeToRefs } from 'pinia'
@@ -198,10 +198,7 @@ const toWaresDetail = (id: string) => {
 
 const toConfirmOrder = () => {
   if (selectedNum.value === 0) {
-    message({
-      title: '请选择商品',
-      icon: 'error'
-    })
+    uni.$tm.u.toast('请选择商品', true, 'error')
     return
   }
   const _ids = cartWares.filter((x) => x.checked).map((x) => x.waresId)

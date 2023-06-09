@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 16:49:47
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-06 19:02:54
+ * @LastEditTime: 2023-06-09 09:24:52
  * @FilePath: \xuct-group-purchase-uniapp\src\api\config\request.ts
  * @Description:
  *
@@ -14,7 +14,6 @@ import { useUserHook } from '@/store'
 import codeMessage from './codeMessage'
 import ENV_CONFIG from '@/config/env'
 import { API_NOT_TOKEN } from '@/constant/white'
-import { message as toast } from '@/utils/dialog'
 import { showFullScreenLoading, tryHideFullScreenLoading } from './serviceLoading'
 
 interface RequestTaskQuery {
@@ -102,10 +101,7 @@ instance.interceptors.response.use(
     const { code, message } = response.data
     tryHideFullScreenLoading()
     if (code !== 200) {
-      toast({
-        title: message || '请求异常',
-        icon: 'error'
-      })
+      uni.$tm.u.toast(message || '请求异常', true, 'error')
       return Promise.reject({
         error: code,
         message
@@ -121,10 +117,7 @@ instance.interceptors.response.use(
       return checkTokenHandler(() => instance(error.config))
     }
     const _tips = codeKeys[statusCode] || '请求异常！'
-    toast({
-      title: _tips,
-      icon: 'error'
-    })
+    uni.$tm.u.toast(_tips || '请求异常', true, 'error')
     return Promise.reject(error)
   }
 )

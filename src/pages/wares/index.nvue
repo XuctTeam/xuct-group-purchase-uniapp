@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-28 16:23:38
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-08 23:00:39
+ * @LastEditTime: 2023-06-09 09:18:22
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\wares\index.nvue
  * @Description: 
  * 
@@ -19,104 +19,91 @@
       </template>
 
       <uv-bottom-bar-container :show-footer="!!logged">
-        <view
+        <tm-tabs
           class="fixed"
-          :style="{ display: opacityValue > 0.3 ? 'block' : 'none', opacity: opacityValue, zIndex: 100, position: 'sticky', top: offsetValue }"
-        >
-          <tm-tabs
-            :list="tabsTitle"
-            v-model:active-name="tabActiveRef"
-            showTabsLineAni
-            :width="_width"
-            @change="switchTab"
-            :item-width="_itemWidth"
-            :item-height="88"
-            align="around"
-            tabsLineAniColor="green"
-            activeFontColor="green"
-          ></tm-tabs>
-        </view>
+          :style="{ display: opacityValue > 0.3 ? 'block' : 'none', opacity: opacityValue, zIndex: 100, top: offsetValue }"
+          :list="tabsTitle"
+          v-model:active-name="tabActiveRef"
+          showTabsLineAni
+          :width="_width"
+          @change="switchTab"
+          :item-width="_itemWidth"
+          align="around"
+          tabsLineAniColor="green"
+          activeFontColor="green"
+        ></tm-tabs>
 
-        <view class="wrapper">
-          <view class="section">
-            <view class="top" id="product">
-              <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
-              <tm-sheet :margin="[10]" :round="4" :shadow="4">
-                <view class="title text-overflow-2 mb-20">{{ name }}</view>
-                <view class="blurb text-overflow-2 mb-20"> {{ blurbValue }}</view>
-                <view class="flex flex-row flex-row-center-between mt-20">
-                  <view class="flex flex-row">
-                    <tm-text color="grey" :font-size="24" label="库存:" />
-                    <view class="ml-8">
-                      <tm-text color="orange" :font-size="24" :label="inventoryValue" />
+        <tm-sheet :margin="[10, 0]" :round="4" :shadow="4">
+          <view class="top" id="product"></view>
+          <tm-carousel autoplay :margin="[0, 0]" :height="700" :displayMultipleItems="0" :list="swiperImages" />
+          <template>
+            <view class="title text-overflow-2 mb-20">{{ name }}</view>
+            <view class="blurb text-overflow-2 mb-20"> {{ blurbValue }}</view>
+            <view class="flex flex-row flex-row-center-between mt-20">
+              <view class="flex flex-row">
+                <tm-text color="grey" :font-size="24" label="库存:" />
+                <view class="ml-8">
+                  <tm-text color="orange" :font-size="24" :label="inventoryValue" />
+                </view>
+              </view>
+              <view class="flex flex-row">
+                <tm-text color="grey" :font-size="24" label="热度:"></tm-text>
+                <view class="ml-8">
+                  <tm-text color="orange" :font-size="24" :label="browse" />
+                </view>
+              </view>
+              <view class="flex flex-row">
+                <tm-text color="grey" :font-size="24" label="成交量:"></tm-text>
+                <view class="ml-8">
+                  <tm-text color="orange" :font-size="24" :label="sell" />
+                </view>
+              </view>
+            </view>
+          </template>
+        </tm-sheet>
+
+        <tm-sheet :margin="[10]" :round="4" :shadow="4">
+          <view class="top" id="evaluation">
+            <view class="title">评价信息</view>
+          </view>
+          <template>
+            <view class="flex flex-row flex-row-start-center pa-20 mb-10" v-if="waresEvaluateList.length === 0">
+              <tm-text color="grey" :font-size="26" label="暂无友友给予评价~"></tm-text>
+            </view>
+            <template v-else>
+              <view class="mb-10 pa-10" v-for="(i, idx) in waresEvaluateList" :key="idx">
+                <view class="flex flex-row flex-row-start-center">
+                  <tm-image :src="i.memberAvatar ?? '/static/images/me.png'" :round="25" :width="54" :height="54"></tm-image>
+                  <view class="ml-10">
+                    <view class="mb-8">
+                      <tm-text color="grey" :font-size="24" :label="i.memberName" />
                     </view>
-                  </view>
-                  <view class="flex flex-row">
-                    <tm-text color="grey" :font-size="24" label="热度:"></tm-text>
-                    <view class="ml-8">
-                      <tm-text color="orange" :font-size="24" :label="browse" />
-                    </view>
-                  </view>
-                  <view class="flex flex-row">
-                    <tm-text color="grey" :font-size="24" label="成交量:"></tm-text>
-                    <view class="ml-8">
-                      <tm-text color="orange" :font-size="24" :label="sell" />
-                    </view>
+                    <tm-rate color="green" :gutter="4" readonly :default-value="Number.parseInt(i.rate)" :size="24"></tm-rate>
                   </view>
                 </view>
-              </tm-sheet>
-            </view>
-          </view>
+                <view class="blurb text-overflow-2 mt-10 mb-10"> {{ i.remarks }}</view>
+                <tm-image-group v-if="i.evaluateImages">
+                  <tm-image
+                    v-for="(im, imx) in i.evaluateImages.split(',')"
+                    :padding="[2, 2]"
+                    preview
+                    :width="155"
+                    :height="156"
+                    :src="im"
+                    :key="imx"
+                  ></tm-image>
+                </tm-image-group>
+              </view>
+            </template>
+          </template>
+        </tm-sheet>
 
-          <view class="section">
-            <view class="section">
-              <view class="top" id="evaluation">
-                <view class="title">评价信息</view>
-              </view>
-              <view class="content content_progress">
-                <view class="flex flex-row flex-row-start-center pa-20 mb-10" v-if="waresEvaluateList.length === 0">
-                  <tm-text color="grey" :font-size="26" label="暂无友友给予评价~"></tm-text>
-                </view>
-                <template v-else>
-                  <view class="mb-10 pa-10" v-for="(i, idx) in waresEvaluateList" :key="idx">
-                    <view class="flex flex-row flex-row-start-center">
-                      <tm-image :src="i.memberAvatar ?? '/static/images/me.png'" :round="25" :width="54" :height="54"></tm-image>
-                      <view class="ml-10">
-                        <view class="mb-8">
-                          <tm-text color="grey" :font-size="24" :label="i.memberName" />
-                        </view>
-                        <tm-rate color="green" readonly :default-value="Number.parseInt(i.rate)" :size="24"></tm-rate>
-                      </view>
-                    </view>
-                    <view class="blurb text-overflow-2 mt-10 mb-10"> {{ i.remarks }}</view>
-                    <tm-image-group v-if="i.evaluateImages">
-                      <tm-image
-                        v-for="(im, imx) in i.evaluateImages.split(',')"
-                        :padding="[2, 2]"
-                        preview
-                        :width="155"
-                        :height="156"
-                        :src="im"
-                        :key="imx"
-                      ></tm-image>
-                    </tm-image-group>
-                  </view>
-                </template>
-              </view>
-            </view>
+        <tm-sheet :margin="[10, 0]" :round="4" :shadow="4">
+          <view class="top" id="detail">
+            <view class="title">商品详情</view>
           </view>
-
-          <view class="section">
-            <view class="section">
-              <view class="top" id="detail">
-                <view class="title">商品详情</view>
-              </view>
-              <view class="content content_progress">
-                <tm-html :content="detail" />
-              </view>
-            </view>
-          </view>
-        </view>
+          <tm-html :content="detail" />
+        </tm-sheet>
 
         <template #footer>
           <view class="flex flex-row flex-1 flex-row-center-between">
@@ -163,7 +150,7 @@ import tmRate from '@/tmui/components/tm-rate/tm-rate.vue'
 import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 import tmRow from '@/tmui/components/tm-row/tm-row.vue'
 import tmCol from '@/tmui/components/tm-col/tm-col.vue'
-import { onLoad, onShow } from '@dcloudio/uni-app'
+import { onLoad } from '@dcloudio/uni-app'
 import { useUserHook, useAppHook } from '@/store'
 import { Wares, Order } from '@/api/interface'
 const paging = ref<any>(null)
@@ -188,7 +175,6 @@ const tabActiveRef = ref<number>(0)
 const isTabChange = ref<boolean>(false)
 const waresEvaluateList = reactive<Order.EvaluateResult[]>([])
 const opacityValue = ref<number>(0)
-const distanceArr = reactive<number[]>([])
 
 const tabsTitle = ref([
   { key: 0, title: '商品', id: 'product' },
@@ -256,14 +242,6 @@ const scrollTo = (res: any) => {
       }
     })
     .exec()
-
-  // nextTick(() => {
-  //   const length = distanceArr.length
-  //   const index = distanceArr.findIndex((el) => el - ( + 44) - scrollTop > 0)
-  //   // 当index  == -1 的时候，实际当前滚动的距离超出了最大值，也就是在最后一个tab显示的内容
-  //   // 当index > 0 的时候，说明能在当前的scrollTop值找到，即index的前一位
-  //   tabActiveRef.value = index > 0 ? index - 1 : length - 1
-  // })
 }
 
 const onCollects = () => {
@@ -290,24 +268,17 @@ const onAddCart = () => {
 }
 
 const initData = async () => {
-  const result = await Promise.all([getWaresApi(idValue.value), waresEvaluateListApi({ waresId: idValue.value, top: 2 })]).catch((err: any) => {
-    console.log(err)
-  })
-  if (!(result && result.length === 2)) {
+  const result = await Promise.all([getWaresApi(idValue.value), waresEvaluateListApi({ waresId: idValue.value, top: 2 }), browseWaresApi(idValue.value)]).catch(
+    (err: any) => {
+      console.log(err)
+    }
+  )
+  if (!(result && result.length === 3)) {
     console.log('get wares error')
     return
   }
   _loadWares(result[0].data)
   _loadEvaluate(result[1].data)
-  nextTick(() => {
-    _browseWaresApi()
-  })
-}
-
-const _browseWaresApi = () => {
-  browseWaresApi(idValue.value)
-    .then(() => {})
-    .catch(() => {})
 }
 
 const _loadWares = (wares: Wares.WaresResult) => {

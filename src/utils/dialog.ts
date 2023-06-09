@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 18:54:33
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-04-20 14:09:40
+ * @LastEditTime: 2023-06-09 09:24:28
  * @FilePath: \xuct-group-purchase-uniapp\src\utils\dialog.ts
  * @Description:
  *
@@ -49,15 +49,4 @@ export const hideLoading = () => {
   setTimeout(() => {
     uni.hideLoading()
   }, 300)
-}
-
-/**
- * 提示框
- * @param param0
- */
-export const message = ({ title, icon }: MessageOpt) => {
-  uni.showToast({
-    title,
-    icon
-  })
 }

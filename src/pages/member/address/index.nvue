@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-24 16:24:00
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-06 19:06:28
+ * @LastEditTime: 2023-06-09 09:29:52
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\address\index.nvue
  * @Description: 
  * 
@@ -82,7 +82,7 @@ import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom
 import { saveUserAddress, getUserAddress, deleteUserAddress } from '@/api/modules/user'
 import { ref, getCurrentInstance } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { confirm, message } from '@/utils/dialog'
+import { confirm } from '@/utils/dialog'
 import { cityData } from '@/constant/city'
 import { User } from '@/api/interface/user'
 
@@ -143,10 +143,7 @@ const onDelete = () => {
           setPageRefresh()
         })
         .catch((err: any) => {
-          message({
-            title: err,
-            icon: 'error'
-          })
+          console.log(err)
         })
     },
     fail: () => {

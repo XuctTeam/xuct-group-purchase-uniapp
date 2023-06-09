@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-17 13:42:03
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-06 10:37:49
+ * @LastEditTime: 2023-06-09 09:28:10
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\login\index.nvue
  * @Description: 
  * 
@@ -33,7 +33,7 @@
         <!-- 那怕你不使用数据,也要这么写.如果不写template v-slot:default="{checked}"> 将会产生兼容性,已知微信小程序会丢失插槽内容 -->
         <tm-checkbox :round="25" :size="36" color="green" @change="checkChange">
           <!-- <template #default="{ checked }"> -->
-            <template>
+          <template>
             <view class="flex flex-row">
               <tm-text color="grey" label="我已经阅读并同意"></tm-text>
               <view>
@@ -59,7 +59,7 @@ import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import { computed, ref } from 'vue'
 import { loginByCode } from '@/api/modules/login'
 import { useAppHook, useUserHook } from '@/store'
-import { confirm, loading, hideLoading, message } from '@/utils/dialog'
+import { confirm, loading, hideLoading } from '@/utils/dialog'
 
 const checked = ref<boolean>(false)
 
@@ -77,10 +77,7 @@ const checkChange = (e: any) => {
 
 const login = () => {
   if (!checked.value) {
-    message({
-      title: '请勾选协议',
-      icon: 'error'
-    })
+    uni.$tm.u.toast('请勾选协议', true, 'error')
     return
   }
   _login()
@@ -148,60 +145,6 @@ const toUserProtocol = () => {
   uni.$tm.u.routerTo('/pages/public/userProtocol', 'navigate')
 }
 </script>
-<style>
-.login-item {
-  display: flex;
-  justify-content: center;
-  padding-bottom: 40upx;
-  border-bottom: 1upx solid #dddddd;
-  align-items: center;
-  margin-top: 30upx;
-}
-.logo {
-  display: block;
-  width: 180upx;
-  height: 180upx;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid #fff;
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
-}
-
-.login-tip {
-  padding: 30upx;
-}
-
-.login-tip-big {
-  font-size: 28upx;
-  line-height: 80upx;
-}
-
-.login-tip-small {
-  font-size: 12px;
-  color: #9e9e9e;
-}
-.app-name {
-  font-size: 28upx;
-  color: #999;
-}
-
-.login-b {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.login-b .btn-g {
-  margin-top: 40upx;
-}
-
-.confirm {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  line-height: 40px;
-}
+<style scoped>
+@import './index.scss';
 </style>

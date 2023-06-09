@@ -49,7 +49,6 @@ import { ref, computed } from 'vue'
 import { useUserHook, useAppHook } from '@/store'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
 import { commentList, addComment } from '@/api/modules/user'
-import { message } from '@/utils/dialog'
 import { User } from '@/api/interface/user'
 
 const userStore = useUserHook()
@@ -73,10 +72,7 @@ const _totalBarHeight = computed(() => {
 const sendClick = () => {
   //如果消息不为空或者不为空白字符（包括换行符、空格等）
   if (!chatMsgValue.value || /^\s+$/.test(chatMsgValue.value)) {
-    message({
-      title: '不能发送空消息',
-      icon: 'error'
-    })
+    uni.$tm.u.toast('不能发送空消息', true, 'error')
     return
   }
 

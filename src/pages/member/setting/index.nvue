@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-03-22 12:22:42
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-06 19:08:58
+ * @LastEditTime: 2023-06-09 09:29:34
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\member\setting\index.nvue
  * @Description: 
  * 
@@ -85,7 +85,7 @@ import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { getConfig } from '@/api/modules/config'
-import { confirm, message } from '@/utils/dialog'
+import { confirm } from '@/utils/dialog'
 import { useUserHook } from '@/store'
 import { upload } from '@/api/config/upload'
 import { saveUserInfo } from '@/api/modules/user'
@@ -114,18 +114,12 @@ const personClick = () => {
 const chooseAvatar = (avatar: any) => {
   const tempPath = avatar?.detail?.avatarUrl
   if (!tempPath) {
-    message({
-      title: '头像选择失败',
-      icon: 'error'
-    })
+    uni.$tm.u.toast('头像选择失败', true, 'error')
     return
   }
   upload(tempPath, {}, ({ code, data }: API.UploadResult) => {
     if (code === -1) {
-      message({
-        title: data,
-        icon: 'error'
-      })
+      uni.$tm.u.toast(data, true, 'error')
       return
     }
     userStore.setUserInfo({ ...userInfo, avatar: data })
@@ -142,25 +136,16 @@ const phoneChange = (e: any) => {
 
 const beforeSave = () => {
   if (!nickNameRef.value) {
-    message({
-      title: '昵称不能为空',
-      icon: 'error'
-    })
+    uni.$tm.u.toast('昵称不能为空', true, 'error')
     return false
   }
   if (!phoneRef.value) {
-    message({
-      title: '电话不能为空',
-      icon: 'error'
-    })
+    uni.$tm.u.toast('电话不能为空', true, 'error')
     return false
   }
 
   if (!uni.$tm.u.isPhone(phoneRef.value)) {
-    message({
-      title: '手机格式错误',
-      icon: 'error'
-    })
+    uni.$tm.u.toast('手机格式错误', true, 'error')
     return false
   }
   return true
