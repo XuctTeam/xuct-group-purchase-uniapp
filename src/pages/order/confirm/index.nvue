@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-06 18:28:56
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-06 19:09:51
+ * @LastEditTime: 2023-06-10 22:00:50
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\confirm\index.nvue
  * @Description: 
  * 
@@ -103,7 +103,7 @@ import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom
 import { onLoad } from '@dcloudio/uni-app'
 import { TEMPLATE_ORDER_IDS } from '@/constant'
 
-import { confirm, message } from '@/utils/dialog'
+import { confirm } from '@/utils/dialog'
 import { getDefaultAddress } from '@/api/modules/user'
 import { getConfirmOrderDetailApi } from '@/api/modules/order'
 import { placeOrder } from '@/api/modules/order'
@@ -125,10 +125,7 @@ const cartWares = reactive<Wares.Cart[]>([])
 onLoad((ops: any) => {
   let { wareIds, scene } = ops
   if (!wareIds) {
-    message({
-      title: '获取参数失败',
-      icon: 'error'
-    })
+    uni.$tm.u.toast('获取参数失败', true, 'error')
     return
   }
   _scene.value = scene

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-25 10:38:54
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 10:03:58
+ * @LastEditTime: 2023-06-10 21:58:31
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\refund\list.nvue
  * @Description: 
  * 
@@ -101,7 +101,7 @@ import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
 import { useAppHook } from '@/store'
 import { pageOrderList, cancelRefundOrder, cancelOrder } from '@/api/modules/order'
 import { onShow } from '@dcloudio/uni-app'
-import { confirm, message } from '@/utils/dialog'
+import { confirm } from '@/utils/dialog'
 import { Order } from '@/api/interface'
 
 const appStore = useAppHook()
@@ -208,10 +208,7 @@ const _cancelOrder = (orderId: string) => {
 
 const onSearch = () => {
   if (!searchValue.value) {
-    message({
-      title: '搜索为空',
-      icon: 'error'
-    })
+    uni.$tm.u.toast('搜索为空', true, 'error')
     return
   }
 

@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-11 18:29:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-07 08:49:51
+ * @LastEditTime: 2023-06-10 21:57:52
  * @FilePath: \xuct-group-purchase-uniapp\src\pages\order\list\index.nvue
  * @Description: 
  * 
@@ -126,7 +126,7 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { computed, ref } from 'vue'
 import { useAppHook } from '@/store'
 import { cancelOrder, pageOrderList } from '@/api/modules/order'
-import { confirm, message } from '@/utils/dialog'
+import { confirm } from '@/utils/dialog'
 import { rushOrder, receiverOrder } from '@/api/modules/order'
 import { Order } from '@/api/interface/order'
 
@@ -249,10 +249,7 @@ const onRefundOrder = (orderId: string) => {
 
 const onSearch = () => {
   if (!searchValue.value) {
-    message({
-      title: '搜索为空',
-      icon: 'error'
-    })
+    uni.$tm.u.toast('搜索为空', true, 'error')
     return
   }
 
