@@ -2,8 +2,8 @@
  * @Author: Derek Xu
  * @Date: 2023-03-27 10:11:35
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 09:19:51
- * @FilePath: \xuct-group-purchase-uniapp\src\api\user.ts
+ * @LastEditTime: 2023-06-12 09:05:15
+ * @FilePath: \xuct-group-purchase-uniapp\src\api\modules\user.ts
  * @Description:
  *
  * Copyright (c) 2023 by 楚恬商行, All Rights Reserved.
@@ -18,7 +18,7 @@ import { User } from '@/api/interface'
  * @param nickname
  * @returns
  */
-export const saveUserInfo = (phone: string, nickname: string) => {
+export const saveUserInfoApi = (phone: string, nickname: string) => {
   return request.put('/api/v1/user', {
     phone,
     nickname
@@ -32,7 +32,7 @@ export const saveUserInfo = (phone: string, nickname: string) => {
  * @param encryptedData
  * @param iv
  */
-export const bindPhone = (code: string, encryptedData: string, iv: string) => {
+export const bindPhoneApi = (code: string, encryptedData: string, iv: string) => {
   return request.post<string>('/api/v1/user/bind/phone', {
     code,
     encryptedData,
@@ -43,7 +43,7 @@ export const bindPhone = (code: string, encryptedData: string, iv: string) => {
  * 获取用户地址列表
  * @returns
  */
-export const userAddressList = (searchValue: string) => {
+export const userAddressListApi = (searchValue: string) => {
   return request.get<User.Address[]>('/api/v1/address/list', {
     searchValue
   })
@@ -53,7 +53,7 @@ export const userAddressList = (searchValue: string) => {
  * 保存用户地址
  * @param address
  */
-export const saveUserAddress = (address: User.Address) => {
+export const saveUserAddressApi = (address: User.Address) => {
   return request.post('/api/v1/address', {
     ...address
   })
@@ -64,7 +64,7 @@ export const saveUserAddress = (address: User.Address) => {
  * @param id
  * @returns
  */
-export const getUserAddress = (id: string) => {
+export const getUserAddressApi = (id: string) => {
   return request.get<User.Address>('/api/v1/address', { id })
 }
 
@@ -73,21 +73,21 @@ export const getUserAddress = (id: string) => {
  * @param id
  * @returns
  */
-export const deleteUserAddress = (id: string) => {
+export const deleteUserAddressApi = (id: string) => {
   return request.delete('/api/v1/address?id=' + id)
 }
 
 /**
  * 获取默认的通讯录地址
  */
-export const getDefaultAddress = () => {
+export const getDefaultAddressApi = () => {
   return request.get<User.Address>('/api/v1/address/default')
 }
 
 /**
  * 获取留言列表
  */
-export const commentList = () => {
+export const commentListApi = () => {
   return request.get<User.Comment[]>('/api/v1/user/comment/list')
 }
 
@@ -96,21 +96,21 @@ export const commentList = () => {
  *
  * @param comment
  */
-export const addComment = (comment: User.Comment) => {
+export const addCommentApi = (comment: User.Comment) => {
   return request.post('/api/v1/user/comment', { ...comment })
 }
 
 /**
  * 用户信息统计
  */
-export const userSum = () => {
+export const userSumApi = () => {
   return request.get<User.SumResult>('/api/v1/user/sum', {}, { noLoading: true })
 }
 
 /**
  * 优惠券列表
  */
-export const couponList = (status: string) => {
+export const couponListApi = (status: string) => {
   return request.get<User.Coupon[]>('/api/v1/coupon/list?status=' + status)
 }
 
@@ -124,16 +124,16 @@ export const canUsedCouponList = () => {
 /**
  * 反馈列表
  */
-export const opinionList = () => {
+export const opinionListApi = () => {
   return request.get<User.Opinion[]>('/api/v1/opinion/list')
 }
 
 /**
  * 添加反馈
- * @param opion
+ * @param opinion
  */
-export const saveOpinion = (opion: User.Opinion) => {
-  return request.post('/api/v1/opinion', { ...opion })
+export const saveOpinionApi = (opinion: User.Opinion) => {
+  return request.post('/api/v1/opinion', { ...opinion })
 }
 
 /**
@@ -141,6 +141,6 @@ export const saveOpinion = (opion: User.Opinion) => {
  * @param id
  * @returns
  */
-export const getOpinion = (id: string) => {
+export const getOpinionApi = (id: string) => {
   return request.get<User.Opinion>('/api/v1/opinion', { id })
 }

@@ -81,7 +81,7 @@ const uploadUrlValue = ref<string>(BASE_API_URL + '/api/v1/opinion/upload')
 const imageList = ref([])
 const opinionValue = ref('1')
 const refundReasonValue = ref<string>('')
-import { saveOpinion } from '@/api/modules/user'
+import { saveOpinionApi } from '@/api/modules/user'
 
 const radioItems = [
   {
@@ -130,7 +130,7 @@ const onSave = () => {
       return JSON.parse(x.response).data
     })
 
-  saveOpinion({
+  saveOpinionApi({
     type: opinionValue.value,
     images: _images.join(','),
     status: true,

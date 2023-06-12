@@ -47,7 +47,7 @@ import tmText from '@/tmui/components/tm-text/tm-text.vue'
 import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 
 import { onLoad, onShow } from '@dcloudio/uni-app'
-import { opinionList } from '@/api/modules/user'
+import { opinionListApi } from '@/api/modules/user'
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { User } from '@/api/interface/user'
 
@@ -95,7 +95,7 @@ onShow(() => {
 
 const initData = () => {
   load.value = true
-  opinionList()
+  opinionListApi()
     .then((res) => {
       opinions.length = 0
       opinions.push(...res.data)

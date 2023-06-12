@@ -23,7 +23,7 @@ import tmHtml from '@/tmui/components/tm-html/tm-html.vue'
 
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
-import { getConfig } from '@/api/modules/config'
+import { getConfigApi } from '@/api/modules/config'
 
 const rx = ref<string>('')
 
@@ -32,7 +32,7 @@ onLoad(() => {
 })
 
 const _load = () => {
-  getConfig(1)
+  getConfigApi(1)
     .then((res) => {
       const { content } = res.data
       rx.value = content

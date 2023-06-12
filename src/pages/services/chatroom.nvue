@@ -48,7 +48,7 @@ import uvChatText from '@/components/uv-chat/uv-chat-text/uv-chat-text.vue'
 import { ref, computed } from 'vue'
 import { useUserHook, useAppHook } from '@/store'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
-import { commentList, addComment } from '@/api/modules/user'
+import { commentListApi, addCommentApi } from '@/api/modules/user'
 import { User } from '@/api/interface/user'
 
 const userStore = useUserHook()
@@ -83,7 +83,7 @@ const sendClick = () => {
     nickName: userInfo.nickname
   }
   load.value = true
-  addComment(msg)
+  addCommentApi(msg)
     .then(() => {
       chatMsgValue.value = ''
       paging.value.addChatRecordData(msg)
@@ -99,7 +99,7 @@ const sendClick = () => {
 }
 
 onLoad(() => {
-  commentList()
+  commentListApi()
     .then((res) => {
       paging.value.complete(res.data)
     })

@@ -64,7 +64,7 @@ import uvEmpty from '@/components/uv-empty/uv-empty.vue'
 
 import * as dayjs from '@/tmui/tool/dayjs/esm/index'
 import { useAppHook } from '@/store'
-import { couponList } from '@/api/modules/user'
+import { couponListApi } from '@/api/modules/user'
 import { onLoad } from '@dcloudio/uni-app'
 import { User } from '@/api/interface/user'
 
@@ -94,7 +94,7 @@ const tabsChange = () => {
 const initData = () => {
   loadValue.value = true
   coupons.length = 0
-  couponList(tabActiveRef.value ?? '0')
+  couponListApi(tabActiveRef.value ?? '0')
     .then((res) => {
       coupons.push(...res.data)
     })

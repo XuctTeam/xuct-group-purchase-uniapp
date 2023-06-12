@@ -73,7 +73,7 @@ import { User } from '@/api/interface/user'
 import { reactive, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { computed } from 'vue'
-import { getOpinion } from '@/api/modules/user'
+import { getOpinionApi } from '@/api/modules/user'
 
 const DayJs = dayjs.default
 
@@ -123,7 +123,7 @@ onLoad((opts: any) => {
 
 const initData = () => {
   load.value = true
-  getOpinion(opinion.id ?? '')
+  getOpinionApi(opinion.id ?? '')
     .then((res) => {
       Object.assign(opinion, { ...res.data })
     })

@@ -104,7 +104,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { TEMPLATE_ORDER_IDS } from '@/constant'
 
 import { confirm } from '@/utils/dialog'
-import { getDefaultAddress } from '@/api/modules/user'
+import { getDefaultAddressApi } from '@/api/modules/user'
 import { getConfirmOrderDetailApi } from '@/api/modules/order'
 import { placeOrder } from '@/api/modules/order'
 import { User, Wares } from '@/api/interface'
@@ -224,7 +224,7 @@ const couponChoose = () => {
 }
 
 const _loadAddress = () => {
-  getDefaultAddress()
+  getDefaultAddressApi()
     .then((res) => {
       const { data } = res
       if (!data) {

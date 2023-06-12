@@ -2,7 +2,7 @@
  * @Author: Derek Xu
  * @Date: 2023-04-10 11:40:24
  * @LastEditors: Derek Xu
- * @LastEditTime: 2023-06-02 09:42:31
+ * @LastEditTime: 2023-06-12 09:05:48
  * @FilePath: \xuct-group-purchase-uniapp\src\api\modules\config.ts
  * @Description:
  *
@@ -16,6 +16,6 @@ import { API } from '../interface'
  *
  * @param type
  */
-export const getConfig = (type: number) => {
+export const getConfigApi = (type: number) => {
   return request.get<API.ConfigResult>('/api/v1/config', { type })
 }

@@ -84,11 +84,11 @@ import tmDivider from '@/tmui/components/tm-divider/tm-divider.vue'
 import tmDrawer from '@/tmui/components/tm-drawer/tm-drawer.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { getConfig } from '@/api/modules/config'
+import { getConfigApi } from '@/api/modules/config'
 import { confirm } from '@/utils/dialog'
 import { useUserHook } from '@/store'
 import { upload } from '@/api/config/upload'
-import { saveUserInfo } from '@/api/modules/user'
+import { saveUserInfoApi } from '@/api/modules/user'
 import { logout } from '@/api/modules/login'
 import { API } from '@/api/interface'
 
@@ -101,7 +101,7 @@ const nickNameRef = ref<string>(userInfo?.nickname || '')
 const phoneRef = ref<string>(userInfo?.phone || '')
 
 onLoad(() => {
-  getConfig(2).then((res) => {
+  getConfigApi(2).then((res) => {
     const { content } = res.data
     versionRef.value = content
   })
@@ -152,7 +152,7 @@ const beforeSave = () => {
 }
 
 const onSave = () => {
-  saveUserInfo(phoneRef.value, nickNameRef.value)
+  saveUserInfoApi(phoneRef.value, nickNameRef.value)
     .then(() => {
       userStore.setUserInfo({ ...userInfo, nickname: nickNameRef.value, phone: phoneRef.value })
       showWin.value = false

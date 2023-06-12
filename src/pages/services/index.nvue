@@ -42,7 +42,7 @@ import tmSheet from '@/tmui/components/tm-sheet/tm-sheet.vue'
 import tmCell from '@/tmui/components/tm-cell/tm-cell.vue'
 import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { getConfig } from '@/api/modules/config'
+import { getConfigApi } from '@/api/modules/config'
 
 const phoneValue = ref<string>('')
 
@@ -51,7 +51,7 @@ const contact = (e: any) => {
 }
 
 onLoad(() => {
-  getConfig(3).then((res) => {
+  getConfigApi(3).then((res) => {
     const { content } = res.data
     phoneValue.value = content
   })

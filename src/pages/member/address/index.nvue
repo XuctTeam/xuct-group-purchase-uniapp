@@ -79,7 +79,7 @@ import tmButton from '@/tmui/components/tm-button/tm-button.vue'
 import tmSwitch from '@/tmui/components/tm-switch/tm-switch.vue'
 import uvBottomBarContainer from '@/components/uv-bottom-bar-container/uv-bottom-bar-container.vue'
 
-import { saveUserAddress, getUserAddress, deleteUserAddress } from '@/api/modules/user'
+import { saveUserAddressApi, getUserAddressApi, deleteUserAddressApi } from '@/api/modules/user'
 import { ref, getCurrentInstance } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { confirm } from '@/utils/dialog'
@@ -109,7 +109,7 @@ onLoad((opt: any) => {
 })
 
 const _load = (id: string) => {
-  getUserAddress(id)
+  getUserAddressApi(id)
     .then((res) => {
       const { provinceName = '', cityName = '', countyName = '', ...addr } = res.data
       address.value = Object.assign({ ...addr }, { city: [provinceName, cityName, countyName], cityStr: provinceName + cityName + countyName })
@@ -138,7 +138,7 @@ const onDelete = () => {
   confirm({
     title: '确定删除吗?',
     success: () => {
-      deleteUserAddress(address.value.id ?? '')
+      deleteUserAddressApi(address.value.id ?? '')
         .then(() => {
           setPageRefresh()
         })
@@ -169,7 +169,7 @@ const onConfirm = (e: any) => {
     _address.countyName = city[2]
   }
 
-  saveUserAddress(_address)
+  saveUserAddressApi(_address)
     .then(() => {
       setPageRefresh()
     })
